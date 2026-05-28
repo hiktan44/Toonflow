@@ -1,7 +1,9 @@
 FROM node:24-bookworm-slim
 
-# Install curl for healthcheck
-RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+# Install curl for healthcheck and build tools for native modules (better-sqlite3, sharp)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl python3 make g++ && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
