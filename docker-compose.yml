@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  toonflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: toonflow-app
+    restart: unless-stopped
+    ports:
+      - "10588:10588"
+    volumes:
+      - toonflow-data:/app/data
+    environment:
+      - NODE_ENV=dev
+      - PORT=10588
+      - FAL_KEY=${FAL_KEY:-5ae26235-278a-46f2-9f4c-d3382a663042:00c6983f7bf51b8ecd24236b3ca1fd04}
+      - OSSURL=${OSSURL:-}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:10588/web/index.html"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  toonflow-data:
+    driver: local

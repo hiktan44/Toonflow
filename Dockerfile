@@ -1,9 +1,9 @@
 FROM node:24-bookworm-slim
 
-WORKDIR /app
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
-RUN npm config set registry https://registry.npmmirror.com/ && \
-    yarn config set registry https://registry.npmmirror.com/
+WORKDIR /app
 
 # Copy the repository contents into the image and install all dependencies
 COPY . .
