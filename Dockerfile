@@ -21,4 +21,5 @@ ENV PORT=10588
 
 EXPOSE 10588
 
-CMD ["yarn", "dev"]
+# Use tsx directly instead of nodemon for production stability
+CMD ["npx", "tsx", "src/app.ts"]
