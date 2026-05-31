@@ -28,6 +28,6 @@ export default router.post(
  .update({
  data: JSON.stringify(data),
  });
- res.status(200).send(success("Updated successfully"));
+ res.status(200).send(success("Başarıyla güncellendi"));
  },
 );

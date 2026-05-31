@@ -50,11 +50,10 @@ class OSS {
  if (!prefix) prefix = "oss";
  await this.ensureInit();
  const safePath = normalizeUserPath(userRelPath);
- // URL startuse /needSystemconvert to /
+ // URL start - use relative path for web, absolute for Electron
  let url = `/${prefix}/`;
  if (process.env.ossURL && process.env.ossURL !== "") url = process.env.ossURL + `/${prefix}/`;
- if (process.env.NODE_ENV == "dev") url = `http://localhost:10588/${prefix}/`;
- if (isEletron()) url = `http://localhost:${process.env.PORT}/${prefix}/`;
+ if (isEletron()) url = `http://localhost:${process.env.PORT || "10588"}/${prefix}/`;
  return `${url}${safePath.split(path.sep).join("/")}`;
  }
 

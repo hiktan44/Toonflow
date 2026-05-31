@@ -22,7 +22,7 @@ export default router.post(
  const resolvedRoot = path.resolve(modelPromptRoot);
  const resolvedFile = path.resolve(modelPromptRoot, filePath);
  if (!resolvedFile.startsWith(resolvedRoot + path.sep)) {
- return res.status(400).send(error("Invalid path"));
+ return res.status(400).send(error("Geçersiz yol"));
  }
 
  // File not foundthen throw error
@@ -33,6 +33,6 @@ export default router.post(
  }
 
  await fs.unlink(resolvedFile);
- res.status(200).send(success("Deleted successfully"));
+ res.status(200).send(success("Başarıyla silindi"));
  },
 );

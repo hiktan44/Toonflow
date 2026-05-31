@@ -25,6 +25,6 @@ export default router.post(
  label: name,
  prompt,
  });
- res.status(200).send(success("Added successfully"));
+ res.status(200).send(success("Başarıyla eklendi"));
  },
 );

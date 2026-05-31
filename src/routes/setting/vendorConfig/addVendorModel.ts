@@ -56,6 +56,6 @@ export default router.post(
  models: JSON.stringify(existingModels),
  });
  }
- res.status(200).send(success("Updated successfully"));
+ res.status(200).send(success("Başarıyla güncellendi"));
  },
 );

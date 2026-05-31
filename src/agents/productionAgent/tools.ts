@@ -153,7 +153,7 @@ export default (toolCpnfig: ToolConfig) => {
  const res = await new Promise((resolve) => socket.emit("delDeriveAsset", { assetsId, id }, (res: any) => resolve(res)));
  thinking.updateTitle("AssetComplete");
  thinking.complete();
- return res ?? "Deleted successfully";
+ return res ?? "Başarıyla silindi";
  },
  }),
  generate_deriveAsset: tool({

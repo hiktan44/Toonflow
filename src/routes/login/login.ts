@@ -8,7 +8,7 @@ const router = express.Router();
 
 export function setToken(payload: string | object, expiresIn: string | number, secret: string): string {
  if (!payload || typeof secret !== "string" || !secret) {
- throw new Error("Invalid parameters");
+ throw new Error("Geçersiz parametreler");
  }
  return (jwt.sign as any)(payload, secret, { expiresIn });
 }
@@ -40,7 +40,7 @@ export default router.post(
 
  return res.status(200).send(success({ token: "Bearer " + token, name: data!.name, id: data!.id }, "Login successful"));
  } else {
- return res.status(400).send(error("Invalid username or password"));
+ return res.status(400).send(error("Geçersiz kullanıcı adı veya şifre"));
  }
  },
 );

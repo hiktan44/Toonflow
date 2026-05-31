@@ -18,7 +18,7 @@ export default router.post(
  async (req, res) => {
  const { reinstall, url, version } = req.body;
  if (reinstall) {
- res.status(200).send(success("Please manually download and install the latest version in browser"));
+ res.status(200).send(success("Lütfen en son sürümü tarayıcıdan indirip yükleyin"));
  } else {
  const rootDir = u.getPath(["temp"]);
  fs.mkdirSync(rootDir, { recursive: true });

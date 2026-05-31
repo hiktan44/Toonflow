@@ -33,7 +33,7 @@ export default router.post(
  } catch (e) {
  console.error("[Delete visual manual] DeleteFailed:", artPromptsDir, e);
  }
- res.status(200).send(success({ message: "Deleted successfully" }));
+ res.status(200).send(success({ message: "Başarıyla silindi" }));
  } catch (err) {
  res.status(500).send(error(u.error(err).message || "DeleteFailed"));
  }

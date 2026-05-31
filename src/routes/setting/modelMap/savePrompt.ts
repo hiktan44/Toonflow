@@ -26,6 +26,6 @@ export default router.post(
  const filePath = path.join(dir, `${name}.md`);
  await fs.writeFile(filePath, data, "utf-8");
 
- res.status(200).send(success("Saved successfully"));
+ res.status(200).send(success("Başarıyla kaydedildi"));
  },
 );

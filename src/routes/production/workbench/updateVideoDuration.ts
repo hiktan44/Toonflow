@@ -15,6 +15,6 @@ export default router.post(
  await u.db("o_videoTrack").where("id", id).update({
  duration,
  });
- res.status(200).send(success("Updated successfully"));
+ res.status(200).send(success("Başarıyla güncellendi"));
  },
 );

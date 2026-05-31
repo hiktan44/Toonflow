@@ -21,6 +21,6 @@ export default router.post(
  .update({
  inputValues: JSON.stringify(inputValues),
  });
- res.status(200).send(success("Updated successfully"));
+ res.status(200).send(success("Başarıyla güncellendi"));
  },
 );
