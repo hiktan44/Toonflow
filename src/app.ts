@@ -101,7 +101,8 @@ export default async function startServe(randomPort: Boolean = false) {
  console.warn("Static website directory not found:", webDir);
  }
 
- app.use(async (req, res, next) => {
+ // Auth middleware - only for /api/* routes
+ app.use("/api", async (req, res, next) => {
  const setting = await u.db("o_setting").where("key", "tokenKey").select("value").first();
  if (!setting) return res.status(444).send({ message: "Server secret key not configured, please contact administrator" });
  const { value: tokenKey } = setting;
@@ -109,7 +110,7 @@ export default async function startServe(randomPort: Boolean = false) {
  const rawToken = req.headers.authorization || (req.query.token as string) || "";
  const token = rawToken.replace("Bearer ", "");
  // Whitelisted paths
- if (req.path === "/api/login/login") return next();
+ if (req.path === "/login/login") return next();
 
  if (!token) return res.status(401).send({ message: "Token not provided" });
  try {
@@ -124,7 +125,21 @@ export default async function startServe(randomPort: Boolean = false) {
  const router = await import("@/router");
  await router.default(app);
 
- // 404 handle
+ // SPA fallback - serve index.html for non-API routes (Vue Router support)
+ const webDirFallback = u.getPath("web");
+ if (fs.existsSync(webDirFallback)) {
+ app.use((req, res, next) => {
+ // Only handle GET requests for SPA fallback
+ if (req.method !== "GET") return next();
+ // Don't serve index.html for API routes or static asset requests
+ if (req.path.startsWith("/api/") || req.path.startsWith("/oss/") || req.path.startsWith("/assets/") || req.path.startsWith("/skills/")) {
+  return next();
+ }
+ res.sendFile(path.join(webDirFallback, "index.html"));
+ });
+ }
+
+ // 404 handle for API routes
  app.use((_, res, next: NextFunction) => {
  return res.status(404).send({ message: "API 404 Not Found" });
  });
@@ -137,7 +152,7 @@ export default async function startServe(randomPort: Boolean = false) {
  res.status(err.status || 500).send(err);
  });
 
- const port = randomPort ? 0 : 10588;
+ const port = randomPort ? 0 : (parseInt(process.env.PORT || "10588", 10));
  return await new Promise((resolve) => {
  server.listen(port, async () => {
  const address = server.address();
