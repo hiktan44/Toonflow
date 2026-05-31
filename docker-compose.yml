@@ -17,7 +17,7 @@ services:
       - FAL_KEY=${FAL_KEY:-5ae26235-278a-46f2-9f4c-d3382a663042:00c6983f7bf51b8ecd24236b3ca1fd04}
       - OSSURL=${OSSURL:-}
     healthcheck:
-      test: ["CMD", "curl", "-sf", "-o", "/dev/null", "-w", "%{http_code}", "http://localhost:10588/web/index.html"]
+      test: ["CMD", "curl", "-sf", "-o", "/dev/null", "-w", "%{http_code}", "http://localhost:10588/index.html"]
       interval: 30s
       timeout: 10s
       retries: 5
