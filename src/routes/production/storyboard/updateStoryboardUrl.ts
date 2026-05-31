@@ -7,23 +7,23 @@ import { id } from "zod/locales";
 const router = express.Router();
 
 export default router.post(
-  "/",
-  validateFields({
-    id: z.number(),
-    url: z.string(),
-    flowId: z.number(),
-  }),
-  async (req, res) => {
-    const { id, url, flowId } = req.body;
-    await u
-      .db("o_storyboard")
-      .where({ id })
-      .update({
-        filePath: u.replaceUrl(url),
-        flowId,
-        state: "已完成",
-        shouldGenerateImage:url ? 1 : 0
-      });
-    res.status(200).send(success({ message: "更新分镜成功" }));
-  },
+ "/",
+ validateFields({
+ id: z.number(),
+ url: z.string(),
+ flowId: z.number(),
+ }),
+ async (req, res) => {
+ const { id, url, flowId } = req.body;
+ await u
+ .db("o_storyboard")
+ .where({ id })
+ .update({
+ filePath: u.replaceUrl(url),
+ flowId,
+ state: "Completed",
+ shouldGenerateImage:url ? 1 : 0
+ });
+ res.status(200).send(success({ message: "Update storyboardSuccess" }));
+ },
 );

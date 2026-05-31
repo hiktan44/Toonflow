@@ -7,18 +7,18 @@ import { id } from "zod/locales";
 const router = express.Router();
 
 export default router.post(
-  "/",
-  validateFields({
-    id: z.number(),
-    prompt: z.string(),
-    videoDesc: z.string(),
-  }),
-  async (req, res) => {
-    const { id, prompt, videoDesc } = req.body;
-    await u.db("o_storyboard").where({ id }).update({
-      prompt,
-      videoDesc,
-    });
-    res.status(200).send(success({ message: "更新提示词成功" }));
-  },
+ "/",
+ validateFields({
+ id: z.number(),
+ prompt: z.string(),
+ videoDesc: z.string(),
+ }),
+ async (req, res) => {
+ const { id, prompt, videoDesc } = req.body;
+ await u.db("o_storyboard").where({ id }).update({
+ prompt,
+ videoDesc,
+ });
+ res.status(200).send(success({ message: "Prompt updated successfully" }));
+ },
 );

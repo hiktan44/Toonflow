@@ -10,25 +10,25 @@ import * as fs from "fs";
 const router = express.Router();
 
 export default router.post(
-  "/",
-  validateFields({
-    path: z.string(),
-    content: z.string(),
-  }),
-  async (req, res) => {
-    const { path, content } = req.body;
-    const skillsRoot = u.getPath(["skills"]);
-    const filePath = p.join(skillsRoot, path);
-    if (!isPathInside(filePath, skillsRoot)) {
-      return res.status(400).send(error("无效的路径"));
-    }
+ "/",
+ validateFields({
+ path: z.string(),
+ content: z.string(),
+ }),
+ async (req, res) => {
+ const { path, content } = req.body;
+ const skillsRoot = u.getPath(["skills"]);
+ const filePath = p.join(skillsRoot, path);
+ if (!isPathInside(filePath, skillsRoot)) {
+ return res.status(400).send(error("InvalidofPath"));
+ }
 
-    if (!fs.existsSync(filePath)) {
-      return res.status(400).send(error("文件不存在"));
-    }
+ if (!fs.existsSync(filePath)) {
+ return res.status(400).send(error("File not found"));
+ }
 
-    const raw = await fs.promises.writeFile(filePath, content, "utf-8");
+ const raw = await fs.promises.writeFile(filePath, content, "utf-8");
 
-    res.status(200).send(success(raw));
-  },
+ res.status(200).send(success(raw));
+ },
 );

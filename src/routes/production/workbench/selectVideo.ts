@@ -6,16 +6,16 @@ import { validateFields } from "@/middleware/middleware";
 const router = express.Router();
 
 export default router.post(
-  "/",
-  validateFields({
-    trackId: z.number(),
-    videoId: z.number(),
-  }),
-  async (req, res) => {
-    const { trackId, videoId } = req.body;
-    await u.db("o_videoTrack").where("id", trackId).update({
-      videoId: videoId,
-    });
-    res.status(200).send(success({ message: "视频选择成功" }));
-  },
+ "/",
+ validateFields({
+ trackId: z.number(),
+ videoId: z.number(),
+ }),
+ async (req, res) => {
+ const { trackId, videoId } = req.body;
+ await u.db("o_videoTrack").where("id", trackId).update({
+ videoId: videoId,
+ });
+ res.status(200).send(success({ message: "Video selected successfully" }));
+ },
 );

@@ -7,28 +7,28 @@ import { validateFields } from "@/middleware/middleware";
 const router = express.Router();
 
 export default router.post(
-  "/",
-  validateFields({
-    id: z.number(),
-    name: z.string(),
-    fileUrl: z.string(),
-    prompt: z.string(),
-  }),
-  async (req, res) => {
-    const { id, name, fileUrl, prompt } = req.body;
-    const imagePath = `/artStyle/${uuidv4()}.jpg`;
-    const matches = fileUrl.match(/^data:image\/\w+;base64,(.+)$/);
-    const realBase64 = matches ? matches[1] : fileUrl;
-    await u.oss.writeFile(imagePath, Buffer.from(realBase64, "base64"));
-    await u
-      .db("o_artStyle")
-      .update({
-        name,
-        fileUrl: imagePath,
-        label: name,
-        prompt,
-      })
-      .where("id", id);
-    res.status(200).send(success("艺术风格编辑成功"));
-  },
+ "/",
+ validateFields({
+ id: z.number(),
+ name: z.string(),
+ fileUrl: z.string(),
+ prompt: z.string(),
+ }),
+ async (req, res) => {
+ const { id, name, fileUrl, prompt } = req.body;
+ const imagePath = `/artStyle/${uuidv4()}.jpg`;
+ const matches = fileUrl.match(/^data:image\/\w+;base64,(.+)$/);
+ const realBase64 = matches ? matches[1] : fileUrl;
+ await u.oss.writeFile(imagePath, Buffer.from(realBase64, "base64"));
+ await u
+ .db("o_artStyle")
+ .update({
+ name,
+ fileUrl: imagePath,
+ label: name,
+ prompt,
+ })
+ .where("id", id);
+ res.status(200).send(success("Edited successfully"));
+ },
 );

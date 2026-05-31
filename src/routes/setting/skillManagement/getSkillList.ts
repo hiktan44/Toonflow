@@ -7,12 +7,12 @@ import u from "@/utils";
 const router = express.Router();
 
 export default router.post("/", async (req, res) => {
-  const skillsRoot = u.getPath(["skills"]);
+ const skillsRoot = u.getPath(["skills"]);
 
-  const entries = await fg("**/*.md", {
-    cwd: skillsRoot.replace(/\\/g, "/"),
-    onlyFiles: true,
-  });
+ const entries = await fg("**/*.md", {
+ cwd: skillsRoot.replace(/\\/g, "/"),
+ onlyFiles: true,
+ });
 
-  res.status(200).send(success(entries));
+ res.status(200).send(success(entries));
 });

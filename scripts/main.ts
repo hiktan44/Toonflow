@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 import Module from "module";
 
-// 加速 Electron 启动：跳过 GPU 信息收集，减少初始化耗时
+//  Electron ： GPU ，
 app.commandLine.appendSwitch("disable-gpu-shader-disk-cache");
 app.commandLine.appendSwitch("disable-features", "CalculateNativeWinOcclusion");
 
@@ -73,16 +73,16 @@ function initializeData(): void {
   }
 }
 
-//获取全部依赖路径，优先从 unpacked 加载原生模块，其他模块从 asar 加载
+//， unpacked ， asar 
 function getNodeModulesPaths(): string[] {
   const paths: string[] = [];
   if (app.isPackaged) {
-    // external 依赖（原生模块）在 unpacked 目录
+    // external （） unpacked 
     const unpackedNodeModules = path.join(process.resourcesPath, "app.asar.unpacked", "node_modules");
     if (fs.existsSync(unpackedNodeModules)) {
       paths.push(unpackedNodeModules);
     }
-    // 普通依赖在 asar 内
+    //  asar 
     const asarNodeModules = path.join(process.resourcesPath, "app.asar", "node_modules");
     paths.push(asarNodeModules);
   } else {
@@ -91,15 +91,15 @@ function getNodeModulesPaths(): string[] {
   return paths;
 }
 
-//动态加载
+//
 function requireWithCustomPaths(modulePath: string): any {
   const appNodeModulesPaths = getNodeModulesPaths();
-  // 保存原始方法
+  // 
   const originalNodeModulePaths = (Module as any)._nodeModulePaths;
-  // 临时修改模块路径解析
+  // 
   (Module as any)._nodeModulePaths = function (from: string): string[] {
     const paths = originalNodeModulePaths.call(this, from);
-    // 将主程序的 node_modules 添加到前面
+    //  node_modules 
     for (let i = appNodeModulesPaths.length - 1; i >= 0; i--) {
       const p = appNodeModulesPaths[i];
       if (!paths.includes(p)) {
@@ -109,11 +109,11 @@ function requireWithCustomPaths(modulePath: string): any {
     return paths;
   };
   try {
-    // 清除缓存确保加载最新
+    // 
     delete require.cache[require.resolve(modulePath)];
     return require(modulePath);
   } finally {
-    // 恢复原始方法
+    // 
     (Module as any)._nodeModulePaths = originalNodeModulePaths;
   }
 }
@@ -131,7 +131,7 @@ body{height:100vh;display:flex;flex-direction:column;align-items:center;justify-
   border-top-color:#000;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 p{margin-top:20px;font-size:14px;opacity:.6}
-</style></head><body><div class="spinner"></div><p>正在启动服务…</p></body></html>`)}`;
+</style></head><body><div class="spinner"></div><p>…</p></body></html>`)}`;
 
 function showLoading(): void {
   loadingWindow = new BrowserWindow({
@@ -221,21 +221,21 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 app.whenReady().then(async () => {
-  // 立即显示加载窗口（data URL + backgroundColor，瞬间可见）
+  // （data URL + backgroundColor，）
   showLoading();
 
   try {
     let servePath: string;
     if (app.isPackaged) {
-      // 生产环境：让出主线程一次，确保 loading 窗口渲染后再做耗时文件拷贝
+      // ：， loading 
       await new Promise((r) => setTimeout(r, 0));
       initializeData();
       servePath = path.join(app.getPath("userData"), "data", "serve", "app.js");
     } else {
-      // 开发环境：直接加载源码（tsx 通过 -r tsx 注册了 require 钩子）
+      // ：（tsx  -r tsx  require ）
       servePath = path.join(process.cwd(), "src", "app.ts");
     }
-    // 使用自定义路径加载模块
+    // 
     const mod = requireWithCustomPaths(servePath);
     closeServeFn = mod.closeServe;
     const port = await mod.default(true);
@@ -245,7 +245,7 @@ app.whenReady().then(async () => {
         resolve();
       }, 2000);
     });
-    // 注册协议处理器
+    // 
     protocol.handle("toonflow", (request) => {
       const url = new URL(request.url);
       const pathname = url.hostname.toLowerCase();
@@ -268,12 +268,12 @@ app.whenReady().then(async () => {
           return { ok: true };
         },
         apprestart: () => {
-          // 延迟执行，让响应先返回给前端
+          // ，
           setTimeout(() => {
             app.relaunch();
             app.exit(0);
           }, 500);
-          return { ok: true, message: "应用即将重启" };
+          return { ok: true, message: "" };
         },
         windowismaximized: () => ({
           maximized: mainWindow?.isMaximized() ?? false,
@@ -290,12 +290,12 @@ app.whenReady().then(async () => {
             shell.openExternal(targetUrl);
             return { ok: true };
           } else {
-            return { ok: false, error: "缺少url参数" };
+            return { ok: false, error: "url" };
           }
         },
       };
       const handler = handlers[pathname];
-      const responseData = handler ? handler() : { error: "未知接口" };
+      const responseData = handler ? handler() : { error: "" };
       return new Response(JSON.stringify(responseData), {
         headers: {
           "Content-Type": "application/json",
@@ -304,10 +304,10 @@ app.whenReady().then(async () => {
       });
     });
 
-    // 服务启动成功，创建主窗口（主窗口 ready-to-show 时自动关闭loading）
+    // ，（ ready-to-show loading）
     await createMainWindow();
   } catch (err) {
-    console.error("[服务启动失败]:", err);
+    console.error("[]:", err);
     await createMainWindow();
   }
 });

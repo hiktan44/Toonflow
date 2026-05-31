@@ -6,14 +6,14 @@ const excludeNames = ["toonflow-serve"];
 // const strictWhiteList = ["MIT", "BSD-2-Clause", "BSD-3-Clause", "BSD", "0BSD"];
 const strictWhiteList: string[] = [];
 
-// 检查是否在白名单协议
+// 
 function isStrictWhiteLicense(license: string): boolean {
   const normalized = license.replace(/[\(\)]/g, "").trim();
   const parts = normalized.split(/\s*(OR|AND|\/)\s*/i).map((part) => part.trim());
   return parts.every((part) => strictWhiteList.some((wl) => part === wl || part.replace(/ with .*/i, "") === wl));
 }
 
-// 读取 package.json 里的直接依赖
+//  package.json 
 function getDirectDependencyNames(): string[] {
   const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), "package.json"), "utf-8"));
   const deps = Object.keys(pkg.dependencies ?? {});
@@ -21,10 +21,10 @@ function getDirectDependencyNames(): string[] {
   return [...deps, ...devDeps];
 }
 
-// 执行主逻辑
+// 
 checker.init({ start: process.cwd() }, (err: Error, packages: Record<string, any>) => {
   if (err) {
-    console.error("license-checker 出错: ", err);
+    console.error("license-checker : ", err);
     process.exit(1);
   }
   const directNames = getDirectDependencyNames();
@@ -38,13 +38,13 @@ checker.init({ start: process.cwd() }, (err: Error, packages: Record<string, any
 
   const needDeclare: PackageInfo[] = [];
   for (const fullName in packages) {
-    // fullName 一般形如 [@scope/]pkg@version, 但 license-checker 会带路径，如 @scope/name@1.0.0@./node_modules/@scope/name
-    // 所以可以正则只保留 name@version 部分
-    // nameMatch[1] 为包名，nameMatch[2] 为版本
+    // fullName  [@scope/]pkg@version,  license-checker ， @scope/name@1.0.0@./node_modules/@scope/name
+    //  name@version 
+    // nameMatch[1] ，nameMatch[2] 
     const nameMatch = fullName.match(/^((?:@[^\/]+\/)?[^@]+)@([^@]+)$/);
     if (!nameMatch) continue;
     const name = nameMatch[1];
-    // 仅关注直接依赖
+    // 
     if (!directNames.includes(name!)) continue;
 
     const info = packages[fullName];
@@ -59,10 +59,10 @@ checker.init({ start: process.cwd() }, (err: Error, packages: Record<string, any
     }
   }
 
-  // 排除名单过滤
+  // 
   const filteredDeclare = needDeclare.filter((pkg) => pkg.name && !excludeNames.some((exName) => pkg.name.startsWith(exName)));
 
-  // 去重：同一个 name@version 只保留一条，并合并 licenses
+  // ： name@version ， licenses
   const dedupedDeclare = Array.from(
     filteredDeclare
       .reduce((acc, pkg) => {
@@ -95,5 +95,5 @@ checker.init({ start: process.cwd() }, (err: Error, packages: Record<string, any
     )
     .join("\n\n-----------------------------\n\n");
   fs.writeFileSync(path.resolve(process.cwd(), "NOTICES.txt"), content, "utf-8");
-  console.log("已生成依赖声明 NOTICES.txt");
+  console.log(" NOTICES.txt");
 });

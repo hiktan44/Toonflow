@@ -6,13 +6,13 @@ import { validateFields } from "@/middleware/middleware";
 const router = express.Router();
 
 export default router.post(
-  "/",
-  validateFields({
-    ids: z.array(z.number()),
-  }),
-  async (req, res) => {
-    const { ids } = req.body;
-    const data = await u.db("o_assets").whereIn("id", ids).whereNot("audioBindState", "生成中").select("*");
-    res.status(200).send(success(data));
-  },
+ "/",
+ validateFields({
+ ids: z.array(z.number()),
+ }),
+ async (req, res) => {
+ const { ids } = req.body;
+ const data = await u.db("o_assets").whereIn("id", ids).whereNot("audioBindState", "Generating").select("*");
+ res.status(200).send(success(data));
+ },
 );

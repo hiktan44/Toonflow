@@ -7,20 +7,20 @@ import { id } from "zod/locales";
 const router = express.Router();
 
 export default router.post(
-  "/",
-  validateFields({
-    id: z.number(),
-    url: z.string(),
-    flowId: z.number(),
-  }),
-  async (req, res) => {
-    const { id, url, flowId } = req.body;
-    const [imageId] = await u.db("o_image").insert({
-      filePath: u.replaceUrl(url),
-      state: "已完成",
-      assetsId: id,
-    });
-    await u.db("o_assets").where({ id }).update({ flowId, imageId });
-    res.status(200).send(success({ message: "更新提示词成功" }));
-  },
+ "/",
+ validateFields({
+ id: z.number(),
+ url: z.string(),
+ flowId: z.number(),
+ }),
+ async (req, res) => {
+ const { id, url, flowId } = req.body;
+ const [imageId] = await u.db("o_image").insert({
+ filePath: u.replaceUrl(url),
+ state: "Completed",
+ assetsId: id,
+ });
+ await u.db("o_assets").where({ id }).update({ flowId, imageId });
+ res.status(200).send(success({ message: "Prompt updated successfully" }));
+ },
 );

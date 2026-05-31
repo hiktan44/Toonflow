@@ -5,15 +5,15 @@ import { success } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
 const router = express.Router();
 
-// 获取原文数据
+// getoriginal text data
 export default router.post(
-  "/",
-  validateFields({
-    projectId: z.number(),
-  }),
-  async (req, res) => {
-    const { projectId } = req.body;
-    const data = await u.db("o_novel").where("projectId", projectId).select("*");
-    res.status(200).send(success(data));
-  },
+ "/",
+ validateFields({
+ projectId: z.number(),
+ }),
+ async (req, res) => {
+ const { projectId } = req.body;
+ const data = await u.db("o_novel").where("projectId", projectId).select("*");
+ res.status(200).send(success(data));
+ },
 );

@@ -6,28 +6,28 @@ import { validateFields } from "@/middleware/middleware";
 const router = express.Router();
 
 export default router.post(
-  "/",
-  validateFields({
-    projectId: z.number(),
-    scriptId: z.number(),
-    videoIds: z.array(z.number()),
-  }),
-  async (req, res) => {
-    const { projectId, scriptId, videoIds } = req.body;
-    const videoList = await u
-      .db("o_video")
-      .whereIn("id", videoIds)
-      .whereIn("state", ["生成成功", "生成失败"])
-      .select("id", "state", "errorReason", "filePath");
-    res.status(200).send(
-      success(
-        await Promise.all(
-          videoList.map(async (s) => ({
-            ...s,
-            src: s.filePath ? await u.oss.getFileUrl(s.filePath) : "",
-          })),
-        ),
-      ),
-    );
-  },
+ "/",
+ validateFields({
+ projectId: z.number(),
+ scriptId: z.number(),
+ videoIds: z.array(z.number()),
+ }),
+ async (req, res) => {
+ const { projectId, scriptId, videoIds } = req.body;
+ const videoList = await u
+ .db("o_video")
+ .whereIn("id", videoIds)
+ .whereIn("state", ["Generated successfully", "Generation failed"])
+ .select("id", "state", "errorReason", "filePath");
+ res.status(200).send(
+ success(
+ await Promise.all(
+ videoList.map(async (s) => ({
+ ...s,
+ src: s.filePath ? await u.oss.getFileUrl(s.filePath) : "",
+ })),
+ ),
+ ),
+ );
+ },
 );

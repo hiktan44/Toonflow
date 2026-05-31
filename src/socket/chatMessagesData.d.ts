@@ -4,17 +4,17 @@ export type ChatMessageStatus = 'pending' | 'streaming' | 'complete' | 'stop' | 
 export type AttachmentType = 'image' | 'video' | 'audio' | 'pdf' | 'doc' | 'ppt' | 'txt';
 export type ChatComment = 'good' | 'bad' | '';
 
-// 基础内容接口
+// base contentinterface
 export interface ChatBaseContent<T extends string, D> {
-  type: T;
-  data: D;
-  status?: ChatMessageStatus;
-  id?: string;
-  strategy?: 'merge' | 'append';
-  ext?: Record<string, any>;
+ type: T;
+ data: D;
+ status?: ChatMessageStatus;
+ id?: string;
+ strategy?: 'merge' | 'append';
+ ext?: Record<string, any>;
 }
 
-// 内容类型定义
+// contentTypedefinition
 export type TextContent = ChatBaseContent<'text', string>;
 export type MarkdownContent = ChatBaseContent<'markdown', string>;
 export type ImageContent = ChatBaseContent<'image', { name?: string; url?: string; width?: number; height?: number }>;
@@ -25,34 +25,34 @@ export type AttachmentContent = ChatBaseContent<'attachment', { fileType: Attach
 export type ToolCallContent = ChatBaseContent<'toolcall', { toolCallId: string; toolCallName: string; eventType?: ToolCallEventType; parentMessageId?: string; args?: string; chunk?: string; result?: string }>;
 export type ActivityContent<T = Record<string, any>> = ChatBaseContent<'activity', { activityType: string; messageId?: string; content: T; deltaInfo?: { fromIndex: number; toIndex: number } }>;
 
-// 聚合内容类型
+// aggregate contentType
 export type AIMessageContent = TextContent | MarkdownContent | ImageContent | ThinkingContent | SearchContent | SuggestionContent | ReasoningContent | ToolCallContent | ActivityContent;
 export type ReasoningContent = ChatBaseContent<'reasoning', AIMessageContent[]>;
 export type UserMessageContent = TextContent | AttachmentContent;
 
-// 消息类型定义
+// messageTypedefinition
 export interface ChatBaseMessage {
-  id: string;
-  status?: ChatMessageStatus;
-  datetime?: string;
-  ext?: any;
+ id: string;
+ status?: ChatMessageStatus;
+ datetime?: string;
+ ext?: any;
 }
 
 export interface UserMessage extends ChatBaseMessage {
-  role: 'user';
-  content: UserMessageContent[];
+ role: 'user';
+ content: UserMessageContent[];
 }
 
 export interface AIMessage extends ChatBaseMessage {
-  role: 'assistant';
-  content?: AIMessageContent[];
-  history?: AIMessageContent[][];
-  comment?: ChatComment;
+ role: 'assistant';
+ content?: AIMessageContent[];
+ history?: AIMessageContent[][];
+ comment?: ChatComment;
 }
 
 export interface SystemMessage extends ChatBaseMessage {
-  role: 'system';
-  content: TextContent[];
+ role: 'system';
+ content: TextContent[];
 }
 
 export type ChatMessagesData = UserMessage | AIMessage | SystemMessage;
