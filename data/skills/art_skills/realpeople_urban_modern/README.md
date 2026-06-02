@@ -1,4 +1,4 @@
-# 真人都市写实风格说明
+# Gerçek hayattaki kentsel gerçekçilik tarzı açıklaması
 
 本风格专为"真人都市写实"题材打造，所有美术提示词、规范和生成内容均严格限定于：
 

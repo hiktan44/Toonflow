@@ -1,4 +1,4 @@
-# 甜宠言情 · 导演叙事手法技能包
+# Tatlı Hayvan Romantizmi · Yönetmenin Anlatı Tekniği Beceri Paketi
 
 ## 简介
 

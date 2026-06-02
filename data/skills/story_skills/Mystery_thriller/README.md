@@ -1,4 +1,4 @@
-# 悬疑推理 · 导演叙事手法技能包
+# Gerilim muhakemesi · Yönetmenin anlatım tekniği beceri paketi
 
 ## 简介
 

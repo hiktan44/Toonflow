@@ -1,4 +1,4 @@
-# 心理博弈 · 导演叙事手法技能包
+# Psikolojik Oyun · Yönetmenin Anlatı Tekniği Beceri Paketi
 
 ## 简介
 

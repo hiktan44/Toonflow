@@ -1,4 +1,4 @@
-# 国风二次元新国潮风格说明
+# Ulusal tarz iki boyutlu yeni ulusal trend tarzı açıklaması
 
 本风格专为"国风二次元新国潮"题材打造，所有美术提示词、规范和生成内容均严格限定于：
 

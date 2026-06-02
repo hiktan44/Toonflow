@@ -1,4 +1,4 @@
-# 家庭温情 · 导演叙事手法技能包
+# Aile Sıcaklığı · Yönetmenin Anlatı Becerileri Paketi
 
 ## 简介
 

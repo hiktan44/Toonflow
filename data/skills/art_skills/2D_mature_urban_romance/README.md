@@ -1,4 +1,4 @@
-# 成熟都市言情二次元动画风格说明
+# Yetişkinlere yönelik kentsel romantizm iki boyutlu animasyon stili açıklaması
 
 本风格专为**成熟都市言情二次元动画**题材打造，所有美术提示词、规范和生成内容均严格限定于：
 

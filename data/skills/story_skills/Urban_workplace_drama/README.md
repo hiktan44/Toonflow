@@ -1,4 +1,4 @@
-# 都市职场 · 导演叙事手法技能包
+# Kentsel İşyeri · Yönetmenin Anlatı Tekniği Beceri Paketi
 
 ## 简介
 

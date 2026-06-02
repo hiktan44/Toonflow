@@ -1,4 +1,4 @@
-# 古风仙侠 · 导演叙事手法技能包
+# Kadim Peri · Yönetmenin Anlatı Tekniği Beceri Paketi
 
 ## 简介
 

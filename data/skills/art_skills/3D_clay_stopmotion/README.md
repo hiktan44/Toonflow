@@ -1,4 +1,4 @@
-# 定格动画黏土风格说明
+# Hareket kil tarzı illüstrasyonu durdurun
 
 本风格专为"定格动画黏土质感"题材打造，所有美术提示词、规范和生成内容均严格限定于：
 

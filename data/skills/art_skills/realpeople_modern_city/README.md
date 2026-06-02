@@ -1,4 +1,4 @@
-# 真人都市影像风格
+# Gerçek hayattaki kentsel görüntü stili
 # 真人都市影像风格
 
 # 真人都市题材视觉手册 · 风格说明

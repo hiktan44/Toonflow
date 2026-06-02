@@ -1,4 +1,4 @@
-# 恐怖灵异 · 导演叙事手法技能包
+# Korku ve Doğaüstü · Yönetmenin Anlatı Tekniği Beceri Paketi
 
 ## 简介
 

@@ -1,4 +1,4 @@
-# 喜剧搞笑 · 导演叙事手法技能包
+# Komedi ve Komik · Yönetmenin Anlatı Becerileri Paketi
 
 ## 简介
 

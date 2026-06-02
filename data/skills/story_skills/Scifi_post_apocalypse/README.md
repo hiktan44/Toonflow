@@ -1,4 +1,4 @@
-# 科幻末世 · 导演叙事手法技能包
+# Bilim Kurgu Kıyameti · Yönetmenin Anlatı Tekniği Beceri Paketi
 
 ## 简介
 

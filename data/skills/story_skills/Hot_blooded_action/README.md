@@ -1,4 +1,4 @@
-# 热血少年 · 导演叙事手法技能包
+# Sıcak Kanlı Çocuk · Yönetmenin Anlatı Tekniği Beceri Paketi
 
 ## 简介
 

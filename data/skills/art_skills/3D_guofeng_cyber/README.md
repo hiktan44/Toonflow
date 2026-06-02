@@ -1,4 +1,4 @@
-# 国风赛博3D风格 说明
+# Çin tarzı siber 3D stil açıklaması
 # 国风赛博3D风格 说明
 # 国风赛博3D风格 说明
 # 国风赛博3D风格 说明

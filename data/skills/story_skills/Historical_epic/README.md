@@ -1,4 +1,4 @@
-# 历史史诗 · 导演叙事手法技能包
+# Tarihsel Destan · Yönetmenin Anlatı Tekniği Beceri Paketi
 
 ## 简介
 

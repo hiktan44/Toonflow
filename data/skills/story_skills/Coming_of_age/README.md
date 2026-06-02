@@ -1,4 +1,4 @@
-# 青春成长 · 导演叙事手法技能包
+# Gençliğin Gelişimi · Yönetmenin Anlatı Tekniği Beceri Paketi
 
 ## 简介
 
