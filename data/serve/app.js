@@ -55589,7 +55589,7 @@ var init_getPath = __esm({
           dbPath2 = import_path2.default.resolve(basePath, fileName);
         }
         if (!isPathInside(dbPath2, basePath) && dbPath2 !== basePath) {
-          throw new Error("\u8DEF\u5F84\u9003\u9038\u9519\u8BEF\uFF0C\u8DEF\u5F84\u5FC5\u987B\u5728\u6570\u636E\u76EE\u5F55\u5185");
+          throw new Error("PathPath escape error: path must be within data directory");
         }
         return dbPath2;
       }
@@ -80359,21 +80359,21 @@ var init_dist_node = __esm({
 // src/utils/agent/embedding.ts
 async function initEmbedding() {
   if (extractor) return;
-  const modelConfigData = await db_default("o_setting").whereIn("key", ["modelOnnxFile", "modelDtype"]);
+  const modelConfigData = await db_default("o_setting").whereIn("key", ["modelopennxFile", "modelDtype"]);
   const modelObj = {};
   Object.entries(modelConfigData).forEach(([key, value]) => {
     modelObj[key] = value;
   });
-  let modelOnnxFile = modelObj?.modelOnnxFile ? JSON.parse(modelObj.modelOnnxFile) : ["all-MiniLM-L6-v2", "onnx", "model_fp16.onnx"];
+  let modelopennxFile = modelObj?.modelopennxFile ? JSON.parse(modelObj.modelopennxFile) : ["all-MiniLM-L6-v2", "onnx", "model_fp16.onnx"];
   let modelDtype = modelObj?.modelDtype ?? "fp16";
-  const onnxPath = import_path3.default.join(getPath_default("models"), ...modelOnnxFile);
+  const onnxPath = import_path3.default.join(getPath_default("models"), ...modelopennxFile);
   if (!import_fs.default.existsSync(onnxPath)) {
-    throw new Error(`Embedding \u6A21\u578B\u6587\u4EF6\u4E0D\u5B58\u5728: ${onnxPath}`);
+    throw new Error(`Embedding File not found: ${onnxPath}`);
   }
   import_transformers.env.allowRemoteModels = false;
   import_transformers.env.allowLocalModels = true;
   import_transformers.env.localModelPath = getPath_default("models").replace(/\\/g, "/") + "/";
-  const modelFolder = modelOnnxFile[0];
+  const modelFolder = modelopennxFile[0];
   extractor = await (0, import_transformers.pipeline)("feature-extraction", modelFolder, { dtype: modelDtype });
 }
 async function getEmbedding(text2) {
@@ -80406,7 +80406,7 @@ var init_initDB = __esm({
     init_embedding();
     initDB_default = async (knex3, forceInit = false) => {
       const tables = [
-        // 
+        // table
         {
           name: "o_user",
           builder: (table) => {
@@ -80420,7 +80420,7 @@ var init_initDB = __esm({
             await knex4("o_user").insert([{ id: 1, name: "admin", password: "admin123" }]);
           }
         },
-        //
+        //Projecttable
         {
           name: "o_project",
           builder: (table) => {
@@ -80442,7 +80442,7 @@ var init_initDB = __esm({
             table.unique(["id"]);
           }
         },
-        //
+        //table
         {
           name: "o_artStyle",
           builder: (table) => {
@@ -80457,7 +80457,7 @@ var init_initDB = __esm({
           initData: async (knex4) => {
           }
         },
-        //Agent
+        //AgentConfigurationtable
         {
           name: "o_agentDeploy",
           builder: (table) => {
@@ -80481,8 +80481,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "scriptAgent",
-                name: "\u5267\u672CAgent",
-                desc: "\u7528\u4E8E\u8BFB\u53D6\u539F\u6587\u751F\u6210\u6545\u4E8B\u9AA8\u67B6\u3001\u6539\u7F16\u7B56\u7565\uFF0C\u5EFA\u8BAE\u4F7F\u7528\u5177\u5907\u5F3A\u5927\u6587\u672C\u7406\u89E3\u548C\u751F\u6210\u80FD\u529B\u7684\u6A21\u578B",
+                name: "ScriptAgent",
+                desc: "readoriginal textadaptation strategyusetextandof",
                 disabled: false
               },
               {
@@ -80490,8 +80490,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "productionAgent",
-                name: "\u751F\u4EA7Agent",
-                desc: "\u5BF9\u5DE5\u4F5C\u6D41\u8FDB\u884C\u8C03\u5EA6\u548C\u7BA1\u7406\uFF0C\u5EFA\u8BAE\u4F7F\u7528\u5177\u5907\u8F83\u5F3A\u7684\u903B\u8F91\u63A8\u7406\u548C\u4EFB\u52A1\u7BA1\u7406\u80FD\u529B\u7684\u6A21\u578B",
+                name: "Agent",
+                desc: "streamanduseofandtaskof",
                 disabled: false
               },
               {
@@ -80499,8 +80499,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "universalAi",
-                name: "\u901A\u7528AI",
-                desc: "\u7528\u4E8E\u5C0F\u8BF4\u4E8B\u4EF6\u63D0\u53D6\u3001\u8D44\u4EA7\u63D0\u793A\u8BCD\u751F\u6210\u3001\u53F0\u8BCD\u63D0\u53D6\u7B49\u8FB9\u7F18\u529F\u80FD\uFF0C\u5EFA\u8BAE\u4F7F\u7528\u5177\u5907\u8F83\u5F3A\u6587\u672C\u5904\u7406\u80FD\u529B\u7684\u6A21\u578B",
+                name: "AI",
+                desc: "NovelEventextractAssetPromptextractusetexthandleof",
                 disabled: false
               },
               {
@@ -80508,8 +80508,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "ttsDubbing",
-                name: "TTS\u914D\u97F3",
-                desc: "\u6839\u636E\u5267\u672C\u5185\u5BB9\u751F\u6210\u89D2\u8272\u914D\u97F3\uFF0C\u652F\u6301\u591A\u79CD\u58F0\u97F3\u98CE\u683C\u548C\u60C5\u7EEA",
+                name: "TTS",
+                desc: "based onScriptcontentCharactersupportsand",
                 disabled: true
               },
               {
@@ -80517,8 +80517,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "scriptAgent:decisionAgent",
-                name: "\u5267\u672CAgent:\u51B3\u7B56\u5C42",
-                desc: "\u51B3\u7B56\u5C42",
+                name: "ScriptAgent:",
+                desc: "",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80528,8 +80528,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "scriptAgent:supervisionAgent",
-                name: "\u5267\u672CAgent:\u76D1\u7763\u5C42",
-                desc: "\u76D1\u7763\u5C42",
+                name: "ScriptAgent:",
+                desc: "",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80539,8 +80539,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "scriptAgent:storySkeletonAgent",
-                name: "\u5267\u672CAgent:\u6545\u4E8B\u9AA8\u67B6",
-                desc: "\u6545\u4E8B\u9AA8\u67B6\u751F\u6210",
+                name: "ScriptAgent:",
+                desc: "",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80550,8 +80550,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "scriptAgent:adaptationStrategyAgent",
-                name: "\u5267\u672CAgent:\u6539\u7F16\u7B56\u7565",
-                desc: "\u6539\u7F16\u7B56\u7565\u751F\u6210",
+                name: "ScriptAgent:adaptation strategy",
+                desc: "adaptation strategy",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80561,8 +80561,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "scriptAgent:scriptAgent",
-                name: "\u5267\u672CAgent:\u5267\u672C\u751F\u6210",
-                desc: "\u5267\u672C\u751F\u6210",
+                name: "ScriptAgent:Script",
+                desc: "Script",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80572,8 +80572,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "productionAgent:decisionAgent",
-                name: "\u751F\u4EA7Agent:\u51B3\u7B56\u5C42",
-                desc: "\u51B3\u7B56\u5C42",
+                name: "Agent:",
+                desc: "",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80583,8 +80583,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "productionAgent:supervisionAgent",
-                name: "\u751F\u4EA7Agent:\u76D1\u7763\u5C42",
-                desc: "\u76D1\u7763\u5C42",
+                name: "Agent:",
+                desc: "",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80594,8 +80594,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "productionAgent:deriveAssetsAgent",
-                name: "\u751F\u4EA7Agent:\u884D\u751F\u8D44\u4EA7",
-                desc: "\u884D\u751F\u8D44\u4EA7",
+                name: "Agent:derivedAsset",
+                desc: "derivedAsset",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80605,8 +80605,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "productionAgent:generateAssetsAgent",
-                name: "\u751F\u4EA7Agent:\u751F\u6210\u8D44\u4EA7",
-                desc: "\u751F\u6210\u8D44\u4EA7",
+                name: "Agent:Asset",
+                desc: "Asset",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80616,8 +80616,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "productionAgent:directorPlanAgent",
-                name: "\u751F\u4EA7Agent:\u5BFC\u6F14\u89C4\u5212",
-                desc: "\u5BFC\u6F14\u89C4\u5212",
+                name: "Agent:",
+                desc: "",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80627,8 +80627,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "productionAgent:storyboardGenAgent",
-                name: "\u751F\u4EA7Agent:\u5206\u955C\u751F\u6210",
-                desc: "\u5206\u955C\u751F\u6210",
+                name: "Agent:Storyboard",
+                desc: "Storyboard",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80638,8 +80638,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "productionAgent:storyboardPanelAgent",
-                name: "\u751F\u4EA7Agent:\u5206\u955C\u9762\u677F",
-                desc: "\u5206\u955C\u9762\u677F\u751F\u6210",
+                name: "Agent:Storyboard",
+                desc: "Storyboard",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80649,8 +80649,8 @@ var init_initDB = __esm({
                 modelName: "",
                 vendorId: null,
                 key: "productionAgent:storyboardTableAgent",
-                name: "\u751F\u4EA7Agent:\u5206\u955C\u8868\u683C",
-                desc: "\u5206\u955C\u8868\u683C\u751F\u6210",
+                name: "Agent:Storyboardtable",
+                desc: "Storyboardtable",
                 temperature: 1,
                 maxOutputTokens: 0,
                 disabled: false
@@ -80658,7 +80658,7 @@ var init_initDB = __esm({
             ]);
           }
         },
-        //
+        //Settingstable
         {
           name: "o_setting",
           builder: (table) => {
@@ -80698,7 +80698,7 @@ var init_initDB = __esm({
                 value: 5
               },
               {
-                key: "modelOnnxFile",
+                key: "modelopennxFile",
                 value: '["all-MiniLM-L6-v2", "onnx", "model_fp16.onnx"]'
               },
               {
@@ -80712,7 +80712,7 @@ var init_initDB = __esm({
             ]);
           }
         },
-        //
+        //tasktable
         {
           name: "o_tasks",
           builder: (table) => {
@@ -80731,7 +80731,7 @@ var init_initDB = __esm({
           initData: async (knex4) => {
           }
         },
-        //
+        //Prompttable
         {
           name: "o_prompt",
           builder: (table) => {
@@ -80746,366 +80746,366 @@ var init_initDB = __esm({
           initData: async (knex4) => {
             await knex4("o_prompt").insert([
               {
-                name: "\u4E8B\u4EF6\u63D0\u53D6",
+                name: "Eventextract",
                 type: "eventExtraction",
-                data: `# \u4E8B\u4EF6\u63D0\u53D6\u6307\u4EE4
+                data: `# Eventextract
 
-\u4F60\u662F\u5C0F\u8BF4\u6587\u672C\u5206\u6790\u52A9\u624B\u3002\u7528\u6237\u6BCF\u6B21\u63D0\u4F9B\u4E00\u4E2A\u7AE0\u8282\u7684\u539F\u6587\uFF0C\u4F60\u63D0\u53D6\u8BE5\u7AE0\u7684\u7ED3\u6784\u5316\u4E8B\u4EF6\u4FE1\u606F\u3002
+youwhetherveltextchapteroforiginal textyouextractchapterofEventInformation
 
-## \u26A0\uFE0F \u8F93\u51FA\u7EA6\u675F\uFF08\u6700\u9AD8\u4F18\u5148\u7EA7\uFF0C\u8FDD\u53CD\u4EFB\u4F55\u4E00\u6761\u5373\u4E3A\u5931\u8D25\uFF09
+## \u26A0\uFE0F itemsFailed
 
-1. \u4F60\u7684**\u5B8C\u6574\u56DE\u590D**\u53EA\u6709\u4E00\u884C\uFF0C\u4EE5 \`|\` \u5F00\u5934\u3001\u4EE5 \`|\` \u7ED3\u5C3E\uFF0C\u6070\u597D 7 \u4E2A\u5B57\u6BB5
-2. \u56DE\u590D\u7684**\u7B2C\u4E00\u4E2A\u5B57\u7B26**\u5FC5\u987B\u662F \`|\`\uFF0C**\u6700\u540E\u4E00\u4E2A\u5B57\u7B26**\u5FC5\u987B\u662F \`|\`
-3. \`|\` \u4E4B\u524D\u4E0D\u8BB8\u6709\u4EFB\u4F55\u5B57\u7B26\u2014\u2014\u6CA1\u6709\u5F15\u5BFC\u8BED\u3001\u6CA1\u6709\u89E3\u91CA\u3001\u6CA1\u6709"\u6839\u636E\u2026\u2026"\u3001\u6CA1\u6709"\u4EE5\u4E0B\u662F\u2026\u2026"
-4. \`|\` \u4E4B\u540E\u4E0D\u8BB8\u6709\u4EFB\u4F55\u5B57\u7B26\u2014\u2014\u6CA1\u6709\u603B\u7ED3\u3001\u6CA1\u6709\u63D0\u53D6\u8BF4\u660E\u3001\u6CA1\u6709\u6539\u7F16\u5EFA\u8BAE
-5. \u4E0D\u8F93\u51FA\u8868\u5934\u884C\u3001\u5206\u9694\u7EBF\u3001Markdown \u6807\u9898\u3001emoji\u3001\u4EE3\u7801\u5757\u6807\u8BB0
+1. youof**** \`|\` open \`|\` 7 field
+2. of**chapter**is \`|\`****is \`|\`
+3. \`|\` no characters allowed before\u2014\u2014"based on\u2026\u2026""the followingis\u2026\u2026"
+4. \`|\` not\u2014\u2014extract
+5. nottableMarkdown emojimark
 
-## \u8F93\u51FA\u683C\u5F0F
+## 
 
 \`\`\`
-| \u7B2CX\u7AE0 {\u7AE0\u8282\u6807\u9898} | {\u6D89\u53CA\u89D2\u8272} | {\u6838\u5FC3\u4E8B\u4EF6} | {\u4E3B\u7EBF\u5173\u7CFB} | {\u4FE1\u606F\u5BC6\u5EA6} | {\u9884\u4F30\u96C6\u957F} | {\u60C5\u7EEA\u5F3A\u5EA6} |
+| chapterXchapter {chapter} | {Character} | {Event} | {related} | {Information} | {} | {emotion intensity} |
 \`\`\`
 
-### \u5B57\u6BB5\u89C4\u8303
+### field
 
-| \u5B57\u6BB5 | \u683C\u5F0F\u8981\u6C42 | \u793A\u4F8B |
+| field | | example |
 |------|----------|------|
-| \u7AE0\u8282 | \`\u7B2CX\u7AE0 {\u7AE0\u8282\u6807\u9898}\` | \`\u7B2C1\u7AE0 \u804C\u4E1A\u5371\u673A\u4E0E\u8BB8\u613F\` |
-| \u6D89\u53CA\u89D2\u8272 | \u6709\u5B9E\u9645\u620F\u4EFD\u7684\u89D2\u8272\uFF0C\u987F\u53F7\u5206\u9694 | \`\u6797\u9038\u3001\u767D\u6709\u5BB9\` |
-| \u6838\u5FC3\u4E8B\u4EF6 | 30-60\u5B57\uFF0C\u5FC5\u987B\u542B\u52A8\u4F5C+\u7ED3\u679C | \`\u6797\u9038\u56E0\u89E3\u5BC6\u98CE\u6F6E\u4E8B\u4E1A\u5D29\u584C\uFF0C\u9893\u5E9F\u4E2D\u8BB8\u613F\u89E6\u53D1\u9B54\u6CD5\u7CFB\u7EDF\u7ED1\u5B9A\` |
-| \u4E3B\u7EBF\u5173\u7CFB | **\u5FC5\u987B**\u4E3A \`\u5F3A/\u4E2D/\u5F31\uFF083-8\u5B57\u7406\u7531\uFF09\` | \`\u5F3A\uFF08\u52A8\u673A\u5EFA\u7ACB+\u7CFB\u7EDF\u6FC0\u6D3B\uFF09\` |
-| \u4FE1\u606F\u5BC6\u5EA6 | \`\u9AD8\` / \`\u4E2D\` / \`\u4F4E\` | \`\u9AD8\` |
-| \u9884\u4F30\u96C6\u957F | **\u5FC5\u987B**\u4E3A \`X\u79D2\`\uFF0C\u7981\u6B62\u7528\u5206\u949F | \`50\u79D2\` |
-| \u60C5\u7EEA\u5F3A\u5EA6 | \u6587\u5B57\u6807\u7B7E\uFF0C\`+\` \u8FDE\u63A5\uFF0C\u7981\u6B62\u661F\u7EA7/\u6570\u5B57 | \`\u8F6C\u6298+\u60AC\u7591\` |
+| chapter | \`chapterXchapter {chapter}\` | \`chapter1chapter \` |
+| Character | with actual scenesCharacterseparated by enumeration comma | \`\` |
+| Event | 30-60+result | \`System\` |
+| related | **** \`//3-8\` | \`+System\` |
+| Information | \`\` / \`\` / \`\` | \`\` |
+| | **** \`X\` | \`50\` |
+| emotion intensity | Tags\`+\` Connection/ | \`convert to+\` |
 
-**\u4E3B\u7EBF\u5173\u7CFB\u5224\u5B9A**\uFF1A\u5F3A\uFF1D\u76F4\u63A5\u63A8\u52A8\u4E3B\u89D2\u5F27\u7EBF\uFF1B\u4E2D\uFF1D\u8865\u5145\u4E16\u754C\u89C2/\u4EBA\u7269\u5173\u7CFB/\u4F0F\u7B14\uFF1B\u5F31\uFF1D\u8FC7\u6E21/\u6C14\u6C1B\u3002
+**related**/related//
 
-**\u9884\u4F30\u96C6\u957F\u53C2\u8003**\uFF1A\u9AD8\u5BC6\u5EA6+\u9AD8\u60C5\u7EEA\u219245-60\u79D2\uFF1B\u4E2D\u219235-45\u79D2\uFF1B\u4F4E\u219225-35\u79D2\u3002
+****+high emotion\u219245-60\u219235-45\u219225-35
 
-**\u53EF\u7528\u60C5\u7EEA\u6807\u7B7E**\uFF1A\`\u51B2\u7A81\`\u3001\`\u6050\u6016\`\u3001\`\u60C5\u611F\`\u3001\`\u8F6C\u6298\`\u3001\`\u9AD8\u6F6E\`\u3001\`\u5E73\u94FA\`\u3001\`\u559C\u5267\`\u3001\`\u60AC\u7591\`\u3001\`\u60C5\u611F\u5D29\u6E83\`\u3002
+**Tags**\`\`\`\`\`\`\`convert to\`\`\`\`\`\`\`\`\`\`\`
 
-## \u8F93\u51FA\u793A\u4F8B
+## example
 
-\u4EE5\u4E0B\u4E24\u4E2A\u793A\u4F8B\u5C55\u793A\u7684\u662F**\u5B8C\u6574\u56DE\u590D**\u2014\u2014\u9664\u8FD9\u4E00\u884C\u5916\u6CA1\u6709\u4EFB\u4F55\u5176\u4ED6\u5185\u5BB9\uFF1A
+the followingexampleofis****\u2014\u2014Othercontent
 
 \`\`\`
-| \u7B2C1\u7AE0 \u804C\u4E1A\u5371\u673A\u4E0E\u8BB8\u613F | \u6797\u9038 | \u804C\u4E1A\u9B54\u672F\u5E08\u6797\u9038\u56E0\u89E3\u5BC6\u6253\u5047\u98CE\u6F6E\u5BFC\u81F4\u4E8B\u4E1A\u5D29\u584C\uFF0C\u9893\u5E9F\u4E2D\u611F\u6168"\u5982\u679C\u4F1A\u9B54\u6CD5\u5C31\u597D\u4E86"\uFF0C\u610F\u5916\u89E6\u53D1\u795E\u5947\u9B54\u6CD5\u7CFB\u7EDF\u7ED1\u5B9A | \u5F3A\uFF08\u4E3B\u89D2\u52A8\u673A\u5EFA\u7ACB+\u7CFB\u7EDF\u6FC0\u6D3B\uFF09 | \u9AD8 | 50\u79D2 | \u8F6C\u6298+\u60AC\u7591 |
+| chapter1chapter | | ""System | +System | | 50 | convert to+ |
 \`\`\`
 \`\`\`
-| \u7B2C12\u7AE0 \u5C71\u95F4\u5C0F\u61A9 | \u51CC\u7384\u3001\u82CF\u665A\u537F | \u51CC\u7384\u4E0E\u82CF\u665A\u537F\u5728\u5C71\u95F4\u6B47\u811A\uFF0C\u82CF\u665A\u537F\u56DE\u5FC6\u5E7C\u65F6\u5F80\u4E8B\uFF0C\u4E24\u4EBA\u5173\u7CFB\u7565\u6709\u7F13\u548C\u4F46\u672A\u5B9E\u8D28\u63A8\u8FDB | \u5F31\uFF08\u6C14\u6C1B\u8FC7\u6E21\uFF09 | \u4F4E | 25\u79D2 | \u5E73\u94FA+\u60C5\u611F |
+| chapter12chapter | | atwhenrelatedand | | | 25 | + |
 \`\`\`
 
-## \u63D0\u53D6\u89C4\u5219
+## extract
 
-- \u5FE0\u4E8E\u539F\u6587\uFF0C\u4E0D\u63A8\u6D4B\u3001\u4E0D\u8111\u8865\u3001\u4E0D\u52A0\u5165\u539F\u6587\u672A\u51FA\u73B0\u7684\u60C5\u8282
-- \u89D2\u8272\u4F7F\u7528\u6587\u4E2D\u4E3B\u8981\u79F0\u547C\uFF0C\u4FDD\u6301\u4E00\u81F4
-- \u591A\u6761\u5E73\u884C\u4E8B\u4EF6\u7EBF\u65F6\uFF0C\u9009\u5BF9\u4E3B\u89D2\u5F71\u54CD\u6700\u5927\u7684\u4E00\u6761\uFF0C\u5176\u4F59\u7B80\u8981\u5E26\u8FC7
-- \u5BF9\u8BDD\u5BC6\u96C6\u7AE0\u8282\uFF0C\u5173\u6CE8\u5BF9\u8BDD\u63A8\u52A8\u4E86\u4EC0\u4E48\u7ED3\u679C\uFF0C\u800C\u975E\u590D\u8FF0\u5BF9\u8BDD\u5185\u5BB9`
+- original textnotnotnotoriginal textof
+- Characteruseconsistent
+- itemsEventwhenofitems
+- chapterrelatedresultnon-content`
               },
               {
-                name: "\u5267\u672C\u8D44\u4EA7\u63D0\u53D6",
+                name: "ScriptAssetextract",
                 type: "scriptAssetExtraction",
                 data: `---
 name: universal_agent
-description: \u4E13\u6CE8\u4E8E\u4ECE\u5267\u672C\u5185\u5BB9\u4E2D\u63D0\u53D6\u6240\u4F7F\u7528\u7684\u8D44\u4EA7\uFF08\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177\uFF09\u5E76\u751F\u6210\u7ED3\u6784\u5316\u8D44\u4EA7\u5217\u8868\u7684\u52A9\u624B\u3002
+description: ScriptcontentextractusedAssetCharacterScenePropAssetlistof
 ---
 
 # Script Assets Extract
 
-\u4F60\u662F\u4E00\u4E2A\u4E13\u4E1A\u7684\u5267\u672C\u5185\u5BB9\u5206\u6790\u52A9\u624B\uFF0C\u4E13\u6CE8\u4E8E\u4ECE\u5267\u672C\u6587\u672C\u4E2D\u8BC6\u522B\u548C\u63D0\u53D6\u6240\u6709\u6D89\u53CA\u7684\u8D44\u4EA7\uFF08\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177\uFF09\uFF0C\u5E76\u4E3A\u6BCF\u9879\u8D44\u4EA7\u751F\u6210\u53EF\u4F9B\u4E0B\u6E38\u5236\u4F5C\u6D41\u7A0B\u4F7F\u7528\u7684\u7ED3\u6784\u5316\u63CF\u8FF0\u548C\u63D0\u793A\u8BCD\u3002
+youisofScriptcontentScripttextandextractallofAssetCharacterScenePropAsset generationunderprocessusedDescriptionandPrompt
 
-## \u4F55\u65F6\u4F7F\u7528
+## whenuse
 
-\u7528\u6237\u63D0\u4F9B\u5267\u672C\u5185\u5BB9\uFF0C\u4F60\u9700\u8981\u9010\u6BB5\u9605\u8BFB\u5E76\u63D0\u53D6\u5176\u4E2D\u6D89\u53CA\u7684\u6240\u6709\u8D44\u4EA7\uFF08\u4EBA\u7269\u89D2\u8272\u3001\u573A\u666F\u5730\u70B9\u3001\u9053\u5177\u7269\u4EF6\uFF09\uFF0C\u8F93\u51FA\u4E3A\u7ED3\u6784\u5316\u7684\u8D44\u4EA7\u5217\u8868\u3002\u4EA7\u51FA\u7684\u8D44\u4EA7\u63CF\u8FF0\u5C06\u7528\u4E8E\u540E\u7EED AI \u56FE\u7247\u751F\u6210\u548C\u5236\u4F5C\u6D41\u7A0B\u3002
+Scriptcontent,youneedextractinvolved inallAssetCharacterScenePropofAssetlistofasset description AI imageandprocess
 
-## \u4E0E\u7CFB\u7EDF\u7684\u5BF9\u5E94\u5173\u7CFB
+## Systemofrelated
 
-- \u8D44\u4EA7\u7C7B\u578B\uFF1A
-  - \`role\` \u2014 \u89D2\u8272\uFF08\u5BF9\u5E94 \`o_assets.type = "role"\`\uFF09
-  - \`scene\` \u2014 \u573A\u666F\uFF08\u5BF9\u5E94 \`o_assets.type = "scene"\`\uFF09
-  - \`tool\` \u2014 \u9053\u5177\uFF08\u5BF9\u5E94 \`o_assets.type = "tool"\`\uFF09
-- \u4E0B\u6E38\u7528\u9014\uFF1A\u8D44\u4EA7\u63D0\u793A\u8BCD\u751F\u6210 \u2192 AI \u8D44\u4EA7\u56FE\u751F\u6210 \u2192 \u5206\u955C\u5236\u4F5C
+- AssetType
+ - \`role\` \u2014 Character \`o_assets.type = "role"\`
+ - \`scene\` \u2014 Scene \`o_assets.type = "scene"\`
+ - \`tool\` \u2014 Prop \`o_assets.type = "tool"\`
+- underAssetPrompt \u2192 AI Assetimage \u2192 Storyboard
 
-## \u8F93\u51FA\u8981\u6C42
+## 
 
-**\u5FC5\u987B\u901A\u8FC7\u8C03\u7528 \`resultTool\` \u5DE5\u5177\u8FD4\u56DE\u7ED3\u679C**\uFF0C\u7981\u6B62\u4EE5\u7EAF\u6587\u672C\u3001Markdown \u8868\u683C\u6216 JSON \u4EE3\u7801\u5757\u7B49\u5F62\u5F0F\u76F4\u63A5\u8F93\u51FA\u8D44\u4EA7\u5217\u8868\u3002
-\`resultTool\` \u7684 schema \u4F1A\u5BF9\u5B57\u6BB5\u7C7B\u578B\u548C\u679A\u4E3E\u503C\u505A\u5F3A\u6821\u9A8C\uFF0C\u8C03\u7528\u65F6\u8BF7\u4E25\u683C\u6309\u7167\u4E0B\u65B9\u5B57\u6BB5\u5B9A\u4E49\u586B\u5199\uFF0C\u786E\u4FDD\u6570\u636E\u7ED3\u6784\u6B63\u786E\u3001\u5B57\u6BB5\u5B8C\u6574\u3001\u7C7B\u578B\u5339\u914D\u3002
+** \`resultTool\` toolreturnresult**textMarkdown table JSON Assetlist
+\`resultTool\` of schema fieldTypeandvalidatewhenstrictly followunderfielddefinitionensuredatafieldTypematch
 
-\u6BCF\u4E2A\u8D44\u4EA7\u5BF9\u8C61\u5305\u542B\u4EE5\u4E0B\u5B57\u6BB5\uFF1A
+Assetthe followingfield
 
-| \u5B57\u6BB5 | \u7C7B\u578B | \u5FC5\u586B | \u8BF4\u660E |
+| field | Type | Required | |
 | ---- | ---- | ---- | ---- |
-| \`name\` | string | \u662F | \u8D44\u4EA7\u540D\u79F0\uFF0C\u4F7F\u7528\u5267\u672C\u4E2D\u7684\u539F\u59CB\u79F0\u547C,\u4E0D\u505A\u5176\u4ED6\u591A\u4F59\u63CF\u8FF0 |
-| \`desc\` | string | \u662F | \u8D44\u4EA7\u63CF\u8FF0\uFF0C30-80 \u5B57\u7684\u89C6\u89C9\u5316\u63CF\u8FF0 |
-| \`prompt\` | string | \u662F | \u751F\u6210\u63D0\u793A\u8BCD\uFF0C\u82F1\u6587\uFF0C\u7528\u4E8E AI \u56FE\u7247\u751F\u6210 |
-| \`type\` | enum | \u662F | \u8D44\u4EA7\u7C7B\u578B\uFF1A\`role\` / \`scene\` / \`tool\`  |
+| \`name\` | string | is | AssetNameuseScriptofstart,notOtherDescription |
+| \`desc\` | string | is | asset description30-80 ofDescription |
+| \`prompt\` | string | is | Generate prompt AI image |
+| \`type\` | enum | is | AssetType\`role\` / \`scene\` / \`tool\` |
 
-## \u63D0\u53D6\u89C4\u5219
+## extract
 
-### \u89D2\u8272\uFF08role\uFF09
+### Characterrole
 
-- \u63D0\u53D6\u5267\u672C\u4E2D\u51FA\u73B0\u7684\u6240\u6709\u6709\u540D\u5B57\u7684\u89D2\u8272
-- \`desc\`\uFF1A\u5305\u542B\u5916\u8C8C\u7279\u5F81\u3001\u670D\u9970\u98CE\u683C\u3001\u4F53\u6001\u6C14\u8D28\u7B49\u89C6\u89C9\u8981\u7D20
-- \`prompt\`\uFF1A\u82F1\u6587\u63D0\u793A\u8BCD\uFF0C\u63CF\u8FF0\u89D2\u8272\u7684\u5916\u89C2\u7279\u5F81\uFF0C\u9002\u7528\u4E8E AI \u89D2\u8272\u56FE\u751F\u6210
-- \u540C\u4E00\u89D2\u8272\u6709\u591A\u4E2A\u79F0\u547C\u65F6\uFF0C\u53D6\u6700\u5E38\u7528\u7684\u4F5C\u4E3A \`name\`
-- \u65E0\u540D\u9F99\u5957\uFF08\u5982"\u8DEF\u4EBA\u7532"\u3001"\u58EB\u5175"\uFF09\u53EF\u8DF3\u8FC7\uFF0C\u9664\u975E\u5176\u9020\u578B\u5BF9\u5267\u60C5\u6709\u91CD\u8981\u89C6\u89C9\u610F\u4E49
+- extractScriptofallofCharacter
+- \`desc\`
+- \`prompt\`PromptDescriptionCharacterof AI Characterimage
+- Characterwhenof \`name\`
+- no""""non-
 
-### \u573A\u666F\uFF08scene\uFF09
+### Scenescene
 
-- \u63D0\u53D6\u5267\u672C\u4E2D\u51FA\u73B0\u7684\u6240\u6709\u573A\u666F/\u5730\u70B9
-- \`desc\`\uFF1A\u5305\u542B\u7A7A\u95F4\u7ED3\u6784\u3001\u5149\u7167\u6C1B\u56F4\u3001\u5173\u952E\u9648\u8BBE\u3001\u8272\u8C03\u57FA\u8C03\u7B49\u89C6\u89C9\u8981\u7D20
-- \`prompt\`\uFF1A\u82F1\u6587\u63D0\u793A\u8BCD\uFF0C\u63CF\u8FF0\u573A\u666F\u7684\u6574\u4F53\u89C6\u89C9\u98CE\u683C\uFF0C\u9002\u7528\u4E8E AI \u573A\u666F\u56FE\u751F\u6210
-- \u540C\u4E00\u573A\u666F\u7684\u4E0D\u540C\u72B6\u6001\uFF08\u5982\u767D\u5929/\u591C\u665A\uFF09\u4E0D\u91CD\u590D\u63D0\u53D6\uFF0C\u5728 \`desc\` \u4E2D\u6CE8\u660E\u5373\u53EF
+- extractScriptofallScene/
+- \`desc\`related
+- \`prompt\`PromptDescriptionSceneof AI Sceneimage
+- SceneofnotStatus/notextractat \`desc\` 
 
-### \u9053\u5177\uFF08tool\uFF09
+### Proptool
 
-- \u63D0\u53D6\u5267\u672C\u4E2D\u51FA\u73B0\u7684\u91CD\u8981\u9053\u5177/\u7269\u54C1
-- \`desc\`\uFF1A\u5305\u542B\u5916\u89C2\u5F62\u72B6\u3001\u989C\u8272\u6750\u8D28\u3001\u5C3A\u5BF8\u53C2\u8003\u3001\u7279\u6B8A\u6548\u679C\u7B49\u89C6\u89C9\u8981\u7D20
-- \`prompt\`\uFF1A\u82F1\u6587\u63D0\u793A\u8BCD\uFF0C\u63CF\u8FF0\u9053\u5177\u7684\u5916\u89C2\u7EC6\u8282\uFF0C\u9002\u7528\u4E8E AI \u9053\u5177\u56FE\u751F\u6210
-- \u4EC5\u63D0\u53D6\u6709\u72EC\u7ACB\u89C6\u89C9\u610F\u4E49\u6216\u5267\u60C5\u529F\u80FD\u7684\u9053\u5177\uFF0C\u901A\u7528\u7269\u54C1\u53EF\u8DF3\u8FC7
+- extractScriptofProp/
+- \`desc\`special
+- \`prompt\`PromptDescriptionPropof AI Propimage
+- extractofProp
 
 
-## \u63D0\u793A\u8BCD\uFF08prompt\uFF09\u751F\u6210\u89C4\u8303
+## Promptprompt
 
-- \u91C7\u7528\u9017\u53F7\u5206\u9694\u7684\u5173\u952E\u8BCD/\u77ED\u8BED\u683C\u5F0F
-- \u4F18\u5148\u63CF\u8FF0**\u89C6\u89C9\u7279\u5F81**\uFF0C\u907F\u514D\u62BD\u8C61\u6982\u5FF5
-- \u5305\u542B\u98CE\u683C\u5173\u952E\u8BCD\uFF08\u5982 anime style, manga style \u7B49\uFF0C\u6839\u636E\u9879\u76EE\u98CE\u683C\u51B3\u5B9A\uFF09
-- \u89D2\u8272 prompt \u793A\u4F8B\uFF1A\`a young man, sharp eyebrows, black hair, pale skin, wearing a gray Taoist robe, slender build, cold expression\`
-- \u573A\u666F prompt \u793A\u4F8B\uFF1A\`dark cave interior, glowing crystals on walls, misty atmosphere, dim blue lighting, stone altar in center\`
-- \u9053\u5177 prompt \u793A\u4F8B\uFF1A\`ancient jade pendant, oval shape, translucent green, carved dragon pattern, glowing faintly\`
+- ofrelatedkeywords/
+- Description****
+- relatedkeywords anime style, manga style based onProject
+- Character prompt example\`a young man, sharp eyebrows, black hair, pale skin, wearing a gray Taoist robe, slender build, cold expression\`
+- Scene prompt example\`dark cave interior, glowing crystals on walls, misty atmosphere, dim blue lighting, stone altar in center\`
+- Prop prompt example\`ancient jade pendant, oval shape, translucent green, carved dragon pattern, glowing faintly\`
 
-## \u63D0\u53D6\u6D41\u7A0B
+## extractprocess
 
-1. \u901A\u8BFB\u5267\u672C\u5168\u6587\uFF0C\u8BC6\u522B\u6240\u6709\u51FA\u73B0\u7684\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177
-2. \u5BF9\u6BCF\u4E2A\u8D44\u4EA7\u751F\u6210\u7ED3\u6784\u5316\u7684 \`name\`\u3001\`desc\`\u3001\`prompt\`\u3001\`type\`
-3. \u53BB\u91CD\uFF1A\u540C\u4E00\u8D44\u4EA7\u4E0D\u91CD\u590D\u63D0\u53D6
-4. **\u5FC5\u987B\u901A\u8FC7\u8C03\u7528 \`resultTool\` \u5DE5\u5177\u8F93\u51FA\u5B8C\u6574\u8D44\u4EA7\u5217\u8868**\uFF0C\u4E0D\u8981\u5206\u591A\u6B21\u8C03\u7528\uFF0C\u4E00\u6B21\u6027\u5C06\u6240\u6709\u8D44\u4EA7\u653E\u5165 \`assetsList\` \u6570\u7EC4\u4E2D\u63D0\u4EA4
+1. ScriptallofCharacterSceneProp
+2. Asset generationof \`name\`\`desc\`\`prompt\`\`type\`
+3. Assetnotextract
+4. ** \`resultTool\` toolAssetlist**notconvert allAsset \`assetsList\` Submit
 
-## \u63D0\u53D6\u539F\u5219
+## extract
 
-1. **\u5FE0\u4E8E\u5267\u672C**\uFF1A\u6240\u6709\u63D0\u53D6\u57FA\u4E8E\u5267\u672C\u4E2D\u7684\u5B9E\u9645\u5185\u5BB9\uFF0C\u4E0D\u81C6\u9020\u672A\u51FA\u73B0\u7684\u8D44\u4EA7
-2. **\u89C6\u89C9\u4F18\u5148**\uFF1A\u63CF\u8FF0\u548C\u63D0\u793A\u8BCD\u805A\u7126\u89C6\u89C9\u7279\u5F81\uFF0C\u4FBF\u4E8E AI \u56FE\u7247\u751F\u6210
-3. **\u7CBE\u7B80\u5B9E\u7528**\uFF1A\u53EA\u63D0\u53D6\u5BF9\u5236\u4F5C\u6709\u5B9E\u9645\u610F\u4E49\u7684\u8D44\u4EA7\uFF0C\u907F\u514D\u8FC7\u5EA6\u63D0\u53D6
-4. **\u5206\u7C7B\u51C6\u786E**\uFF1A\u4E25\u683C\u6309\u7167 role/scene/tool \u5206\u7C7B\uFF0C\u4E0D\u6DF7\u6DC6
-5. **\u63D0\u793A\u8BCD\u8D28\u91CF**\uFF1A\u82F1\u6587\u63D0\u793A\u8BCD\u5E94\u5177\u4F53\u3001\u53EF\u6267\u884C\uFF0C\u80FD\u76F4\u63A5\u7528\u4E8E AI \u56FE\u7247\u751F\u6210
+1. **Script**allextractScriptofcontent,notofAsset
+2. ****DescriptionandPrompt AI image
+3. ****extractofAssetextract
+4. **Category**by role/scene/tool Categorynot
+5. **Prompt**Prompt AI image
 
-## \u6CE8\u610F\u4E8B\u9879
+## 
 
-- \u8D44\u4EA7\u5217\u8868\u4E2D**\u4E0D\u8981\u5305\u542B\u5267\u672C\u5185\u5BB9\u672C\u8EAB**\uFF0C\u4EC5\u63D0\u53D6\u6240\u4F7F\u7528\u5230\u7684\u8D44\u4EA7
-- \u89D2\u8272\u7684\u968F\u8EAB\u7269\u54C1\u5982\u679C\u6709\u72EC\u7ACB\u5267\u60C5\u529F\u80FD\uFF0C\u5E94\u5355\u72EC\u4F5C\u4E3A\u9053\u5177\u63D0\u53D6
-- \u573A\u666F\u4E2D\u7684\u56FA\u5B9A\u9648\u8BBE\u4E0D\u9700\u8981\u5355\u72EC\u63D0\u53D6\u4E3A\u9053\u5177\uFF0C\u9664\u975E\u8BE5\u7269\u4EF6\u6709\u72EC\u7ACB\u5267\u60C5\u4F5C\u7528`
+- Assetlist**notScriptcontent**extractuseofAsset
+- CharacterofPropextract
+- SceneofnotneedextractPropnon-`
               },
               {
-                name: "\u89C6\u9891\u63D0\u793A\u8BCD\u751F\u6210",
+                name: "Video prompt",
                 type: "videoPromptGeneration",
-                data: `# \u89C6\u9891\u63D0\u793A\u8BCD\u751F\u6210 Skill
+                data: `# Video prompt Skill
 
-\u4F60\u662F**\u89C6\u9891\u63D0\u793A\u8BCD\u751F\u6210 Agent**\uFF0C\u4E13\u95E8\u8D1F\u8D23\u6839\u636E\u6307\u5B9A\u7684 AI \u89C6\u9891\u6A21\u578B\uFF0C\u8BFB\u53D6\u5206\u955C\u4FE1\u606F\u5E76\u8F93\u51FA\u8BE5\u6A21\u578B\u5BF9\u5E94\u683C\u5F0F\u7684\u89C6\u9891\u63D0\u793A\u8BCD\u3002
+youis**Video prompt Agent**based onspecifiedof AI video modelreadStoryboardInformationofVideo prompt
 
 ---
 
-## \u8F93\u5165\u683C\u5F0F
+## 
 
-### 1. \u6A21\u578B\u4E0E\u6A21\u5F0F\uFF08\u5FC5\u9009\uFF09
+### 1. 
 
 
-#### \u6A21\u5F0F\u8DEF\u7531\u89C4\u5219
+#### 
 
-| \u6761\u4EF6 | \u5339\u914D\u6A21\u5F0F | \u8BF4\u660E |
+| items | match | |
 |------|----------|------|
-| \u6A21\u578B\u540D\u4E3A \`Seedance2.0\` / \`seedance 2.0\` / \`\u5373\u68A62.0\` | **Seedance 2.0** | \u56FA\u5B9A\u6A21\u5F0F\uFF0C\u65E0\u8BBA\u591A\u53C2\u6807\u5FD7\u5982\u4F55 |
-| \u6A21\u578B\u540D\u4E3A \`Wan2.6\` / \`wan 2.6\` / \`\u4E07\u8C612.6\` | **Wan 2.6** | \u56FA\u5B9A\u6A21\u5F0F\uFF0C\u5355\u56FE\uFF08\u9996\u5E27\uFF09+ \u53D9\u4E8B\u6587\u672C\uFF0C\u65E0\u5C3E\u5E27 |
-| \u5176\u4ED6\u4EFB\u4F55\u6A21\u578B + \`\u591A\u53C2:\u662F\` | **\u901A\u7528\u591A\u53C2\u6A21\u5F0F** | \u652F\u6301\u89D2\u8272/\u573A\u666F/\u5206\u955C\u56FE\u591A\u53C2\u5F15\u7528 |
-| \u5176\u4ED6\u4EFB\u4F55\u6A21\u578B + \`\u591A\u53C2:\u5426\` | **\u901A\u7528\u9996\u5C3E\u5E27\u6A21\u5F0F** | \u9996\u5E27/\u9996\u5C3E\u5E27 + \u7EAF\u6587\u672C\u63CF\u8FF0 |
+| \`Seedance2.0\` / \`seedance 2.0\` / \`2.0\` | **Seedance 2.0** | noMulti-reference |
+| \`Wan2.6\` / \`wan 2.6\` / \`2.6\` | **Wan 2.6** | Single imageFirst frame+ textnoLast frame |
+| Other + \`Multi-reference:is\` | **Multi-reference** | supportsCharacter/Scene/storyboard imageMulti-reference |
+| Other + \`Multi-reference:No\` | **First and last frames** | First frame/First and last frames + textDescription |
 
-> \u6A21\u578B\u540D\u4EC5\u7528\u4E8E\u8BB0\u5F55\uFF0C\u5B9E\u9645\u63D0\u793A\u8BCD\u683C\u5F0F\u7531\u5339\u914D\u5230\u7684\u6A21\u5F0F\u51B3\u5B9A\u3002Seedance 2.0 \u548C Wan 2.6 \u662F\u6307\u5B9A\u6A21\u578B\u540D\u5373\u786E\u5B9A\u6A21\u5F0F\u7684\u7279\u4F8B\u3002
+> PromptmatchofSeedance 2.0 and Wan 2.6 isspecifiedOKof
 
-### 2. \u8D44\u4EA7\u4FE1\u606F
+### 2. AssetInformation
 
 \`\`\`
-\u8D44\u4EA7\u4FE1\u606F[id, type, name], [id, type, name], ...
+AssetInformation[id, type, name], [id, type, name], ...
 \`\`\`
 
-- \`id\`\uFF1A\u8D44\u4EA7\u552F\u4E00\u6807\u8BC6\uFF08\u5982 \`A001\`\uFF09
-- \`type\`\uFF1A\u8D44\u4EA7\u7C7B\u578B\uFF0C\u53D6\u503C \`character\`\uFF08\u89D2\u8272\uFF09/ \`scene\`\uFF08\u573A\u666F\uFF09/ \`prop\`\uFF08\u9053\u5177\uFF09
-- \`name\`\uFF1A\u8D44\u4EA7\u540D\u79F0\uFF08\u5982 \`\u6C88\u8F9E\`\u3001\`\u57CE\u697C\`\u3001\`\u957F\u5251\`\uFF09
+- \`id\`Asset \`A001\`
+- \`type\`AssetType \`character\`Character/ \`scene\`Scene/ \`prop\`Prop
+- \`name\`AssetName \`\`\`\`\`\`
 
-### 3. \u5206\u955C\u4FE1\u606F
+### 3. StoryboardInformation
 
-\u5206\u955C\u4EE5 \`<storyboardItem>\` XML \u6807\u7B7E\u5217\u8868\u7684\u5F62\u5F0F\u4F20\u5165\uFF0C\u6BCF\u6761\u5206\u955C\u7ED3\u6784\u5982\u4E0B\uFF1A
+Storyboard \`<storyboardItem>\` XML TagslistofitemsStoryboardunder
 
 \`\`\`xml
 <storyboardItem
-  videoDesc='\uFF08\u753B\u9762\u63CF\u8FF0\u3001\u573A\u666F\u3001\u5173\u8054\u8D44\u4EA7\u540D\u79F0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u3001\u5173\u8054\u8D44\u4EA7ID\uFF09'
-  prompt='\u5F85\u751F\u6210'
-  track='\u5206\u7EC4'
-  duration='\u89C6\u9891\u63A8\u8350\u65F6\u95F4'
-  associateAssetsIds="[\u8BE5\u5206\u955C\u6240\u9700\u7684\u8D44\u4EA7ID\u5217\u8868]"
-  shouldGenerateImage="true"
+ videoDesc='Visual descriptionScenerelatedAssetNamewhenCharacterrelatedAssetID'
+ prompt=''
+ track=''
+ duration='Time'
+ associateAssetsIds="[StoryboardofAssetIDlist]"
+ shouldGenerateImage="true"
 ></storyboardItem>
 \`\`\`
 
-#### \u8F93\u5165\u5B57\u6BB5\u8BF4\u660E
+#### field
 
-| \u5C5E\u6027 | \u8BF4\u660E | \u6765\u6E90 |
+| | | |
 |------|------|------|
-| \`videoDesc\` | **\u6838\u5FC3\u8F93\u5165**\uFF1A\u5206\u955C\u7684\u7ED3\u6784\u5316\u753B\u9762\u63CF\u8FF0\uFF0C\u5305\u542B\u753B\u9762\u63CF\u8FF0\u3001\u573A\u666F\u3001\u5173\u8054\u8D44\u4EA7\u540D\u79F0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u3001\u5173\u8054\u8D44\u4EA7ID | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
-| \`prompt\` | **\u5DF2\u6709\u5B57\u6BB5**\uFF1A\u4E0A\u6E38\u751F\u6210\u7684\u5206\u955C\u56FE\u63D0\u793A\u8BCD\uFF0C\u4F5C\u4E3A\u8F85\u52A9\u53C2\u8003\u4E0A\u4E0B\u6587\uFF0C**\u4E0D\u4FEE\u6539** | \u4E0A\u6E38\u7CFB\u7EDF\u5DF2\u586B\u5199 |
-| \`track\` | \u5206\u955C\u5206\u7EC4\u6807\u8BC6 | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
-| \`duration\` | \u89C6\u9891\u63A8\u8350\u65F6\u957F\uFF08\u79D2\uFF09 | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
-| \`associateAssetsIds\` | \u8BE5\u5206\u955C\u5173\u8054\u7684\u8D44\u4EA7ID\u5217\u8868 | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
-| \`shouldGenerateImage\` | \u662F\u5426\u9700\u8981\u751F\u6210\u5206\u955C\u56FE\u7247\uFF0C\u9ED8\u8BA4 \`true\` | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
+| \`videoDesc\` | ****StoryboardofVisual descriptionVisual descriptionScenerelatedAssetNamewhenCharacterrelatedAssetID | /System |
+| \`prompt\` | **alreadyfield**ofstoryboard imagePromptunder**notedit** | Systemalready |
+| \`track\` | Storyboard | /System |
+| \`duration\` | when | /System |
+| \`associateAssetsIds\` | StoryboardrelatedofAssetIDlist | /System |
+| \`shouldGenerateImage\` | whetherneedGenerate storyboardimageDefault \`true\` | /System |
 
 ---
 
-## \u4EFB\u52A1\u76EE\u6807
+## task
 
-\u8BFB\u53D6\u6240\u6709 \`<storyboardItem>\` \u7684\u5C5E\u6027\uFF0C\u7ED3\u5408\u8D44\u4EA7\u4FE1\u606F\uFF0C\u6839\u636E\u6307\u5B9A\u6A21\u578B\u7684\u63D0\u793A\u8BCD\u683C\u5F0F\uFF0C\u5C06\u5168\u90E8\u5206\u955C\u6574\u5408\u4E3A\u4E00\u4E2A\u5B8C\u6574\u7684\u89C6\u9891\u63D0\u793A\u8BCD\u3002
+readall \`<storyboardItem>\` ofAssetInformationbased onspecifiedofPromptAllStoryboardofVideo prompt
 
 ---
 
-## \u8F93\u51FA\u683C\u5F0F
+## 
 
-\u5C06\u6240\u6709\u5206\u955C\u6574\u5408\u4E3A**\u4E00\u4E2A\u5B8C\u6574\u7684\u89C6\u9891\u63D0\u793A\u8BCD**\u8F93\u51FA\uFF08\u975E\u9010\u6761\u72EC\u7ACB\uFF09\uFF1A
+convert allStoryboard**ofVideo prompt**non-items
 
-| \u6A21\u5F0F | \u6574\u5408\u65B9\u5F0F |
+| | |
 |------|----------|
-| **\u901A\u7528\u591A\u53C2\u6A21\u5F0F** | \`[References]\` \u6C47\u603B\u6240\u6709 \`@\u56FEN \` \u5F15\u7528\uFF1B\`[Instruction]\` \u6309\u65F6\u95F4\u987A\u5E8F\u63CF\u8FF0\u5B8C\u6574\u53D9\u4E8B |
-| **\u901A\u7528\u9996\u5C3E\u5E27\u6A21\u5F0F** | \u7EAF\u6587\u672C\u4E94\u7EF4\u5EA6\uFF08Visual / Motion / Camera / Audio / Narrative\uFF09\uFF0C\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528\uFF0C\u6309\u65F6\u95F4\u8F74\u8FDE\u7EED\u7F16\u6392\uFF08\`[Motion]\` 0s \u2192 \u603B\u65F6\u957F\uFF0C\u6BCF\u6BB5\u6700\u4F4E 1 \u79D2\uFF09\uFF0C\u5168\u7A0B\u5355\u4E00\u8FDE\u8D2F\u955C\u5934\uFF0C\u4E0D\u5207\u955C |
-| **Seedance 2.0** | \`\u751F\u6210\u4E00\u4E2A\u7531\u4EE5\u4E0B N \u4E2A\u5206\u955C\u7EC4\u6210\u7684\u89C6\u9891\`\uFF0C\u6BCF\u6761\u5BF9\u5E94 \`\u5206\u955CN<duration-ms>\` \u6BB5\u843D |
-| **Wan 2.6** | \u5355\u56FE\u9996\u5E27\u6A21\u5F0F\uFF0C\u6BCF\u6B21\u4EC5\u8F93\u5165\u4E00\u6761\u5206\u955C\uFF0C\u8F93\u51FA\u4E00\u6BB5\u53D9\u4E8B\u5F0F\u82F1\u6587\u63D0\u793A\u8BCD\uFF08\u4E09\u6BB5\u5F0F\uFF1A\u98CE\u683C\u57FA\u8C03 \u2192 \u4E3B\u4F53\u52A8\u4F5C+\u573A\u666F\u73AF\u5883+\u5149\u7EBF\u6C1B\u56F4 \u2192 \u955C\u5934\u6536\u5C3E\uFF09\uFF0C\u4E0D\u4F7F\u7528 \`@\u56FEN \` \u5F15\u7528 |
+| **Multi-reference** | \`[References]\` all \`@imageN \` \`[Instruction]\` byTimeDescription |
+| **First and last frames** | textVisual / Motion / Camera / Audio / Narrativenotuse \`@imageN \` byTime\`[Motion]\` 0s \u2192 when 1 not |
+| **Seedance 2.0** | \`the following N Storyboardof\`items \`StoryboardN<duration-ms>\` |
+| **Wan 2.6** | Single imageFirst frameitemsStoryboardPrompt \u2192 +Scene+ \u2192 notuse \`@imageN \` |
 
-- \u4EC5\u8F93\u51FA\u89C6\u9891\u63D0\u793A\u8BCD\u6587\u672C\uFF0C\u4E0D\u8F93\u51FA XML \u6807\u7B7E\uFF0C\u4E0D\u9644\u52A0\u89E3\u91CA
+- Video prompttextnot XML Tagsnot
 
 ---
 
-## videoDesc \u89E3\u6790\u89C4\u5219
+## videoDesc parse
 
-\u4ECE \`videoDesc\` \u62EC\u53F7\u5185\u6309\u987F\u53F7\u5206\u9694\u63D0\u53D6\u4EE5\u4E0B\u7ED3\u6784\u5316\u5B57\u6BB5\uFF1A
+ \`videoDesc\` byseparated by enumeration commaextractthe followingfield
 
 \`\`\`
-\uFF08{\u753B\u9762\u63CF\u8FF0}\u3001{\u573A\u666F}\u3001{\u5173\u8054\u8D44\u4EA7\u540D\u79F0}\u3001{\u65F6\u957F}\u3001{\u666F\u522B}\u3001{\u8FD0\u955C}\u3001{\u89D2\u8272\u52A8\u4F5C}\u3001{\u60C5\u7EEA}\u3001{\u5149\u5F71\u6C1B\u56F4}\u3001{\u53F0\u8BCD}\u3001{\u97F3\u6548}\u3001{\u5173\u8054\u8D44\u4EA7ID}\uFF09
+{Visual description}{Scene}{relatedAssetName}{when}{}{}{Character}{}{}{}{}{relatedAssetID}
 \`\`\`
 
-| \u5E8F\u53F7 | \u5B57\u6BB5 | \u7528\u9014 | \u793A\u4F8B |
+| | field | | example |
 |------|------|------|------|
-| 1 | \u753B\u9762\u63CF\u8FF0 | prompt \u7684\u53D9\u4E8B\u4E3B\u5E72 | \u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730 |
-| 2 | \u573A\u666F | \u5339\u914D\u573A\u666F\u8D44\u4EA7 | \u57CE\u697C |
-| 3 | \u5173\u8054\u8D44\u4EA7\u540D\u79F0 | \u5339\u914D\u89D2\u8272/\u9053\u5177\u8D44\u4EA7 | \u6C88\u8F9E/\u57CE\u697C |
-| 4 | \u65F6\u957F | \u63A7\u5236\u65F6\u957F\u53C2\u6570 | 4s |
-| 5 | \u666F\u522B | \u63A7\u5236\u955C\u5934\u666F\u522B | \u5168\u666F |
-| 6 | \u8FD0\u955C | \u63A7\u5236\u8FD0\u955C\u65B9\u5F0F | \u9759\u6B62 |
-| 7 | \u89D2\u8272\u52A8\u4F5C | prompt \u52A8\u4F5C\u63CF\u5199 | \u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C |
-| 8 | \u60C5\u7EEA | prompt \u60C5\u7EEA\u6C1B\u56F4 | \u575A\u5B9A\u51B3\u7EDD |
-| 9 | \u5149\u5F71\u6C1B\u56F4 | prompt \u5149\u5F71\u63CF\u5199 | \u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149 |
-| 10 | \u53F0\u8BCD | prompt \u53F0\u8BCD/\u97F3\u9891\u6BB5 | \u65E0\u53F0\u8BCD / \u5177\u4F53\u53F0\u8BCD\u5185\u5BB9 |
-| 11 | \u97F3\u6548 | prompt \u97F3\u6548\u63CF\u5199 | \u98CE\u58F0\u8863\u8882\u58F0 |
-| 12 | \u5173\u8054\u8D44\u4EA7ID | \u7528\u4E8E\u8D44\u4EA7ID\u2194\u89D2\u8272\u6807\u7B7E\u6620\u5C04 | A001/A002 |
+| 1 | Visual description | prompt of | |
+| 2 | Scene | matchSceneAsset | |
+| 3 | relatedAssetName | matchCharacter/PropAsset | / |
+| 4 | when | when | 4s |
+| 5 | | | |
+| 6 | | | |
+| 7 | Character | prompt | |
+| 8 | | prompt | |
+| 9 | | prompt | |
+| 10 | | prompt /audio | no / content |
+| 11 | | prompt | |
+| 12 | relatedAssetID | AssetID\u2194CharacterTagsmapping | A001/A002 |
 
 ---
 
-## \u8D44\u4EA7\u5F15\u7528\u7F16\u53F7\u89C4\u5219
+## Asset
 
-\u6240\u6709\u6A21\u578B\u7EDF\u4E00\u4F7F\u7528 \`@\u56FEN \` \u683C\u5F0F\u5F15\u7528\u8D44\u4EA7\u548C\u5206\u955C\u56FE\uFF0C\u7F16\u53F7\u6309\u8F93\u5165\u987A\u5E8F\u8FDE\u7EED\u9012\u589E\uFF1A
+alluse \`@imageN \` Assetandstoryboard imageby
 
-1. **\u8D44\u4EA7**\uFF1A\u6309\u8D44\u4EA7\u4FE1\u606F\u4E2D \`[id, type, name]\` \u7684\u51FA\u73B0\u987A\u5E8F\uFF0C\u4ECE \`@\u56FE1 \` \u5F00\u59CB\u7F16\u53F7\uFF08\u4E0D\u533A\u5206 character / scene / prop\uFF09
-2. **\u5206\u955C\u56FE**\uFF1A\u6BCF\u6761 \`<storyboardItem>\` \u5BF9\u5E94\u4E00\u5F20\u5206\u955C\u56FE\uFF0C\u7F16\u53F7\u63A5\u7EED\u8D44\u4EA7\u4E4B\u540E
-3. **\u8DF3\u8FC7\u65E0\u5206\u955C\u56FE\u7684\u6761\u76EE**\uFF1A\u5F53 \`shouldGenerateImage="false"\` \u65F6\uFF0C\u8BE5\u5206\u955C\u672A\u751F\u6210\u56FE\u7247\uFF0C**\u4E0D\u5206\u914D**\u5206\u955C\u56FE\u7F16\u53F7\uFF0C\u540E\u7EED\u7F16\u53F7\u987A\u5EF6
+1. **Asset**byAssetInformation \`[id, type, name]\` of \`@image1 \` openstartnot character / scene / prop
+2. **storyboard image**items \`<storyboardItem>\` storyboard imageAsset
+3. **nostoryboard imageofitems** \`shouldGenerateImage="false"\` whenStoryboardnot generatedimage**not**storyboard image
 
-#### \u793A\u4F8B
+#### example
 
-\u8F93\u5165 3 \u4E2A\u8D44\u4EA7 + 2 \u6761\u5206\u955C\uFF1A
+ 3 Asset + 2 itemsStoryboard
 \`\`\`
-\u8D44\u4EA7\u4FE1\u606F[A001, character, \u6C88\u8F9E], [A002, character, \u82CF\u9526], [A003, scene, \u57CE\u697C]
+AssetInformation[A001, character, ], [A002, character, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem ...>  <!-- \u5206\u955C1 -->
-<storyboardItem ...>  <!-- \u5206\u955C2 -->
+<storyboardItem ...> <!-- Storyboard1 -->
+<storyboardItem ...> <!-- Storyboard2 -->
 \`\`\`
 
-\u7F16\u53F7\u7ED3\u679C\uFF1A
+result
 
-| \u8F93\u5165\u9879 | \u5F15\u7528\u6807\u7B7E | \u8BF4\u660E |
+| | Tags | |
 |--------|----------|------|
-| [A001, character, \u6C88\u8F9E] | \`@\u56FE1 \` | \u89D2\u8272\xB7\u6C88\u8F9E \u53C2\u8003\u56FE |
-| [A002, character, \u82CF\u9526] | \`@\u56FE2 \` | \u89D2\u8272\xB7\u82CF\u9526 \u53C2\u8003\u56FE |
-| [A003, scene, \u57CE\u697C] | \`@\u56FE3 \` | \u573A\u666F\xB7\u57CE\u697C \u53C2\u8003\u56FE |
-| storyboardItem \u7B2C1\u6761 | \`@\u56FE4 \` | \u5206\u955C\u56FE1 |
-| storyboardItem \u7B2C2\u6761 | \`@\u56FE5 \` | \u5206\u955C\u56FE2 |
+| [A001, character, ] | \`@image1 \` | Character\xB7 image |
+| [A002, character, ] | \`@image2 \` | Character\xB7 image |
+| [A003, scene, ] | \`@image3 \` | Scene\xB7 image |
+| storyboardItem chapter1items | \`@image4 \` | storyboard image1 |
+| storyboardItem chapter2items | \`@image5 \` | storyboard image2 |
 
 ---
 
-## \u6A21\u578B\u63D0\u793A\u8BCD\u751F\u6210\u89C4\u5219
+## Prompt
 
-### \u4E00\u3001\u901A\u7528\u591A\u53C2\u6A21\u5F0F
+### Multi-reference
 
-#### \u6838\u5FC3\u539F\u5219
-- MVL \u591A\u6A21\u6001\u878D\u5408\uFF1A\u81EA\u7136\u8BED\u8A00 + \u56FE\u50CF\u5F15\u7528\u5728\u540C\u4E00\u8BED\u4E49\u7A7A\u95F4
-- \u5206\u955C\u56FE\u5E8F\u5217\u8D1F\u8D23\u52A8\u4F5C/\u65F6\u95F4\u8F74/\u6784\u56FE\uFF0C\u573A\u666F\u53C2\u8003\u56FE\u8D1F\u8D23\u73AF\u5883\u4E00\u81F4\u6027
-- \u6240\u6709\u8D44\u4EA7\u548C\u5206\u955C\u56FE\u7EDF\u4E00\u7528 \`@\u56FEN \` \u5F15\u7528
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728 Instruction \u4E2D\u4F53\u73B0\u53F0\u8BCD\u76F8\u5173\u63CF\u8FF0
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08dialogue\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08inner monologue OS\uFF09\u3001\u753B\u5916\u97F3\uFF08voiceover VO\uFF09\uFF0C\u5728 Instruction \u4E2D\u7528\u62EC\u53F7\u6807\u6CE8
+#### 
+- MVL + imageat
+- storyboard image/Time/imageSceneimageconsistent
+- allAssetandstoryboard image \`@imageN \` 
+- ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardat Instruction relatedDescription
+- **Type**plaindialogueinner monologue OSvoiceover VOat Instruction 
 
-#### prompt \u751F\u6210\u6A21\u677F
+#### prompt template
 
 \`\`\`
 [References]
-@\u56FE1 : [{\u89D2\u8272A\u540D}\u53C2\u8003\u56FE]
-@\u56FE2 : [{\u89D2\u8272B\u540D}\u53C2\u8003\u56FE]
-@\u56FE3 : [{\u573A\u666F\u540D}\u53C2\u8003\u56FE]
-@\u56FE4 : [\u5206\u955C\u56FE1]
+@image1 : [{CharacterA}image]
+@image2 : [{CharacterB}image]
+@image3 : [{Scene}image]
+@image4 : [storyboard image1]
 
 [Instruction]
-Based on the storyboard @\u56FE4 :
-@\u56FE1 {\u52A8\u4F5C/\u72B6\u6001\u63CF\u8FF0\uFF08\u82F1\u6587\uFF09},
-@\u56FE2 {\u52A8\u4F5C/\u72B6\u6001\u63CF\u8FF0\uFF08\u82F1\u6587\uFF09},
-set in the {\u573A\u666F\u63CF\u8FF0\uFF08\u82F1\u6587\uFF09} of @\u56FE3 ,
-{\u955C\u5934/\u8FD0\u955C\u63CF\u8FF0\uFF08\u82F1\u6587\uFF09},
-{\u60C5\u611F\u57FA\u8C03\uFF08\u82F1\u6587\uFF09},
-{\u53F0\u8BCD\u63CF\u8FF0\uFF08\u82F1\u6587\uFF0C\u542B dialogue/OS/VO \u6807\u6CE8\uFF09/ No dialogue},
-{\u97F3\u6548\u63CF\u8FF0\uFF08\u82F1\u6587\uFF09}.
+Based on the storyboard @image4 :
+@image1 {/StatusDescription},
+@image2 {/StatusDescription},
+set in the {SceneDescription} of @image3 ,
+{/Description},
+{},
+{Description dialogue/OS/VO / No dialogue},
+{Description}.
 \`\`\`
 
-#### \u751F\u6210\u7EA6\u675F
-1. **Instruction \u5FC5\u987B\u7528\u82F1\u6587**
-2. **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u4FE1\u606F
-3. **\u89D2\u8272\u52A8\u4F5C**\u4ECE videoDesc \u7684\u300C\u89D2\u8272\u52A8\u4F5C\u300D\u5B57\u6BB5\u63D0\u53D6\uFF0C\u7FFB\u8BD1\u4E3A\u7B80\u6D01\u82F1\u6587\u52A8\u4F5C\u63CF\u8FF0
-4. **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728 Instruction \u4E2D\u4F53\u73B0\u53F0\u8BCD\u5185\u5BB9\uFF08\u4FDD\u6301\u539F\u59CB\u8BED\u8A00\uFF0C\u4E0D\u7FFB\u8BD1\uFF09
-5. **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u666E\u901A\u5BF9\u767D\u6807\u6CE8 \`(dialogue)\`\uFF1B\u5185\u5FC3\u72EC\u767D\u6807\u6CE8 \`(inner monologue, OS)\`\uFF1B\u753B\u5916\u97F3\u6807\u6CE8 \`(voiceover, VO)\`
-6. **\u955C\u5934\u98CE\u683C**\u4F7F\u7528\u6807\u51C6\u6807\u7B7E\uFF1A\`cinematic\` / \`wide-angle\` / \`close-up\` / \`slow motion\` / \`surround shooting\` / \`handheld\`
-7. **\u7A7A\u95F4\u5173\u7CFB**\u4F7F\u7528\u6807\u51C6\u52A8\u8BCD\uFF1A\`wearing\` / \`holding\` / \`standing on\` / \`following behind\` / \`sitting in\`
-8. \u5355\u6761\u5206\u955C\u5BF9\u5E94\u5355\u4E2A \`@\u56FEN \`\uFF0C\u4E0D\u505A\u591A\u5E27\u8DE8\u955C\u63CF\u8FF0
-9. \u65E0\u9700\u63CF\u8FF0\u89D2\u8272\u5916\u89C2\uFF08\u7531\u53C2\u8003\u56FE\u8D1F\u8D23\uFF09
-10. \u65E0\u65F6\u957F\u6807\u6CE8\uFF08\u7531\u6A21\u578B\u63A8\u65AD\uFF09
-11. **\u65E0\u5206\u955C\u56FE\u65F6**\uFF1A\u5F53 \`shouldGenerateImage="false"\` \u65F6\uFF0C\u8BE5\u5206\u955C\u65E0\u5206\u955C\u56FE\uFF0C\`[References]\` \u4E2D\u4E0D\u5217\u51FA\u8BE5\u5206\u955C\u56FE\uFF0C\`[Instruction]\` \u4E2D\u4E0D\u4F7F\u7528 \`@\u56FEN \` \u5F15\u7528\u8BE5\u5206\u955C\u56FE\uFF0C\u6539\u4E3A\u7EAF\u6587\u672C\u63CF\u8FF0\u753B\u9762\u5185\u5BB9
+#### 
+1. **Instruction **
+2. ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotInformation
+3. **Character** videoDesc ofCharacterfieldextractDescription
+4. **not**videoDesc ofStoryboardat Instruction contentstartnot
+5. **Type**plain \`(dialogue)\` \`(inner monologue, OS)\` \`(voiceover, VO)\`
+6. ****useTags\`cinematic\` / \`wide-angle\` / \`close-up\` / \`slow motion\` / \`surround shooting\` / \`handheld\`
+7. **related**use\`wearing\` / \`holding\` / \`standing on\` / \`following behind\` / \`sitting in\`
+8. itemsStoryboard \`@imageN \`notDescription
+9. noDescriptionCharacterimage
+10. nowhen
+11. **nostoryboard imagewhen** \`shouldGenerateImage="false"\` whenStoryboardnostoryboard image\`[References]\` notstoryboard image\`[Instruction]\` notuse \`@imageN \` storyboard imagetextDescriptioncontent
 
-#### KlingOmni \u5B8C\u6574\u793A\u4F8B
+#### KlingOmni example
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1AKlingOmni
-\u8D44\u4EA7\u4FE1\u606F[A001, character, \u6C88\u8F9E], [A002, character, \u82CF\u9526], [A003, scene, \u57CE\u697C]
+KlingOmni
+AssetInformation[A001, character, ], [A002, character, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730\u3001\u57CE\u697C\u3001\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u5168\u666F\u3001\u9759\u6B62\u3001\u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C\u3001\u575A\u5B9A\u51B3\u7EDD\u3001\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149\u3001\u65E0\u53F0\u8BCD\u3001\u98CE\u58F0\u8863\u8882\u58F0\u3001A001/A003\uFF09' prompt='\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u57CE\u697C\u4E4B\u4E0A\uFF0C\u6C88\u8F9E\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u98D8\u626C\uFF0C\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
-<storyboardItem videoDesc='\uFF08\u82CF\u9526\u767B\u4E0A\u57CE\u697C\u8D70\u5411\u6C88\u8F9E\u3001\u57CE\u697C\u3001\u82CF\u9526/\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u4E2D\u666F\u3001\u8DDF\u8E2A\u3001\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u6C88\u8F9E\u3001\u62C5\u5FE7\u3001\u9EC4\u660F\u4F59\u6656\u6E10\u6697\u3001\u65E0\u53F0\u8BCD\u3001\u811A\u6B65\u58F0\u98CE\u58F0\u3001A001/A002/A003\uFF09' prompt='\u4E2D\u666F\uFF0C\u8DDF\u8E2A\uFF0C\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u57CE\u697C\u4E0A\u7684\u6C88\u8F9E...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='/4snoA001/A003' prompt='...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='//4snoA001/A002/A003' prompt='of...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
 [References]
-@\u56FE1 : [\u6C88\u8F9E\u53C2\u8003\u56FE]
-@\u56FE2 : [\u82CF\u9526\u53C2\u8003\u56FE]
-@\u56FE3 : [\u57CE\u697C\u53C2\u8003\u56FE]
-@\u56FE4 : [\u5206\u955C\u56FE1]
-@\u56FE5 : [\u5206\u955C\u56FE2]
+@image1 : [image]
+@image2 : [image]
+@image3 : [image]
+@image4 : [storyboard image1]
+@image5 : [storyboard image2]
 
 [Instruction]
-Based on the storyboard from @\u56FE4 to @\u56FE5 :
-@\u56FE1 standing alone atop the city wall, hands clasped behind back, robes billowing in the wind, gazing across the vast land,
-@\u56FE2 ascending the steps toward @\u56FE1 , expression worried,
-set in the ancient city wall environment of @\u56FE3 ,
+Based on the storyboard from @image4 to @image5 :
+@image1 standing alone atop the city wall, hands clasped behind back, robes billowing in the wind, gazing across the vast land,
+@image2 ascending the steps toward @image1 , expression worried,
+set in the ancient city wall environment of @image3 ,
 wide shot transitioning to medium tracking shot, cinematic,
 resolute determination shifting to concerned anticipation, dusk cold-toned side-backlit atmosphere fading,
 no dialogue,
@@ -81114,68 +81114,68 @@ wind howling, fabric flapping, footsteps on stone.
 
 ---
 
-### \u4E8C\u3001\u901A\u7528\u9996\u5C3E\u5E27\u6A21\u5F0F
+### First and last frames
 
-#### \u6838\u5FC3\u539F\u5219
-- **\u7EAF\u6587\u672C\u63D0\u793A\u8BCD**\uFF1A\u63D0\u793A\u8BCD\u5185**\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528**\uFF08\u4E0D\u5F15\u7528\u89D2\u8272\u8D44\u4EA7\u3001\u573A\u666F\u8D44\u4EA7\u3001\u4E5F\u4E0D\u5F15\u7528\u5206\u955C\u56FE\uFF09\uFF0C\u5168\u90E8\u5185\u5BB9\u7528\u7EAF\u6587\u672C\u63CF\u8FF0
-- **\u4E94\u7EF4\u5EA6\u7ED3\u6784**\uFF1AVisual / Motion / Camera / Audio / Narrative
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728 \`[Audio]\` \u4E2D\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u5185\u5BB9
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08dialogue, lip-sync active\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08inner monologue OS, silent lips\uFF09\u3001\u753B\u5916\u97F3\uFF08voiceover VO, silent lips\uFF09\uFF0C\u5E76\u5728 \`[Audio]\` \u4E2D\u660E\u786E\u6807\u6CE8
-- **\u4E0D\u8BF4\u8BDD\u7684\u4E3B\u4F53\u6807\u6CE8 \`silent\`** \u2014 \u9632\u6B62\u8BEF\u751F\u53E3\u578B
-- **\u5168\u7A0B\u5355\u4E00\u8FDE\u8D2F\u955C\u5934**\uFF1A\u4ECE\u5934\u5230\u5C3E\u4E00\u4E2A\u955C\u5934\uFF0C\u4E0D\u5B58\u5728\u5207\u955C
-- **\u65F6\u95F4\u8F74\u5206\u6BB5**\uFF1A\u6BCF\u6BB5\u6700\u4F4E 1 \u79D2\uFF0C\u7528 \`0s-Xs\` \u6807\u6CE8
+#### 
+- **textPrompt**Prompt**notuse \`@imageN \` **notCharacterAssetSceneAssetnotstoryboard imageAllcontenttextDescription
+- ****Visual / Motion / Camera / Audio / Narrative
+- ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardat \`[Audio]\` content
+- **Type**plaindialogue, lip-sync activeinner monologue OS, silent lipsvoiceover VO, silent lipsat \`[Audio]\` 
+- **notof \`silent\`** \u2014 
+- ****notexists
+- **Time** 1 \`0s-Xs\` 
 
-#### prompt \u751F\u6210\u6A21\u677F
+#### prompt template
 
 \`\`\`
 [Visual]
-{\u4E3B\u4F53A\u540D}: {\u5916\u89C2\u7B80\u8FF0}, {\u7AD9\u4F4D/\u59FF\u6001}, {\u8BF4\u8BDD\u72B6\u6001 speaking/silent}.
-{\u4E3B\u4F53B\u540D}: {\u5916\u89C2\u7B80\u8FF0}, {\u7AD9\u4F4D/\u59FF\u6001}, {\u8BF4\u8BDD\u72B6\u6001}.
-{\u573A\u666F\u63CF\u8FF0}, {\u9053\u5177\u63CF\u8FF0}.
-{\u89C6\u89C9\u98CE\u683C\u6807\u7B7E}.
+{A}: {}, {/}, {Status speaking/silent}.
+{B}: {}, {/}, {Status}.
+{SceneDescription}, {PropDescription}.
+{Tags}.
 
 [Motion]
-0s-{X}s: {\u4E3B\u4F53A\u540D} {\u52A8\u4F5C\u63CF\u8FF0\u6BB51}.
-{X}s-{Y}s: {\u4E3B\u4F53B\u540D} {\u52A8\u4F5C\u63CF\u8FF0\u6BB52}.
+0s-{X}s: {A} {Description1}.
+{X}s-{Y}s: {B} {Description2}.
 
 [Camera]
-{\u955C\u5934\u7C7B\u578B}, {\u8FD0\u955C\u65B9\u5F0F}, {\u5168\u7A0B\u5355\u4E00\u8FDE\u8D2F\u955C\u5934\u63CF\u8FF0}.
+{Type}, {}, {Description}.
 
 [Audio]
-{Xs-Ys}: "{\u53F0\u8BCD\u5185\u5BB9}" \u2014 {\u8BF4\u8BDD\u8005\u540D} ({dialogue / inner monologue OS / voiceover VO}), {lip-sync active / silent lips}.
-{\u97F3\u6548\u63CF\u8FF0}.
+{Xs-Ys}: "{content}" \u2014 {} ({dialogue / inner monologue OS / voiceover VO}), {lip-sync active / silent lips}.
+{Description}.
 
 [Narrative]
-{\u60C5\u8282\u70B9\u6982\u8FF0}, {\u53D9\u4E8B\u4F4D\u7F6E}.
+{}, {}.
 \`\`\`
 
-#### \u751F\u6210\u7EA6\u675F
-1. **\u5168\u90E8\u7528\u82F1\u6587**
-2. **\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528**\uFF1A\u63D0\u793A\u8BCD\u5185\u4E0D\u5F15\u7528\u89D2\u8272\u8D44\u4EA7\u3001\u573A\u666F\u8D44\u4EA7\u3001\u5206\u955C\u56FE\uFF0C\u5168\u90E8\u5185\u5BB9\u7528\u7EAF\u6587\u672C\u63CF\u8FF0
-3. **\u4E3B\u4F53\u7528\u6587\u5B57\u63CF\u8FF0**\uFF1A\u5728 [Visual] \u4E2D\u7B80\u8981\u63CF\u8FF0\u4E3B\u4F53\u5916\u89C2\u7279\u5F81\uFF08\u5982\u670D\u9970\u3001\u53D1\u578B\u7B49\u5173\u952E\u8FA8\u8BC6\u7279\u5F81\uFF09
-4. **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u4FE1\u606F
-5. **\u6BCF\u4E2A\u4E3B\u4F53\u5FC5\u987B\u6807\u6CE8\u8BF4\u8BDD\u72B6\u6001**\uFF1A\`speaking\` / \`silent\` / \`speaking simultaneously\`
-6. **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728 \`[Audio]\` \u4E2D\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u5185\u5BB9\uFF08\u4FDD\u6301\u539F\u59CB\u8BED\u8A00\uFF0C\u4E0D\u7FFB\u8BD1\uFF09
-7. **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u666E\u901A\u5BF9\u767D\u6807\u6CE8 \`dialogue, lip-sync active\`\uFF1B\u5185\u5FC3\u72EC\u767D\u6807\u6CE8 \`inner monologue (OS), silent lips\`\uFF1B\u753B\u5916\u97F3\u6807\u6CE8 \`voiceover (VO), silent lips\`
-8. **Motion \u65F6\u95F4\u8F74**\u6BCF\u6BB5\u6700\u4F4E 1 \u79D2\uFF0C\u4E0D\u8D85\u8FC7\u603B\u65F6\u957F
-9. **\u5168\u7A0B\u5355\u4E00\u8FDE\u8D2F\u955C\u5934**\uFF1ACamera \u6BB5\u843D\u63CF\u8FF0\u4ECE\u5934\u5230\u5C3E\u7684\u4E00\u4E2A\u955C\u5934\uFF0C\u7EDD\u4E0D\u5207\u955C
-10. **\u89C6\u89C9\u98CE\u683C**\u53C2\u8003 Assistant \u4E2D\u7684\u300C\u89C6\u89C9\u98CE\u683C\u7EA6\u675F\u300D\u90E8\u5206\u5185\u5BB9
-11. **\u955C\u5934\u7C7B\u578B**\u4ECE\u4EE5\u4E0B\u9009\u53D6\uFF1A\`Wide establishing shot / Over-the-shoulder / Medium shot / Close-up / Wide shot / POV / Dutch angle / Crane up / Dolly right / Whip pan / Handheld / Slow motion\`
+#### 
+1. **All**
+2. **notuse \`@imageN \` **PromptnotCharacterAssetSceneAssetstoryboard imageAllcontenttextDescription
+3. **Description**at [Visual] Descriptionrelated
+4. ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotInformation
+5. **Status**\`speaking\` / \`silent\` / \`speaking simultaneously\`
+6. **not**videoDesc ofStoryboardat \`[Audio]\` contentstartnot
+7. **Type**plain \`dialogue, lip-sync active\` \`inner monologue (OS), silent lips\` \`voiceover (VO), silent lips\`
+8. **Motion Time** 1 notwhen
+9. ****Camera Descriptionofnot
+10. **** Assistant ofcontent
+11. **Type**the following\`Wide establishing shot / Over-the-shoulder / Medium shot / Close-up / Wide shot / POV / Dutch angle / Crane up / Dolly right / Whip pan / Handheld / Slow motion\`
 
-#### Seedance 1.5 Pro \u5B8C\u6574\u793A\u4F8B
+#### Seedance 1.5 Pro example
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1ASeedance1.5
-\u8D44\u4EA7\u4FE1\u606F[A001, character, \u6C88\u8F9E], [A002, character, \u82CF\u9526], [A003, scene, \u57CE\u697C]
+Seedance1.5
+AssetInformation[A001, character, ], [A002, character, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730\u3001\u57CE\u697C\u3001\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u5168\u666F\u3001\u9759\u6B62\u3001\u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C\u3001\u575A\u5B9A\u51B3\u7EDD\u3001\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149\u3001\u65E0\u53F0\u8BCD\u3001\u98CE\u58F0\u8863\u8882\u58F0\u3001A001/A003\uFF09' prompt='\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u57CE\u697C\u4E4B\u4E0A\uFF0C\u6C88\u8F9E\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u98D8\u626C\uFF0C\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
-<storyboardItem videoDesc='\uFF08\u82CF\u9526\u767B\u4E0A\u57CE\u697C\u8D70\u5411\u6C88\u8F9E\u3001\u57CE\u697C\u3001\u82CF\u9526/\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u4E2D\u666F\u3001\u8DDF\u8E2A\u3001\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u6C88\u8F9E\u3001\u62C5\u5FE7\u3001\u9EC4\u660F\u4F59\u6656\u6E10\u6697\u3001\u65E0\u53F0\u8BCD\u3001\u811A\u6B65\u58F0\u98CE\u58F0\u3001A001/A002/A003\uFF09' prompt='\u4E2D\u666F\uFF0C\u8DDF\u8E2A\uFF0C\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u57CE\u697C\u4E0A\u7684\u6C88\u8F9E...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='/4snoA001/A003' prompt='...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='//4snoA001/A002/A003' prompt='of...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
 [Visual]
 Shen Ci: male, dark flowing robes, hair tied up, standing alone atop city wall, hands clasped behind back, robes billowing, silent.
@@ -81201,177 +81201,177 @@ Lone figure on city wall, then arrival of a companion. Tension between determina
 
 ---
 
-### \u4E09\u3001Seedance 2.0
+### Seedance 2.0
 
-#### \u6838\u5FC3\u539F\u5219
-- **\u7ED3\u6784\u531612\u7EF4\u7F16\u7801**\uFF1A\u7EDF\u4E00\u7528 \`@\u56FEN \` \u5F15\u7528\u8D44\u4EA7\u548C\u5206\u955C\u56FE\uFF0C\u65F6\u957F \`<duration-ms>\`
-- **\u97F3\u8272\u53C2\u65709\u7EF4\u5EA6\u7CBE\u7EC6\u63CF\u8FF0**\uFF08\u6709\u53F0\u8BCD\u65F6\u5FC5\u586B\uFF09
-- **\u6BEB\u79D2\u7EA7\u65F6\u957F\u63A7\u5236**\uFF1A\u5355\u5206\u955C\u65F6\u957F\u6700\u4F4E 1000ms\uFF081 \u79D2\uFF09
-- **\u4E2D\u6587\u63D0\u793A\u8BCD**
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u6BCF\u6761\u5206\u955C\u7684\u63CF\u8FF0\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u548C\u97F3\u8272\u63CF\u8FF0
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08\u76F4\u63A5\u4F7F\u7528\u300C\u8BF4\uFF1A\u300D\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08\u4F7F\u7528\u300C\u5185\u5FC3OS\uFF1A\u300D\uFF09\u3001\u753B\u5916\u97F3\uFF08\u4F7F\u7528\u300C\u753B\u5916\u97F3VO\uFF1A\u300D\uFF09\uFF0C\u5E76\u5339\u914D\u5BF9\u5E94\u7684\u5634\u578B\u72B6\u6001\u63CF\u8FF0
+#### 
+- **12** \`@imageN \` Assetandstoryboard imagewhen \`<duration-ms>\`
+- **9Description**whenRequired
+- **when**Storyboardwhen 1000ms1 
+- **Prompt**
+- ** videoDesc**itemsStoryboardofDescriptioncontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardandDescription
+- **Type**plainuseuseOSuseVOmatchofStatusDescription
 
-#### prompt \u751F\u6210\u6A21\u677F
+#### prompt template
 
-**\u5355\u5206\u955C\u6A21\u677F\uFF1A**
+**Storyboardtemplate**
 \`\`\`
-\u753B\u9762\u98CE\u683C\u548C\u7C7B\u578B: {\u98CE\u683C}, {\u8272\u8C03}, {\u7C7B\u578B}
+andType: {}, {}, {Type}
 
-\u751F\u6210\u4E00\u4E2A\u7531\u4EE5\u4E0B 1 \u4E2A\u5206\u955C\u7EC4\u6210\u7684\u89C6\u9891:
+the following 1 Storyboardof:
 
-\u573A\u666F:
-\u5206\u955C\u8FC7\u6E21: \u65E0
+Scene:
+Storyboard: no
 
-\u5206\u955C1<duration-ms>{\u6BEB\u79D2\u6570}</duration-ms>: \u65F6\u95F4\uFF1A{\u65E5/\u591C/\u6668/\u9EC4\u660F}\uFF0C\u573A\u666F\u56FE\u7247\uFF1A@\u56FE{\u573A\u666F\u7F16\u53F7} \uFF0C\u955C\u5934\uFF1A{\u666F\u522B}\uFF0C{\u89D2\u5EA6}\uFF0C{\u8FD0\u955C}\uFF0C@\u56FE{\u89D2\u8272\u7F16\u53F7} {\u52A8\u4F5C/\u8868\u60C5/\u89C6\u7EBF\u671D\u5411/\u7AD9\u4F4D\u63CF\u8FF0}\u3002{\u53F0\u8BCD\u4E0E\u97F3\u8272\u63CF\u8FF0\uFF08\u5982\u6709\uFF09}\u3002{\u80CC\u666F\u73AF\u5883\u8865\u5145}\u3002{\u5149\u5F71\u6C1B\u56F4}\u3002{\u8FD0\u955C\u8865\u5145}\u3002
+Storyboard1<duration-ms>{}</duration-ms>: Time{///}Sceneimage@image{Scene} {}{}{}@image{Character} {/table//Description}{Description}{}{}{}
 \`\`\`
 
-**\u591A\u5206\u955C\u6A21\u677F\uFF1A**
+**Storyboardtemplate**
 \`\`\`
-\u753B\u9762\u98CE\u683C\u548C\u7C7B\u578B: {\u98CE\u683C}, {\u8272\u8C03}, {\u7C7B\u578B}
+andType: {}, {}, {Type}
 
-\u751F\u6210\u4E00\u4E2A\u7531\u4EE5\u4E0B {N} \u4E2A\u5206\u955C\u7EC4\u6210\u7684\u89C6\u9891:
+the following {N} Storyboardof:
 
-\u573A\u666F:
-\u5206\u955C\u8FC7\u6E21: {\u5168\u5C40\u8FC7\u6E21\u63CF\u8FF0}
+Scene:
+Storyboard: {Description}
 
-\u5206\u955C1<duration-ms>{\u6BEB\u79D2\u6570}</duration-ms>: \u65F6\u95F4\uFF1A{...}\uFF0C\u573A\u666F\u56FE\u7247\uFF1A@\u56FE{\u573A\u666F\u7F16\u53F7} \uFF0C\u955C\u5934\uFF1A{...}\uFF0C@\u56FE{\u89D2\u8272\u7F16\u53F7} {...}\u3002{...}\u3002
-\u5206\u955C2<duration-ms>{\u6BEB\u79D2\u6570}</duration-ms>: ...
+Storyboard1<duration-ms>{}</duration-ms>: Time{...}Sceneimage@image{Scene} {...}@image{Character} {...}{...}
+Storyboard2<duration-ms>{}</duration-ms>: ...
 ...
 \`\`\`
 
-#### \u97F3\u8272\u751F\u6210\u89C4\u5219\uFF08\u6709\u53F0\u8BCD\u65F6\u5FC5\u586B\uFF09
+#### whenRequired
 
-\u53F0\u8BCD\u683C\u5F0F\uFF1A\`@\u56FE{\u89D2\u8272\u7F16\u53F7} \u8BF4\uFF1A\u300C{\u53F0\u8BCD\u5185\u5BB9}\u300D\u97F3\u8272\uFF1A{9\u7EF4\u5EA6\u63CF\u8FF0}\`
+\`@image{Character} {content}{9Description}\`
 
-9\u7EF4\u5EA6\u6309\u987A\u5E8F\u586B\u5199\uFF1A
+9by
 \`\`\`
-{\u6027\u522B}\uFF0C{\u5E74\u9F84\u97F3\u8272}\uFF0C{\u97F3\u8C03}\uFF0C{\u97F3\u8272\u8D28\u611F}\uFF0C{\u58F0\u97F3\u539A\u5EA6}\uFF0C{\u53D1\u97F3\u65B9\u5F0F}\uFF0C{\u6C14\u606F}\uFF0C{\u8BED\u901F}\uFF0C{\u7279\u6B8A\u8D28\u611F}
+{}{}{}{}{}{}{}{}{special}
 \`\`\`
 
-> \u5F53 desc \u4E2D\u672A\u660E\u786E\u97F3\u8272\u4FE1\u606F\u65F6\uFF0C\u6839\u636E\u89D2\u8272\u7C7B\u578B\u4ECE\u4EE5\u4E0B\u53C2\u8003\u8868\u63A8\u65AD\uFF1A
+> desc Informationwhenbased onCharacterTypethe followingtable
 
-| \u89D2\u8272\u7C7B\u578B\u7279\u5F81 | \u9ED8\u8BA4\u97F3\u8272 |
+| CharacterType | Default |
 |------------|---------|
-| \u7537\u6027\u6743\u5A01/\u9738\u6C14\u89D2\u8272 | \u7537\u58F0\uFF0C\u4E2D\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4F4E\u6C89\uFF0C\u97F3\u8272\u6D51\u539A\u6709\u529B\uFF0C\u58F0\u97F3\u539A\u91CD\uFF0C\u53D1\u97F3\u6807\u51C6\uFF0C\u6C14\u606F\u6781\u5176\u6C89\u7A33\uFF0C\u8BED\u901F\u504F\u6162 |
-| \u5973\u6027\u6E29\u67D4/\u751C\u7F8E\u89D2\u8272 | \u5973\u58F0\uFF0C\u9752\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4E2D\u7B49\u504F\u9AD8\uFF0C\u97F3\u8272\u8D28\u611F\u660E\u4EAE\u6E05\u8106\uFF0C\u58F0\u97F3\u6E05\u4EAE\u67D4\u548C\uFF0C\u6C14\u606F\u5145\u6C9B\u5E73\u7A33\uFF0C\u5E26\u6E29\u5A49\u771F\u8BDA\u611F |
-| \u7537\u6027\u5E74\u8F7B/\u666E\u901A\u89D2\u8272 | \u7537\u58F0\uFF0C\u9752\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4E2D\u7B49\uFF0C\u97F3\u8272\u5E72\u51C0\uFF0C\u58F0\u97F3\u539A\u5EA6\u9002\u4E2D\uFF0C\u53D1\u97F3\u6E05\u6670\uFF0C\u6C14\u606F\u5E73\u7A33\uFF0C\u8BED\u901F\u9002\u4E2D |
-| \u5973\u6027\u6D3B\u6CFC/\u5916\u5411\u89D2\u8272 | \u5973\u58F0\uFF0C\u9752\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u504F\u9AD8\uFF0C\u97F3\u8272\u6E05\u8106\u6D3B\u6CFC\uFF0C\u58F0\u97F3\u8F7B\u76C8\uFF0C\u6C14\u606F\u5145\u6C9B\uFF0C\u8BED\u901F\u504F\u5FEB\uFF0C\u5E26\u7B11\u610F\u548C\u611F\u67D3\u529B |
-| \u53CD\u6D3E/\u51B7\u9177\u89D2\u8272 | \u7537\u58F0\uFF0C\u4E2D\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4F4E\u6C89\uFF0C\u97F3\u8272\u8D28\u611F\u5E72\u71E5\u504F\u6697\uFF0C\u58F0\u97F3\u5E26\u6C99\u783E\u611F\uFF0C\u6C14\u606F\u5E73\u7A33\uFF0C\u8BED\u901F\u6781\u6162\uFF0C\u6709\u5A01\u80C1\u611F |
+| /Character | |
+| /Character | and |
+| /plainCharacter | |
+| /Character | and |
+| /Character | |
 
-#### \u65E0\u53F0\u8BCD\u5206\u955C\u5904\u7406
-- \u4E0D\u5199 \`\u8BF4\uFF1A\` \u548C\u97F3\u8272\u6BB5\u843D
-- \u5728\u52A8\u4F5C\u63CF\u8FF0\u540E\u6807\u6CE8 \`\u65E0\u53F0\u8BCD\`
+#### noStoryboardhandle
+- not \`\` and
+- atDescription \`no\`
 
-#### \u53F0\u8BCD\u7C7B\u578B\u683C\u5F0F
+#### Type
 
-| \u53F0\u8BCD\u7C7B\u578B | \u683C\u5F0F | \u5634\u578B\u63CF\u8FF0 |
+| Type | | Description |
 |----------|------|----------|
-| \u666E\u901A\u5BF9\u767D | \`@\u56FE{\u89D2\u8272\u7F16\u53F7} \u8BF4\uFF1A\u300C{\u53F0\u8BCD}\u300D\u97F3\u8272\uFF1A{9\u7EF4\u5EA6}\` | \u89D2\u8272\u5634\u90E8\u5F00\u5408\u8BF4\u8BDD |
-| \u5185\u5FC3\u72EC\u767D | \`@\u56FE{\u89D2\u8272\u7F16\u53F7} \u5185\u5FC3OS\uFF1A\u300C{\u53F0\u8BCD}\u300D\u97F3\u8272\uFF1A{9\u7EF4\u5EA6}\` | \u89D2\u8272\u5634\u90E8\u7D27\u95ED\u4E0D\u52A8 |
-| \u753B\u5916\u97F3 | \`@\u56FE{\u89D2\u8272\u7F16\u53F7} \u753B\u5916\u97F3VO\uFF1A\u300C{\u53F0\u8BCD}\u300D\u97F3\u8272\uFF1A{9\u7EF4\u5EA6}\` | \u89D2\u8272\u5634\u90E8\u7D27\u95ED\u4E0D\u52A8\uFF08\u6216\u89D2\u8272\u4E0D\u5728\u753B\u9762\u4E2D\uFF09 |
+| plain | \`@image{Character} {}{9}\` | Characteropen |
+| | \`@image{Character} OS{}{9}\` | Characternot |
+| | \`@image{Character} VO{}{9}\` | CharacternotCharacternot in |
 
-#### \u751F\u6210\u7EA6\u675F
-1. **\u4E2D\u6587\u63D0\u793A\u8BCD**
-2. **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u6BCF\u6761\u5206\u955C\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u4FE1\u606F
-3. **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u548C\u97F3\u8272
-4. **\u53F0\u8BCD\u7C7B\u578B\u6B63\u786E\u6807\u6CE8**\uFF1A\u666E\u901A\u5BF9\u767D\u7528\u300C\u8BF4\uFF1A\u300D\uFF0C\u5185\u5FC3\u72EC\u767D\u7528\u300C\u5185\u5FC3OS\uFF1A\u300D\uFF0C\u753B\u5916\u97F3\u7528\u300C\u753B\u5916\u97F3VO\uFF1A\u300D
-5. **\u5355\u5206\u955C\u65F6\u957F\u6700\u4F4E 1000ms\uFF081 \u79D2\uFF09**
-6. **\u65F6\u957F\u5355\u4F4D**\uFF1A\u5C06 videoDesc \u4E2D\u7684\u79D2 \xD7 1000 \u8F6C\u4E3A\u6BEB\u79D2\u586B\u5165 \`<duration-ms>\`
+#### 
+1. **Prompt**
+2. ** videoDesc**itemsStoryboardcontent videoDesc ofVisual descriptionwhenCharacterfieldnotInformation
+3. **not**videoDesc ofStoryboardand
+4. **Type**plainOSVO
+5. **Storyboardwhen 1000ms1 **
+6. **when** videoDesc of \xD7 1000 convert to \`<duration-ms>\`
 
-#### Seedance 2.0 \u5B8C\u6574\u793A\u4F8B
+#### Seedance 2.0 example
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1ASeedance2.0
-\u8D44\u4EA7\u4FE1\u606F[A001, character, \u6C88\u8F9E], [A002, character, \u82CF\u9526], [A003, scene, \u57CE\u697C]
+Seedance2.0
+AssetInformation[A001, character, ], [A002, character, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730\u3001\u57CE\u697C\u3001\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u5168\u666F\u3001\u9759\u6B62\u3001\u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C\u3001\u575A\u5B9A\u51B3\u7EDD\u3001\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149\u3001\u65E0\u53F0\u8BCD\u3001\u98CE\u58F0\u8863\u8882\u58F0\u3001A001/A003\uFF09' prompt='\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u57CE\u697C\u4E4B\u4E0A\uFF0C\u6C88\u8F9E\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u98D8\u626C\uFF0C\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
-<storyboardItem videoDesc='\uFF08\u82CF\u9526\u767B\u4E0A\u57CE\u697C\u8D70\u5411\u6C88\u8F9E\u3001\u57CE\u697C\u3001\u82CF\u9526/\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u4E2D\u666F\u3001\u8DDF\u8E2A\u3001\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u6C88\u8F9E\u3001\u62C5\u5FE7\u3001\u9EC4\u660F\u4F59\u6656\u6E10\u6697\u3001\u82CF\u9526\u8BF4\uFF1A\u4F60\u53C8\u4E00\u4E2A\u4EBA\u5728\u8FD9\u91CC\u3001\u811A\u6B65\u58F0\u98CE\u58F0\u3001A001/A002/A003\uFF09' prompt='\u4E2D\u666F\uFF0C\u8DDF\u8E2A\uFF0C\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u57CE\u697C\u4E0A\u7684\u6C88\u8F9E...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='/4snoA001/A003' prompt='...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='//4syouatA001/A002/A003' prompt='of...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
-\u753B\u9762\u98CE\u683C\u548C\u7C7B\u578B: \u771F\u4EBA\u5199\u5B9E, \u7535\u5F71\u98CE\u683C, \u51B7\u8C03, \u53E4\u98CE
+andType: , , , 
 
-\u751F\u6210\u4E00\u4E2A\u7531\u4EE5\u4E0B 2 \u4E2A\u5206\u955C\u7EC4\u6210\u7684\u89C6\u9891:
+the following 2 Storyboardof:
 
-\u573A\u666F:
-\u5206\u955C\u8FC7\u6E21: \u955C\u5934\u5E73\u6ED1\u5207\u6362\uFF0C\u4ECE\u5168\u666F\u8FC7\u6E21\u5230\u4E2D\u666F\u8DDF\u8E2A\uFF0C\u7126\u70B9\u4ECE\u6C88\u8F9E\u72EC\u5904\u8F6C\u5411\u82CF\u9526\u5230\u6765\u3002
+Scene:
+Storyboard: convert to
 
-\u5206\u955C1<duration-ms>4000</duration-ms>: \u65F6\u95F4\uFF1A\u9EC4\u660F\uFF0C\u573A\u666F\u56FE\u7247\uFF1A@\u56FE3 \uFF0C\u955C\u5934\uFF1A\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u9759\u6B62\u955C\u5934\uFF0C@\u56FE1 \u72EC\u7ACB\u57CE\u697C\u4E4B\u4E0A\uFF0C\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u968F\u98CE\u98D8\u626C\uFF0C\u76EE\u5149\u8FDC\u773A\u82CD\u832B\u5927\u5730\uFF0C\u795E\u60C5\u8083\u7136\u9762\u5BB9\u6C89\u7740\uFF0C\u773C\u795E\u575A\u5B9A\u76EE\u5149\u6E05\u51BD\uFF0C\u7709\u773C\u6C89\u9759\u6C14\u8D28\u51DB\u7136\u3002\u65E0\u53F0\u8BCD\u3002\u80CC\u666F\u662F\u53E4\u57CE\u697C\u7816\u77F3\u7EB9\u7406\u6E05\u6670\uFF0C\u8FDC\u65B9\u5927\u5730\u82CD\u832B\u8FBD\u9614\uFF0C\u5929\u9645\u7EBF\u51B7\u6696\u4EA4\u66FF\u3002\u9EC4\u660F\u659C\u5C04\u4F59\u6656\u4FA7\u9006\u5149\uFF0C\u51B7\u8C03\u4E3A\u4E3B\uFF0C\u957F\u5F71\u62C9\u4F38\uFF0C\u8F6E\u5ED3\u5149\u5FAE\u52FE\u52D2\u4EBA\u7269\u8FB9\u7F18\uFF0C\u5149\u611F\u8BD7\u610F\u3002\u955C\u5934\u9759\u6B62\u3002
+Storyboard1<duration-ms>4000</duration-ms>: TimeSceneimage@image3 @image1 nois
 
-\u5206\u955C2<duration-ms>4000</duration-ms>: \u65F6\u95F4\uFF1A\u9EC4\u660F\uFF0C\u573A\u666F\u56FE\u7247\uFF1A@\u56FE3 \uFF0C\u955C\u5934\uFF1A\u4E2D\u666F\uFF0C\u5E73\u89C6\uFF0C\u8DDF\u8E2A\u62CD\u6444\uFF0C@\u56FE2 \u62FE\u7EA7\u800C\u4E0A\uFF0C\u8D70\u5411\u57CE\u697C\u4E0A\u7684@\u56FE1 \uFF0C\u9762\u90E8\u671D\u5411@\u56FE1 \u65B9\u5411\uFF0C\u795E\u60C5\u5FAE\u6123\u9762\u8272\u5FAE\u53D8\uFF0C\u773C\u795E\u4E2D\u5E26\u7740\u62C5\u5FE7\uFF0C@\u56FE2 \u8BF4\uFF1A\u300C\u4F60\u53C8\u4E00\u4E2A\u4EBA\u5728\u8FD9\u91CC\u3002\u300D\u97F3\u8272\uFF1A\u5973\u58F0\uFF0C\u9752\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4E2D\u7B49\u504F\u9AD8\uFF0C\u97F3\u8272\u8D28\u611F\u660E\u4EAE\u6E05\u8106\uFF0C\u58F0\u97F3\u6E05\u4EAE\u67D4\u548C\uFF0C\u53D1\u97F3\u65B9\u5F0F\u5E72\u51C0\uFF0C\u6C14\u606F\u5145\u6C9B\u5E73\u7A33\uFF0C\u8BED\u901F\u9002\u4E2D\uFF0C\u5E26\u6E29\u5A49\u771F\u8BDA\u611F\u3002\u80CC\u666F\u57CE\u697C\u53F0\u9636\u7EB9\u7406\u6E05\u6670\uFF0C\u4F59\u6656\u6E10\u6697\uFF0C\u5929\u9645\u7EBF\u51B7\u6696\u4EA4\u66FF\u52A0\u6DF1\u3002\u955C\u5934\u8DDF\u8E2A\u82CF\u9526\u79FB\u52A8\u3002
+Storyboard2<duration-ms>4000</duration-ms>: TimeSceneimage@image3 @image2 of@image1 @image1 @image2 You're here alone again.and
 \`\`\`
 
 ---
 
-### \u56DB\u3001Wan 2.6
+### Wan 2.6
 
-#### \u6838\u5FC3\u539F\u5219
-- **\u5355\u56FE\u9996\u5E27\u6A21\u5F0F**\uFF1A\u5F52\u7C7B\u4E3A\u9996\u5C3E\u5E27\u6A21\u5F0F\uFF0C\u4F46\u4EC5\u6709\u9996\u5E27\uFF08\u5206\u955C\u56FE\uFF09\uFF0C\u65E0\u5C3E\u5E27
-- **\u5355\u6761\u5206\u955C\u8F93\u5165/\u8F93\u51FA**\uFF1A\u6BCF\u6B21\u4EC5\u8F93\u5165\u4E00\u6761 \`<storyboardItem>\` \u53CA\u5176\u5173\u8054\u8D44\u4EA7\u4FE1\u606F\uFF0C\u8F93\u51FA\u4E5F\u4EC5\u4E3A\u4E00\u6BB5\u5B8C\u6574\u7684\u53D9\u4E8B\u5F0F\u63D0\u793A\u8BCD
-- **\u53D9\u4E8B\u5F0F\u82F1\u6587\u63D0\u793A\u8BCD**\uFF1A\u50CF\u5199\u5C0F\u8BF4\u4E00\u6837\u63CF\u5199\u753B\u9762\uFF0C\u4E0D\u4F7F\u7528\u6807\u7B7E\u7F57\u5217\uFF08\u4E0D\u5199 \`4K, cinematic, high quality\` \u8FD9\u7C7B\u5806\u780C\uFF09
-- **\u4E09\u6BB5\u5F0F\u7ED3\u6784**\uFF1A\u98CE\u683C\u57FA\u8C03 \u2192 \u4E3B\u4F53\u52A8\u4F5C + \u573A\u666F\u73AF\u5883 + \u5149\u7EBF\u6C1B\u56F4 \u2192 \u955C\u5934\u6536\u5C3E
-- **\u7EAF\u6587\u672C\u63D0\u793A\u8BCD**\uFF1A\u63D0\u793A\u8BCD\u5185**\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528**\uFF0C\u5168\u90E8\u5185\u5BB9\u7528\u7EAF\u6587\u672C\u63CF\u8FF0
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728\u63D0\u793A\u8BCD\u4E2D\u4F53\u73B0\u53F0\u8BCD\u76F8\u5173\u63CF\u8FF0
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08dialogue\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08inner monologue OS\uFF09\u3001\u753B\u5916\u97F3\uFF08voiceover VO\uFF09\uFF0C\u5728\u63D0\u793A\u8BCD\u4E2D\u7528\u62EC\u53F7\u6807\u6CE8
+#### 
+- **Single imageFirst frame**First and last framesFirst framestoryboard imagenoLast frame
+- **itemsStoryboard/**items \`<storyboardItem>\` relatedAssetInformationofPrompt
+- **Prompt**NovelnotuseTagsnot \`4K, cinematic, high quality\` 
+- **** \u2192 + Scene + \u2192 
+- **textPrompt**Prompt**notuse \`@imageN \` **AllcontenttextDescription
+- ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardatPromptrelatedDescription
+- **Type**plaindialogueinner monologue OSvoiceover VOatPrompt
 
-#### prompt \u751F\u6210\u6A21\u677F
+#### prompt template
 
-\u6BCF\u6B21\u8F93\u5165\u4E00\u6761\u5206\u955C\uFF0C\u8F93\u51FA\u4E00\u6BB5\u5B8C\u6574\u63D0\u793A\u8BCD\uFF08\u65E0\u7F16\u53F7\u524D\u7F00\uFF09\uFF0C\u683C\u5F0F\u5982\u4E0B\uFF1A
+itemsStoryboardPromptnounder
 
 \`\`\`
-{\u98CE\u683C\u57FA\u8C03\u4E00\u53E5\u8BDD\u5B9A\u6027},
-{\u4E3B\u4F53\u540D} {\u5916\u89C2\u7B80\u8FF0}, {\u5177\u4F53\u52A8\u4F5C/\u59FF\u6001\u63CF\u8FF0}, {\u60C5\u7EEA/\u8868\u60C5\u7528\u52A8\u4F5C\u6697\u793A}.
-{\u573A\u666F\u80CC\u666F\u4E3B\u4F53}, {\u5177\u4F53\u73AF\u5883\u7269\u4EF6}, {\u7A7A\u95F4\u611F}, {\u65F6\u95F4/\u5929\u6C14}.
-{\u5149\u7EBF\u65B9\u5411/\u8272\u6E29} {\u8D28\u611F\u63CF\u8FF0}, {\u60C5\u7EEA\u6697\u793A\u5149\u5F71}.
-{\u53F0\u8BCD\u63CF\u8FF0\uFF08\u5982\u6709\uFF0C\u542B dialogue/OS/VO \u6807\u6CE8\uFF09/ No dialogue}.
-{\u97F3\u6548\u63CF\u8FF0}.
-{\u62CD\u6444\u65B9\u5F0F}, {\u666F\u522B}, {\u89C6\u89D2}, {\u8FD0\u955C\u65B9\u5F0F}.
+{},
+{} {}, {/Description}, {/table}.
+{Scene}, {}, {}, {Time/}.
+{/} {Description}, {}.
+{Description dialogue/OS/VO / No dialogue}.
+{Description}.
+{}, {}, {}, {}.
 \`\`\`
 
-#### \u53D9\u4E8B\u5F0F\u5199\u6CD5\u8981\u70B9
+#### 
 
-| \u539F\u5219 | \u8BF4\u660E | \u793A\u4F8B |
+| | | example |
 |------|------|------|
-| \u98CE\u683C\u57FA\u8C03\u653E\u6700\u524D | \u4E00\u53E5\u8BDD\u5B9A\u6027\u6574\u4F53\u6C14\u8D28 | \`A cinematic epic scene\` / \`A melancholic cinematic scene\` |
-| \u4E3B\u4F53+\u52A8\u4F5C\u7D27\u5BC6\u7ED1\u5B9A | \u4E3B\u4F53\u540E\u9762\u76F4\u63A5\u8DDF\u52A8\u4F5C\uFF0C\u5916\u89C2\u7EC6\u8282\u5D4C\u5165\u4E3B\u4F53\u63CF\u8FF0 | \`A young man in dark flowing robes stands alone atop the city wall, hands clasped behind back\` |
-| \u60C5\u7EEA\u7528\u52A8\u4F5C\u6697\u793A | \u4E0D\u76F4\u63A5\u9648\u8FF0\u300C\u4ED6\u5F88\u60B2\u4F24\u300D | \u274C \`He is sad.\` \u2192 \u2705 \`head drops slowly, shoulders slumped\` |
-| \u73AF\u5883\u878D\u5165\u53D9\u4E8B | \u4E0D\u7F57\u5217\u73AF\u5883\u5C5E\u6027 | \u274C \`The sky is blue. The grass is green.\` \u2192 \u2705 \`hazy blue sky stretches over the emerald valley\` |
-| \u5149\u7EBF\u5355\u72EC\u6210\u53E5 | \u5149\u7EBF\u65B9\u5411+\u8272\u6E29+\u8D28\u611F+\u60C5\u7EEA | \`Warm golden hour light streams from behind, casting long shadows across the stone floor\` |
-| \u955C\u5934\u8BED\u8A00\u6536\u5C3E | \u4E00\u53E5\u8BDD\u70B9\u775B | \`Captured in a wide establishing shot from a low-angle perspective, static camera\` |
-| \u7981\u6B62\u6807\u7B7E\u5806\u780C | \u4E0D\u5199 \`4K, cinematic, high quality\` | \`cinematic\` \u878D\u5165\u98CE\u683C\u57FA\u8C03\u5373\u53EF |
+| | | \`A cinematic epic scene\` / \`A melancholic cinematic scene\` |
+| + | Description | \`A young man in dark flowing robes stands alone atop the city wall, hands clasped behind back\` |
+| | not | \u274C \`He is sad.\` \u2192 \u2705 \`head drops slowly, shoulders slumped\` |
+| | not | \u274C \`The sky is blue. The grass is green.\` \u2192 \u2705 \`hazy blue sky stretches over the emerald valley\` |
+| | +++ | \`Warm golden hour light streams from behind, casting long shadows across the stone floor\` |
+| | | \`Captured in a wide establishing shot from a low-angle perspective, static camera\` |
+| Tags | not \`4K, cinematic, high quality\` | \`cinematic\` |
 
-#### \u751F\u6210\u7EA6\u675F
-1. **\u5168\u90E8\u7528\u82F1\u6587**
-2. **\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528**\uFF1A\u63D0\u793A\u8BCD\u5185\u4E0D\u5F15\u7528\u89D2\u8272\u8D44\u4EA7\u3001\u573A\u666F\u8D44\u4EA7\u3001\u5206\u955C\u56FE\uFF0C\u5168\u90E8\u5185\u5BB9\u7528\u7EAF\u6587\u672C\u63CF\u8FF0
-3. **\u53D9\u4E8B\u5F0F\u63CF\u5199**\uFF1A\u50CF\u5199\u5C0F\u8BF4\u4E00\u6837\u6784\u5EFA\u753B\u9762\uFF0C\u7981\u6B62\u6807\u7B7E\u7F57\u5217\u548C\u914D\u7F6E\u6E05\u5355\u5F0F\u5199\u6CD5
-4. **\u4E3B\u4F53\u7528\u6587\u5B57\u63CF\u8FF0**\uFF1A\u7B80\u8981\u63CF\u8FF0\u4E3B\u4F53\u5916\u89C2\u7279\u5F81\uFF08\u5982\u670D\u9970\u3001\u53D1\u578B\u7B49\u5173\u952E\u8FA8\u8BC6\u7279\u5F81\uFF09\uFF0C\u5D4C\u5165\u4E3B\u4F53\u63CF\u8FF0\u4E2D
-5. **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u4FE1\u606F
-6. **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728\u63D0\u793A\u8BCD\u4E2D\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u5185\u5BB9\uFF08\u4FDD\u6301\u539F\u59CB\u8BED\u8A00\uFF0C\u4E0D\u7FFB\u8BD1\uFF09
-7. **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u666E\u901A\u5BF9\u767D\u6807\u6CE8 \`(dialogue)\`\uFF1B\u5185\u5FC3\u72EC\u767D\u6807\u6CE8 \`(inner monologue, OS)\`\uFF1B\u753B\u5916\u97F3\u6807\u6CE8 \`(voiceover, VO)\`
-8. **\u5355\u6761\u8F93\u5165/\u8F93\u51FA**\uFF1A\u6BCF\u6B21\u4EC5\u5904\u7406\u4E00\u6761\u5206\u955C\uFF0C\u8F93\u51FA\u4E00\u6BB5\u63D0\u793A\u8BCD\uFF0C\u65E0\u7F16\u53F7\u524D\u7F00
-9. **\u65E0\u9700\u6807\u6CE8\u65F6\u957F**\uFF1A\u65F6\u957F\u7531\u6A21\u578B\u4FA7\u63A7\u5236\uFF0C\u63D0\u793A\u8BCD\u4E2D\u4E0D\u5199\u65F6\u957F\u53C2\u6570
-10. **\u955C\u5934\u63CF\u8FF0\u878D\u5165\u53D9\u4E8B**\uFF1A\u4E0D\u7528\u65B9\u62EC\u53F7\u6807\u7B7E\uFF0C\u7528\u5B8C\u6574\u53E5\u5B50\u63CF\u8FF0\u955C\u5934
-11. **\u89C6\u89C9\u98CE\u683C**\u53C2\u8003 Assistant \u4E2D\u7684\u300C\u89C6\u89C9\u98CE\u683C\u7EA6\u675F\u300D\u90E8\u5206\u5185\u5BB9
+#### 
+1. **All**
+2. **notuse \`@imageN \` **PromptnotCharacterAssetSceneAssetstoryboard imageAllcontenttextDescription
+3. ****NovelbuildTagsandConfiguration
+4. **Description**DescriptionrelatedDescription
+5. ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotInformation
+6. **not**videoDesc ofStoryboardatPromptcontentstartnot
+7. **Type**plain \`(dialogue)\` \`(inner monologue, OS)\` \`(voiceover, VO)\`
+8. **items/**handleitemsStoryboardPromptno
+9. **nowhen**whenPromptnotwhen
+10. **Description**notTagschildDescription
+11. **** Assistant ofcontent
 
-#### Wan 2.6 \u5B8C\u6574\u793A\u4F8B
+#### Wan 2.6 example
 
-**\u793A\u4F8B1\uFF1A\u65E0\u53F0\u8BCD\u5206\u955C**
+**example1noStoryboard**
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1AWan2.6
-\u8D44\u4EA7\u4FE1\u606F[A001, character, \u6C88\u8F9E], [A003, scene, \u57CE\u697C]
+Wan2.6
+AssetInformation[A001, character, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730\u3001\u57CE\u697C\u3001\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u5168\u666F\u3001\u9759\u6B62\u3001\u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C\u3001\u575A\u5B9A\u51B3\u7EDD\u3001\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149\u3001\u65E0\u53F0\u8BCD\u3001\u98CE\u58F0\u8863\u8882\u58F0\u3001A001/A003\uFF09' prompt='\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u57CE\u697C\u4E4B\u4E0A\uFF0C\u6C88\u8F9E\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u98D8\u626C\uFF0C\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='/4snoA001/A003' prompt='...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
 A cinematic epic scene with a cold, desaturated palette,
 A lone man in dark flowing robes stands atop an ancient city wall, hands clasped behind his back, robes and hair billowing in the wind, gaze fixed on the vast land stretching to the horizon, jaw set firm, eyes unwavering.
@@ -81382,95 +81382,95 @@ Wind howling across the open wall, fabric flapping rhythmically.
 Captured in a wide establishing shot from a slightly low angle, static camera, single continuous take.
 \`\`\`
 
-**\u793A\u4F8B2\uFF1A\u6709\u53F0\u8BCD\u5206\u955C**
+**example2Storyboard**
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1AWan2.6
-\u8D44\u4EA7\u4FE1\u606F[A001, character, \u6C88\u8F9E], [A002, character, \u82CF\u9526], [A003, scene, \u57CE\u697C]
+Wan2.6
+AssetInformation[A001, character, ], [A002, character, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u82CF\u9526\u767B\u4E0A\u57CE\u697C\u8D70\u5411\u6C88\u8F9E\u3001\u57CE\u697C\u3001\u82CF\u9526/\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u4E2D\u666F\u3001\u8DDF\u8E2A\u3001\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u6C88\u8F9E\u3001\u62C5\u5FE7\u3001\u9EC4\u660F\u4F59\u6656\u6E10\u6697\u3001\u82CF\u9526\u8BF4\uFF1A\u4F60\u53C8\u4E00\u4E2A\u4EBA\u5728\u8FD9\u91CC\u3001\u811A\u6B65\u58F0\u98CE\u58F0\u3001A001/A002/A003\uFF09' prompt='\u4E2D\u666F\uFF0C\u8DDF\u8E2A\uFF0C\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u57CE\u697C\u4E0A\u7684\u6C88\u8F9E...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='//4syouatA001/A002/A003' prompt='of...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
 A melancholic cinematic scene, dusk tones deepening,
 A young woman in a light-colored dress ascends the final stone steps onto the city wall, her gaze locked on the lone figure ahead, brow slightly furrowed, pace slowing as she approaches, lips parting softly.
 The ancient city wall stretches behind her, weathered stairs leading up from below, the distant skyline dimming as the last traces of golden hour fade into twilight.
 Fading warm light mingles with rising cool blue tones, the contrast between the two figures softened by the diffused remnants of sunset.
-"\u4F60\u53C8\u4E00\u4E2A\u4EBA\u5728\u8FD9\u91CC\u3002" \u2014 Su Jin (dialogue).
+"You're here alone again." \u2014 Su Jin (dialogue).
 Footsteps on stone, wind sweeping across the battlements, fabric rustling.
 A medium tracking shot follows the woman from behind as she ascends and approaches, handheld camera with subtle movement, single continuous take.
 \`\`\`
 
 ---
 
-## \u666F\u522B \u2192 \u955C\u5934\u6807\u7B7E\u6620\u5C04
+## \u2192 Tagsmapping
 
-| videoDesc \u4E2D\u7684\u666F\u522B | KlingOmni\uFF08\u82F1\u6587\u6807\u7B7E\uFF09 | Seedance 1.5\uFF08\u82F1\u6587\u6807\u7B7E\uFF09 | Seedance 2.0\uFF08\u4E2D\u6587\u63CF\u8FF0\uFF09 | Wan 2.6\uFF08\u82F1\u6587\u53D9\u4E8B\u5F0F\uFF09 |
+| videoDesc of | KlingOmniTags | Seedance 1.5Tags | Seedance 2.0Description | Wan 2.6 |
 |------|------|------|------|------|
-| \u8FDC\u666F | extreme wide shot | Extreme wide shot | \u8FDC\u666F | an extreme wide shot capturing the vast expanse |
-| \u5168\u666F | wide shot | Wide establishing shot | \u5168\u666F | a wide establishing shot |
-| \u4E2D\u666F | medium shot | Medium shot | \u4E2D\u666F | a medium shot |
-| \u8FD1\u666F | close-up | Close-up | \u8FD1\u666F | a close-up shot |
-| \u7279\u5199 | close-up | Close-up | \u7279\u5199 | a close-up capturing fine detail |
-| \u5927\u7279\u5199 | extreme close-up | Extreme close-up | \u5927\u7279\u5199 | an extreme close-up |
+| | extreme wide shot | Extreme wide shot | | an extreme wide shot capturing the vast expanse |
+| | wide shot | Wide establishing shot | | a wide establishing shot |
+| | medium shot | Medium shot | | a medium shot |
+| | close-up | Close-up | | a close-up shot |
+| | close-up | Close-up | | a close-up capturing fine detail |
+| | extreme close-up | Extreme close-up | | an extreme close-up |
 
-## \u8FD0\u955C \u2192 \u955C\u5934\u6807\u7B7E\u6620\u5C04
+## \u2192 Tagsmapping
 
-| videoDesc \u4E2D\u7684\u8FD0\u955C | KlingOmni\uFF08\u82F1\u6587\u6807\u7B7E\uFF09 | Seedance 1.5\uFF08\u82F1\u6587\u6807\u7B7E\uFF09 | Seedance 2.0\uFF08\u4E2D\u6587\u63CF\u8FF0\uFF09 | Wan 2.6\uFF08\u82F1\u6587\u53D9\u4E8B\u5F0F\uFF09 |
+| videoDesc of | KlingOmniTags | Seedance 1.5Tags | Seedance 2.0Description | Wan 2.6 |
 |------|------|------|------|------|
-| \u9759\u6B62 | static camera | Static, no camera movement | \u955C\u5934\u9759\u6B62 | static camera, locked off |
-| \u63A8\u8FDB | dolly in / push in | Slow dolly forward | \u955C\u5934\u7F13\u6162\u5411\u524D\u63A8\u8FDB | camera slowly pushing in |
-| \u62C9\u8FDC | dolly out / pull back | Slow dolly backward pull | \u955C\u5934\u7F13\u6162\u5411\u540E\u62C9\u8FDC | camera gently pulling back |
-| \u8DDF\u8E2A | tracking shot | Tracking shot, handheld | \u8DDF\u8E2A\u62CD\u6444 | tracking shot following the subject |
-| \u6447\u955C | pan left/right | Slow pan | \u955C\u5934\u7F13\u6162\u6447\u79FB | smooth pan across the scene |
-| \u7529\u955C | whip pan | Whip pan | \u5FEB\u901F\u7529\u955C | whip pan |
-| \u5347\u964D | crane up/down | Crane up/down | \u955C\u5934\u5347\u964D | crane rising / descending |
-| \u73AF\u7ED5 | surround shooting | Orbiting shot | \u73AF\u7ED5\u62CD\u6444 | orbiting around the subject |
+| | static camera | Static, no camera movement | | static camera, locked off |
+| | dolly in / push in | Slow dolly forward | | camera slowly pushing in |
+| | dolly out / pull back | Slow dolly backward pull | | camera gently pulling back |
+| | tracking shot | Tracking shot, handheld | | tracking shot following the subject |
+| | pan left/right | Slow pan | | smooth pan across the scene |
+| | whip pan | Whip pan | | whip pan |
+| | crane up/down | Crane up/down | | crane rising / descending |
+| | surround shooting | Orbiting shot | | orbiting around the subject |
 
 ---
 
-## \u6267\u884C\u6D41\u7A0B
+## process
 
-1. **\u89E3\u6790\u8F93\u5165**\uFF1A\u63D0\u53D6\u6A21\u578B\u540D\u548C\u591A\u53C2\u6807\u5FD7\uFF0C\u6309\u8DEF\u7531\u89C4\u5219\u5339\u914D\u6A21\u5F0F\uFF1B\u63D0\u53D6\u8D44\u4EA7\u5217\u8868
-2. **\u6784\u5EFA @\u56FEN \u7F16\u53F7\u8868**\uFF1A\u8D44\u4EA7\u6309\u8F93\u5165\u987A\u5E8F\u4ECE \`@\u56FE1 \` \u8D77\u7F16\u53F7\uFF0C\u5206\u955C\u56FE\u63A5\u7EED\u7F16\u53F7\uFF1B\`shouldGenerateImage="false"\` \u7684\u5206\u955C\u4E0D\u5206\u914D\u5206\u955C\u56FE\u7F16\u53F7
-3. **\u9010\u6761\u89E3\u6790 \`<storyboardItem>\`**\uFF1A\u6309 videoDesc \u89E3\u6790\u89C4\u5219\u63D0\u53D612\u4E2A\u5B57\u6BB5\uFF0C\u7ED3\u5408 \`duration\`\u3001\`associateAssetsIds\` \u5EFA\u7ACB\u6807\u7B7E\u6620\u5C04
-4. **\u6574\u5408\u4E3A\u4E00\u4E2A\u5B8C\u6574\u7684\u89C6\u9891\u63D0\u793A\u8BCD**\uFF1A\u6309\u76EE\u6807\u6A21\u578B\u683C\u5F0F\u7F16\u6392\u5168\u90E8\u5206\u955C
-5. **\u8F93\u51FA\u89C6\u9891\u63D0\u793A\u8BCD**
+1. **parse**extractandMulti-referencebymatchExtract assetslist
+2. **build @imageN table**Assetby \`@image1 \` storyboard image\`shouldGenerateImage="false"\` ofStoryboardnotstoryboard image
+3. **itemsparse \`<storyboardItem>\`**by videoDesc parseextract12field \`duration\`\`associateAssetsIds\` Tagsmapping
+4. **ofVideo prompt**byAllStoryboard
+5. **Video prompt**
 
 ---
 
-## \u7EA6\u675F
+## 
 
-- **\u4EC5\u8F93\u51FA\u89C6\u9891\u63D0\u793A\u8BCD**\uFF1A\u4E0D\u9644\u52A0\u4EFB\u4F55\u89E3\u91CA\u3001\u6CE8\u91CA\u6216\u989D\u5916\u8BF4\u660E\uFF0C\u53EA\u8F93\u51FA\u89C6\u9891\u63D0\u793A\u8BCD\u6587\u672C
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728\u63D0\u793A\u8BCD\u4E2D\u5B8C\u6574\u4F53\u73B0\u53F0\u8BCD\u5185\u5BB9\uFF0C\u4E0D\u5F97\u9057\u6F0F
-- **\u53F0\u8BCD\u4FDD\u6301\u539F\u59CB\u8F93\u5165**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1A\u53F0\u8BCD\u5185\u5BB9\u4E25\u7981\u7FFB\u8BD1\uFF0C\u5FC5\u987B\u4FDD\u6301 videoDesc \u4E2D\u7684\u539F\u59CB\u8BED\u8A00\u539F\u6837\u8F93\u51FA
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1A\u5FC5\u987B\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08dialogue / \u8BF4\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08OS / \u5185\u5FC3OS\uFF09\u3001\u753B\u5916\u97F3\uFF08VO / \u753B\u5916\u97F3VO\uFF09\uFF0C\u5E76\u5728\u63D0\u793A\u8BCD\u4E2D\u6B63\u786E\u6807\u6CE8
-- **\u65F6\u95F4\u8DE8\u5EA6\u6700\u4F4E 1 \u79D2**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1A\u6240\u6709\u6A21\u5F0F\u4E2D\u6D89\u53CA\u65F6\u95F4\u5206\u6BB5\uFF08Motion \u65F6\u95F4\u8F74 / duration-ms\uFF09\u7684\u6700\u5C0F\u7C92\u5EA6\u4E3A 1 \u79D2\uFF081000ms\uFF09\uFF0C\u7981\u6B62\u51FA\u73B0 0.5 \u79D2\u7B49\u4F4E\u4E8E 1 \u79D2\u7684\u95F4\u9694
-- **\u89C6\u89C9\u98CE\u683C**\uFF1A\u98CE\u683C\u76F8\u5173\u63CF\u8FF0\u53C2\u8003 Assistant \u4E2D\u7684\u300C\u89C6\u89C9\u98CE\u683C\u7EA6\u675F\u300D\u90E8\u5206\u5185\u5BB9\uFF0C\u4E0D\u5728\u672C Skill \u5185\u81EA\u884C\u5B9A\u4E49\u98CE\u683C
-- **\u4E25\u683C\u6309\u5339\u914D\u5230\u7684\u6A21\u5F0F\u683C\u5F0F**\uFF0C\u4E0D\u6DF7\u7528\u4E0D\u540C\u6A21\u5F0F\u7684\u683C\u5F0F
-- **\u4E0D\u4FEE\u6539\u539F\u59CB\u8F93\u5165**\uFF1A\u4E0D\u6539\u5199 \`<storyboardItem>\` \u7684\u4EFB\u4F55\u5B57\u6BB5\uFF1B\`prompt\` \u5DF2\u6709\u7684\u5206\u955C\u56FE\u63D0\u793A\u8BCD\u4EC5\u4F5C\u753B\u9762\u53C2\u8003
-- **\u4E0D\u7F16\u9020\u8D44\u4EA7\u6216\u53F0\u8BCD**\uFF1A\u53EA\u4F7F\u7528\u8F93\u5165\u4E2D\u7684\u8D44\u4EA7\u4FE1\u606F\uFF1B\u65E0\u53F0\u8BCD\u5219\u6807\u6CE8\u300C\u65E0\u53F0\u8BCD\u300D/ \`No dialogue\`
-- **\u65F6\u957F\u5355\u4F4D\u8F6C\u6362**\uFF1ASeedance 2.0 \u7684 \`<duration-ms>\` \u9700\u5C06\u79D2 \xD7 1000 \u8F6C\u4E3A\u6BEB\u79D2
+- **Video prompt**notVideo prompttext
+- ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardatPromptcontent,not
+- **start**content videoDesc ofstart
+- **Type**plaindialogue / OS / OSVO / VOatPrompt
+- **Time 1 **allTimeMotion Time / duration-msof 1 1000ms 0.5 1 of
+- ****relatedDescription Assistant ofcontent,not in Skill definition
+- **bymatchof**notnotof
+- **noteditstart**not \`<storyboardItem>\` offield\`prompt\` alreadyofstoryboard imagePrompt
+- **notAsset**useofAssetInformationnono/ \`No dialogue\`
+- **whenconvert to**Seedance 2.0 of \`<duration-ms>\` \xD7 1000 convert to
 `
               },
               {
-                name: "\u97F3\u8272\u7ED1\u5B9A",
+                name: "",
                 type: "audioBindPrompt",
-                data: `\u4F60\u662F\u4E00\u4E2A\u97F3\u8272\u5339\u914D\u52A9\u624B\u3002
-\u4F60\u7684\u4EFB\u52A1\u662F\uFF1A\u6839\u636E\u7ED9\u5B9A\u89D2\u8272\u8D44\u4EA7\u7684\u540D\u79F0\u4E0E\u63CF\u8FF0\uFF0C\u4ECE\u5019\u9009\u97F3\u9891\u5217\u8868\u4E2D\u9009\u51FA\u6700\u5408\u9002\u7684\u97F3\u8272\u3002
-\u5339\u914D\u89C4\u5219\uFF1A
-1. \u4F18\u5148\u6839\u636E\u89D2\u8272\u6027\u522B\u3001\u5E74\u9F84\u3001\u6027\u683C\u7B49\u7279\u5F81\u4E0E\u97F3\u8272\u63CF\u8FF0\u8FDB\u884C\u8BED\u4E49\u5339\u914D\uFF1B
-2. \u540C\u4E00\u89D2\u8272\u4EC5\u53EF\u5339\u914D\u4E00\u4E2A\u97F3\u8272\uFF1B
-3. \u82E5\u5019\u9009\u5217\u8868\u4E2D\u6CA1\u6709\u5408\u9002\u7684\u97F3\u8272\uFF0C\u5219\u65E0\u9700\u8FD4\u56DE audioId\uFF1B`
+                data: `youismatch
+youoftaskisbased onCharacterAssetofNameDescriptionaudiolistof
+match
+1. based onCharacterDescriptionmatch
+2. Charactermatch
+3. listofnoreturn audioId`
               }
             ]);
           }
         },
-        //
+        //Prompttable
         {
           name: "o_modelPrompt",
           builder: (table) => {
@@ -81485,7 +81485,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
           initData: async (knex4) => {
           }
         },
-        //
+        //Noveloriginal texttable
         {
           name: "o_novel",
           builder: (table) => {
@@ -81503,7 +81503,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             table.unique(["id"]);
           }
         },
-        //
+        //NovelEventtable
         {
           name: "o_event",
           builder: (table) => {
@@ -81515,7 +81515,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             table.unique(["id"]);
           }
         },
-        //-
+        //Event-chaptertable
         {
           name: "o_eventChapter",
           builder: (table) => {
@@ -81526,7 +81526,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             table.unique(["id"]);
           }
         },
-        //
+        //Script
         {
           name: "o_script",
           builder: (table) => {
@@ -81541,7 +81541,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             table.unique(["id"]);
           }
         },
-        //
+        //Assettable
         {
           name: "o_assets",
           builder: (table) => {
@@ -81566,7 +81566,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
           initData: async (knex4) => {
           }
         },
-        //
+        //imagetable
         {
           name: "o_image",
           builder: (table) => {
@@ -81582,7 +81582,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             table.unique(["id"]);
           }
         },
-        //
+        //Storyboard
         {
           name: "o_storyboard",
           builder: (table) => {
@@ -81605,7 +81605,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             table.unique(["id"]);
           }
         },
-        //flowData-
+        //flowData-Script
         {
           name: "o_agentWorkData",
           builder: (table) => {
@@ -81636,7 +81636,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             table.unique(["id"]);
           }
         },
-        // 
+        // video track
         {
           name: "o_videoTrack",
           builder: (table) => {
@@ -81653,7 +81653,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             table.unique(["id"]);
           }
         },
-        //
+        //Vendor configurationtable
         {
           name: "o_vendorConfig",
           builder: (table) => {
@@ -81717,7 +81717,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             ]);
           }
         },
-        //
+        //imagestreamtable
         {
           name: "o_imageFlow",
           builder: (table) => {
@@ -81851,7 +81851,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "efccb0464cfd472861b49ebf737d4820",
                 path: "references/event_extract.md",
                 name: "event_extract",
-                description: "\u4E13\u4E3A\u5C0F\u8BF4\u6539\u7F16\u77ED\u5267\u8BBE\u8BA1\u7684\u6587\u672C\u5206\u6790\u52A9\u624B\uFF0C\u9010\u7AE0\u63D0\u53D6\u6D89\u53CA\u89D2\u8272\u3001\u6838\u5FC3\u4E8B\u4EF6\u3001\u4E3B\u7EBF\u5173\u7CFB\u3001\u4FE1\u606F\u5BC6\u5EA6\u3001\u9884\u4F30\u96C6\u957F\u53CA\u60C5\u7EEA\u5F3A\u5EA6\u7B49\u7ED3\u6784\u5316\u4FE1\u606F\uFF0C\u4EE5Markdown\u8868\u683C\u5F62\u5F0F\u8F93\u51FA\uFF0C\u5E76\u9644\u6C47\u603B\u7EDF\u8BA1\uFF0C\u8F85\u52A9\u77ED\u5267\u5236\u4F5C\u7684\u5185\u5BB9\u89C4\u5212\u4E0E\u65F6\u957F\u4F30\u7B97\u3002",
+                description: "NoveloftextchapterextractCharacterEventrelatedInformationemotion intensityInformationMarkdowntableofcontentwhen",
                 embedding: "",
                 type: "references",
                 createTime: 1774447310118,
@@ -81863,7 +81863,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "783678aaab829b34e7c30a414c356bf6",
                 path: "references/novel_character_extract.md",
                 name: "novel_character_extract",
-                description: "\u4E13\u4E3A\u5C0F\u8BF4\u5185\u5BB9\u5206\u6790\u8BBE\u8BA1\u7684\u89D2\u8272\u63D0\u53D6\u52A9\u624B\uFF0C\u4ECE\u539F\u6587\u4E2D\u8BC6\u522B\u5E76\u7ED3\u6784\u5316\u8F93\u51FA\u6240\u6709\u91CD\u8981\u89D2\u8272\u7684\u89C6\u89C9\u63CF\u8FF0\u4FE1\u606F\uFF0C\u5305\u62EC\u5916\u8C8C\u3001\u670D\u9970\u3001\u4F53\u6001\u3001\u72B6\u6001\u53D8\u4F53\u7B49\u5B57\u6BB5\uFF0C\u4F9B\u7F8E\u672F\u5236\u4F5C\u548CAI\u89D2\u8272\u56FE\u751F\u6210\u4F7F\u7528\u3002",
+                description: "NovelcontentofCharacterextractoriginal textallCharacterofDescriptionInformationStatusfieldandAICharacterimageuse",
                 embedding: "",
                 type: "references",
                 createTime: 1774447310118,
@@ -81875,7 +81875,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "10544d12c4ef011e6b3b63a99b8c7fa8",
                 path: "references/novel_props_extract.md",
                 name: "novel_props_extract",
-                description: "\u4E13\u6CE8\u4E8E\u4ECE\u5C0F\u8BF4\u539F\u6587\u4E2D\u63D0\u53D6\u9053\u5177\u7269\u54C1\u4FE1\u606F\u7684\u5206\u6790\u52A9\u624B\uFF0C\u80FD\u8BC6\u522B\u6B66\u5668\u3001\u6CD5\u5668\u3001\u836F\u7269\u7B49\u5404\u7C7B\u9053\u5177\uFF0C\u751F\u6210\u5305\u542B\u5916\u89C2\u3001\u6750\u8D28\u3001\u5C3A\u5BF8\u3001\u529F\u80FD\u53CA\u72B6\u6001\u53D8\u4F53\u7684\u7ED3\u6784\u5316\u89C6\u89C9\u63CF\u8FF0\u8868\u683C\uFF0C\u4F9B\u7F8E\u672F\u5236\u4F5C\u548CAI\u7ED8\u56FE\u4F7F\u7528\u3002",
+                description: "Noveloriginal textExtract propsInformationofPropStatusofDescriptiontableandAIimageuse",
                 embedding: "",
                 type: "references",
                 createTime: 1774447310118,
@@ -81887,7 +81887,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "65603aa495a541f54c55b7f30e149f45",
                 path: "references/novel_scene_extract.md",
                 name: "novel_scene_extract",
-                description: "\u4E13\u6CE8\u4E8E\u4ECE\u5C0F\u8BF4\u539F\u6587\u4E2D\u63D0\u53D6\u5E76\u7ED3\u6784\u5316\u573A\u666F\u4FE1\u606F\u7684\u5206\u6790\u52A9\u624B\uFF0C\u53EF\u8BC6\u522B\u5404\u7C7B\u573A\u666F\u5730\u70B9\uFF0C\u8F93\u51FA\u5305\u542B\u7A7A\u95F4\u63CF\u8FF0\u3001\u5149\u7167\u6C1B\u56F4\u3001\u5173\u952E\u9648\u8BBE\u3001\u8272\u8C03\u57FA\u8C03\u7B49\u5B57\u6BB5\u7684\u6807\u51C6\u5316\u573A\u666F\u8D44\u4EA7\u8868\uFF0C\u7528\u4E8E\u7F8E\u672F\u5236\u4F5C\u548CAI\u7ED8\u56FE\u7684\u573A\u666F\u6982\u5FF5\u56FE\u751F\u6210\u3002",
+                description: "Noveloriginal textextractSceneInformationofSceneDescriptionrelatedfieldofSceneAssettableandAIimageofSceneimage",
                 embedding: "",
                 type: "references",
                 createTime: 1774447310118,
@@ -81899,7 +81899,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "830559e8f2cd5d0fa8e6df48a164fe2d",
                 path: "references/video_dialogue_extract.md",
                 name: "video_dialogue_extract",
-                description: "\u8FD9\u662F\u4E00\u4E2A\u4E13\u95E8\u4ECE\u89C6\u9891\u5206\u955C\u63D0\u793A\u8BCD\u4E2D\u63D0\u53D6\u7ED3\u6784\u5316\u53F0\u8BCD\u3001\u65C1\u767D\u4E0E\u97F3\u6548\u4FE1\u606F\u7684AI\u52A9\u624B\u914D\u7F6E\u6587\u6863\uFF0C\u5B9A\u4E49\u4E86\u5B8C\u6574\u7684\u8F93\u51FA\u683C\u5F0F\uFF08\u542B\u955C\u53F7\u3001\u89D2\u8272\u3001\u53F0\u8BCD\u7C7B\u578B\u3001\u8868\u6F14\u6307\u5BFC\u7B49\u5B57\u6BB5\uFF09\u3001\u63D0\u53D6\u89C4\u5219\u53CA\u5904\u7406\u6D41\u7A0B\uFF0C\u7528\u4E8E\u5C06\u89C6\u9891\u5206\u955C\u63CF\u8FF0\u8F6C\u5316\u4E3A\u6807\u51C6\u5316\u53F0\u8BCD\u8868\u3002",
+                description: "isStoryboardPromptextractInformationofAIConfigurationdefinitionofCharacterTypetablefieldextracthandleprocessStoryboardDescriptionconvert totable",
                 embedding: "",
                 type: "references",
                 createTime: 1774447310118,
@@ -81911,7 +81911,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "43e63450efe0c9af8a3a40b036d36cb4",
                 path: "references/pipeline.md",
                 name: "pipeline",
-                description: "\u9762\u5411\u77ED\u5267\u6539\u7F16\u9879\u76EE\u7684\u56DB\u9636\u6BB5\u6D41\u6C34\u7EBF\u8BF4\u660E\u6587\u6863\uFF0C\u6DB5\u76D6\u4E8B\u4EF6\u63D0\u53D6\u3001\u6545\u4E8B\u9AA8\u67B6\u3001\u6539\u7F16\u7B56\u7565\u3001\u5267\u672C\u7F16\u5199\u7684\u4E32\u884C\u6267\u884C\u6D41\u7A0B\uFF0C\u5B9A\u4E49\u4E86\u51B3\u7B56\u5C42\u3001\u6267\u884C\u5C42\u3001\u76D1\u7763\u5C42\u7684\u534F\u4F5C\u89C4\u8303\u53CA\u6D3E\u53D1\u3001\u5BA1\u6838\u3001\u4FEE\u590D\u7684\u4EA4\u4E92\u683C\u5F0F\u4E0E\u8D28\u91CF\u95E8\u63A7\u6807\u51C6\u3002",
+                description: "ProjectofstreamEventextractadaptation strategyScriptofprocessdefinitionofof",
                 embedding: "",
                 type: "references",
                 createTime: 1774451946248,
@@ -81923,7 +81923,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "7d353be4bab7a794436d9abff2b9c6ee",
                 path: "references/adaptation_format.md",
                 name: "adaptation_format",
-                description: "\u672C\u6587\u6863\u89C4\u5B9A\u4E86\u6539\u7F16\u7B56\u7565\u8F93\u51FA\u7684\u6807\u51C6\u683C\u5F0F\uFF0C\u5305\u62EC\u6838\u5FC3\u6539\u7F16\u539F\u5219\u3001\u5220\u9664\u51B3\u7B56\u548C\u4E16\u754C\u89C2\u5448\u73B0\u7B56\u7565\u4E09\u5927\u6A21\u5757\u7684\u4E66\u5199\u89C4\u8303\uFF0C\u660E\u786E\u5404\u6A21\u5757\u6240\u9700\u6DB5\u76D6\u7684\u7EF4\u5EA6\u4E0E\u8981\u7D20\uFF0C\u7528\u4E8E\u6307\u5BFC\u7AD6\u5C4F\u77ED\u5267\u7B49\u8F7D\u4F53\u7684\u6587\u5B66\u6539\u7F16\u5DE5\u4F5C\u3002",
+                description: "adaptation strategyofDeleteandofofof",
                 embedding: "",
                 type: "references",
                 createTime: 1774452010535,
@@ -81935,7 +81935,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "2ef08a7479f29d74986999ceb02092c8",
                 path: "references/event_format.md",
                 name: "event_format",
-                description: "\u672C\u6587\u6863\u89C4\u5B9A\u4E86\u5F71\u89C6\u6539\u7F16\u9879\u76EE\u4E2D\u4E8B\u4EF6\u8868\u7684\u6807\u51C6\u8F93\u51FA\u683C\u5F0F\uFF0C\u5305\u62EC\u6587\u4EF6\u5934\u3001\u4E8B\u4EF6\u8868\u683C\u3001\u5404\u5B57\u6BB5\u586B\u5199\u89C4\u8303\uFF08\u7AE0\u8282\u3001\u89D2\u8272\u3001\u6838\u5FC3\u4E8B\u4EF6\u3001\u4E3B\u7EBF\u5173\u7CFB\u3001\u60C5\u7EEA\u5F3A\u5EA6\u3001\u9884\u4F30\u65F6\u957F\uFF09\u53CA\u6C47\u603B\u7EDF\u8BA1\u6A21\u677F\uFF0C\u7528\u4E8E\u6307\u5BFC\u4ECE\u539F\u8457\u63D0\u53D6\u4E8B\u4EF6\u5E76\u8BC4\u4F30\u6539\u7F16\u96C6\u6570\u4E0E\u538B\u7F29\u6BD4\u7684\u7B2C\u4E00\u9636\u6BB5\u5DE5\u4F5C\u3002",
+                description: "ProjectEventtableoffileEventtablefieldchapterCharacterEventrelatedemotion intensitywhentemplateextractEventofchapter",
                 embedding: "",
                 type: "references",
                 createTime: 1774452010535,
@@ -81947,7 +81947,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "f5e7fe6db7e05db69d5dc327c4c538f2",
                 path: "references/script_format.md",
                 name: "script_format",
-                description: "\u672C\u6587\u6863\u4E3A\u7AD6\u5C4F\u77ED\u5267\u5267\u672C\u7684\u8F93\u51FA\u683C\u5F0F\u89C4\u8303\uFF0C\u5B9A\u4E49\u4E86\u6587\u4EF6\u5934\u3001\u8282\u62CD\u7ED3\u6784\u3001\u5206\u955C\u811A\u672C\u3001\u753B\u9762\u63CF\u8FF0\u3001\u53F0\u8BCD\u3001\u8F6C\u573A\u6807\u6CE8\u7B49\u6807\u51C6\u683C\u5F0F\u8981\u6C42\uFF0C\u5E76\u9644\u6709\u65F6\u957F\u63A7\u5236\u53C2\u6570\u4E0E\u81EA\u67E5\u6E05\u5355\uFF0C\u4F9BAI\u89C6\u9891\u751F\u6210\u548C\u5BFC\u6F14\u5236\u4F5C\u4F7F\u7528\u3002",
+                description: "ScriptofdefinitionfileStoryboardScriptVisual descriptionconvert towhenAIanduse",
                 embedding: "",
                 type: "references",
                 createTime: 1774452010535,
@@ -81959,7 +81959,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "a587532c737ce15022e1522021f099bb",
                 path: "references/skeleton_format.md",
                 name: "skeleton_format",
-                description: "\u672C\u6587\u6863\u5B9A\u4E49\u4E86\u6545\u4E8B\u9AA8\u67B6\u6587\u4EF6\uFF08skeleton.md\uFF09\u7684\u6807\u51C6\u5316\u8F93\u51FA\u683C\u5F0F\uFF0C\u6DB5\u76D6\u6545\u4E8B\u6838\u3001\u4EBA\u7269\u6210\u957F\u9690\u7EBF\u3001\u4E09\u5E55\u7ED3\u6784\u3001\u5206\u96C6\u51B3\u7B56\u6A21\u677F\u3001\u5168\u5C40\u5220\u51CF\u8BB0\u5F55\u3001\u4ED8\u8D39\u5361\u70B9\u8BBE\u8BA1\u53CA\u81EA\u67E5\u6E05\u5355\uFF0C\u7528\u4E8E\u6307\u5BFC\u7F16\u5267\u5C06\u7AE0\u8282\u4E8B\u4EF6\u5217\u8868\u8F6C\u5316\u4E3A\u7ED3\u6784\u5B8C\u6574\u7684\u5267\u96C6\u6539\u7F16\u65B9\u6848\u3002",
+                description: "definitionfileskeleton.mdoftemplatechapterEventlistconvert toof",
                 embedding: "",
                 type: "references",
                 createTime: 1774452010535,
@@ -81971,7 +81971,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "120b3c856f1b2a8a429e11319e8c95fe",
                 path: "references/quality_criteria.md",
                 name: "quality_criteria",
-                description: "\u672C\u6587\u6863\u4E3A\u5F71\u89C6/\u77ED\u5267\u9879\u76EE\u7684\u8D28\u91CF\u5BA1\u6838\u6807\u51C6\u624B\u518C\uFF0C\u6DB5\u76D6\u4E8B\u4EF6\u8868\u3001\u6545\u4E8B\u9AA8\u67B6\u3001\u6539\u7F16\u7B56\u7565\u548C\u5267\u672C\u56DB\u5927\u6A21\u5757\u7684\u8BE6\u7EC6\u5BA1\u6838\u89C4\u5219\uFF0C\u89C4\u5B9A\u4E86\u683C\u5F0F\u89C4\u8303\u3001\u89D2\u8272\u540D\u79F0\u7EDF\u4E00\u3001\u65F6\u957F\u5408\u7406\u6027\u3001\u753B\u9762\u53EF\u6267\u884C\u6027\u53CA\u573A\u666F\u6C1B\u56F4\u4E00\u81F4\u6027\u7B49\u5BA1\u6838\u8981\u6C42\uFF0C\u7528\u4E8E\u786E\u4FDD\u5404\u9636\u6BB5\u4EA7\u51FA\u7269\u7684\u5185\u5BB9\u51C6\u786E\u6027\u4E0E\u5236\u4F5C\u53EF\u884C\u6027\u3002",
+                description: "/ProjectofEventtableadaptation strategyandScriptofCharacterNamewhenSceneconsistentensureofcontent",
                 embedding: "",
                 type: "references",
                 createTime: 1774452068093,
@@ -81983,7 +81983,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "c710ab7d237e1f0c5aa3d208e0f5b484",
                 path: "references/plan.md",
                 name: "plan",
-                description: "\u8BE5\u6587\u6863\u5B9A\u4E49\u4E86AI\u4EE3\u7406\u751F\u6210\u6267\u884C\u8BA1\u5212\u7684\u89C4\u8303\uFF0C\u5305\u62EC\u4EFB\u52A1\u603B\u89C8\u3001\u6B65\u9AA4\u5217\u8868\uFF08\u542B\u7F16\u53F7\u3001\u540D\u79F0\u3001\u8BE6\u7EC6\u5185\u5BB9\u3001\u9884\u671F\u8F93\u51FA\u53CA\u4F9D\u8D56\u5173\u7CFB\uFF09\u548C\u6267\u884C\u987A\u5E8F\u6807\u6CE8\uFF0C\u5E76\u63D0\u4F9B\u6807\u51C6\u56DE\u590D\u6A21\u677F\uFF0C\u7528\u4E8E\u5C06\u7528\u6237\u9700\u6C42\u62C6\u89E3\u4E3A\u53EF\u76F4\u63A5\u4F20\u5165\u5B50\u4EE3\u7406\u5DE5\u5177\u6267\u884C\u7684\u5177\u4F53\u6B65\u9AA4\u3002",
+                description: "definitionAIoftasksteplistNamecontentrelatedandtemplatechildTool executionofstep",
                 embedding: "",
                 type: "references",
                 createTime: 1774452098447,
@@ -81995,7 +81995,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "6045d76873fd58b8b87a914a21a38439",
                 path: "references/derive_assets_extraction.md",
                 name: "derive_assets_extraction",
-                description: "\u672C\u6587\u6863\u662F\u4E00\u4EFD\u6280\u672F\u64CD\u4F5C\u6307\u5357\uFF0C\u8BF4\u660E\u5982\u4F55\u6839\u636E\u5267\u672C\u5185\u5BB9\u548C\u5DF2\u6709\u8D44\u4EA7\u5217\u8868\uFF0C\u63D0\u53D6\u6BCF\u4E2A\u8D44\u4EA7\u5728\u5267\u60C5\u4E2D\u51FA\u73B0\u7684\u4E0D\u540C\u89C6\u89C9\u72B6\u6001\u53D8\u4F53\uFF08derive\uFF09\uFF0C\u5E76\u901A\u8FC7\u5DE5\u5177\u51FD\u6570\u8BFB\u53D6\u548C\u5199\u5165\u6570\u636E\uFF0C\u7528\u4E8E\u540E\u7EED\u56FE\u7247\u751F\u6210\u53C2\u8003\u3002",
+                description: "isbased onScriptcontentandalreadyAssetlistextractAssetatofnotStatusderivetoolreadanddataimage",
                 embedding: "",
                 type: "references",
                 createTime: 1774452119499,
@@ -82007,7 +82007,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
                 md5: "a3b3432854970f22949ba47236a6532f",
                 path: "references/storyboard_generation.md",
                 name: "storyboard_generation",
-                description: "\u6839\u636E\u5267\u672C\u548C\u8D44\u4EA7\u5217\u8868\u751F\u6210\u7ED3\u6784\u5316\u5206\u955C\u9762\u677F\u7684\u5DE5\u5177\u6307\u5357\uFF0C\u6DB5\u76D6\u5206\u955C\u62C6\u5206\u539F\u5219\u3001\u5B57\u6BB5\u586B\u5199\u89C4\u8303\u53CA\u5DE5\u5177\u8C03\u7528\u6D41\u7A0B\uFF0C\u7528\u4E8E\u5C06\u5267\u672C\u8F6C\u5316\u4E3A\u542B\u753B\u9762\u63CF\u8FF0\u3001\u955C\u5934\u8BED\u8A00\u3001\u53F0\u8BCD\u548CAI\u7ED8\u56FE\u63D0\u793A\u8BCD\u7684\u5206\u955C\u6570\u636E\u3002",
+                description: "based onScriptandAssetlistStoryboardoftoolStoryboardsplitfieldTool callprocessScriptconvert toVisual descriptionandAIimagePromptofStoryboarddata",
                 embedding: "",
                 type: "references",
                 createTime: 1774452119499,
@@ -82093,7 +82093,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
             ]);
           }
         },
-        //（message=, summary=）
+        //tablemessage=startmessage, summary=summary
         {
           name: "memories",
           builder: (table) => {
@@ -82127,14 +82127,14 @@ A medium tracking shot follows the woman from behind as she ascends and approach
         if (!tableExists || forceInit) {
           if (tableExists && forceInit) {
             await knex3.schema.dropTable(t.name);
-            console.log("[\u521D\u59CB\u5316\u6570\u636E\u5E93] \u5DF2\u5B58\u5728\u8868\u5220\u9664\u5E76\u91CD\u5EFA:", t.name);
+            console.log("[Initializing database] alreadyexiststableDelete:", t.name);
           } else {
-            console.log("[\u521D\u59CB\u5316\u6570\u636E\u5E93] \u521B\u5EFA\u6570\u636E\u8868:", t.name);
+            console.log("[Initializing database] Creating table:", t.name);
           }
           await knex3.schema.createTable(t.name, t.builder);
           if (t.initData) {
             await t.initData(knex3);
-            console.log("[\u521D\u59CB\u5316\u6570\u636E\u5E93] \u8868\u6570\u636E\u521D\u59CB\u5316:", t.name);
+            console.log("[Initializing database] Table data initialization:", t.name);
           }
         }
       }
@@ -105742,22 +105742,22 @@ var vendor_default;
 var init_vendor = __esm({
   "src/lib/vendor.json"() {
     vendor_default = {
-      "atlascloud.ts": '/**\r\n * Toonflow AI\u4F9B\u5E94\u5546\u6A21\u677F - AtlasCloud MASS\r\n * @version 0.8\r\n *\r\n * \u8BF4\u660E\uFF1A\r\n * 1) \u6587\u672C\u63A5\u53E3\u4F7F\u7528 OpenAI \u517C\u5BB9\u57FA\u5730\u5740\uFF1Ahttps://api.atlascloud.ai/v1\r\n * 2) \u56FE\u7247/\u89C6\u9891\u4F7F\u7528 Atlas Cloud \u5A92\u4F53\u63A5\u53E3\uFF1Ahttps://api.atlascloud.ai/api/v1\r\n * 3) \u56FE\u7247/\u89C6\u9891\u4E3A\u5F02\u6B65\u4EFB\u52A1\uFF1A\u63D0\u4EA4\u540E\u8F6E\u8BE2 /api/v1/model/prediction/{id}\r\n */\r\n\r\n// ============================================================\r\n// \u7C7B\u578B\u5B9A\u4E49\r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string; disabled?: boolean }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\ntype AtlasVideoModelKind =\r\n  | "seedanceTextToVideo"\r\n  | "seedanceReferenceToVideo"\r\n  | "seedanceImageToVideo"\r\n  | "wanReferenceToVideo"\r\n  | "generic";\r\n\r\n// ============================================================\r\n// \u5168\u5C40\u58F0\u660E\r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "atlascloud",\r\n  version: "1.0",\r\n  author: "AtlasCloud",\r\n  name: "AtlasCloud MASS",\r\n  description: "AtlasCloud \u5168\u6A21\u6001\u5E73\u53F0\u63A5\u5165 Toonflow\u3002\u9ED8\u8BA4\u6309\u5B98\u65B9\u6587\u6863\u586B\u5199\u6587\u672C\u3001\u56FE\u7247\u3001\u89C6\u9891\u4E0E\u4EFB\u52A1\u8F6E\u8BE2\u8DEF\u5F84\u3002",\r\n  inputs: [\r\n    { key: "apiKey", label: "API\u5BC6\u94A5", type: "password", required: true, placeholder: "AtlasCloud API Key" },\r\n    { key: "chatBaseUrl", label: "\u6587\u672C\u57FA\u5730\u5740", type: "url", required: true, placeholder: "https://api.atlascloud.ai/v1", disabled: true },\r\n    { key: "mediaBaseUrl", label: "\u5A92\u4F53\u57FA\u5730\u5740", type: "url", required: true, placeholder: "https://api.atlascloud.ai/api/v1", disabled: true },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    chatBaseUrl: "https://api.atlascloud.ai/v1",\r\n    mediaBaseUrl: "https://api.atlascloud.ai/api/v1",\r\n  },\r\n  models: [\r\n    { name: "DeepSeek V4 Pro", modelName: "deepseek-ai/deepseek-v4-pro", type: "text", think: false },\r\n    { name: "DeepSeek V4 Flash", modelName: "deepseek-ai/deepseek-v4-flash", type: "text", think: false },\r\n    { name: "Kimi K2.6", modelName: "moonshotai/kimi-k2.6", type: "text", think: false },\r\n    { name: "GLM 5.1", modelName: "zai-org/glm-5.1", type: "text", think: false },\r\n    { name: "MiniMax M2.7", modelName: "minimaxai/minimax-m2.7", type: "text", think: false },\r\n    { name: "GPT Image 2", modelName: "openai/gpt-image-2/text-to-image", type: "image", mode: ["text", "singleImage"] },\r\n    { name: "Nano Banana Pro", modelName: "google/nano-banana-pro/text-to-image", type: "image", mode: ["text", "singleImage", "multiReference"] },\r\n    { name: "Nano Banana 2", modelName: "google/nano-banana-2/text-to-image", type: "image", mode: ["text", "singleImage", "multiReference"] },\r\n    { name: "Seedream v5", modelName: "bytedance/seedream-v5.0-lite/sequential", type: "image", mode: ["text"] },\r\n    { name: "Qwen Image 2 Pro", modelName: "qwen/qwen-image-2.0-pro/text-to-image", type: "image", mode: ["text"] },\r\n    {\r\n      name: "Seedance 2.0 Audio-Visual",\r\n      modelName: "bytedance/seedance-2.0/text-to-video",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Seedance 2.0 Reference-to-Video",\r\n      modelName: "bytedance/seedance-2.0/reference-to-video",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance 2.0 Multi-Image-to-Video",\r\n      modelName: "bytedance/seedance-2.0/image-to-video",\r\n      type: "video",\r\n      mode: ["startFrameOptional", ["imageReference:4"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance 2.0 Fast Audio-Visual",\r\n      modelName: "bytedance/seedance-2.0-fast/text-to-video",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Seedance 2.0 Fast Reference-to-Video",\r\n      modelName: "bytedance/seedance-2.0-fast/reference-to-video",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Wan-2.7 Reference-to-video",\r\n      modelName: "alibaba/wan-2.7/reference-to-video",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["720p", "1080p"] }],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \u8F85\u52A9\u5DE5\u5177\r\n// ============================================================\r\n\r\nconst getChatBaseUrl = () => vendor.inputValues.chatBaseUrl.replace(/\\/+$/, "");\r\n\r\nconst getMediaBaseUrl = () => vendor.inputValues.mediaBaseUrl.replace(/\\/+$/, "");\r\n\r\nconst joinUrl = (base: string, path: string) => `${base}${path.startsWith("/") ? "" : "/"}${path}`;\r\n\r\nconst getHeaders = () => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11 API Key");\r\n  return {\r\n    "Content-Type": "application/json",\r\n    Authorization: `Bearer ${vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "")}`,\r\n  };\r\n};\r\n\r\nconst readByPath = (obj: any, path: string): any => {\r\n  if (!obj || !path) return undefined;\r\n  const normalizedPath = path.replace(/\\[(\\d+)\\]/g, ".$1");\r\n  return normalizedPath.split(".").reduce((acc, key) => (acc == null ? undefined : acc[key]), obj);\r\n};\r\n\r\nconst pickFirstPath = (obj: any, paths: string[]): any => {\r\n  for (const path of paths) {\r\n    const value = readByPath(obj, path);\r\n    if (value !== undefined && value !== null && value !== "") return value;\r\n  }\r\n  return undefined;\r\n};\r\n\r\nconst extractTaskId = (data: any): string | undefined => {\r\n  return pickFirstPath(data, ["id", "taskId", "task_id", "data.id", "data.taskId", "data.task_id"]);\r\n};\r\n\r\nconst extractUrl = (data: any): string | undefined => {\r\n  return (\r\n    (Array.isArray(readByPath(data, "data.outputs")) ? readByPath(data, "data.outputs")[0] : undefined) ||\r\n    (Array.isArray(readByPath(data, "outputs")) ? readByPath(data, "outputs")[0] : undefined) ||\r\n    readByPath(data, "url") ||\r\n    readByPath(data, "video_url") ||\r\n    readByPath(data, "image_url") ||\r\n    readByPath(data, "data.url") ||\r\n    readByPath(data, "data.video_url") ||\r\n    readByPath(data, "data.image_url") ||\r\n    readByPath(data, "data.output.url") ||\r\n    readByPath(data, "data.output.video_url") ||\r\n    readByPath(data, "output.url")\r\n  );\r\n};\r\n\r\nconst extractB64 = (data: any): string | undefined => {\r\n  return pickFirstPath(data, ["b64_json", "data.b64_json", "data.0.b64_json", "data[0].b64_json"]);\r\n};\r\n\r\nconst extractStatus = (data: any): string => {\r\n  const statusRaw = pickFirstPath(data, ["status", "data.status", "data.state", "state"]);\r\n  return String(statusRaw || "").toLowerCase();\r\n};\r\n\r\nconst extractError = (data: any): string | undefined => {\r\n  return pickFirstPath(data, ["error.message", "message", "msg", "data.error.message", "data.message"]);\r\n};\r\n\r\nconst isDnsOrNetworkError = (err: any): boolean => {\r\n  const msg = String(err?.message || err || "");\r\n  return /ENOTFOUND|EAI_AGAIN|ECONNRESET|ETIMEDOUT|timeout/i.test(msg);\r\n};\r\n\r\nconst withNetworkRetry = async <T>(fn: () => Promise<T>, maxRetry = 3, waitMs = 1500): Promise<T> => {\r\n  let lastErr: any;\r\n  for (let i = 0; i < maxRetry; i += 1) {\r\n    try {\r\n      return await fn();\r\n    } catch (err) {\r\n      lastErr = err;\r\n      if (!isDnsOrNetworkError(err) || i === maxRetry - 1) throw err;\r\n      await new Promise((resolve) => setTimeout(resolve, waitMs * (i + 1)));\r\n    }\r\n  }\r\n  throw lastErr;\r\n};\r\n\r\nconst resolveAtlasImageModelName = (modelName: string, hasImageRefs: boolean): string => {\r\n  if (!hasImageRefs) return modelName;\r\n\r\n  switch (modelName) {\r\n    case "google/nano-banana-pro/text-to-image":\r\n      return "google/nano-banana-pro/edit";\r\n    case "google/nano-banana-2/text-to-image":\r\n      return "google/nano-banana-2/edit";\r\n    default:\r\n      return modelName;\r\n  }\r\n};\r\n\r\nconst resolveAtlasVideoModelKind = (modelName: string): AtlasVideoModelKind => {\r\n  if (modelName === "alibaba/wan-2.7/reference-to-video") return "wanReferenceToVideo";\r\n  if (/^bytedance\\/seedance-2\\.0(?:-fast)?\\/reference-to-video$/.test(modelName)) return "seedanceReferenceToVideo";\r\n  if (/^bytedance\\/seedance-2\\.0(?:-fast)?\\/image-to-video$/.test(modelName)) return "seedanceImageToVideo";\r\n  if (/^bytedance\\/seedance-2\\.0(?:-fast)?\\/text-to-video$/.test(modelName)) return "seedanceTextToVideo";\r\n  return "generic";\r\n};\r\n\r\nconst clampNumber = (value: unknown, min: number, max: number, fallback: number): number => {\r\n  const num = Number(value);\r\n  if (!Number.isFinite(num)) return fallback;\r\n  return Math.max(min, Math.min(max, num));\r\n};\r\n\r\nconst normalizeResolution = (value: unknown, allowed: string[], fallback: string): string => {\r\n  const lower = String(value || "").toLowerCase();\r\n  const matched = allowed.find((item) => item.toLowerCase() === lower);\r\n  if (matched) return matched;\r\n  if (/1080/.test(lower)) return allowed.find((item) => /1080/i.test(item)) || fallback;\r\n  if (/720/.test(lower)) return allowed.find((item) => /720/i.test(item)) || fallback;\r\n  if (/480/.test(lower)) return allowed.find((item) => /480/i.test(item)) || fallback;\r\n  return fallback;\r\n};\r\n\r\nconst getReferenceLimit = (\r\n  modes: VideoMode[],\r\n  prefix: "imageReference" | "videoReference" | "audioReference",\r\n): number | undefined => {\r\n  for (const mode of modes) {\r\n    if (!Array.isArray(mode)) continue;\r\n    for (const entry of mode) {\r\n      if (!entry.startsWith(`${prefix}:`)) continue;\r\n      const limit = Number(entry.split(":")[1]);\r\n      if (Number.isFinite(limit) && limit > 0) return limit;\r\n    }\r\n  }\r\n  return undefined;\r\n};\r\n\r\nconst limitReferences = (refs: string[], maxCount?: number): string[] => {\r\n  if (!maxCount || maxCount < 1) return refs;\r\n  return refs.slice(0, maxCount);\r\n};\r\n\r\nconst summarizeRefCount = (usedCount: number, rawCount: number): string => {\r\n  return usedCount === rawCount ? String(usedCount) : `${usedCount}/${rawCount}`;\r\n};\r\n\r\nconst buildAtlasVideoPayload = (config: VideoConfig, model: VideoModel) => {\r\n  const rawImageRefs = (config.referenceList || []).filter((r) => r.type === "image").map((r) => r.base64).filter(Boolean);\r\n  const rawVideoRefs = (config.referenceList || []).filter((r) => r.type === "video").map((r) => r.base64).filter(Boolean);\r\n  const rawAudioRefs = (config.referenceList || []).filter((r) => r.type === "audio").map((r) => r.base64).filter(Boolean);\r\n\r\n  const imageRefs = limitReferences(rawImageRefs, getReferenceLimit(model.mode, "imageReference"));\r\n  const videoRefs = limitReferences(rawVideoRefs, getReferenceLimit(model.mode, "videoReference"));\r\n  const audioRefs = limitReferences(rawAudioRefs, getReferenceLimit(model.mode, "audioReference"));\r\n  const kind = resolveAtlasVideoModelKind(model.modelName);\r\n  const ratio = config.aspectRatio || "16:9";\r\n  const shouldGenerateAudio = model.audio === true || (model.audio === "optional" && config.audio !== false);\r\n  const body: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt || "",\r\n  };\r\n\r\n  if (kind === "wanReferenceToVideo") {\r\n    if (imageRefs.length < 1) {\r\n      throw new Error(`${model.name} \u9700\u8981\u81F3\u5C11 1 \u5F20\u53C2\u8003\u56FE`);\r\n    }\r\n    body.images = [imageRefs[0]];\r\n    body.ratio = ratio;\r\n    body.duration = clampNumber(config.duration, 2, 10, 5);\r\n    body.resolution = normalizeResolution(config.resolution, ["720P", "1080P"], "720P");\r\n    body.prompt_extend = false;\r\n    body.seed = -1;\r\n  } else if (kind === "seedanceReferenceToVideo") {\r\n    if (imageRefs.length < 1) {\r\n      throw new Error(`${model.name} \u9700\u8981\u81F3\u5C11 1 \u5F20\u53C2\u8003\u56FE`);\r\n    }\r\n    if (shouldGenerateAudio) body.generate_audio = true;\r\n    body.images = [imageRefs[0]];\r\n    body.ratio = ratio;\r\n    body.duration = clampNumber(config.duration, 4, 15, 5);\r\n    body.resolution = normalizeResolution(config.resolution, ["480p", "720p", "1080p"], "720p");\r\n    body.watermark = false;\r\n  } else if (kind === "seedanceImageToVideo") {\r\n    if (imageRefs.length < 1) {\r\n      throw new Error(`${model.name} \u9700\u8981\u81F3\u5C11 1 \u5F20\u53C2\u8003\u56FE`);\r\n    }\r\n    if (shouldGenerateAudio) body.generate_audio = true;\r\n    body.images = imageRefs;\r\n    body.ratio = ratio;\r\n    body.duration = clampNumber(config.duration, 4, 15, 5);\r\n    body.resolution = normalizeResolution(config.resolution, ["480p", "720p", "1080p"], "720p");\r\n    body.watermark = false;\r\n  } else {\r\n    if (shouldGenerateAudio) body.generate_audio = true;\r\n    if (imageRefs.length > 0) body.reference_images = imageRefs;\r\n    if (videoRefs.length > 0) body.reference_videos = videoRefs;\r\n    if (audioRefs.length > 0) body.reference_audios = audioRefs;\r\n    body.ratio = ratio;\r\n    body.duration = clampNumber(config.duration, 4, 15, 5);\r\n    body.resolution = normalizeResolution(config.resolution, ["480p", "720p"], "720p");\r\n    body.watermark = false;\r\n  }\r\n\r\n  return {\r\n    body,\r\n    summary: `kind=${kind} imageRefs=${summarizeRefCount(imageRefs.length, rawImageRefs.length)} videoRefs=${summarizeRefCount(videoRefs.length, rawVideoRefs.length)} audioRefs=${summarizeRefCount(audioRefs.length, rawAudioRefs.length)} resolution=${body.resolution} duration=${body.duration}${shouldGenerateAudio ? " audio=on" : " audio=off"}`,\r\n  };\r\n};\r\n\r\n// ============================================================\r\n// \u9002\u914D\u5668\u51FD\u6570\r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11 API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  const effortMap: Record<number, string> = { 0: "minimal", 1: "low", 2: "medium", 3: "high" };\r\n\r\n  return createOpenAICompatible({\r\n    name: "atlascloud",\r\n    baseURL: getChatBaseUrl(),\r\n    apiKey,\r\n    fetch: async (url: string, options?: RequestInit) => {\r\n      const rawBody = JSON.parse((options?.body as string) ?? "{}");\r\n      const body = think\r\n        ? {\r\n          ...rawBody,\r\n          thinking: { type: "enabled" },\r\n          reasoning_effort: effortMap[thinkLevel],\r\n        }\r\n        : rawBody;\r\n      return await fetch(url, { ...options, body: JSON.stringify(body) });\r\n    },\r\n  }).chatModel(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  const headers = getHeaders();\r\n  const url = joinUrl(getMediaBaseUrl(), "/model/generateImage");\r\n  const sizeToResolution: Record<ImageConfig["size"], string> = {\r\n    "1K": "1k",\r\n    "2K": "2k",\r\n    "4K": "4k",\r\n  };\r\n  const imageRefs = (config.referenceList || []).map((ref) => ref.base64).filter(Boolean);\r\n  const resolvedModelName = resolveAtlasImageModelName(model.modelName, imageRefs.length > 0);\r\n  const isNanoModel = /^google\\/nano-banana-(pro|2)\\//.test(resolvedModelName);\r\n  const supportsImageConditioning = /^(openai\\/gpt-image-2\\/text-to-image|google\\/nano-banana-(pro|2)\\/edit)$/.test(resolvedModelName);\r\n\r\n  const body: any = {\r\n    model: resolvedModelName,\r\n    prompt: config.prompt || "",\r\n  };\r\n  if (supportsImageConditioning && imageRefs.length > 0) {\r\n    body.images = imageRefs;\r\n  }\r\n  if (isNanoModel) {\r\n    body.aspect_ratio = config.aspectRatio || "16:9";\r\n    body.resolution = sizeToResolution[config.size || "1K"] || "1k";\r\n  }\r\n\r\n  logger(`[AtlasCloud \u56FE\u7247] \u63D0\u4EA4\u4EFB\u52A1: ${model.modelName} -> ${resolvedModelName}, refs=${imageRefs.length}`);\r\n  const submitResp = await axios.post(url, body, { headers });\r\n  const submitData = submitResp.data;\r\n\r\n  // \u540C\u6B65\u8FD4\u56DE\uFF08\u76F4\u63A5\u62FF\u56FE\uFF09\r\n  const syncB64 = extractB64(submitData);\r\n  if (syncB64) return syncB64;\r\n  const syncUrl = extractUrl(submitData);\r\n  if (syncUrl) return await urlToBase64(syncUrl);\r\n\r\n  // \u5F02\u6B65\u8FD4\u56DE\uFF08\u62FF taskId \u518D\u8F6E\u8BE2\uFF09\r\n  const taskId = extractTaskId(submitData);\r\n  if (!taskId) {\r\n    throw new Error(`\u56FE\u7247\u4EFB\u52A1\u63D0\u4EA4\u5931\u8D25\uFF1A\u672A\u83B7\u53D6\u5230\u4EFB\u52A1ID\u3002\u539F\u59CB\u54CD\u5E94\uFF1A${JSON.stringify(submitData).slice(0, 500)}`);\r\n  }\r\n\r\n  const pollResult = await pollTask(\r\n    async (): Promise<PollResult> => {\r\n      const resultUrl = joinUrl(getMediaBaseUrl(), `/model/prediction/${taskId}`);\r\n      const resultResp = await axios.get(resultUrl, { headers });\r\n      const data = resultResp.data;\r\n      const status = extractStatus(data);\r\n\r\n      if (["succeeded", "success", "done", "completed"].includes(status)) {\r\n        const b64 = extractB64(data);\r\n        if (b64) return { completed: true, data: b64 };\r\n        const mediaUrl = extractUrl(data);\r\n        if (mediaUrl) return { completed: true, data: mediaUrl };\r\n        return { completed: true, error: "\u4EFB\u52A1\u6210\u529F\u4F46\u672A\u8FD4\u56DE\u7ED3\u679C\u5730\u5740" };\r\n      }\r\n      if (["failed", "error", "cancelled", "canceled", "expired"].includes(status)) {\r\n        return { completed: true, error: extractError(data) || "\u56FE\u7247\u751F\u6210\u5931\u8D25" };\r\n      }\r\n      return { completed: false };\r\n    },\r\n    3000,\r\n    600000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  if (!pollResult.data) throw new Error("\u56FE\u7247\u751F\u6210\u5931\u8D25\uFF1A\u8F6E\u8BE2\u672A\u8FD4\u56DE\u6570\u636E");\r\n  if (pollResult.data.startsWith("data:")) return pollResult.data;\r\n  if (pollResult.data.startsWith("http")) return await urlToBase64(pollResult.data);\r\n  return pollResult.data;\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  const headers = getHeaders();\r\n  const url = joinUrl(getMediaBaseUrl(), "/model/generateVideo");\r\n  const { body, summary } = buildAtlasVideoPayload(config, model);\r\n\r\n  logger(`[AtlasCloud \u89C6\u9891] \u63D0\u4EA4\u4EFB\u52A1: ${model.modelName}, ${summary}`);\r\n  const submitResp: any = await withNetworkRetry<any>(() => axios.post(url, body, { headers }), 3, 1500);\r\n  const submitData = submitResp.data;\r\n\r\n  const taskId = extractTaskId(submitData);\r\n  if (!taskId) {\r\n    const syncUrl = extractUrl(submitData);\r\n    if (syncUrl) return await urlToBase64(syncUrl);\r\n    throw new Error(`\u89C6\u9891\u4EFB\u52A1\u63D0\u4EA4\u5931\u8D25\uFF1A\u672A\u83B7\u53D6\u5230\u4EFB\u52A1ID\u3002\u539F\u59CB\u54CD\u5E94\uFF1A${JSON.stringify(submitData).slice(0, 500)}`);\r\n  }\r\n\r\n  const pollResult = await pollTask(\r\n    async (): Promise<PollResult> => {\r\n      const resultUrl = joinUrl(getMediaBaseUrl(), `/model/prediction/${taskId}`);\r\n      const resultResp: any = await withNetworkRetry<any>(() => axios.get(resultUrl, { headers }), 3, 1200);\r\n      const data = resultResp.data;\r\n      const status = extractStatus(data);\r\n\r\n      if (["succeeded", "success", "done", "completed"].includes(status)) {\r\n        const mediaUrl = extractUrl(data);\r\n        if (mediaUrl) return { completed: true, data: mediaUrl };\r\n        return { completed: true, error: "\u4EFB\u52A1\u6210\u529F\u4F46\u672A\u8FD4\u56DE\u89C6\u9891\u5730\u5740" };\r\n      }\r\n      if (["failed", "error", "cancelled", "canceled", "expired"].includes(status)) {\r\n        return { completed: true, error: extractError(data) || "\u89C6\u9891\u751F\u6210\u5931\u8D25" };\r\n      }\r\n      return { completed: false };\r\n    },\r\n    5000,\r\n    1800000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  if (!pollResult.data) throw new Error("\u89C6\u9891\u751F\u6210\u5931\u8D25\uFF1A\u8F6E\u8BE2\u672A\u8FD4\u56DE\u6570\u636E");\r\n  return await urlToBase64(pollResult.data);\r\n};\r\n\r\nconst ttsRequest = async (_config: TTSConfig, _model: TTSModel): Promise<string> => {\r\n  // AtlasCloud \u5F53\u524D\u7248\u672C\u5148\u4E0D\u63A5 TTS\u3002\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return {\r\n    hasUpdate: false,\r\n    latestVersion: vendor.version,\r\n    notice: "AtlasCloud MASS \u521D\u7A3F\u3002",\r\n  };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \u5BFC\u51FA\r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\nexport { };\r\n',
-      "deepseek.ts": '/**\r\n * Toonflow AI\u4F9B\u5E94\u5546\u6A21\u677F - DeepSeek\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \u7C7B\u578B\u5B9A\u4E49\r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  imageBase64: string[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  imageBase64?: string[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \u5168\u5C40\u58F0\u660E\r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "deepseek",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "DeepSeek",\r\n  description:\r\n    "DeepSeek \u5B98\u65B9\u63A5\u53E3\u9002\u914D\uFF0C\u652F\u6301 V4 \u7CFB\u5217\u6A21\u578B\u4E0E\u601D\u8003\u6A21\u5F0F\uFF08\u601D\u7EF4\u94FE\u8F93\u51FA\uFF09\u3002\\n\\n[\u524D\u5F80\u5E73\u53F0](https://platform.deepseek.com/)",\r\n  icon: "",\r\n  inputs: [\r\n    { key: "apiKey", label: "API\u5BC6\u94A5", type: "password", required: true },\r\n    { key: "baseUrl", label: "\u8BF7\u6C42\u5730\u5740", type: "url", required: true, placeholder: "\u793A\u4F8B\uFF1Ahttps://api.deepseek.com" },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://api.deepseek.com/v1",\r\n  },\r\n  models: [\r\n    { name: "DeepSeek V4 Pro", modelName: "deepseek-v4-pro", type: "text", think: true },\r\n    { name: "DeepSeek V4 Flash", modelName: "deepseek-v4-flash", type: "text", think: true },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \u9002\u914D\u5668\u51FD\u6570\r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n\r\n  // DeepSeek \u601D\u8003\u5F3A\u5EA6\u4EC5\u652F\u6301 high / max\uFF08low\u3001medium \u4F1A\u88AB\u6620\u5C04\u4E3A high\uFF0Cxhigh \u4F1A\u88AB\u6620\u5C04\u4E3A max\uFF09\r\n  // thinkLevel: 0/1/2 \u2192 high, 3 \u2192 max\r\n  const effortMap: Record<0 | 1 | 2 | 3, "high" | "max"> = {\r\n    0: "high",\r\n    1: "high",\r\n    2: "high",\r\n    3: "max",\r\n  };\r\n\r\n  const enableThinking = model.think && think;\r\n  const extraBody: Record<string, any> = {\r\n    thinking: { type: enableThinking ? "enabled" : "disabled" },\r\n  };\r\n  if (enableThinking) {\r\n    extraBody.reasoning_effort = effortMap[thinkLevel];\r\n  }\r\n\r\n  return createDeepSeek({\r\n    baseURL: vendor.inputValues.baseUrl,\r\n    apiKey,\r\n    extraBody,\r\n  }).chat(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "" };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \u5BFC\u51FA\r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\nexport { };',
-      "grsai.ts": '/**\r\n * Toonflow AI\u4F9B\u5E94\u5546\u6A21\u677F\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \u7C7B\u578B\u5B9A\u4E49\r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage" //\u5355\u56FE\u53C2\u8003\r\n  | "startEndRequired" //\u9996\u5C3E\u5E27\uFF08\u4E24\u5F20\u90FD\u5F97\u6709\uFF09\r\n  | "endFrameOptional" //\u9996\u5C3E\u5E27\uFF08\u5C3E\u5E27\u53EF\u9009\uFF09\r\n  | "startFrameOptional" //\u9996\u5C3E\u5E27\uFF08\u9996\u5E27\u53EF\u9009\uFF09\r\n  | "text" //\u6587\u672C\r\n  | (\r\n      | `videoReference:${number}`\r\n      | `imageReference:${number}`\r\n      | `audioReference:${number}`\r\n    )[]; //\u591A\u53C2\u8003\uFF08\u6570\u5B57\u4EE3\u8868\u9650\u5236\u6570\u91CF\uFF09\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string; //\u552F\u4E00ID\uFF0C\u4F5C\u4E3A\u6587\u4EF6\u540D\u5B58\u50A8\u7528\u6237\u78C1\u76D8\u4E0A\uFF0C\u7981\u6B62\u7B26\u53F7\r\n  version: string; //\u7248\u672C\u53F7\uFF0C\u683C\u5F0F\u4E3Ax.y\uFF0C\u9700\u9075\u5B88\u8BED\u4E49\u5316\u7248\u672C\u63A7\u5236\r\n  name: string; //\u4F9B\u5E94\u5546\u540D\u79F0\r\n  author: string; //\u4F5C\u8005\r\n  description?: string; //\u63CF\u8FF0\uFF0C\u652F\u6301Markdown\u683C\u5F0F\r\n  icon?: string; //\u56FE\u6807\uFF0C\u4EC5\u652F\u6301Base64\u683C\u5F0F\uFF0C\u5EFA\u8BAE\u5C3A\u5BF8\u4E3A128x128\u50CF\u7D20\r\n  inputs: {\r\n    key: string;\r\n    label: string;\r\n    type: "text" | "password" | "url";\r\n    required: boolean;\r\n    placeholder?: string;\r\n  }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \u5168\u5C40\u58F0\u660E\r\n// ============================================================\r\n\r\ndeclare const axios: any; // HTTP\u8BF7\u6C42\u5E93\r\ndeclare const logger: (msg: string) => void; // \u65E5\u5FD7\u51FD\u6570\r\ndeclare const jsonwebtoken: any; // JWT\u5904\u7406\u5E93\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>; // \u56FE\u7247\u538B\u7F29\u51FD\u6570\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\ndeclare const zipImageResolution: (\r\n  base64: string,\r\n  w: number,\r\n  h: number,\r\n) => Promise<string>; // \u56FE\u7247\u5206\u8FA8\u7387\u8C03\u6574\u51FD\u6570\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\ndeclare const mergeImages: (\r\n  base64Arr: string[],\r\n  maxSize?: string,\r\n) => Promise<string>; // \u56FE\u7247\u5408\u6210\u51FD\u6570\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\ndeclare const urlToBase64: (url: string) => Promise<string>; // URL\u8F6CBase64\u51FD\u6570\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\ndeclare const pollTask: (\r\n  fn: () => Promise<PollResult>,\r\n  interval?: number,\r\n  timeout?: number,\r\n) => Promise<PollResult>; // \u8F6E\u8BE2\u51FD\u6570\uFF0Cfn\u4E3A\u5F02\u6B65\u51FD\u6570\uFF0Cinterval\u4E3A\u8F6E\u8BE2\u95F4\u9694\uFF0Ctimeout\u4E3A\u8D85\u65F6\u65F6\u95F4\uFF0C\u8FD4\u56DEfn\u7684\u7ED3\u679C\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any; //\u6587\u672C\u6A21\u578B\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>; //\u56FE\u7247\u6A21\u578B\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>; //\u89C6\u9891\u6A21\u578B\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>; //\uFF08\u6682\u672A\u5F00\u653E\uFF09\u8BED\u97F3\u6A21\u578B\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\n  checkForUpdates?: () => Promise<{\r\n    hasUpdate: boolean;\r\n    latestVersion: string;\r\n    notice: string;\r\n  }>; //\u68C0\u67E5\u66F4\u65B0\u51FD\u6570\uFF0C\u8FD4\u56DE\u662F\u5426\u6709\u66F4\u65B0\u548C\u6700\u65B0\u7248\u672C\u53F7\u548C\u66F4\u516C\u544A\uFF08\u652F\u6301Markdown\u683C\u5F0F\uFF09\r\n  updateVendor?: () => Promise<string>; //\u66F4\u65B0\u51FD\u6570\uFF0C\u8FD4\u56DE\u6700\u65B0\u7684\u4EE3\u7801\u6587\u672C\r\n};\r\n\r\n// ============================================================\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "grsai",\r\n  version: "2.1",\r\n  author: "Toonflow",\r\n  name: "Grsai",\r\n  description:\r\n    "Grsai AI\u5E73\u53F0\u9002\u914D\uFF0C\u652F\u6301\u6587\u751F\u56FE\u3001\u56FE\u751F\u56FE\u3001\u6587\u751F\u89C6\u9891\u3001Gemini\u517C\u5BB9\u6587\u672C\u6A21\u578B \\n [\u524D\u5F80\u4E2D\u8F6C\u5E73\u53F0](https://tf.grsai.ai/zh)",\r\n  inputs: [\r\n    { key: "apiKey", label: "API\u5BC6\u94A5", type: "password", required: true },\r\n    {\r\n      key: "baseUrl",\r\n      label: "\u8BF7\u6C42\u5730\u5740",\r\n      type: "url",\r\n      required: true,\r\n      placeholder: "\u793A\u4F8B\uFF1Ahttps://grsai.dakka.com.cn",\r\n    },\r\n  ],\r\n  inputValues: { apiKey: "", baseUrl: "https://grsai.dakka.com.cn" },\r\n  models: [\r\n    {\r\n      name: "GPT Image 2",\r\n      modelName: "gpt-image-2",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Nano Banana Fast",\r\n      modelName: "nano-banana-fast",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Nano Banana 2",\r\n      modelName: "nano-banana-2",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Nano Banana Pro",\r\n      modelName: "nano-banana-pro",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \u8F85\u52A9\u5DE5\u5177\r\n// ============================================================\r\n\r\nconst getHeaders = () => {\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return {\r\n    "Content-Type": "application/json",\r\n    Authorization: `Bearer ${apiKey}`,\r\n  };\r\n};\r\n\r\n// ============================================================\r\n// \u9002\u914D\u5668\u51FD\u6570\r\n// ============================================================\r\n\r\nconst textRequest = (\r\n  model: TextModel,\r\n  think: boolean,\r\n  thinkLevel: 0 | 1 | 2 | 3,\r\n) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return createGoogleGenerativeAI({\r\n    baseURL: `${vendor.inputValues.baseUrl}/v1beta`,\r\n    apiKey,\r\n  }).chat(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (\r\n  config: ImageConfig,\r\n  model: ImageModel,\r\n): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const baseUrl = vendor.inputValues.baseUrl;\r\n  const headers = getHeaders();\r\n\r\n  // \u6784\u9020\u8BF7\u6C42\u53C2\u6570\r\n  const requestBody: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt,\r\n    aspectRatio: config.aspectRatio,\r\n    webHook: "-1",\r\n    shutProgress: true,\r\n  };\r\n\r\n  // \u8865\u5145\u6A21\u578B\u4E13\u5C5E\u53C2\u6570\r\n  if (model.modelName.startsWith("nano-banana")) {\r\n    requestBody.imageSize = config.size;\r\n  } else {\r\n    requestBody.size = config.aspectRatio;\r\n    requestBody.variants = 1;\r\n  }\r\n\r\n  // \u5904\u7406\u53C2\u8003\u56FE\r\n  if (config.referenceList && config.referenceList.length > 0) {\r\n    requestBody.urls = config.referenceList.map((img) => img.base64);\r\n  }\r\n\r\n  // \u9009\u62E9\u63A5\u53E3\u8DEF\u5F84\r\n  const apiPath = model.modelName.startsWith("nano-banana")\r\n    ? "/v1/draw/nano-banana"\r\n    : "/v1/draw/completions";\r\n\r\n  logger(`\u5F00\u59CB\u63D0\u4EA4\u56FE\u7247\u751F\u6210\u4EFB\u52A1\uFF0C\u6A21\u578B\uFF1A${model.modelName}`);\r\n  const submitResp = await axios.post(`${baseUrl}${apiPath}`, requestBody, {\r\n    headers,\r\n  });\r\n  if (submitResp.data.code !== 0)\r\n    throw new Error(`\u4EFB\u52A1\u63D0\u4EA4\u5931\u8D25\uFF1A${submitResp.data.msg}`);\r\n\r\n  const taskId = submitResp.data.data.id;\r\n  logger(`\u56FE\u7247\u4EFB\u52A1\u63D0\u4EA4\u6210\u529F\uFF0C\u4EFB\u52A1ID\uFF1A${taskId}`);\r\n\r\n  // \u8F6E\u8BE2\u7ED3\u679C\r\n  const pollResult = await pollTask(\r\n    async () => {\r\n      const resp = await axios.post(\r\n        `${baseUrl}/v1/draw/result`,\r\n        { id: taskId },\r\n        { headers },\r\n      );\r\n      if (resp.data.code !== 0)\r\n        return { completed: true, error: resp.data.msg };\r\n\r\n      const taskData = resp.data.data;\r\n      if (taskData.status === "failed")\r\n        return {\r\n          completed: true,\r\n          error: taskData.failure_reason || taskData.error,\r\n        };\r\n      if (taskData.status === "succeeded") {\r\n        const imgUrl = taskData.results?.[0]?.url || taskData.url;\r\n        return { completed: true, data: imgUrl };\r\n      }\r\n      logger(`\u56FE\u7247\u4EFB\u52A1\u751F\u6210\u4E2D\uFF0C\u8FDB\u5EA6\uFF1A${taskData.progress}%`);\r\n      return { completed: false };\r\n    },\r\n    3000,\r\n    600000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  logger(`\u56FE\u7247\u751F\u6210\u5B8C\u6210\uFF0C\u5F00\u59CB\u8F6C\u6362Base64`);\r\n  return await urlToBase64(pollResult.data!);\r\n};\r\n\r\nconst videoRequest = async (\r\n  config: VideoConfig,\r\n  model: VideoModel,\r\n): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const baseUrl = vendor.inputValues.baseUrl;\r\n  const headers = getHeaders();\r\n\r\n  // \u6784\u9020\u8BF7\u6C42\u53C2\u6570\r\n  const requestBody: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt,\r\n    aspectRatio: config.aspectRatio,\r\n    webHook: "-1",\r\n    shutProgress: true,\r\n  };\r\n\r\n  // \u5904\u7406\u53C2\u8003\u8D44\u6E90\r\n  if (config.referenceList && config.referenceList.length > 0) {\r\n    const imageRefs = config.referenceList.filter(\r\n      (item) => item.type === "image",\r\n    ) as Extract<ReferenceList, { type: "image" }>[];\r\n    if (config.mode.includes("endFrameOptional") && imageRefs.length >= 1) {\r\n      requestBody.firstFrameUrl = imageRefs[0].base64;\r\n      if (imageRefs.length >= 2) requestBody.lastFrameUrl = imageRefs[1].base64;\r\n    } else if (\r\n      config.mode.some(\r\n        (m) => Array.isArray(m) && m.includes("imageReference:3"),\r\n      )\r\n    ) {\r\n      requestBody.urls = imageRefs.map((img) => img.base64);\r\n    }\r\n  }\r\n\r\n  logger(`\u5F00\u59CB\u63D0\u4EA4\u89C6\u9891\u751F\u6210\u4EFB\u52A1\uFF0C\u6A21\u578B\uFF1A${model.modelName}`);\r\n  const submitResp = await axios.post(`${baseUrl}/v1/video/veo`, requestBody, {\r\n    headers,\r\n  });\r\n  if (submitResp.data.code !== 0)\r\n    throw new Error(`\u4EFB\u52A1\u63D0\u4EA4\u5931\u8D25\uFF1A${submitResp.data.msg}`);\r\n\r\n  const taskId = submitResp.data.data.id;\r\n  logger(`\u89C6\u9891\u4EFB\u52A1\u63D0\u4EA4\u6210\u529F\uFF0C\u4EFB\u52A1ID\uFF1A${taskId}`);\r\n\r\n  // \u8F6E\u8BE2\u7ED3\u679C\r\n  const pollResult = await pollTask(\r\n    async () => {\r\n      const resp = await axios.post(\r\n        `${baseUrl}/v1/draw/result`,\r\n        { id: taskId },\r\n        { headers },\r\n      );\r\n      if (resp.data.code !== 0)\r\n        return { completed: true, error: resp.data.msg };\r\n\r\n      const taskData = resp.data.data;\r\n      if (taskData.status === "failed")\r\n        return {\r\n          completed: true,\r\n          error: taskData.failure_reason || taskData.error,\r\n        };\r\n      if (taskData.status === "succeeded") {\r\n        return { completed: true, data: taskData.url };\r\n      }\r\n      logger(`\u89C6\u9891\u4EFB\u52A1\u751F\u6210\u4E2D\uFF0C\u8FDB\u5EA6\uFF1A${taskData.progress}%`);\r\n      return { completed: false };\r\n    },\r\n    5000,\r\n    1800000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  logger(`\u89C6\u9891\u751F\u6210\u5B8C\u6210\uFF0C\u5F00\u59CB\u8F6C\u6362Base64`);\r\n  return await urlToBase64(pollResult.data!);\r\n};\r\n\r\nconst ttsRequest = async (\r\n  config: TTSConfig,\r\n  model: TTSModel,\r\n): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{\r\n  hasUpdate: boolean;\r\n  latestVersion: string;\r\n  notice: string;\r\n}> => {\r\n  return {\r\n    hasUpdate: false,\r\n    latestVersion: "1.0",\r\n    notice: "## \u65B0\u7248\u672C\u66F4\u65B0\u516C\u544A",\r\n  };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \u5BFC\u51FA\r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\n// \u8FD9\u884C\u4EE3\u7801\u7528\u4E8E\u786E\u4FDD\u5F53\u524D\u6587\u4EF6\u88AB\u8BC6\u522B\u4E3A\u6A21\u5757\uFF0C\u907F\u514D\u5168\u5C40\u53D8\u91CF\u51B2\u7A81\r\nexport {};\r\n',
-      "klingai.ts": '/**\r\n * Toonflow AI\u4F9B\u5E94\u5546\u6A21\u677F - \u53EF\u7075AI\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \u7C7B\u578B\u5B9A\u4E49\r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \u5168\u5C40\u58F0\u660E\r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "klingai",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "\u53EF\u7075AI",\r\n  description:\r\n    "\u53EF\u7075AI\u89C6\u9891\u751F\u6210\\n\\n\u652F\u6301\u53EF\u7075\u5168\u7CFB\u5217\u89C6\u9891\u6A21\u578B\uFF0C\u5305\u62EC kling-video-o1\u3001kling-v3-omni\u3001kling-v3\u3001kling-v2-6\u3001kling-v2-5-turbo\u3001kling-v2-1\u3001kling-v2-master\u3001kling-v1-6\u3001kling-v1-5\u3001kling-v1 \u7B49\u3002\\n\\n\u9700\u8981\u5728[\u53EF\u7075AI\u5F00\u653E\u5E73\u53F0](https://klingai.com)\\n\\n\u83B7\u53D6 Access Key \u548C Secret Key\u3002",\r\n  inputs: [\r\n    { key: "accessKey", label: "Access Key", type: "password", required: true, placeholder: "\u8BF7\u8F93\u5165\u53EF\u7075AI\u7684Access Key" },\r\n    { key: "secretKey", label: "Secret Key", type: "password", required: true, placeholder: "\u8BF7\u8F93\u5165\u53EF\u7075AI\u7684Secret Key" },\r\n    { key: "baseUrl", label: "\u8BF7\u6C42\u5730\u5740", type: "url", required: true, placeholder: "\u9ED8\u8BA4\uFF1Ahttps://api-beijing.klingai.com" },\r\n  ],\r\n  inputValues: { accessKey: "", secretKey: "", baseUrl: "https://api-beijing.klingai.com" },\r\n  models: [\r\n    // kling-video-o1 (Omni)\r\n    {\r\n      name: "kling-video-o1 \u6807\u51C6",\r\n      modelName: "kling-video-o1:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired", ["imageReference:7", "videoReference:1"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-video-o1 \u4E13\u5BB6",\r\n      modelName: "kling-video-o1:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired", ["imageReference:7", "videoReference:1"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    // kling-v3-omni (Omni)\r\n    {\r\n      name: "kling-v3-omni \u6807\u51C6",\r\n      modelName: "kling-v3-omni:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired", ["imageReference:7", "videoReference:1"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v3-omni \u4E13\u5BB6",\r\n      modelName: "kling-v3-omni:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired", ["imageReference:7", "videoReference:1"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n    },\r\n    // kling-v3\r\n    {\r\n      name: "kling-v3 \u6807\u51C6",\r\n      modelName: "kling-v3:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v3 \u4E13\u5BB6",\r\n      modelName: "kling-v3:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n    },\r\n    // kling-v2-6\r\n    {\r\n      name: "kling-v2-6 \u6807\u51C6",\r\n      modelName: "kling-v2-6:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v2-6 \u4E13\u5BB6",\r\n      modelName: "kling-v2-6:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v2-5-turbo\r\n    {\r\n      name: "kling-v2-5-turbo \u6807\u51C6",\r\n      modelName: "kling-v2-5-turbo:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    {\r\n      name: "kling-v2-5-turbo \u4E13\u5BB6",\r\n      modelName: "kling-v2-5-turbo:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v2-1\r\n    {\r\n      name: "kling-v2-1 \u6807\u51C6",\r\n      modelName: "kling-v2-1:std",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v2-1 \u4E13\u5BB6",\r\n      modelName: "kling-v2-1:pro",\r\n      type: "video",\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v2-1-master\r\n    {\r\n      name: "kling-v2-1 Master",\r\n      modelName: "kling-v2-1-master:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v2-master\r\n    {\r\n      name: "kling-v2 Master",\r\n      modelName: "kling-v2-master:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    // kling-v1-6\r\n    {\r\n      name: "kling-v1-6 \u6807\u51C6",\r\n      modelName: "kling-v1-6:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", ["imageReference:4"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v1-6 \u4E13\u5BB6",\r\n      modelName: "kling-v1-6:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "endFrameOptional", ["imageReference:4"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v1-5\r\n    {\r\n      name: "kling-v1-5 \u6807\u51C6",\r\n      modelName: "kling-v1-5:std",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v1-5 \u4E13\u5BB6",\r\n      modelName: "kling-v1-5:pro",\r\n      type: "video",\r\n      mode: ["singleImage", "endFrameOptional"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v1\r\n    {\r\n      name: "kling-v1 \u6807\u51C6",\r\n      modelName: "kling-v1:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v1 \u4E13\u5BB6",\r\n      modelName: "kling-v1:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \u8F85\u52A9\u5DE5\u5177\r\n// ============================================================\r\n\r\n/**\r\n * \u751F\u6210\u53EF\u7075AI\u7684JWT\u9274\u6743Token\r\n */\r\nconst generateAuthToken = (): string => {\r\n  const now = Math.floor(Date.now() / 1000);\r\n  const payload = {\r\n    iss: vendor.inputValues.accessKey,\r\n    exp: now + 1800,\r\n    nbf: now - 5,\r\n  };\r\n  return jsonwebtoken.sign(payload, vendor.inputValues.secretKey, {\r\n    algorithm: "HS256",\r\n    header: { alg: "HS256", typ: "JWT" },\r\n  });\r\n};\r\n\r\n/**\r\n * \u83B7\u53D6\u57FA\u7840\u8BF7\u6C42\u5730\u5740\r\n */\r\nconst getBaseUrl = (): string => {\r\n  return vendor.inputValues.baseUrl || "https://api-beijing.klingai.com";\r\n};\r\n\r\n/**\r\n * \u4ECE ReferenceList \u6761\u76EE\u4E2D\u63D0\u53D6\u53EF\u7528\u7684\u6570\u636E\u5B57\u7B26\u4E32\r\n * \u5BF9\u4E8E url \u7C7B\u578B\u8FD4\u56DE url\uFF0C\u5BF9\u4E8E base64 \u7C7B\u578B\u8FD4\u56DE\u7EAF base64\uFF08\u53BB\u6389 data: \u524D\u7F00\uFF09\r\n */\r\nconst extractRawBase64 = (ref: ReferenceList): string => {\r\n  return ref.base64.replace(/^data:[^;]+;base64,/, "");\r\n};\r\n\r\n/**\r\n * \u4ECE ReferenceList \u6761\u76EE\u4E2D\u63D0\u53D6\u5E26\u5934\u7684 base64 \u6216 url\r\n * \u7528\u4E8E omni-video \u63A5\u53E3\uFF0C\u8BE5\u63A5\u53E3\u7684 image_url \u652F\u6301\u5E26\u524D\u7F00\u7684 base64 \u548C url\r\n */\r\nconst extractImageUrl = (ref: ReferenceList): string => {\r\n  return ref.base64.startsWith("data:") ? ref.base64 : `data:image/jpeg;base64,${ref.base64}`;\r\n};\r\n\r\n/**\r\n * \u63D0\u4EA4\u4EFB\u52A1\u5E76\u8F6E\u8BE2\u83B7\u53D6\u7ED3\u679C\u7684\u901A\u7528\u51FD\u6570\r\n */\r\nconst submitAndPoll = async (submitUrl: string, queryUrlBase: string, requestBody: any): Promise<string> => {\r\n  const token = generateAuthToken();\r\n\r\n  logger(`\u5F00\u59CB\u63D0\u4EA4\u53EF\u7075AI\u89C6\u9891\u751F\u6210\u4EFB\u52A1: ${submitUrl}`);\r\n  logger(\r\n    `\u8BF7\u6C42\u53C2\u6570: ${JSON.stringify({\r\n      ...requestBody,\r\n      image: requestBody.image ? "[BASE64]" : undefined,\r\n      image_tail: requestBody.image_tail ? "[BASE64]" : undefined,\r\n      image_list: requestBody.image_list ? "[IMAGES]" : undefined,\r\n    })}`,\r\n  );\r\n\r\n  const submitResp = await axios.post(submitUrl, requestBody, {\r\n    headers: {\r\n      "Content-Type": "application/json",\r\n      Authorization: `Bearer ${token}`,\r\n    },\r\n  });\r\n\r\n  if (submitResp.data.code !== 0) {\r\n    throw new Error(`\u63D0\u4EA4\u4EFB\u52A1\u5931\u8D25: ${submitResp.data.message || JSON.stringify(submitResp.data)}`);\r\n  }\r\n\r\n  const taskId = submitResp.data.data.task_id;\r\n  logger(`\u4EFB\u52A1\u5DF2\u63D0\u4EA4\uFF0C\u4EFB\u52A1ID: ${taskId}`);\r\n\r\n  const result = await pollTask(\r\n    async () => {\r\n      const freshToken = generateAuthToken();\r\n      const queryResp = await axios.get(`${queryUrlBase}/${taskId}`, {\r\n        headers: {\r\n          Authorization: `Bearer ${freshToken}`,\r\n        },\r\n      });\r\n\r\n      if (queryResp.data.code !== 0) {\r\n        return { completed: true, error: `\u67E5\u8BE2\u4EFB\u52A1\u5931\u8D25: ${queryResp.data.message}` };\r\n      }\r\n\r\n      const taskData = queryResp.data.data;\r\n      const status = taskData.task_status;\r\n      logger(`\u8F6E\u8BE2\u4E2D... \u4EFB\u52A1\u72B6\u6001: ${status}`);\r\n\r\n      if (status === "succeed") {\r\n        const videoUrl = taskData.task_result?.videos?.[0]?.url;\r\n        if (!videoUrl) {\r\n          return { completed: true, error: "\u4EFB\u52A1\u5B8C\u6210\u4F46\u672A\u83B7\u53D6\u5230\u89C6\u9891URL" };\r\n        }\r\n        return { completed: true, data: videoUrl };\r\n      }\r\n\r\n      if (status === "failed") {\r\n        return { completed: true, error: `\u89C6\u9891\u751F\u6210\u5931\u8D25: ${taskData.task_status_msg || "\u672A\u77E5\u9519\u8BEF"}` };\r\n      }\r\n\r\n      return { completed: false };\r\n    },\r\n    5000,\r\n    600000,\r\n  );\r\n\r\n  if (result.error) throw new Error(result.error);\r\n  logger(`\u89C6\u9891\u751F\u6210\u5B8C\u6210\uFF0C\u6B63\u5728\u8F6C\u6362\u4E3ABase64...`);\r\n  return await urlToBase64(result.data!);\r\n};\r\n\r\n// ============================================================\r\n// \u9002\u914D\u5668\u51FD\u6570\r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  throw new Error("\u53EF\u7075AI\u4E0D\u652F\u6301\u6587\u672C\u6A21\u578B");\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  throw new Error("\u53EF\u7075AI\u4E0D\u652F\u6301\u56FE\u7247\u6A21\u578B");\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  if (!vendor.inputValues.accessKey) throw new Error("\u7F3A\u5C11Access Key");\r\n  if (!vendor.inputValues.secretKey) throw new Error("\u7F3A\u5C11Secret Key");\r\n\r\n  const baseUrl = getBaseUrl();\r\n\r\n  // \u89E3\u6790 modelName\uFF0C\u683C\u5F0F\uFF1Akling-video-o1:pro => modelName=kling-video-o1, mode=pro\r\n  const colonIdx = model.modelName.indexOf(":");\r\n  const modelName = colonIdx > -1 ? model.modelName.substring(0, colonIdx) : model.modelName;\r\n  const mode = colonIdx > -1 ? model.modelName.substring(colonIdx + 1) : "pro";\r\n\r\n  // \u5224\u65AD\u662F\u5426\u4E3A Omni \u6A21\u578B\r\n  const isOmniModel = modelName === "kling-video-o1" || modelName === "kling-v3-omni";\r\n\r\n  // \u5224\u65AD\u5F53\u524D\u9009\u4E2D\u7684\u89C6\u9891\u751F\u6210\u6A21\u5F0F\r\n  const currentMode = config.mode;\r\n  const isText = currentMode.includes("text");\r\n  const isSingleImage = currentMode.includes("singleImage");\r\n  const isStartEndRequired = currentMode.includes("startEndRequired");\r\n  const isEndFrameOptional = currentMode.includes("endFrameOptional");\r\n  const isStartFrameOptional = currentMode.includes("startFrameOptional");\r\n  const hasMultiRef = Array.isArray(currentMode) && currentMode.some((m) => Array.isArray(m));\r\n\r\n  // \u63D0\u53D6\u4E0D\u540C\u7C7B\u578B\u7684\u5F15\u7528\r\n  const imageRefs = (config.referenceList || []).filter((r) => r.type === "image");\r\n  const videoRefs = (config.referenceList || []).filter((r) => r.type === "video");\r\n\r\n  // =====================================================\r\n  // Omni \u6A21\u578B \u2014\u2014 \u4F7F\u7528 /v1/videos/omni-video \u63A5\u53E3\r\n  // =====================================================\r\n  if (isOmniModel) {\r\n    const requestBody: any = {\r\n      model_name: modelName,\r\n      mode: mode,\r\n      duration: String(config.duration),\r\n      sound: config.audio === true ? "on" : "off",\r\n    };\r\n\r\n    if (config.prompt) {\r\n      requestBody.prompt = config.prompt;\r\n    }\r\n\r\n    if (isSingleImage && imageRefs.length > 0) {\r\n      const imageUrl = extractImageUrl(imageRefs[0]);\r\n      requestBody.image_list = [{ image_url: imageUrl, type: "first_frame" }];\r\n      if (!requestBody.prompt) requestBody.prompt = "\u6839\u636E\u56FE\u7247\u751F\u6210\u89C6\u9891";\r\n    } else if (isStartEndRequired && imageRefs.length >= 2) {\r\n      const firstUrl = extractImageUrl(imageRefs[0]);\r\n      const endUrl = extractImageUrl(imageRefs[1]);\r\n      requestBody.image_list = [\r\n        { image_url: firstUrl, type: "first_frame" },\r\n        { image_url: endUrl, type: "end_frame" },\r\n      ];\r\n      if (!requestBody.prompt) requestBody.prompt = "\u6839\u636E\u9996\u5C3E\u5E27\u56FE\u7247\u751F\u6210\u8FC7\u6E21\u89C6\u9891";\r\n    } else if (isEndFrameOptional && imageRefs.length >= 1) {\r\n      const firstUrl = extractImageUrl(imageRefs[0]);\r\n      requestBody.image_list = [{ image_url: firstUrl, type: "first_frame" }];\r\n      if (imageRefs.length >= 2) {\r\n        const endUrl = extractImageUrl(imageRefs[1]);\r\n        requestBody.image_list.push({ image_url: endUrl, type: "end_frame" });\r\n      }\r\n      if (!requestBody.prompt) requestBody.prompt = "\u6839\u636E\u56FE\u7247\u751F\u6210\u89C6\u9891";\r\n    } else if (isStartFrameOptional && imageRefs.length >= 1) {\r\n      if (imageRefs.length >= 2) {\r\n        const firstUrl = extractImageUrl(imageRefs[0]);\r\n        const endUrl = extractImageUrl(imageRefs[1]);\r\n        requestBody.image_list = [\r\n          { image_url: firstUrl, type: "first_frame" },\r\n          { image_url: endUrl, type: "end_frame" },\r\n        ];\r\n      } else {\r\n        const endUrl = extractImageUrl(imageRefs[0]);\r\n        requestBody.image_list = [{ image_url: endUrl, type: "end_frame" }];\r\n      }\r\n      if (!requestBody.prompt) requestBody.prompt = "\u6839\u636E\u56FE\u7247\u751F\u6210\u89C6\u9891";\r\n    } else if (hasMultiRef && (imageRefs.length > 0 || videoRefs.length > 0)) {\r\n      requestBody.image_list = [];\r\n      for (let i = 0; i < imageRefs.length; i++) {\r\n        const imageUrl = extractImageUrl(imageRefs[i]);\r\n        requestBody.image_list.push({ image_url: imageUrl });\r\n      }\r\n      if (!requestBody.prompt) {\r\n        const refs = imageRefs.map((_, idx) => `<<<image_${idx + 1}>>>`).join("\u3001");\r\n        requestBody.prompt = `\u53C2\u8003${refs}\u751F\u6210\u89C6\u9891`;\r\n      }\r\n    }\r\n\r\n    // \u6587\u751F\u89C6\u9891\u6216\u65E0\u56FE\u7247\u8F93\u5165\u65F6\u9700\u8981\u8BBE\u7F6E\u5BBD\u9AD8\u6BD4\r\n    const hasImageInput = requestBody.image_list && requestBody.image_list.length > 0;\r\n    if (!hasImageInput) {\r\n      requestBody.aspect_ratio = config.aspectRatio || "16:9";\r\n      if (!requestBody.prompt) throw new Error("\u6587\u751F\u89C6\u9891\u6A21\u5F0F\u9700\u8981\u63D0\u4F9B\u63D0\u793A\u8BCD");\r\n    }\r\n\r\n    const apiPath = "/v1/videos/omni-video";\r\n    return await submitAndPoll(`${baseUrl}${apiPath}`, `${baseUrl}${apiPath}`, requestBody);\r\n  }\r\n\r\n  // =====================================================\r\n  // \u975E Omni \u6A21\u578B \u2014\u2014 \u6839\u636E\u6A21\u5F0F\u9009\u62E9\u4E0D\u540C\u63A5\u53E3\r\n  // =====================================================\r\n\r\n  // \u591A\u56FE\u53C2\u8003\u6A21\u5F0F \u2014\u2014 \u4F7F\u7528 /v1/videos/multi-image2video \u63A5\u53E3\uFF08\u4EC5 kling-v1-6 \u652F\u6301\uFF09\r\n  if (hasMultiRef && imageRefs.length > 0) {\r\n    const imageList = [];\r\n    for (let i = 0; i < imageRefs.length; i++) {\r\n      const rawBase64 = extractRawBase64(imageRefs[i]);\r\n      imageList.push({ image: rawBase64 });\r\n    }\r\n\r\n    const requestBody: any = {\r\n      model_name: modelName,\r\n      image_list: imageList,\r\n      prompt: config.prompt || "\u6839\u636E\u53C2\u8003\u56FE\u7247\u751F\u6210\u89C6\u9891",\r\n      mode: mode,\r\n      duration: String(config.duration),\r\n      aspect_ratio: config.aspectRatio || "16:9",\r\n    };\r\n\r\n    const apiPath = "/v1/videos/multi-image2video";\r\n    return await submitAndPoll(`${baseUrl}${apiPath}`, `${baseUrl}${apiPath}`, requestBody);\r\n  }\r\n\r\n  // \u6587\u751F\u89C6\u9891\u6A21\u5F0F \u2014\u2014 \u4F7F\u7528 /v1/videos/text2video \u63A5\u53E3\r\n  if (isText) {\r\n    if (!config.prompt) throw new Error("\u6587\u751F\u89C6\u9891\u6A21\u5F0F\u9700\u8981\u63D0\u4F9B\u63D0\u793A\u8BCD");\r\n\r\n    const requestBody: any = {\r\n      model_name: modelName,\r\n      prompt: config.prompt,\r\n      mode: mode,\r\n      duration: String(config.duration),\r\n      aspect_ratio: config.aspectRatio || "16:9",\r\n      sound: config.audio === true ? "on" : "off",\r\n    };\r\n\r\n    const apiPath = "/v1/videos/text2video";\r\n    return await submitAndPoll(`${baseUrl}${apiPath}`, `${baseUrl}${apiPath}`, requestBody);\r\n  }\r\n\r\n  // \u56FE\u751F\u89C6\u9891\u6A21\u5F0F\uFF08\u5355\u56FE / \u9996\u5C3E\u5E27 / \u5C3E\u5E27\u53EF\u9009\u7B49\uFF09\u2014\u2014 \u4F7F\u7528 /v1/videos/image2video \u63A5\u53E3\r\n  if ((isSingleImage || isStartEndRequired || isEndFrameOptional || isStartFrameOptional) && imageRefs.length > 0) {\r\n    const requestBody: any = {\r\n      model_name: modelName,\r\n      prompt: config.prompt || "\u6839\u636E\u56FE\u7247\u751F\u6210\u89C6\u9891",\r\n      mode: mode,\r\n      duration: String(config.duration),\r\n      sound: config.audio === true ? "on" : "off",\r\n    };\r\n\r\n    if (isSingleImage) {\r\n      requestBody.image = extractRawBase64(imageRefs[0]);\r\n    } else if (isStartEndRequired && imageRefs.length >= 2) {\r\n      requestBody.image = extractRawBase64(imageRefs[0]);\r\n      requestBody.image_tail = extractRawBase64(imageRefs[1]);\r\n    } else if (isEndFrameOptional) {\r\n      requestBody.image = extractRawBase64(imageRefs[0]);\r\n      if (imageRefs.length >= 2) {\r\n        requestBody.image_tail = extractRawBase64(imageRefs[1]);\r\n      }\r\n    } else if (isStartFrameOptional) {\r\n      if (imageRefs.length >= 2) {\r\n        requestBody.image = extractRawBase64(imageRefs[0]);\r\n        requestBody.image_tail = extractRawBase64(imageRefs[1]);\r\n      } else {\r\n        requestBody.image = extractRawBase64(imageRefs[0]);\r\n      }\r\n    }\r\n\r\n    const apiPath = "/v1/videos/image2video";\r\n    return await submitAndPoll(`${baseUrl}${apiPath}`, `${baseUrl}${apiPath}`, requestBody);\r\n  }\r\n\r\n  throw new Error("\u4E0D\u652F\u6301\u7684\u89C6\u9891\u751F\u6210\u6A21\u5F0F\u6216\u7F3A\u5C11\u5FC5\u8981\u7684\u8F93\u5165\u53C2\u6570");\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \u5BFC\u51FA\r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\n\r\n// \u8FD9\u884C\u4EE3\u7801\u7528\u4E8E\u786E\u4FDD\u5F53\u524D\u6587\u4EF6\u88AB\u8BC6\u522B\u4E3A\u6A21\u5757\uFF0C\u907F\u514D\u5168\u5C40\u53D8\u91CF\u51B2\u7A81\r\nexport {};\r\n',
-      "minimax.ts": '/**\r\n * Toonflow AI\u4F9B\u5E94\u5546\u6A21\u677F - MiniMax(\u6D77\u87BAAI)\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \u7C7B\u578B\u5B9A\u4E49\r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \u5168\u5C40\u58F0\u660E\r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  uploadReference: (base64: string, fileType: "image" | "audio" | "video") => Promise<ReferenceList>;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "minimax",\r\n  version: "2.1",\r\n  author: "Toonflow",\r\n  name: "MiniMax(\u6D77\u87BAAI)",\r\n  description: "MiniMax\u5B98\u65B9\u63A5\u53E3\u9002\u914D\uFF0C\u652F\u6301M\u7CFB\u5217\u63A8\u7406\u6587\u672C\u6A21\u578B\u3001\u6587\u751F\u56FE/\u56FE\u751F\u56FE\u3001\u89C6\u9891\u751F\u6210\uFF08\u6587\u751F\u89C6\u9891\u3001\u56FE\u751F\u89C6\u9891\u3001\u9996\u5C3E\u5E27\u751F\u6210\uFF09\u80FD\u529B \\n [\u524D\u5F80\u5E73\u53F0](https://minimaxi.com/)",\r\n  inputs: [\r\n    { key: "apiKey", label: "API\u5BC6\u94A5", type: "password", required: true },\r\n    { key: "baseUrl", label: "\u8BF7\u6C42\u5730\u5740", type: "url", required: true, placeholder: "\u793A\u4F8B\uFF1Ahttps://api.minimaxi.com" },\r\n  ],\r\n  inputValues: { apiKey: "", baseUrl: "https://api.minimaxi.com" },\r\n  models: [\r\n    // \u6587\u672C\u6A21\u578B\r\n    { name: "MiniMax-M2.7 (\u63A8\u7406\u7248)", modelName: "MiniMax-M2.7", type: "text", think: true },\r\n    { name: "MiniMax-M2.7 \u6781\u901F\u7248 (\u63A8\u7406\u7248)", modelName: "MiniMax-M2.7-highspeed", type: "text", think: true },\r\n    { name: "MiniMax-M2.5 (\u63A8\u7406\u7248)", modelName: "MiniMax-M2.5", type: "text", think: true },\r\n    { name: "MiniMax-M2.5 \u6781\u901F\u7248 (\u63A8\u7406\u7248)", modelName: "MiniMax-M2.5-highspeed", type: "text", think: true },\r\n    { name: "MiniMax-M2.1 (\u7F16\u7A0B\u7248)", modelName: "MiniMax-M2.1", type: "text", think: true },\r\n    { name: "MiniMax-M2.1 \u6781\u901F\u7248 (\u7F16\u7A0B\u7248)", modelName: "MiniMax-M2.1-highspeed", type: "text", think: true },\r\n    { name: "MiniMax-M2 (Agent\u7248)", modelName: "MiniMax-M2", type: "text", think: false },\r\n    // \u56FE\u7247\u6A21\u578B\r\n    { name: "\u6D77\u87BA\u56FE\u50CFV1", modelName: "image-01", type: "image", mode: ["text", "singleImage"] },\r\n    { name: "\u6D77\u87BA\u56FE\u50CFV1 Live\u7248", modelName: "image-01-live", type: "image", mode: ["text", "singleImage"], associationSkills: "\u652F\u6301\u81EA\u5B9A\u4E49\u753B\u98CE" },\r\n    // \u89C6\u9891\u6A21\u578B\r\n    {\r\n      name: "\u6D77\u87BA2.3",\r\n      modelName: "MiniMax-Hailuo-2.3",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [\r\n        { duration: [6], resolution: ["768P", "1080P"] },\r\n        { duration: [10], resolution: ["768P"] },\r\n      ],\r\n    },\r\n    {\r\n      name: "\u6D77\u87BA2.3\u6781\u901F\u7248",\r\n      modelName: "MiniMax-Hailuo-2.3-Fast",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [\r\n        { duration: [6], resolution: ["768P", "1080P"] },\r\n        { duration: [10], resolution: ["768P"] },\r\n      ],\r\n    },\r\n    {\r\n      name: "\u6D77\u87BA02",\r\n      modelName: "MiniMax-Hailuo-02",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [\r\n        { duration: [6], resolution: ["512P", "768P", "1080P"] },\r\n        { duration: [10], resolution: ["512P", "768P"] },\r\n      ],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \u8F85\u52A9\u5DE5\u5177\r\n// ============================================================\r\n\r\n/**\r\n * \u83B7\u53D6\u8BF7\u6C42\u5934\r\n */\r\nconst getHeaders = (): Record<string, string> => {\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return {\r\n    Authorization: `Bearer ${apiKey}`,\r\n    "Content-Type": "application/json",\r\n  };\r\n};\r\n\r\n/**\r\n * \u83B7\u53D6\u57FA\u7840\u8BF7\u6C42\u5730\u5740\r\n */\r\nconst getBaseUrl = (): string => {\r\n  return vendor.inputValues.baseUrl.replace(/\\/$/, "");\r\n};\r\n\r\n/**\r\n * \u4ECE ReferenceList \u6761\u76EE\u4E2D\u63D0\u53D6\u6709\u5934 base64 \u5B57\u7B26\u4E32\r\n */\r\nconst extractBase64WithHead = (ref: ReferenceList): string => {\r\n  return ref.base64.startsWith("data:") ? ref.base64 : `data:image/png;base64,${ref.base64}`;\r\n};\r\n\r\n// ============================================================\r\n// \u9002\u914D\u5668\u51FD\u6570\r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  const baseUrl = getBaseUrl();\r\n\r\n  const openaiBaseUrl = `${baseUrl}/v1`;\r\n  const extraBody = model.think ? { reasoning_split: true } : {};\r\n  return createOpenAI({ baseURL: openaiBaseUrl, apiKey, extraBody }).chat(model.modelName);\r\n};\r\n\r\nconst uploadReference = async (base64: string, fileType: "image" | "audio" | "video"): Promise<ReferenceList> => {\r\n  // MiniMax\u7684\u56FE\u7247\u63A5\u53E3\u76F4\u63A5\u63A5\u53D7 base64\uFF0C\u538B\u7F29\u540E\u539F\u6837\u8FD4\u56DE\r\n  if (fileType === "image") {\r\n    const compressed = await zipImage(base64, 10 * 1024);\r\n    return { type: "image", sourceType: "base64", base64: compressed };\r\n  }\r\n  // \u89C6\u9891\u63A5\u53E3\u7684\u56FE\u7247\u53C2\u6570\u4E5F\u662F base64\uFF0C\u538B\u7F29\u523020MB\r\n  return { type: fileType, sourceType: "base64", base64 } as ReferenceList;\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const baseUrl = getBaseUrl();\r\n  const headers = getHeaders();\r\n\r\n  const reqBody: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt,\r\n    aspect_ratio: config.aspectRatio,\r\n    response_format: "base64",\r\n    n: 1,\r\n    prompt_optimizer: true,\r\n    aigc_watermark: false,\r\n  };\r\n\r\n  // \u5904\u7406\u56FE\u751F\u56FE\u53C2\u8003\r\n  const imageRefs = config.referenceList || [];\r\n  if (imageRefs.length > 0) {\r\n    const refBase64 = extractBase64WithHead(imageRefs[0]);\r\n    reqBody.subject_reference = [{ type: "character", image_file: refBase64 }];\r\n  }\r\n\r\n  logger("\u5F00\u59CB\u63D0\u4EA4MiniMax\u56FE\u50CF\u751F\u6210\u4EFB\u52A1");\r\n  const resp = await axios.post(`${baseUrl}/v1/image_generation`, reqBody, { headers });\r\n  if (resp.data.base_resp.status_code !== 0) {\r\n    throw new Error(`\u56FE\u50CF\u751F\u6210\u5931\u8D25\uFF1A${resp.data.base_resp.status_msg}`);\r\n  }\r\n  if (resp.data.metadata.success_count === 0) {\r\n    throw new Error("\u56FE\u50CF\u751F\u6210\u88AB\u5B89\u5168\u7B56\u7565\u62E6\u622A\uFF0C\u8BF7\u8C03\u6574prompt\u6216\u53C2\u8003\u56FE");\r\n  }\r\n\r\n  const imgBase64 = resp.data.data.image_base64[0];\r\n  return imgBase64.startsWith("data:") ? imgBase64 : `data:image/png;base64,${imgBase64}`;\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const baseUrl = getBaseUrl();\r\n  const headers = getHeaders();\r\n\r\n  const reqBody: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt,\r\n    duration: config.duration,\r\n    resolution: config.resolution,\r\n    aigc_watermark: false,\r\n    prompt_optimizer: true,\r\n  };\r\n\r\n  // \u63D0\u53D6\u56FE\u7247\u7C7B\u578B\u7684\u5F15\u7528\r\n  const imageRefs = (config.referenceList || []).filter((r) => r.type === "image");\r\n\r\n  if (imageRefs.length > 0) {\r\n    // \u538B\u7F29\u56FE\u7247\u523020MB\u4EE5\u5185\r\n    const compressedImages: string[] = [];\r\n    for (const ref of imageRefs) {\r\n      const base64 = extractBase64WithHead(ref);\r\n      const compressed = await zipImage(base64, 20 * 1024);\r\n      compressedImages.push(compressed);\r\n    }\r\n\r\n    if (config.mode.includes("startEndRequired")) {\r\n      if (compressedImages.length < 2) throw new Error("\u9996\u5C3E\u5E27\u6A21\u5F0F\u9700\u8981\u4E0A\u4F20\u4E24\u5F20\u56FE\u7247");\r\n      reqBody.first_frame_image = compressedImages[0];\r\n      reqBody.last_frame_image = compressedImages[1];\r\n    } else if (config.mode.includes("singleImage")) {\r\n      reqBody.first_frame_image = compressedImages[0];\r\n    }\r\n  }\r\n\r\n  logger("\u5F00\u59CB\u63D0\u4EA4MiniMax\u89C6\u9891\u751F\u6210\u4EFB\u52A1");\r\n  const submitResp = await axios.post(`${baseUrl}/v1/video_generation`, reqBody, { headers });\r\n  if (submitResp.data.base_resp.status_code !== 0) {\r\n    throw new Error(`\u4EFB\u52A1\u63D0\u4EA4\u5931\u8D25\uFF1A${submitResp.data.base_resp.status_msg}`);\r\n  }\r\n  const taskId = submitResp.data.task_id;\r\n  logger(`\u89C6\u9891\u4EFB\u52A1\u63D0\u4EA4\u6210\u529F\uFF0C\u4EFB\u52A1ID: ${taskId}`);\r\n\r\n  // \u8F6E\u8BE2\u4EFB\u52A1\u72B6\u6001\r\n  const pollResult = await pollTask(\r\n    async () => {\r\n      const queryResp = await axios.get(`${baseUrl}/v1/query/video_generation`, {\r\n        headers: getHeaders(),\r\n        params: { task_id: taskId },\r\n      });\r\n      if (queryResp.data.base_resp.status_code !== 0) {\r\n        return { completed: true, error: queryResp.data.base_resp.status_msg };\r\n      }\r\n      const status = queryResp.data.status;\r\n      if (status === "Success") {\r\n        return { completed: true, data: queryResp.data.file_id };\r\n      }\r\n      if (status === "Fail") {\r\n        return { completed: true, error: "\u89C6\u9891\u751F\u6210\u5931\u8D25" };\r\n      }\r\n      logger(`\u89C6\u9891\u4EFB\u52A1\u751F\u6210\u4E2D\uFF0C\u5F53\u524D\u72B6\u6001\uFF1A${status}`);\r\n      return { completed: false };\r\n    },\r\n    5000,\r\n    600000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  const fileId = pollResult.data!;\r\n  logger(`\u89C6\u9891\u4EFB\u52A1\u751F\u6210\u6210\u529F\uFF0C\u6587\u4EF6ID: ${fileId}`);\r\n\r\n  // \u83B7\u53D6\u4E0B\u8F7D\u5730\u5740\r\n  const fileResp = await axios.get(`${baseUrl}/v1/files/retrieve`, {\r\n    headers: getHeaders(),\r\n    params: { file_id: fileId },\r\n  });\r\n  if (fileResp.data.base_resp.status_code !== 0) {\r\n    throw new Error(`\u83B7\u53D6\u6587\u4EF6\u5730\u5740\u5931\u8D25\uFF1A${fileResp.data.base_resp.status_msg}`);\r\n  }\r\n  const downloadUrl = fileResp.data.file.download_url;\r\n  logger(`\u89C6\u9891\u4E0B\u8F7D\u5730\u5740\u83B7\u53D6\u6210\u529F\uFF0C\u5F00\u59CB\u8F6CBase64`);\r\n\r\n  return await urlToBase64(downloadUrl);\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return {\r\n    hasUpdate: false,\r\n    latestVersion: "2.0",\r\n    notice:\r\n      "## \u65B0\u7248\u672C\u66F4\u65B0\u516C\u544A\\n1. \u9002\u914D\u65B0\u7248\u6A21\u677F\u67B6\u6784\uFF0C\u652F\u6301 ReferenceList \u7EDF\u4E00\u5F15\u7528\u7C7B\u578B\\n2. \u65B0\u589E uploadReference \u524D\u7F6E\u5904\u7406\u5668\\n3. \u4F18\u5316\u56FE\u7247\u538B\u7F29\u548C\u5F15\u7528\u63D0\u53D6\u903B\u8F91",\r\n  };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \u5BFC\u51FA\r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.uploadReference = uploadReference;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\n// \u8FD9\u884C\u4EE3\u7801\u7528\u4E8E\u786E\u4FDD\u5F53\u524D\u6587\u4EF6\u88AB\u8BC6\u522B\u4E3A\u6A21\u5757\uFF0C\u907F\u514D\u5168\u5C40\u53D8\u91CF\u51B2\u7A81\r\nexport {};',
-      "null.ts": '/**\r\n * Toonflow AI\u4F9B\u5E94\u5546\u6A21\u677F\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \u7C7B\u578B\u5B9A\u4E49\r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage" //\u5355\u56FE\u53C2\u8003\r\n  | "startEndRequired" //\u9996\u5C3E\u5E27\uFF08\u4E24\u5F20\u90FD\u5F97\u6709\uFF09\r\n  | "endFrameOptional" //\u9996\u5C3E\u5E27\uFF08\u5C3E\u5E27\u53EF\u9009\uFF09\r\n  | "startFrameOptional" //\u9996\u5C3E\u5E27\uFF08\u9996\u5E27\u53EF\u9009\uFF09\r\n  | "text" //\u6587\u672C\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[]; //\u591A\u53C2\u8003\uFF08\u6570\u5B57\u4EE3\u8868\u9650\u5236\u6570\u91CF\uFF09\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string; //\u552F\u4E00ID\uFF0C\u4F5C\u4E3A\u6587\u4EF6\u540D\u5B58\u50A8\u7528\u6237\u78C1\u76D8\u4E0A\uFF0C\u7981\u6B62\u7B26\u53F7\r\n  version: string; //\u7248\u672C\u53F7\uFF0C\u683C\u5F0F\u4E3Ax.y\uFF0C\u9700\u9075\u5B88\u8BED\u4E49\u5316\u7248\u672C\u63A7\u5236\r\n  name: string; //\u4F9B\u5E94\u5546\u540D\u79F0\r\n  author: string; //\u4F5C\u8005\r\n  description?: string; //\u63CF\u8FF0\uFF0C\u652F\u6301Markdown\u683C\u5F0F\r\n  icon?: string; //\u56FE\u6807\uFF0C\u4EC5\u652F\u6301Base64\u683C\u5F0F\uFF0C\u5EFA\u8BAE\u5C3A\u5BF8\u4E3A128x128\u50CF\u7D20\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \u5168\u5C40\u58F0\u660E\r\n// ============================================================\r\n\r\ndeclare const axios: any; // HTTP\u8BF7\u6C42\u5E93\r\ndeclare const logger: (msg: string) => void; // \u65E5\u5FD7\u51FD\u6570\r\ndeclare const jsonwebtoken: any; // JWT\u5904\u7406\u5E93\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>; // \u56FE\u7247\u538B\u7F29\u51FD\u6570\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>; // \u56FE\u7247\u5206\u8FA8\u7387\u8C03\u6574\u51FD\u6570\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>; // \u56FE\u7247\u5408\u6210\u51FD\u6570\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\ndeclare const urlToBase64: (url: string) => Promise<string>; // URL\u8F6CBase64\u51FD\u6570\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>; // \u8F6E\u8BE2\u51FD\u6570\uFF0Cfn\u4E3A\u5F02\u6B65\u51FD\u6570\uFF0Cinterval\u4E3A\u8F6E\u8BE2\u95F4\u9694\uFF0Ctimeout\u4E3A\u8D85\u65F6\u65F6\u95F4\uFF0C\u8FD4\u56DEfn\u7684\u7ED3\u679C\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any; //\u6587\u672C\u6A21\u578B\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>; //\u56FE\u7247\u6A21\u578B\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>; //\u89C6\u9891\u6A21\u578B\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>; //\uFF08\u6682\u672A\u5F00\u653E\uFF09\u8BED\u97F3\u6A21\u578B\uFF0C\u8FD4\u56DE\u6709\u5934base64\u5B57\u7B26\u4E32\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>; //\u68C0\u67E5\u66F4\u65B0\u51FD\u6570\uFF0C\u8FD4\u56DE\u662F\u5426\u6709\u66F4\u65B0\u548C\u6700\u65B0\u7248\u672C\u53F7\u548C\u66F4\u516C\u544A\uFF08\u652F\u6301Markdown\u683C\u5F0F\uFF09\r\n  updateVendor?: () => Promise<string>; //\u66F4\u65B0\u51FD\u6570\uFF0C\u8FD4\u56DE\u6700\u65B0\u7684\u4EE3\u7801\u6587\u672C\r\n};\r\n\r\n// ============================================================\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "null",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "\u7A7A\u6A21\u677F",\r\n  description: "## \u5F00\u53D1\u6A21\u677F\uFF0C\u60A8\u53EF\u4EE5\u4F7F\u7528\u6B64\u6A21\u677F\u8FDB\u884CVibe Coding",\r\n  inputs: [\r\n    { key: "apiKey", label: "API\u5BC6\u94A5", type: "password", required: true },\r\n    { key: "baseUrl", label: "\u8BF7\u6C42\u5730\u5740", type: "url", required: true, placeholder: "\u793A\u4F8B\uFF1Ahttps://api.openai.com/v1" },\r\n  ],\r\n  inputValues: { apiKey: "", baseUrl: "https://api.openai.com/v1" },\r\n  models: [{ name: "GPT-4o", modelName: "gpt-4o", type: "text", think: false }],\r\n};\r\n\r\n// ============================================================\r\n// \u9002\u914D\u5668\u51FD\u6570\r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return createOpenAI({ baseURL: vendor.inputValues.baseUrl, apiKey }).chat(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "## \u65B0\u7248\u672C\u66F4\u65B0\u516C\u544A" };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \u5BFC\u51FA\r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\n// \u8FD9\u884C\u4EE3\u7801\u7528\u4E8E\u786E\u4FDD\u5F53\u524D\u6587\u4EF6\u88AB\u8BC6\u522B\u4E3A\u6A21\u5757\uFF0C\u907F\u514D\u5168\u5C40\u53D8\u91CF\u51B2\u7A81\r\nexport {};\r\n\r\n/**\r\n * ============================================================\r\n * AI \u4EE3\u7801\u751F\u6210\u6307\u5357\r\n * ============================================================\r\n *\r\n * \u3010\u6982\u8FF0\u3011\r\n * \u672C\u6587\u4EF6\u662F Toonflow AI \u4F9B\u5E94\u5546\u9002\u914D\u6A21\u677F\u3002AI \u5728\u751F\u6210\u65B0\u4F9B\u5E94\u5546\u9002\u914D\u4EE3\u7801\u65F6\uFF0C\r\n * \u5FC5\u987B\u4E25\u683C\u9075\u5B88\u4EE5\u4E0B\u89C4\u5219\uFF0C\u5E76\u8981\u6C42\u7528\u6237\u63D0\u4F9B\u76EE\u6807\u5E73\u53F0\u7684 curl \u8C03\u7528\u793A\u4F8B\u6216 API \u6587\u6863\u4FE1\u606F\u4F5C\u4E3A\u8F93\u5165\u4F9D\u636E\u3002\r\n *\r\n * \u3010\u524D\u7F6E\u8981\u6C42\u3011\r\n * \u5728\u751F\u6210\u4EE3\u7801\u524D\uFF0C\u8BF7\u5411\u7528\u6237\u7D22\u8981\u4EE5\u4E0B\u4FE1\u606F\uFF08\u81F3\u5C11\u5176\u4E00\uFF09\uFF1A\r\n *   1. \u76EE\u6807 API \u7684 curl \u8BF7\u6C42\u793A\u4F8B\uFF08\u5305\u542B\u8BF7\u6C42\u5730\u5740\u3001Headers\u3001Body \u7ED3\u6784\u3001\u54CD\u5E94\u7ED3\u6784\uFF09\r\n *   2. \u76EE\u6807 API \u7684\u5B98\u65B9\u6587\u6863\u94FE\u63A5\u6216\u6587\u6863\u622A\u56FE/\u6587\u672C\u5185\u5BB9\r\n *   3. \u9700\u8981\u9002\u914D\u7684\u6A21\u578B\u7C7B\u578B\uFF08text / image / video / tts\uFF09\u53CA\u5176\u80FD\u529B\u8BF4\u660E\r\n * \u6CA1\u6709\u8DB3\u591F\u4FE1\u606F\u65F6\uFF0C\u5E94\u4E3B\u52A8\u8FFD\u95EE\uFF0C\u4E0D\u8981\u51ED\u7A7A\u7F16\u9020 API \u7ED3\u6784\u3002\r\n *\r\n * \u3010\u4EE3\u7801\u89C4\u5219\u3011\r\n *\r\n * 1. \u7981\u6B62\u5F15\u5165\u4EFB\u4F55\u5916\u90E8\u5305\r\n *    \u4E0D\u53EF\u4F7F\u7528 import / require\uFF0C\u4EC5\u80FD\u4F7F\u7528\u672C\u6587\u4EF6\u300C\u5168\u5C40\u58F0\u660E\u300D\u533A\u57DF\u4E2D\u5DF2\u58F0\u660E\u7684\u65B9\u6CD5\u548C\u5BF9\u8C61\uFF0C\r\n *    \u5305\u62EC\uFF1Aaxios\u3001logger\u3001jsonwebtoken\u3001zipImage\u3001zipImageResolution\u3001mergeImages\u3001\r\n *    urlToBase64\u3001pollTask\uFF0C\u4EE5\u53CA createOpenAI\u3001createDeepSeek\u3001createZhipu\u3001createQwen\u3001\r\n *    createAnthropic\u3001createOpenAICompatible\u3001createXai\u3001createMinimax\u3001\r\n *    createGoogleGenerativeAI \u7B49 AI SDK \u5DE5\u5382\u51FD\u6570\u3002\r\n *\r\n * 2. \u7981\u6B62\u5728 exports.* \u51FD\u6570\u5916\u90E8\u58F0\u660E\u79BB\u6563\u7684\u5168\u5927\u5199\u5E38\u91CF\r\n *    \u9519\u8BEF\u793A\u4F8B\uFF1Aconst API_URL = "https://..."; const MAX_RETRY = 3;\r\n *    \u5982\u679C\u786E\u5B9E\u9700\u8981\u53EF\u914D\u7F6E\u7684\u5E38\u91CF\u503C\uFF0C\u5FC5\u987B\u5C06\u5176\u58F0\u660E\u5728 vendor.inputValues \u4E2D\uFF0C\r\n *    \u901A\u8FC7 vendor.inputValues.xxx \u8BBF\u95EE\uFF0C\u8BA9\u7528\u6237\u53EF\u5728\u754C\u9762\u4E0A\u914D\u7F6E\u3002\r\n *    \u5982\u679C\u662F\u7EAF\u903B\u8F91\u5185\u90E8\u4F7F\u7528\u7684\u4E34\u65F6\u53D8\u91CF\uFF0C\u5E94\u5185\u8054\u5728\u5BF9\u5E94\u7684 exports.* \u51FD\u6570\u4F53\u5185\u90E8\uFF0C\u4F7F\u7528\u5C0F\u9A7C\u5CF0\u547D\u540D\u3002\r\n *\r\n * 3. \u903B\u8F91\u5C3D\u91CF\u805A\u5408\u5728 exports.* \u5BF9\u5E94\u7684\u51FD\u6570\u5185\u90E8\r\n *    \u6BCF\u4E2A\u9002\u914D\u51FD\u6570\uFF08textRequest / imageRequest / videoRequest / ttsRequest\uFF09\r\n *    \u5E94\u81EA\u5305\u542B\uFF0C\u5C06\u8BF7\u6C42\u6784\u9020\u3001\u53D1\u9001\u3001\u8F6E\u8BE2\u3001\u7ED3\u679C\u89E3\u6790\u7B49\u903B\u8F91\u5199\u5728\u51FD\u6570\u4F53\u5185\uFF0C\u907F\u514D\u62C6\u5206\u51FA\u5927\u91CF\u5916\u90E8\u8F85\u52A9\u51FD\u6570\u3002\r\n *    \u5982\u679C\u591A\u4E2A\u51FD\u6570\u786E\u5B9E\u5B58\u5728\u516C\u5171\u903B\u8F91\uFF08\u5982\u7B7E\u540D\u8BA1\u7B97\u3001Token \u751F\u6210\u3001\u8BF7\u6C42\u5934\u6784\u9020\uFF09\uFF0C\r\n *    \u53EF\u63D0\u53D6\u4E3A\u6587\u4EF6\u5185\u7684\u5C0F\u9A7C\u5CF0\u547D\u540D\u51FD\u6570\uFF0C\u653E\u5728\u300C\u9002\u914D\u5668\u51FD\u6570\u300D\u533A\u5757\u4E4B\u524D\u7684\u300C\u8F85\u52A9\u5DE5\u5177\u300D\u533A\u5757\u4E2D\uFF0C\r\n *    \u4E14\u4E0D\u53EF\u4F7F\u7528\u5168\u5927\u5199\u547D\u540D\u3002\r\n *\r\n * 4. \u547D\u540D\u89C4\u8303\r\n *    \u6240\u6709\u53D8\u91CF\u3001\u51FD\u6570\u4E00\u5F8B\u4F7F\u7528\u5C0F\u9A7C\u5CF0\u547D\u540D\uFF08camelCase\uFF09\uFF0C\u7981\u6B62\u4F7F\u7528 UPPER_SNAKE_CASE\u3002\r\n *\r\n * 5. \u4E0D\u9700\u8981\u91CD\u65B0\u58F0\u660E\u7C7B\u578B\r\n *    \u672C\u6587\u4EF6\u9876\u90E8\u5DF2\u5B8C\u6574\u5B9A\u4E49\u4E86\u6240\u6709\u63A5\u53E3\u548C\u7C7B\u578B\uFF08VendorConfig\u3001ImageConfig\u3001VideoConfig\u3001\r\n *    TTSConfig\u3001TextModel\u3001ImageModel\u3001VideoModel\u3001TTSModel\u3001ReferenceList\u3001PollResult \u7B49\uFF09\uFF0C\r\n *    AI \u751F\u6210\u4EE3\u7801\u65F6\u76F4\u63A5\u4F7F\u7528\u5373\u53EF\uFF0C\u4E0D\u8981\u91CD\u590D\u58F0\u660E\u3002\r\n *\r\n * 6. \u8FD4\u56DE\u503C\u89C4\u8303\r\n *    - textRequest(model)\uFF1A\u8FD4\u56DE AI SDK \u7684 chat model \u5B9E\u4F8B\uFF08\u901A\u8FC7 createOpenAI \u7B49\u5DE5\u5382\u51FD\u6570\u521B\u5EFA\uFF09\u3002\r\n *    - imageRequest(config, model)\uFF1A\u8FD4\u56DE\u6709\u5934 base64 \u5B57\u7B26\u4E32\uFF08\u5982 "data:image/png;base64,..."\uFF09\u3002\r\n *      config.referenceList \u4E3A Extract<ReferenceList, { type: "image" }>[] \u7C7B\u578B\uFF0C\r\n *      \u6BCF\u4E2A\u5F15\u7528\u6761\u76EE\u5747\u4E3A base64 \u5F62\u5F0F\uFF08sourceType \u56FA\u5B9A\u4E3A "base64"\uFF09\u3002\r\n *    - videoRequest(config, model)\uFF1A\u8FD4\u56DE\u6709\u5934 base64 \u5B57\u7B26\u4E32\uFF08\u5982 "data:video/mp4;base64,..."\uFF09\u3002\r\n *      config.referenceList \u4E3A ReferenceList[] \u7C7B\u578B\uFF0C\u53EF\u5305\u542B image / video / audio \u4E09\u79CD\u5F15\u7528\uFF0C\r\n *      \u6BCF\u4E2A\u5F15\u7528\u6761\u76EE\u5747\u4E3A base64 \u5F62\u5F0F\uFF08sourceType \u56FA\u5B9A\u4E3A "base64"\uFF09\u3002\r\n *      config.mode \u4E3A\u5F53\u524D\u6FC0\u6D3B\u7684\u89C6\u9891\u6A21\u5F0F\u6570\u7EC4\uFF0C\u9700\u6839\u636E mode \u51B3\u5B9A\u5982\u4F55\u4F7F\u7528 referenceList\u3002\r\n *    - ttsRequest(config, model)\uFF1A\u8FD4\u56DE\u6709\u5934 base64 \u5B57\u7B26\u4E32\uFF08\u5982 "data:audio/mp3;base64,..."\uFF09\u3002\r\n *      config.referenceList \u4E3A Extract<ReferenceList, { type: "audio" }>[] \u7C7B\u578B\uFF08\u97F3\u9891\u53C2\u8003\uFF09\u3002\r\n *    \u5F53 API \u8FD4\u56DE\u7684\u662F URL \u800C\u975E\u4E8C\u8FDB\u5236\u6570\u636E\u65F6\uFF0C\u4F7F\u7528 urlToBase64(url) \u8F6C\u6362\u3002\r\n *\r\n * 7. ReferenceList \u4E0E VideoMode \u8BF4\u660E\r\n *    ReferenceList \u662F\u7EDF\u4E00\u7684\u591A\u5A92\u4F53\u5F15\u7528\u7C7B\u578B\uFF0C\u6BCF\u4E2A\u6761\u76EE\u5305\u542B\uFF1A\r\n *      - type: "image" | "audio" | "video"\uFF08\u5A92\u4F53\u7C7B\u578B\uFF09\r\n *      - sourceType: "base64"\uFF08\u5F53\u524D\u6A21\u677F\u56FA\u5B9A\u4E3A base64\uFF09\r\n *      - base64\uFF08\u5BF9\u5E94\u7684\u6570\u636E\uFF09\r\n *\r\n *    VideoMode \u5B9A\u4E49\u4E86\u89C6\u9891\u6A21\u578B\u652F\u6301\u7684\u8F93\u5165\u6A21\u5F0F\uFF1A\r\n *      - "text"\uFF1A\u7EAF\u6587\u672C\u751F\u6210\u89C6\u9891\r\n *      - "singleImage"\uFF1A\u5355\u5F20\u9996\u5E27\u56FE\u7247\r\n *      - "startEndRequired"\uFF1A\u9996\u5C3E\u5E27\uFF08\u4E24\u5F20\u90FD\u5FC5\u987B\u63D0\u4F9B\uFF09\r\n *      - "endFrameOptional"\uFF1A\u9996\u5C3E\u5E27\uFF08\u5C3E\u5E27\u53EF\u9009\uFF09\r\n *      - "startFrameOptional"\uFF1A\u9996\u5C3E\u5E27\uFF08\u9996\u5E27\u53EF\u9009\uFF09\r\n *      - \u6570\u7EC4\u5F62\u5F0F\u5982 ["imageReference:9", "videoReference:3", "audioReference:3"]\uFF1A\r\n *        \u591A\u6A21\u6001\u53C2\u8003\u6A21\u5F0F\uFF0C\u6570\u5B57\u8868\u793A\u8BE5\u7C7B\u578B\u7684\u6700\u5927\u6570\u91CF\u9650\u5236\u3002\r\n *\r\n *    \u5728 videoRequest \u4E2D\uFF0Cconfig.mode \u8868\u793A\u5F53\u524D\u9009\u62E9\u7684\u6A21\u5F0F\uFF0C\u9700\u6839\u636E\u5176\u503C\u51B3\u5B9A\uFF1A\r\n *      - \u5982\u4F55\u4ECE config.referenceList \u4E2D\u63D0\u53D6\u5BF9\u5E94\u7C7B\u578B\u7684\u5F15\u7528\r\n *      - \u5982\u4F55\u6784\u9020 API \u8BF7\u6C42\u4F53\u4E2D\u7684\u56FE\u7247/\u89C6\u9891/\u97F3\u9891\u53C2\u6570\r\n *\r\n * 8. \u5F02\u6B65\u4EFB\u52A1\u5904\u7406\r\n *    \u5BF9\u4E8E\u89C6\u9891\u751F\u6210\u7B49\u9700\u8981\u8F6E\u8BE2\u7684\u5F02\u6B65\u4EFB\u52A1\uFF0C\u4F7F\u7528\u5168\u5C40\u7684 pollTask \u51FD\u6570\uFF1A\r\n *    const result = await pollTask(async () => {\r\n *      const resp = await axios.get(...);\r\n *      if (resp.data.status === "SUCCESS") return { completed: true, data: resp.data.url };\r\n *      if (resp.data.status === "FAILED") return { completed: true, error: resp.data.message };\r\n *      return { completed: false };\r\n *    }, 5000, 600000); // \u6BCF5\u79D2\u8F6E\u8BE2\uFF0C10\u5206\u949F\u8D85\u65F6\r\n *    if (result.error) throw new Error(result.error);\r\n *    return await urlToBase64(result.data!);\r\n *\r\n * 9. \u9519\u8BEF\u5904\u7406\r\n *    \u5728\u6BCF\u4E2A\u51FD\u6570\u5F00\u5934\u6821\u9A8C\u5FC5\u9700\u53C2\u6570\uFF08\u5982 API Key\uFF09\uFF0C\u7F3A\u5931\u65F6\u4F7F\u7528 throw new Error("...") \u629B\u51FA\u3002\r\n *    API \u8BF7\u6C42\u5931\u8D25\u65F6\uFF0C\u4ECE\u54CD\u5E94\u4E2D\u63D0\u53D6\u6709\u610F\u4E49\u7684\u9519\u8BEF\u4FE1\u606F\u629B\u51FA\uFF0C\u4E0D\u8981\u541E\u6389\u5F02\u5E38\u3002\r\n *\r\n * 10. \u65E5\u5FD7\u8F93\u51FA\r\n *     \u5728\u5173\u952E\u6B65\u9AA4\u4F7F\u7528 logger("...") \u8F93\u51FA\u65E5\u5FD7\uFF08\u5982"\u5F00\u59CB\u63D0\u4EA4\u4EFB\u52A1"\u3001"\u4EFB\u52A1ID: xxx"\u3001"\u8F6E\u8BE2\u4E2D..."\uFF09\uFF0C\r\n *     \u4FBF\u4E8E\u8C03\u8BD5\u3002\r\n *\r\n * 11. vendor \u914D\u7F6E\u586B\u5199\r\n *     - id\uFF1A\u7EAF\u82F1\u6587\u5C0F\u5199\uFF0C\u4F5C\u4E3A\u6587\u4EF6\u540D\u4F7F\u7528\uFF0C\u7981\u6B62\u7279\u6B8A\u7B26\u53F7\u548C\u7A7A\u683C\u3002\r\n *     - version\uFF1A\u8BED\u4E49\u5316\u7248\u672C\u683C\u5F0F "x.y"\u3002\r\n *     - inputs\uFF1A\u6839\u636E\u76EE\u6807 API \u6240\u9700\u7684\u8BA4\u8BC1\u4FE1\u606F\u914D\u7F6E\uFF08API Key\u3001Secret\u3001\u8BF7\u6C42\u5730\u5740\u7B49\uFF09\u3002\r\n *     - models\uFF1A\u6839\u636E\u76EE\u6807\u5E73\u53F0\u652F\u6301\u7684\u6A21\u578B\u5217\u8868\u586B\u5199\uFF0C\u6CE8\u610F\u6B63\u786E\u8BBE\u7F6E type \u548C\u5404\u6A21\u578B\u7279\u6709\u5B57\u6BB5\u3002\r\n *       - VideoModel \u7684 mode \u5BF9\u5E94 API \u652F\u6301\u7684\u8F93\u5165\u6A21\u5F0F\uFF08\u53C2\u89C1\u89C4\u5219 7 \u7684 VideoMode \u8BF4\u660E\uFF09\u3002\r\n *       - VideoModel \u7684 audio \u5B57\u6BB5\uFF1Atrue\uFF08\u59CB\u7EC8\u751F\u6210\u97F3\u9891\uFF09\u3001false\uFF08\u4E0D\u751F\u6210\uFF09\u3001"optional"\uFF08\u7528\u6237\u53EF\u9009\uFF09\u3002\r\n *       - VideoModel \u7684 durationResolutionMap \u5BF9\u5E94\u5404\u65F6\u957F\u4E0B\u53EF\u9009\u7684\u5206\u8FA8\u7387\u3002\r\n *       - VideoModel \u7684 associationSkills \u53EF\u9009\uFF0C\u7528\u4E8E\u63CF\u8FF0\u6A21\u578B\u7684\u7279\u6B8A\u80FD\u529B\u3002\r\n *       - ImageModel \u7684 mode \u5BF9\u5E94 API \u652F\u6301\u7684\u751F\u56FE\u6A21\u5F0F\uFF08"text" \u7EAF\u6587\u672C\u3001"singleImage" \u5355\u56FE\u53C2\u8003\u3001"multiReference" \u591A\u56FE\u53C2\u8003\uFF09\u3002\r\n *       - TTSModel \u7684 voices \u5BF9\u5E94\u53EF\u9009\u7684\u97F3\u8272\u5217\u8868\u3002\r\n *\r\n * 12. \u56FE\u7247\u5904\u7406\r\n *     - \u9700\u8981\u538B\u7F29\u56FE\u7247\u4F53\u79EF\u65F6\u4F7F\u7528 zipImage(base64, maxSizeKB)\u3002\r\n *     - \u9700\u8981\u8C03\u6574\u56FE\u7247\u5206\u8FA8\u7387\u65F6\u4F7F\u7528 zipImageResolution(base64, width, height)\u3002\r\n *     - \u9700\u8981\u5C06\u591A\u5F20\u56FE\u7247\u62FC\u5408\u4E3A\u4E00\u5F20\u65F6\u4F7F\u7528 mergeImages(base64Arr, maxSize)\u3002\r\n *     - \u4EE5\u4E0A\u51FD\u6570\u5747\u63A5\u6536\u548C\u8FD4\u56DE\u6709\u5934 base64 \u5B57\u7B26\u4E32\u3002\r\n *\r\n * 13. \u6587\u4EF6\u7ED3\u6784\r\n *     \u751F\u6210\u7684\u4EE3\u7801\u5FC5\u987B\u4FDD\u6301\u672C\u6A21\u677F\u7684\u6574\u4F53\u7ED3\u6784\uFF1A\r\n *     \u7C7B\u578B\u5B9A\u4E49\u533A \u2192 \u5168\u5C40\u58F0\u660E\u533A \u2192 \u4F9B\u5E94\u5546\u914D\u7F6E\u533A \u2192 [\u8F85\u52A9\u5DE5\u5177\u533A\uFF08\u53EF\u9009\uFF09] \u2192 \u9002\u914D\u5668\u51FD\u6570\u533A \u2192 \u5BFC\u51FA\u533A\r\n *     \u4E0D\u8981\u6253\u4E71\u987A\u5E8F\uFF0C\u4E0D\u8981\u5220\u9664\u5DF2\u6709\u7684\u7ED3\u6784\u6CE8\u91CA\u5206\u9694\u7EBF\u3002\r\n *     \u8F85\u52A9\u5DE5\u5177\u533A\u7528\u4E8E\u653E\u7F6E\u591A\u4E2A\u9002\u914D\u5668\u51FD\u6570\u5171\u4EAB\u7684\u5C0F\u9A7C\u5CF0\u547D\u540D\u8F85\u52A9\u51FD\u6570\uFF08\u5982 getHeaders\u3001getBaseUrl\uFF09\u3002\r\n *\r\n * 14. \u5BFC\u51FA\u89C4\u8303\r\n *     \u5FC5\u987B\u5BFC\u51FA\u4EE5\u4E0B\u5B57\u6BB5\uFF08\u901A\u8FC7 exports.xxx = xxx \u8D4B\u503C\uFF09\uFF1A\r\n *       - exports.vendor\uFF08\u5FC5\u987B\uFF09\r\n *       - exports.textRequest\uFF08\u5FC5\u987B\uFF09\r\n *       - exports.imageRequest\uFF08\u5FC5\u987B\uFF09\r\n *       - exports.videoRequest\uFF08\u5FC5\u987B\uFF09\r\n *       - exports.ttsRequest\uFF08\u5FC5\u987B\uFF09\r\n *       - exports.checkForUpdates\uFF08\u53EF\u9009\uFF09\r\n *       - exports.updateVendor\uFF08\u53EF\u9009\uFF09\r\n *     \u672A\u5B9E\u73B0\u7684\u9002\u914D\u5668\u51FD\u6570\u4FDD\u7559\u7A7A\u5B9E\u73B0\uFF08return ""\uFF09\uFF0C\u4E0D\u53EF\u7701\u7565\u5BFC\u51FA\u3002\r\n *     \u6587\u4EF6\u672B\u5C3E\u5FC5\u987B\u5305\u542B export {}; \u4EE5\u786E\u4FDD\u6587\u4EF6\u88AB\u8BC6\u522B\u4E3A\u6A21\u5757\u3002\r\n *\r\n * \u3010\u751F\u6210\u6D41\u7A0B\u3011\r\n * \u5F53\u7528\u6237\u8BF7\u6C42\u751F\u6210\u65B0\u7684\u4F9B\u5E94\u5546\u9002\u914D\u65F6\uFF1A\r\n *   1. \u786E\u8BA4\u7528\u6237\u5DF2\u63D0\u4F9B curl \u793A\u4F8B\u6216 API \u6587\u6863\u3002\r\n *   2. \u5206\u6790 API \u7684\u8BA4\u8BC1\u65B9\u5F0F\u3001\u7AEF\u70B9\u5730\u5740\u3001\u8BF7\u6C42/\u54CD\u5E94\u7ED3\u6784\u3002\r\n *   3. \u57FA\u4E8E\u672C\u6A21\u677F\u7ED3\u6784\uFF0C\u586B\u5145 vendor \u914D\u7F6E\u548C\u5BF9\u5E94\u7684\u9002\u914D\u5668\u51FD\u6570\u3002\r\n *   4. \u6839\u636E\u5F53\u524D\u6A21\u677F\u7684 ReferenceList \u5B9A\u4E49\uFF0C\u6309 base64 \u5F62\u5F0F\u6784\u9020\u548C\u6D88\u8D39 referenceList\u3002\r\n *   5. \u4EC5\u5B9E\u73B0\u7528\u6237\u9700\u8981\u7684\u6A21\u578B\u7C7B\u578B\uFF0C\u672A\u7528\u5230\u7684\u51FD\u6570\u4FDD\u7559\u7A7A\u5B9E\u73B0\uFF08return ""\uFF09\u3002\r\n *   6. \u751F\u6210\u5B8C\u6574\u53EF\u7528\u7684\u4EE3\u7801\uFF0C\u786E\u4FDD\u65E0\u8BED\u6CD5\u9519\u8BEF\u3001\u65E0\u9057\u6F0F\u5BFC\u51FA\u3002\r\n */\r\n',
-      "openai.ts": '/**\r\n * Toonflow AI\u4F9B\u5E94\u5546\u6A21\u677F\r\n * @version 2.0\r\n */\r\n// ============================================================\r\n// \u7C7B\u578B\u5B9A\u4E49\r\n// ============================================================\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  imageBase64: string[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  imageBase64?: string[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n}\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n// ============================================================\r\n// \u5168\u5C40\u58F0\u660E\r\n// ============================================================\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n// ============================================================\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\n// ============================================================\r\nconst vendor: VendorConfig = {\r\n  id: "openai",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "OpenAI\u6807\u51C6\u63A5\u53E3",\r\n  description: "OpenAI\u6807\u51C6\u683C\u5F0F\u63A5\u53E3\uFF0C\u53EF\u4FEE\u6539\u8BF7\u6C42\u5730\u5740\u5E76\u624B\u52A8\u6DFB\u52A0\u6A21\u578B\u3002",\r\n  icon: "",\r\n  inputs: [\r\n    { key: "apiKey", label: "API\u5BC6\u94A5", type: "password", required: true },\r\n    { key: "baseUrl", label: "\u8BF7\u6C42\u5730\u5740", type: "url", required: true, placeholder: "\u4EE5v1\u7ED3\u675F\uFF0C\u793A\u4F8B\uFF1Ahttps://api.openai.com/v1" },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://api.openai.com/v1",\r\n  },\r\n  models: [\r\n    { name: "GPT-4o", modelName: "gpt-4o", type: "text", think: false },\r\n    { name: "GPT-4.1", modelName: "gpt-4.1", type: "text", think: false },\r\n    { name: "GPT-5.1", modelName: "gpt-5.1", type: "text", think: false },\r\n    { name: "GPT-5.2", modelName: "gpt-5.2", type: "text", think: false },\r\n    { name: "GPT-5.4", modelName: "gpt-5.4", type: "text", think: false },\r\n  ],\r\n};\r\n// ============================================================\r\n// \u9002\u914D\u5668\u51FD\u6570\r\n// ============================================================\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return createOpenAI({ baseURL: vendor.inputValues.baseUrl, apiKey }).chat(model.modelName);\r\n};\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  return "";\r\n};\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  return "";\r\n};\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "" };\r\n};\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n// ============================================================\r\n// \u5BFC\u51FA\r\n// ============================================================\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\nexport {};',
-      "toonflow.ts": '/**\r\n * Toonflow\u5B98\u65B9\u4E2D\u8F6C\u5E73\u53F0 \u4F9B\u5E94\u5546\u9002\u914D\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \u7C7B\u578B\u5B9A\u4E49\r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \u5168\u5C40\u58F0\u660E\r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "toonflow",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "Toonflow\u5B98\u65B9\u4E2D\u8F6C\u5E73\u53F0",\r\n  description:\r\n    "## Toonflow\u5B98\u65B9\u4E2D\u8F6C\u5E73\u53F0\\n\\nToonflow\u5B98\u65B9\u4E2D\u8F6C\u5E73\u53F0\uFF0C\u63D0\u4F9B**\u6587\u672C\u3001\u56FE\u50CF\u3001\u89C6\u9891\u3001\u97F3\u9891**\u7B49\u591A\u6A21\u6001\u751F\u6210\u80FD\u529B\u7684\u4E2D\u8F6C\u670D\u52A1\uFF0C\u652F\u6301\u63A5\u5165\u591A\u4E2A\u5927\u6A21\u578B\u4F9B\u5E94\u5546\uFF0C\u65B9\u4FBF\u7528\u6237\u7EDF\u4E00\u7BA1\u7406\u548C\u8C03\u7528\u4E0D\u540C\u4F9B\u5E94\u5546\u7684\u751F\u6210\u80FD\u529B\u3002\\n\\n\u{1F517} [\u524D\u5F80\u4E2D\u8F6C\u5E73\u53F0](https://api.toonflow.net/)\\n\\n\u5982\u679C\u8FD9\u4E2A\u9879\u76EE\u5BF9\u4F60\u6709\u5E2E\u52A9\uFF0C\u53EF\u4EE5\u8003\u8651\u652F\u6301\u4E00\u4E0B\u6211\u4EEC\u7684\u5F00\u53D1\u5DE5\u4F5C \u2615",\r\n  icon: "",\r\n  inputs: [{ key: "apiKey", label: "API\u5BC6\u94A5", type: "password", required: true }],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://api.toonflow.net/v1",\r\n  },\r\n  models: [\r\n    { name: "claude-sonnet-4-6", type: "text", modelName: "claude-sonnet-4-6", think: false },\r\n    { name: "claude-opus-4-6", type: "text", modelName: "claude-opus-4-6", think: false },\r\n    { name: "claude-sonnet-4-5-20250929", type: "text", modelName: "claude-sonnet-4-5-20250929", think: false },\r\n    { name: "claude-opus-4-5-20251101", type: "text", modelName: "claude-opus-4-5-20251101", think: false },\r\n    { name: "claude-haiku-4-5-20251001", type: "text", modelName: "claude-haiku-4-5-20251001", think: false },\r\n    { name: "gpt-5.4", type: "text", modelName: "gpt-5.4", think: false },\r\n    { name: "gpt-5.2", type: "text", modelName: "gpt-5.2", think: false },\r\n    { name: "MiniMax-M2.7", type: "text", modelName: "MiniMax-M2.7", think: true },\r\n    { name: "MiniMax-M2.5", type: "text", modelName: "MiniMax-M2.5", think: true },\r\n    {\r\n      name: "Wan2.6 I2V 1080P (\u652F\u6301\u771F\u4EBA)",\r\n      type: "video",\r\n      modelName: "Wan2.6-I2V-1080P",\r\n      mode: ["text", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["1080p"] }],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "Wan2.6 I2V 720P (\u652F\u6301\u771F\u4EBA)",\r\n      type: "video",\r\n      modelName: "Wan2.6-I2V-720P",\r\n      mode: ["text", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "Seedance 1.5 Pro",\r\n      type: "video",\r\n      modelName: "doubao-seedance-1-5-pro-251215",\r\n      mode: ["text", "endFrameOptional"],\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "vidu2 turbo",\r\n      type: "video",\r\n      modelName: "ViduQ2-turbo",\r\n      mode: ["singleImage", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],\r\n      audio: false,\r\n    },\r\n    {\r\n      name: "ViduQ3 pro",\r\n      type: "video",\r\n      modelName: "ViduQ3-pro",\r\n      mode: ["singleImage", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], resolution: ["540p", "720p", "1080p"] }],\r\n      audio: false,\r\n    },\r\n    {\r\n      name: "ViduQ2 pro",\r\n      type: "video",\r\n      modelName: "ViduQ2-pro",\r\n      mode: ["singleImage", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],\r\n      audio: false,\r\n    },\r\n    {\r\n      name: "Doubao Seedream 5.0 Lite",\r\n      type: "image",\r\n      modelName: "Doubao-Seedream-5.0-Lite",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Doubao Seedream 4.5",\r\n      type: "image",\r\n      modelName: "doubao-seedream-4-5-251128",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \u8F85\u52A9\u5DE5\u5177\r\n// ============================================================\r\n\r\n// \u4ECE markdown \u5185\u5BB9\u4E2D\u63D0\u53D6\u7B2C\u4E00\u5F20\u56FE\u7247\r\nfunction extractFirstImageFromMd(content: string) {\r\n  const regex = /!\\[([^\\]]*)\\]\\((data:image\\/[^;]+;base64,[A-Za-z0-9+/=]+|https?:\\/\\/[^\\s)]+|\\/\\/[^\\s)]+|[^\\s)]+)\\)/;\r\n  const match = content.match(regex);\r\n  if (!match) return null;\r\n  const raw = match[2].trim();\r\n  const url = raw.startsWith("data:") ? raw : raw.split(/\\s+/)[0];\r\n  return { alt: match[1], url, type: url.startsWith("data:image") ? "base64" : "url" };\r\n}\r\n\r\n// ============================================================\r\n// \u9002\u914D\u5668\u51FD\u6570\r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return createOpenAI({ baseURL: vendor.inputValues.baseUrl, apiKey }).chat(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  const baseUrl = vendor.inputValues.baseUrl;\r\n  const lowerName = model.modelName.toLowerCase();\r\n  const imageBase64List = (config.referenceList ?? []).map((r) => r.base64);\r\n\r\n  // Gemini / nano \u7CFB\u6A21\u578B\uFF1A\u8D70 chat/completions \u63A5\u53E3\uFF0C\u4ECE\u8FD4\u56DE\u7684 markdown \u4E2D\u63D0\u53D6\u56FE\u7247\r\n  if (lowerName.includes("gemini") || lowerName.includes("nano")) {\r\n    const imageConfigGoogle: Record<string, string> = {\r\n      aspect_ratio: config.aspectRatio,\r\n      image_size: config.size,\r\n    };\r\n    const messages: any[] = [];\r\n    if (imageBase64List.length) {\r\n      messages.push({\r\n        role: "user",\r\n        content: imageBase64List.map((b) => ({ type: "image_url", image_url: { url: b } })),\r\n      });\r\n    }\r\n    messages.push({ role: "user", content: config.prompt + "\u8BF7\u76F4\u63A5\u8F93\u51FA\u56FE\u7247" });\r\n    const body = {\r\n      model: model.modelName,\r\n      messages,\r\n      extra_body: { google: { image_config: imageConfigGoogle } },\r\n    };\r\n    logger(`[imageRequest] \u4F7F\u7528 gemini \u9002\u914D\u5668\uFF0C\u6A21\u578B: ${model.modelName}`);\r\n    const response = await fetch(`${baseUrl}/chat/completions`, {\r\n      method: "POST",\r\n      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n      body: JSON.stringify(body),\r\n    });\r\n    if (!response.ok) {\r\n      const errorText = await response.text();\r\n      throw new Error(`\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801: ${response.status}, \u9519\u8BEF\u4FE1\u606F: ${errorText}`);\r\n    }\r\n    const data = await response.json();\r\n    const imageResult = extractFirstImageFromMd(data.choices[0].message.content);\r\n    if (!imageResult) throw new Error("\u672A\u80FD\u4ECE\u54CD\u5E94\u4E2D\u63D0\u53D6\u56FE\u7247");\r\n    if (imageResult.type === "base64") return imageResult.url;\r\n    return await urlToBase64(imageResult.url);\r\n  }\r\n\r\n  // \u8C46\u5305 / seedream \u7CFB\u6A21\u578B\uFF1A\u8D70 images/generations \u63A5\u53E3\r\n  if (lowerName.includes("doubao") || lowerName.includes("seedream")) {\r\n    const effectiveSize = config.size === "1K" ? "2K" : config.size;\r\n    const sizeMap: Record<string, Record<string, string>> = {\r\n      "16:9": { "2K": "2848x1600", "4K": "4096x2304" },\r\n      "9:16": { "2K": "1600x2848", "4K": "2304x4096" },\r\n    };\r\n    const resolvedSize = sizeMap[config.aspectRatio]?.[effectiveSize];\r\n    const body: Record<string, any> = {\r\n      model: model.modelName,\r\n      prompt: config.prompt,\r\n      size: resolvedSize,\r\n      response_format: "url",\r\n      sequential_image_generation: "disabled",\r\n      stream: false,\r\n      watermark: false,\r\n      ...(imageBase64List.length && { image: imageBase64List }),\r\n    };\r\n    logger(`[imageRequest] \u4F7F\u7528 doubao \u9002\u914D\u5668\uFF0C\u6A21\u578B: ${model.modelName}`);\r\n    const response = await fetch(`${baseUrl}/images/generations`, {\r\n      method: "POST",\r\n      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n      body: JSON.stringify(body),\r\n    });\r\n    if (!response.ok) {\r\n      const errorText = await response.text();\r\n      throw new Error(`\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801: ${response.status}, \u9519\u8BEF\u4FE1\u606F: ${errorText}`);\r\n    }\r\n    const data = await response.json();\r\n    const resultUrl = data.data[0].url;\r\n    return await urlToBase64(resultUrl);\r\n  }\r\n\r\n  throw new Error(`\u4E0D\u652F\u6301\u7684\u56FE\u50CF\u6A21\u578B: ${model.modelName}`);\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  const baseUrl = vendor.inputValues.baseUrl;\r\n  const lowerName = model.modelName.toLowerCase();\r\n\r\n  // \u5F53\u524D\u6FC0\u6D3B\u7684\u5355\u4E00 VideoMode\uFF08\u53D6\u7B2C\u4E00\u4E2A\u975E\u6570\u7EC4\u6A21\u5F0F\uFF0C\u6216\u6570\u7EC4\u6A21\u5F0F\uFF09\r\n  const activeMode = config.mode;\r\n  const imageRefs = (config.referenceList ?? []).filter((r) => r.type === "image").map((r) => r.base64);\r\n  const videoRefs = (config.referenceList ?? []).filter((r) => r.type === "video").map((r) => r.base64);\r\n  const audioRefs = (config.referenceList ?? []).filter((r) => r.type === "audio").map((r) => r.base64);\r\n\r\n  // \u6784\u5EFA\u6A21\u578B\u4E13\u5C5E metadata\r\n  let metadata: Record<string, any> = {};\r\n\r\n  if (lowerName.includes("wan")) {\r\n    // \u4E07\u8C61\u7CFB\u5217\r\n    if ((activeMode === "startEndRequired" || activeMode === "endFrameOptional" || activeMode === "startFrameOptional") && imageRefs.length >= 2) {\r\n      if (imageRefs[0]) metadata.first_frame_url = imageRefs[0];\r\n      if (imageRefs[1]) metadata.last_frame_url = imageRefs[1];\r\n    } else if (imageRefs.length) {\r\n      metadata.img_url = imageRefs[0];\r\n    }\r\n    if (typeof config.audio === "boolean") metadata.audio = config.audio;\r\n\r\n    // \u4E07\u8C61\u9700\u8981\u989D\u5916\u4F20 size \u5B57\u6BB5\r\n    const wanSizeMap: Record<string, Record<string, string>> = {\r\n      "480p": { "16:9": "832*480", "9:16": "480*832" },\r\n      "720p": { "16:9": "1280*720", "9:16": "720*1280" },\r\n      "1080p": { "16:9": "1920*1080", "9:16": "1080*1920" },\r\n    };\r\n    const wanSize = wanSizeMap[config.resolution]?.[config.aspectRatio];\r\n    const body: Record<string, any> = {\r\n      model: model.modelName,\r\n      prompt: config.prompt,\r\n      duration: config.duration,\r\n      size: wanSize,\r\n      metadata,\r\n    };\r\n    logger(`[videoRequest] \u63D0\u4EA4\u4E07\u8C61\u89C6\u9891\u4EFB\u52A1\uFF0C\u6A21\u578B: ${model.modelName}`);\r\n    const response = await fetch(`${baseUrl}/video/generations`, {\r\n      method: "POST",\r\n      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n      body: JSON.stringify(body),\r\n    });\r\n    if (!response.ok) {\r\n      const errorText = await response.text();\r\n      throw new Error(`\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801: ${response.status}, \u9519\u8BEF\u4FE1\u606F: ${errorText}`);\r\n    }\r\n    const data = await response.json();\r\n    const taskId = data.id;\r\n    logger(`[videoRequest] \u4E07\u8C61\u4EFB\u52A1ID: ${taskId}`);\r\n    const res = await pollTask(async () => {\r\n      const queryResponse = await fetch(`${baseUrl}/video/generations/${taskId}`, {\r\n        method: "GET",\r\n        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n      });\r\n      if (!queryResponse.ok) {\r\n        const errorText = await queryResponse.text();\r\n        throw new Error(`\u8F6E\u8BE2\u5931\u8D25\uFF0C\u72B6\u6001\u7801: ${queryResponse.status}, \u9519\u8BEF\u4FE1\u606F: ${errorText}`);\r\n      }\r\n      const queryData = await queryResponse.json();\r\n      const status = queryData?.status ?? queryData?.data?.status;\r\n      switch (status) {\r\n        case "completed":\r\n        case "SUCCESS":\r\n        case "success":\r\n          return { completed: true, data: queryData.data.result_url };\r\n        case "FAILURE":\r\n        case "failed":\r\n          return { completed: true, error: queryData?.data?.fail_reason ?? "\u89C6\u9891\u751F\u6210\u5931\u8D25" };\r\n        default:\r\n          return { completed: false };\r\n      }\r\n    });\r\n    if (res.error) throw new Error(res.error);\r\n    return await urlToBase64(res.data!);\r\n  }\r\n\r\n  if (lowerName.includes("doubao") || lowerName.includes("seedance")) {\r\n    // \u8C46\u5305/Seedance \u7CFB\u5217\r\n    metadata = {\r\n      ...(typeof config.audio === "boolean" && { generate_audio: config.audio }),\r\n      ratio: config.aspectRatio,\r\n      image_roles: [] as string[],\r\n      references: [] as string[],\r\n    };\r\n    if (Array.isArray(activeMode)) {\r\n      // \u591A\u53C2\u8003\u6A21\u5F0F\r\n      imageRefs.forEach((b) => metadata.references.push(b));\r\n      videoRefs.forEach((b) => metadata.references.push(b));\r\n      audioRefs.forEach((b) => metadata.references.push(b));\r\n    } else if (activeMode === "startEndRequired" || activeMode === "endFrameOptional" || activeMode === "startFrameOptional") {\r\n      imageRefs.forEach((_, i) => (metadata.image_roles as string[]).push(i === 0 ? "first_frame" : "last_frame"));\r\n    } else if (activeMode === "singleImage") {\r\n      imageRefs.forEach(() => (metadata.image_roles as string[]).push("reference_image"));\r\n    }\r\n  } else if (lowerName.includes("vidu")) {\r\n    // Vidu \u7CFB\u5217\r\n    metadata = {\r\n      aspect_ratio: config.aspectRatio,\r\n      audio: config.audio ?? false,\r\n      off_peak: false,\r\n    };\r\n  } else if (lowerName.includes("kling")) {\r\n    // \u53EF\u7075\u7CFB\u5217\r\n    metadata = { aspect_ratio: config.aspectRatio };\r\n    if (Array.isArray(activeMode)) {\r\n      metadata.reference = [...imageRefs, ...videoRefs, ...audioRefs];\r\n    } else if (activeMode === "endFrameOptional" && imageRefs.length) {\r\n      metadata.image_tail = imageRefs[0];\r\n    } else if (activeMode === "startEndRequired" && imageRefs.length >= 2) {\r\n      metadata.image_list = [\r\n        { image_url: imageRefs[0], type: "first_frame" },\r\n        { image_url: imageRefs[1], type: "last_frame" },\r\n      ];\r\n    } else if (activeMode === "singleImage" && imageRefs.length) {\r\n      metadata.image = imageRefs[0];\r\n    }\r\n  }\r\n\r\n  // \u516C\u5171\u8BF7\u6C42\u4F53\uFF08\u975E\u4E07\u8C61\u901A\u7528\u8DEF\u5F84\uFF09\r\n  const publicBody: Record<string, any> = {\r\n    model: model.modelName,\r\n    ...(!Array.isArray(activeMode) && imageRefs.length ? { images: imageRefs } : {}),\r\n    prompt: config.prompt,\r\n    duration: config.duration,\r\n    metadata,\r\n  };\r\n\r\n  logger(`[videoRequest] \u63D0\u4EA4\u89C6\u9891\u4EFB\u52A1\uFF0C\u6A21\u578B: ${model.modelName}`);\r\n  const response = await fetch(`${baseUrl}/video/generations`, {\r\n    method: "POST",\r\n    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n    body: JSON.stringify(publicBody),\r\n  });\r\n  if (!response.ok) {\r\n    const errorText = await response.text();\r\n    throw new Error(`\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801: ${response.status}, \u9519\u8BEF\u4FE1\u606F: ${errorText}`);\r\n  }\r\n  const data = await response.json();\r\n  const taskId = data.id;\r\n  logger(`[videoRequest] \u4EFB\u52A1ID: ${taskId}`);\r\n\r\n  const res = await pollTask(async () => {\r\n    const queryResponse = await fetch(`${baseUrl}/video/generations/${taskId}`, {\r\n      method: "GET",\r\n      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n    });\r\n    if (!queryResponse.ok) {\r\n      const errorText = await queryResponse.text();\r\n      throw new Error(`\u8F6E\u8BE2\u5931\u8D25\uFF0C\u72B6\u6001\u7801: ${queryResponse.status}, \u9519\u8BEF\u4FE1\u606F: ${errorText}`);\r\n    }\r\n    const queryData = await queryResponse.json();\r\n    const status = queryData?.status ?? queryData?.data?.status;\r\n    switch (status) {\r\n      case "completed":\r\n      case "SUCCESS":\r\n      case "success":\r\n        return { completed: true, data: queryData.data.result_url };\r\n      case "FAILURE":\r\n      case "failed":\r\n        return { completed: true, error: queryData?.data?.fail_reason ?? "\u89C6\u9891\u751F\u6210\u5931\u8D25" };\r\n      default:\r\n        return { completed: false };\r\n    }\r\n  });\r\n\r\n  if (res.error) throw new Error(res.error);\r\n  return await urlToBase64(res.data!);\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "" };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \u5BFC\u51FA\r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\nexport {};\r\n',
-      "vidu.ts": '//\u5982\u9700\u9065\u6D4BAI\u8BF7\u4F7F\u7528\u5728toonflow\u5B89\u88C5\u76EE\u5F55\u8FD0\u884Cnpx @ai-sdk/devtools \uFF08\u8981\u6C42\u5728\u5176\u4ED6\u8BBE\u7F6E\u4E2D\u6253\u5F00\u9065\u6D4B\u529F\u80FD\uFF0C\u4E14toonflow\u6709\u6743\u9650\u5728\u5B89\u88C5\u76EE\u5F55\u521B\u5EFA.devtools\u6587\u4EF6\u5939\uFF09\r\n// ==================== \u7C7B\u578B\u5B9A\u4E49 ====================\r\n// \u6587\u672C\u6A21\u578B\r\ninterface TextModel {\r\n  name: string; // \u663E\u793A\u540D\u79F0\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean; // \u524D\u7AEF\u663E\u793A\u7528\r\n}\r\n\r\n// \u56FE\u50CF\u6A21\u578B\r\ninterface ImageModel {\r\n  name: string; // \u663E\u793A\u540D\u79F0\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string; // \u5173\u8054\u6280\u80FD\uFF0C\u591A\u4E2A\u6280\u80FD\u7528\u9017\u53F7\u5206\u9694\r\n}\r\n// \u89C6\u9891\u6A21\u578B\r\ninterface VideoModel {\r\n  name: string; // \u663E\u793A\u540D\u79F0\r\n  modelName: string; //\u5168\u5C40\u552F\u4E00\r\n  type: "video";\r\n  mode: (\r\n    | "singleImage" // \u5355\u56FE\r\n    | "startEndRequired" // \u9996\u5C3E\u5E27\uFF08\u4E24\u5F20\u90FD\u5F97\u6709\uFF09\r\n    | "endFrameOptional" // \u9996\u5C3E\u5E27\uFF08\u5C3E\u5E27\u53EF\u9009\uFF09\r\n    | "startFrameOptional" // \u9996\u5C3E\u5E27\uFF08\u9996\u5E27\u53EF\u9009\uFF09\r\n    | "text" // \u6587\u672C\u751F\u89C6\u9891\r\n    | ("videoReference" | "imageReference" | "audioReference" | "textReference")[] // \u6DF7\u5408\u53C2\u8003\r\n  )[];\r\n  associationSkills?: string; // \u5173\u8054\u6280\u80FD\uFF0C\u591A\u4E2A\u6280\u80FD\u7528\u9017\u53F7\u5206\u9694\r\n  audio: "optional" | false | true; // \u97F3\u9891\u914D\u7F6E\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string; // \u663E\u793A\u540D\u79F0\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: {\r\n    title: string; //\u663E\u793A\u540D\u79F0\r\n    voice: string; //\u8BF4\u8BDD\u4EBA\r\n  }[];\r\n}\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\ninterface VendorConfig {\r\n  id: string; //\u4F9B\u5E94\u5546\u552F\u4E00\u6807\u8BC6\uFF0C\u5FC5\u987B\u5168\u5C40\u552F\u4E00\r\n  author: string;\r\n  description?: string; //md5\u683C\u5F0F\r\n  name: string;\r\n  icon?: string; //\u4EC5\u652F\u6301base64\u683C\u5F0F\r\n  inputs: {\r\n    key: string;\r\n    label: string;\r\n    type: "text" | "password" | "url";\r\n    required: boolean;\r\n    placeholder?: string;\r\n  }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel)[];\r\n}\r\n// ==================== \u5168\u5C40\u5DE5\u5177\u51FD\u6570 ====================\r\n//Axios\u5B9E\u4F8B\r\n//\u538B\u7F29\u56FE\u7247\u5927\u5C0F(1MB = 1 * 1024 * 1024)\r\ndeclare const zipImage: (completeBase64: string, size: number) => Promise<string>;\r\n//\u538B\u7F29\u56FE\u7247\u5206\u8FA8\u7387\r\ndeclare const zipImageResolution: (completeBase64: string, width: number, height: number) => Promise<string>;\r\n//\u591A\u56FE\u62FC\u63A5\u4E58\u5355\u56FE maxSize  \u6700\u5927\u8F93\u51FA\u5927\u5C0F\uFF0C\u9ED8\u8BA4\u4E3A 10mb\r\ndeclare const mergeImages: (completeBase64: string[], maxSize?: string) => Promise<string>;\r\n//Url\u8F6CBase64\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\n//\u8F6E\u8BE2\u51FD\u6570\r\ndeclare const pollTask: (\r\n  fn: () => Promise<{ completed: boolean; data?: string; error?: string }>,\r\n  interval?: number,\r\n  timeout?: number,\r\n) => Promise<{ completed: boolean; data?: string; error?: string }>;\r\ndeclare const axios: any;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const logger: (logstring: string) => void;\r\ndeclare const jsonwebtoken: any;\r\n// ==================== \u4F9B\u5E94\u5546\u6570\u636E ====================\r\nconst vendor: VendorConfig = {\r\n  id: "vidu",\r\n  author: "\u642C\u7816\u7684Coder",\r\n  description:\r\n    "Vidu \u5B98\u65B9\u89C6\u9891\u751F\u6210\u5E73\u53F0\u3002 [\u524D\u5F80\u5E73\u53F0](https://platform.vidu.cn/login/)",\r\n  name: "Vidu \u5F00\u653E\u5E73\u53F0",\r\n  inputs: [\r\n    { key: "apiKey", label: "API\u5BC6\u94A5", type: "password", required: true, placeholder: "\u8BF7\u5230Vidu\u5B98\u65B9\u7533\u8BF7" },\r\n    { key: "baseUrl", label: "\u63A5\u53E3\u8DEF\u5F84", type: "url", required: true, placeholder: "https://api.vidu.cn/ent/v2" },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://api.vidu.cn/ent/v2",\r\n  },\r\n  models: [\r\n    {\r\n      name: "ViduQ3 turbo",\r\n      type: "video",\r\n      modelName: "ViduQ3-turbo",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], resolution: ["540p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired", "text"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ3 pro",\r\n      type: "video",\r\n      modelName: "ViduQ3-pro",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], resolution: ["540p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired", "text"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ2 pro fast",\r\n      type: "video",\r\n      modelName: "ViduQ2-pro-fast",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "viduQ2 turbo",\r\n      type: "video",\r\n      modelName: "ViduQ2-turbo",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ2 pro",\r\n      type: "video",\r\n      modelName: "ViduQ2-pro",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"], //\u53C2\u8003\u751F\u89C6\u9891\u65E0\u6709\u6548\u8BBE\u7F6E\u503C\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ2",\r\n      type: "video",\r\n      modelName: "ViduQ2",\r\n      durationResolutionMap: [{ duration: [5], resolution: ["1080p"] }],\r\n      mode: ["text"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ1",\r\n      type: "video",\r\n      modelName: "ViduQ1",\r\n      durationResolutionMap: [{ duration: [5], resolution: ["1080p"] }],\r\n      mode: ["singleImage", "startEndRequired", "text"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ1 classic",\r\n      type: "video",\r\n      modelName: "viduQ1-classic",\r\n      durationResolutionMap: [{ duration: [5], resolution: ["1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "Vidu2.0",\r\n      type: "video",\r\n      modelName: "vidu2.0",\r\n      durationResolutionMap: [{ duration: [4, 8], resolution: ["360p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "viduq1 for image",\r\n      type: "image",\r\n      modelName: "viduq1",\r\n      mode: ["text"],\r\n    },\r\n    {\r\n      name: "viduq2 for image",\r\n      type: "image",\r\n      modelName: "viduq2",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n  ],\r\n};\r\nexports.vendor = vendor;\r\n\r\n// ==================== \u9002\u914D\u5668\u51FD\u6570 ====================\r\n\r\n// \u6587\u672C\u8BF7\u6C42\u51FD\u6570\r\nconst textRequest: (textModel: TextModel) => { url: string; model: string } = (textModel) => {\r\n  throw new Error("\u5F53\u524D\u4F9B\u5E94\u5546\u4EC5\u652F\u6301\u89C6\u9891\u5927\u6A21\u578B\uFF0C\u8C22\u8C22\uFF01");\r\n};\r\nexports.textRequest = textRequest;\r\n\r\n//\u56FE\u7247\u8BF7\u6C42\u51FD\u6570\r\ninterface ImageConfig {\r\n  prompt: string; //\u56FE\u7247\u63D0\u793A\u8BCD\r\n  imageBase64: string[]; //\u8F93\u5165\u7684\u56FE\u7247\u63D0\u793A\u8BCD\r\n  size: "1K" | "2K" | "4K"; // \u56FE\u7247\u5C3A\u5BF8\r\n  aspectRatio: `${number}:${number}`; // \u957F\u5BBD\u6BD4\r\n}\r\nconst imageRequest = async (imageConfig: ImageConfig, imageModel: ImageModel) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace("Token ", "");\r\n\r\n  const size = imageConfig.size === "1K" ? "2K" : imageConfig.size;\r\n  const sizeMap: Record<string, Record<string, string>> = {\r\n    "16:9": {\r\n      "1k": "1920x1080",\r\n      "2K": "2848x1600",\r\n      "4K": "4096x2304",\r\n    },\r\n    "9:16": {\r\n      "1k": "1920x1080",\r\n      "2K": "1600x2848",\r\n      "4K": "2304x4096",\r\n    },\r\n  };\r\n\r\n  const body: Record<string, any> = {\r\n    model: imageModel.modelName,\r\n    prompt: imageConfig.prompt,\r\n    aspect_ratio: sizeMap[imageConfig.aspectRatio][size],\r\n    seed: 0,\r\n    resolution: size,\r\n    ...(imageConfig.imageBase64 && { image: imageConfig.imageBase64 }),\r\n  };\r\n\r\n  const createImageUrl = vendor.inputValues.baseUrl + "/reference2image";\r\n  const response = await fetch(createImageUrl, {\r\n    method: "POST",\r\n    headers: { Authorization: `Token ${apiKey}`, "Content-Type": "application/json" },\r\n    body: JSON.stringify(body),\r\n  });\r\n  if (!response.ok) {\r\n    const errorText = await response.text(); // \u83B7\u53D6\u9519\u8BEF\u4FE1\u606F\r\n    console.error("\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801:", response.status, ", \u9519\u8BEF\u4FE1\u606F:", errorText);\r\n    throw new Error(`\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801: ${response.status}, \u9519\u8BEF\u4FE1\u606F: ${errorText}`);\r\n  }\r\n  const data = await response.json();\r\n  const res = await checkTaskResult(data.task_id);\r\n  if (!res.data) {\r\n    throw new Error("\u56FE\u7247\u672A\u80FD\u751F\u6210");\r\n  }\r\n  const list = JSON.parse(JSON.stringify(res.data));\r\n  return list[0].url;\r\n};\r\nexports.imageRequest = imageRequest;\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  imageBase64?: string[];\r\n  audio?: boolean;\r\n  mode:\r\n    | "singleImage" // \u5355\u56FE\r\n    | "multiImage" // \u591A\u56FE\u6A21\u5F0F\r\n    | "gridImage" // \u7F51\u683C\u5355\u56FE\uFF08\u4F20\u5165\u4E00\u5F20\u56FE\u7247\uFF0C\u4F46\u8BE5\u56FE\u7247\u662F\u7F51\u683C\u56FE\uFF09\r\n    | "startEndRequired" // \u9996\u5C3E\u5E27\uFF08\u4E24\u5F20\u90FD\u5F97\u6709\uFF09\r\n    | "endFrameOptional" // \u9996\u5C3E\u5E27\uFF08\u5C3E\u5E27\u53EF\u9009\uFF09\r\n    | "startFrameOptional" // \u9996\u5C3E\u5E27\uFF08\u9996\u5E27\u53EF\u9009\uFF09\r\n    | "text" // \u6587\u672C\u751F\u89C6\u9891\r\n    | ("video" | "image" | "audio" | "text")[]; // \u6DF7\u5408\u53C2\u8003\r\n}\r\n\r\n// \u6784\u5EFA \u5404\u4E2A\u5E73\u53F0\u7684metadata\u53C2\u6570\r\n\r\nconst buildViduMetadata = (videoConfig: VideoConfig) => ({\r\n  aspect_ratio: videoConfig.aspectRatio,\r\n  audio: videoConfig.audio ?? false,\r\n  off_peak: false,\r\n});\r\n\r\ntype MetadataBuilder = (config: VideoConfig) => Record<string, any>;\r\nconst METADATA_BUILDERS: Array<[string, MetadataBuilder]> = [["vidu", buildViduMetadata]];\r\nconst buildModelMetadata = (modelName: string, videoConfig: VideoConfig) => {\r\n  const lowerName = modelName.toLowerCase();\r\n  const match = METADATA_BUILDERS.find(([key]) => lowerName.includes(key));\r\n  return match ? match[1](videoConfig) : {};\r\n};\r\n// \u68C0\u67E5\u751F\u6210\u7269\u7ED3\u679C\r\nconst checkTaskResult = async (taskId: string) => {\r\n  const queryUrl = vendor.inputValues.baseUrl + "/tasks/{id}/creations";\r\n  const apiKey = vendor.inputValues.apiKey;\r\n  const res = await pollTask(async () => {\r\n    const queryResponse = await fetch(queryUrl.replace("{id}", taskId), {\r\n      method: "GET",\r\n      headers: { Authorization: `Token ${apiKey}`, "Content-Type": "application/json" },\r\n    });\r\n    if (!queryResponse.ok) {\r\n      const errorText = await queryResponse.text(); // \u83B7\u53D6\u9519\u8BEF\u4FE1\u606F\r\n      console.error("\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801:", queryResponse.status, ", \u9519\u8BEF\u4FE1\u606F:", errorText);\r\n      throw new Error(`\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801: ${queryResponse.status}, \u9519\u8BEF\u4FE1\u606F: ${errorText}`);\r\n    }\r\n    const queryData = await queryResponse.json();\r\n    const status = queryData?.state ?? queryData?.data?.state;\r\n    const fail_reason = queryData?.data?.err_code ?? queryData?.data;\r\n    switch (status) {\r\n      case "completed":\r\n      case "SUCCESS":\r\n      case "success":\r\n        return { completed: true, data: queryData.creations };\r\n      case "FAILURE":\r\n      case "failed":\r\n        return { completed: false, error: fail_reason || "\u751F\u6210\u5931\u8D25" };\r\n      default:\r\n        return { completed: false };\r\n    }\r\n  });\r\n  if (res.error) throw new Error(res.error);\r\n  return res;\r\n};\r\n\r\nconst videoRequest = async (videoConfig: VideoConfig, videoModel: VideoModel) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace("Token ", "");\r\n\r\n  // \u6784\u5EFA\u6BCF\u4E2A\u6A21\u578B\u5BF9\u5E94\u7684\u9644\u52A0\u53C2\u6570\r\n  const metadata = buildModelMetadata(videoModel.modelName, videoConfig);\r\n\r\n  //\u516C\u5171\u8BF7\u6C42\u53C2\u6570\r\n  const publicBody = {\r\n    model: videoModel.modelName,\r\n    ...(videoConfig.imageBase64 && videoConfig.imageBase64.length ? { images: videoConfig.imageBase64 } : {}),\r\n    prompt: videoConfig.prompt,\r\n    size: videoConfig.resolution,\r\n    duration: videoConfig.duration,\r\n    metadata: metadata,\r\n  };\r\n\r\n  const requestUrl = vendor.inputValues.baseUrl + "/start-end2video";\r\n  const response = await fetch(requestUrl, {\r\n    method: "POST",\r\n    headers: { Authorization: `Token ${apiKey}`, "Content-Type": "application/json" },\r\n    body: JSON.stringify(publicBody),\r\n  });\r\n  if (!response.ok) {\r\n    const errorText = await response.text(); // \u83B7\u53D6\u9519\u8BEF\u4FE1\u606F\r\n    console.error("\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801:", response.status, ", \u9519\u8BEF\u4FE1\u606F:", errorText);\r\n    throw new Error(`\u8BF7\u6C42\u5931\u8D25\uFF0C\u72B6\u6001\u7801: ${response.status}, \u9519\u8BEF\u4FE1\u606F: ${errorText}`);\r\n  }\r\n  const data = await response.json();\r\n  const taskId = data.id;\r\n  const result = await checkTaskResult(taskId);\r\n  return result.data;\r\n};\r\nexports.videoRequest = videoRequest;\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n}\r\nconst ttsRequest = async (ttsConfig: TTSConfig, ttsModel: TTSModel) => {\r\n  throw new Error("Vidu \u6682\u4E0D\u652F\u6301\u8BED\u97F3\u5408\u6210\uFF08TTS\uFF09");\r\n};\r\n',
-      "volcengine.ts": '/**\r\n * Toonflow AI\u4F9B\u5E94\u5546\u6A21\u677F - \u706B\u5C71\u5F15\u64CE(\u8C46\u5305)\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \u7C7B\u578B\u5B9A\u4E49\r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \u5168\u5C40\u58F0\u660E\r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \u4F9B\u5E94\u5546\u914D\u7F6E\r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "volcengine",\r\n  version: "2.3",\r\n  author: "leeqi",\r\n  name: "\u706B\u5C71\u5F15\u64CE(\u8C46\u5305)",\r\n  description: "\u706B\u5C71\u5F15\u64CE\u8C46\u5305\u5927\u6A21\u578B\uFF0C\u652F\u6301\u6587\u672C\u3001\u56FE\u7247\u751F\u6210\u3001\u89C6\u9891\u751F\u6210\u7B49\u80FD\u529B\u3002\\n\\n\u9700\u8981\u5728[\u706B\u5C71\u5F15\u64CE\u63A7\u5236\u53F0](https://console.volcengine.com/ark)\u83B7\u53D6API\u5BC6\u94A5\u3002",\r\n  icon: "",\r\n  inputs: [\r\n    { key: "apiKey", label: "API\u5BC6\u94A5", type: "password", required: true, placeholder: "\u706B\u5C71\u5F15\u64CEAPI Key" },\r\n    { key: "baseUrl", label: "\u8BF7\u6C42\u5730\u5740", type: "url", required: true, placeholder: "\u4EE5v3\u7ED3\u675F\uFF0C\u793A\u4F8B\uFF1Ahttps://ark.cn-beijing.volces.com/api/v3" },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://ark.cn-beijing.volces.com/api/v3",\r\n  },\r\n  models: [\r\n    // ===================== \u6587\u672C\u6A21\u578B - \u63A8\u8350 =====================\r\n    { name: "Doubao-Seed-2.0-Pro", modelName: "doubao-seed-2-0-pro-260215", type: "text", think: true },\r\n    { name: "Doubao-Seed-2.0-Lite", modelName: "doubao-seed-2-0-lite-260215", type: "text", think: true },\r\n    { name: "Doubao-Seed-2.0-Mini", modelName: "doubao-seed-2-0-mini-260215", type: "text", think: true },\r\n    { name: "Doubao-Seed-2.0-Code-Preview", modelName: "doubao-seed-2-0-code-preview-260215", type: "text", think: true },\r\n    { name: "Doubao-Seed-Character", modelName: "doubao-seed-character-251128", type: "text", think: false },\r\n    // ===================== \u6587\u672C\u6A21\u578B - \u5F80\u671F =====================\r\n    { name: "Doubao-Seed-1.8", modelName: "doubao-seed-1-8-251228", type: "text", think: true },\r\n    { name: "Doubao-Seed-Code-Preview", modelName: "doubao-seed-code-preview-251028", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6-Lite", modelName: "doubao-seed-1-6-lite-251015", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6-Flash(0828)", modelName: "doubao-seed-1-6-flash-250828", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6-Vision", modelName: "doubao-seed-1-6-vision-250815", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6(1015)", modelName: "doubao-seed-1-6-251015", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6(0615)", modelName: "doubao-seed-1-6-250615", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6-Flash(0615)", modelName: "doubao-seed-1-6-flash-250615", type: "text", think: true },\r\n    { name: "Doubao-Seed-Translation", modelName: "doubao-seed-translation-250915", type: "text", think: false },\r\n    { name: "Doubao-1.5-Pro-32K", modelName: "doubao-1-5-pro-32k-250115", type: "text", think: false },\r\n    { name: "Doubao-1.5-Pro-32K-Character(0715)", modelName: "doubao-1-5-pro-32k-character-250715", type: "text", think: false },\r\n    { name: "Doubao-1.5-Pro-32K-Character(0228)", modelName: "doubao-1-5-pro-32k-character-250228", type: "text", think: false },\r\n    { name: "Doubao-1.5-Lite-32K", modelName: "doubao-1-5-lite-32k-250115", type: "text", think: false },\r\n    { name: "Doubao-1.5-Vision-Pro-32K", modelName: "doubao-1-5-vision-pro-32k-250115", type: "text", think: false },\r\n    // ===================== \u6587\u672C\u6A21\u578B - \u7B2C\u4E09\u65B9(\u706B\u5C71\u5F15\u64CE\u6258\u7BA1) =====================\r\n    { name: "GLM-4-7", modelName: "glm-4-7-251222", type: "text", think: true },\r\n    { name: "DeepSeek-V3-2", modelName: "deepseek-v3-2-251201", type: "text", think: true },\r\n    { name: "DeepSeek-V3-1-Terminus", modelName: "deepseek-v3-1-terminus", type: "text", think: true },\r\n    { name: "DeepSeek-V3(0324)", modelName: "deepseek-v3-250324", type: "text", think: false },\r\n    { name: "DeepSeek-R1(0528)", modelName: "deepseek-r1-250528", type: "text", think: true },\r\n    { name: "Qwen3-32B", modelName: "qwen3-32b-20250429", type: "text", think: false },\r\n    { name: "Qwen3-14B", modelName: "qwen3-14b-20250429", type: "text", think: false },\r\n    { name: "Qwen3-8B", modelName: "qwen3-8b-20250429", type: "text", think: false },\r\n    { name: "Qwen3-0.6B", modelName: "qwen3-0-6b-20250429", type: "text", think: false },\r\n    { name: "Qwen2.5-72B", modelName: "qwen2-5-72b-20240919", type: "text", think: false },\r\n    { name: "GLM-4.5-Air", modelName: "glm-4-5-air", type: "text", think: false },\r\n    // ===================== \u56FE\u7247\u751F\u6210\u6A21\u578B =====================\r\n    {\r\n      name: "Seedream-5.0",\r\n      modelName: "doubao-seedream-5-0-260128",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Seedream-5.0-Lite",\r\n      modelName: "doubao-seedream-5-0-lite-260128",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Seedream-4.5",\r\n      modelName: "doubao-seedream-4-5-251128",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Seedream-4.0",\r\n      modelName: "doubao-seedream-4-0-250828",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Seedream-3.0-T2I",\r\n      modelName: "doubao-seedream-3-0-t2i-250415",\r\n      type: "image",\r\n      mode: ["text"],\r\n    },\r\n    // ===================== \u89C6\u9891\u751F\u6210\u6A21\u578B =====================\r\n    {\r\n      name: "Seedance-2.0(\u97F3\u753B\u540C\u751F)",\r\n      modelName: "doubao-seedance-2-0-260128",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-2.0-Fast(\u97F3\u753B\u540C\u751F)",\r\n      modelName: "doubao-seedance-2-0-fast-260128",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.5-Pro(\u97F3\u753B\u540C\u751F)",\r\n      modelName: "doubao-seedance-1-5-pro-251215",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.0-Pro",\r\n      modelName: "doubao-seedance-1-0-pro-250528",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.0-Pro-Fast",\r\n      modelName: "doubao-seedance-1-0-pro-fast-251015",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.0-Lite-T2V",\r\n      modelName: "doubao-seedance-1-0-lite-t2v-250428",\r\n      type: "video",\r\n      mode: ["text"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.0-Lite-I2V",\r\n      modelName: "doubao-seedance-1-0-lite-i2v-250428",\r\n      type: "video",\r\n      mode: ["startFrameOptional", ["imageReference:4"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \u8F85\u52A9\u5DE5\u5177\r\n// ============================================================\r\n\r\nconst getHeaders = () => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  return {\r\n    "Content-Type": "application/json",\r\n    Authorization: `Bearer ${vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "")}`,\r\n  };\r\n};\r\n\r\nconst getBaseUrl = () => vendor.inputValues.baseUrl.replace(/\\/+$/, "");\r\n\r\n// ============================================================\r\n// \u9002\u914D\u5668\u51FD\u6570\r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("\u7F3A\u5C11API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n\r\n  const effortMap: Record<number, string> = {\r\n    0: "minimal",\r\n    1: "low",\r\n    2: "medium",\r\n    3: "high",\r\n  };\r\n\r\n  return createOpenAICompatible({\r\n    name: "volcengine",\r\n    baseURL: getBaseUrl(),\r\n    apiKey,\r\n    fetch: async (url: string, options?: RequestInit) => {\r\n      const rawBody = JSON.parse((options?.body as string) ?? "{}");\r\n      const modifiedBody = {\r\n        ...rawBody,\r\n        thinking: {\r\n          type: "enabled",\r\n        },\r\n        reasoning_effort: effortMap[thinkLevel],\r\n      };\r\n      return await fetch(url, {\r\n        ...options,\r\n        body: JSON.stringify(modifiedBody),\r\n      });\r\n    },\r\n  }).chatModel(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  const baseUrl = getBaseUrl();\r\n  const headers = getHeaders();\r\n\r\n  const body: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt || "",\r\n    response_format: "url",\r\n    watermark: false,\r\n  };\r\n\r\n  const isOldModel = model.modelName.includes("seedream-3-0");\r\n  const is5Lite = model.modelName.includes("seedream-5-0-lite");\r\n\r\n  // sequential_image_generation \u4EC5 seedream 5.0-lite/4.5/4.0 \u652F\u6301\r\n  if (!isOldModel) {\r\n    body.sequential_image_generation = "disabled";\r\n  }\r\n\r\n  // \u53C2\u8003\u56FE\u7247\uFF1A\u5355\u56FE\u4E3A string\uFF0C\u591A\u56FE\u4E3A array\uFF08seedream-3.0-t2i \u4E0D\u652F\u6301 image \u53C2\u6570\uFF09\r\n  if (!isOldModel && config.referenceList && config.referenceList.length > 0) {\r\n    const images = config.referenceList.map((ref) => ref.base64);\r\n    body.image = images.length === 1 ? images[0] : images;\r\n  }\r\n\r\n  // \u5C3A\u5BF8\u5904\u7406\uFF1A\u4F18\u5148\u4F7F\u7528\u63A8\u8350\u50CF\u7D20\u503C\uFF0C\u672A\u5339\u914D\u5219\u76F4\u63A5\u4F20\u5206\u8FA8\u7387\u5B57\u7B26\u4E32\u8BA9\u6A21\u578B\u81EA\u884C\u51B3\u5B9A\r\n  const [w, h] = config.aspectRatio.split(":").map(Number);\r\n  const sizeTable: Record<string, Record<string, string>> = {\r\n    "1K": {\r\n      "1:1": "1024x1024",\r\n      "4:3": "1152x864",\r\n      "3:4": "864x1152",\r\n      "16:9": "1280x720",\r\n      "9:16": "720x1280",\r\n      "3:2": "1248x832",\r\n      "2:3": "832x1248",\r\n      "21:9": "1512x648",\r\n    },\r\n    "2K": {\r\n      "1:1": "2048x2048",\r\n      "4:3": "2304x1728",\r\n      "3:4": "1728x2304",\r\n      "16:9": "2848x1600",\r\n      "9:16": "1600x2848",\r\n      "3:2": "2496x1664",\r\n      "2:3": "1664x2496",\r\n      "21:9": "3136x1344",\r\n    },\r\n    "4K": {\r\n      "1:1": "4096x4096",\r\n      "4:3": "4704x3520",\r\n      "3:4": "3520x4704",\r\n      "16:9": "5504x3040",\r\n      "9:16": "3040x5504",\r\n      "3:2": "4992x3328",\r\n      "2:3": "3328x4992",\r\n      "21:9": "6240x2656",\r\n    },\r\n  };\r\n\r\n  const sizeKey = config.size || "2K";\r\n  const ratioKey = config.aspectRatio;\r\n  const table = sizeTable[sizeKey];\r\n\r\n  if (table && table[ratioKey]) {\r\n    // \u63A8\u8350\u50CF\u7D20\u503C\u5339\u914D\u5230\u4E86\uFF0C\u4F46\u9700\u8981\u68C0\u67E5\u662F\u5426\u6EE1\u8DB3\u6A21\u578B\u6700\u4F4E\u50CF\u7D20\u8981\u6C42\r\n    const [pw, ph] = table[ratioKey].split("x").map(Number);\r\n    const totalPixels = pw * ph;\r\n    if (isOldModel) {\r\n      // seedream-3.0-t2i: \u50CF\u7D20\u8303\u56F4 [512x512, 2048x2048]\r\n      body.size = table[ratioKey];\r\n    } else if (totalPixels < 3686400) {\r\n      // 1K \u50CF\u7D20\u503C\u4E0D\u6EE1\u8DB3\u65B0\u6A21\u578B\u6700\u4F4E\u8981\u6C42\uFF0C\u76F4\u63A5\u4F20 "2K" \u8BA9\u6A21\u578B\u81EA\u884C\u51B3\u5B9A\r\n      body.size = "2K";\r\n    } else if (is5Lite && totalPixels > 10404496) {\r\n      // seedream-5.0-lite \u6700\u9AD8 10404496\uFF0C4K \u8D85\u9650\uFF0C\u56DE\u9000\u4F20 "2K"\r\n      body.size = "2K";\r\n    } else {\r\n      body.size = table[ratioKey];\r\n    }\r\n  } else if (isOldModel) {\r\n    // seedream-3.0-t2i: \u50CF\u7D20\u8303\u56F4 [512x512, 2048x2048]\uFF0C\u76F4\u63A5\u6309\u6BD4\u4F8B\u8BA1\u7B97\r\n    const base = sizeKey === "1K" ? 1024 : 2048;\r\n    const calcW = Math.min(2048, Math.round(base * Math.sqrt(w / h)));\r\n    const calcH = Math.min(2048, Math.round(base * Math.sqrt(h / w)));\r\n    body.size = `${Math.max(512, calcW)}x${Math.max(512, calcH)}`;\r\n  } else {\r\n    // \u65B0\u6A21\u578B\u672A\u5339\u914D\u63A8\u8350\u503C\u65F6\uFF0C\u76F4\u63A5\u4F20\u5206\u8FA8\u7387\u5B57\u7B26\u4E32\uFF08\u65B9\u5F0F1\uFF09\uFF0C\u7531\u6A21\u578B\u6839\u636E prompt \u81EA\u884C\u51B3\u5B9A\u5C3A\u5BF8\r\n    // seedream 5.0-lite \u652F\u6301 "2K"/"3K"\uFF0Cseedream 4.5 \u652F\u6301 "2K"/"4K"\uFF0Cseedream 4.0 \u652F\u6301 "1K"/"2K"/"4K"\r\n    if (is5Lite) {\r\n      body.size = sizeKey === "4K" ? "3K" : sizeKey === "1K" ? "2K" : sizeKey;\r\n    } else {\r\n      body.size = sizeKey === "1K" ? "2K" : sizeKey;\r\n    }\r\n  }\r\n\r\n  logger(`[\u56FE\u7247\u751F\u6210] \u8BF7\u6C42\u6A21\u578B: ${model.modelName}, \u5C3A\u5BF8: ${body.size}`);\r\n\r\n  const response = await axios.post(`${baseUrl}/images/generations`, body, { headers });\r\n  const data = response.data;\r\n\r\n  if (data?.error) {\r\n    throw new Error(`\u56FE\u7247\u751F\u6210\u5931\u8D25\uFF1A${data.error.message || data.error.code}`);\r\n  }\r\n\r\n  // \u4ECE data \u6570\u7EC4\u4E2D\u63D0\u53D6\u7B2C\u4E00\u5F20\u6210\u529F\u7684\u56FE\u7247\r\n  if (data?.data && data.data.length > 0) {\r\n    for (const item of data.data) {\r\n      if (item.url) {\r\n        return await urlToBase64(item.url);\r\n      }\r\n      if (item.b64_json) {\r\n        return item.b64_json;\r\n      }\r\n      if (item.error) {\r\n        throw new Error(`\u56FE\u7247\u751F\u6210\u5931\u8D25\uFF1A${item.error.message || item.error.code}`);\r\n      }\r\n    }\r\n  }\r\n\r\n  throw new Error("\u56FE\u7247\u751F\u6210\u5931\u8D25\uFF1A\u672A\u8FD4\u56DE\u6709\u6548\u7ED3\u679C");\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  const baseUrl = getBaseUrl();\r\n  const headers = getHeaders();\r\n\r\n  const content: any[] = [];\r\n\r\n  if (config.prompt) {\r\n    content.push({ type: "text", text: config.prompt });\r\n  }\r\n\r\n  if (typeof config.mode === "string") {\r\n    switch (config.mode) {\r\n      case "singleImage": {\r\n        const firstImage = config.referenceList?.find((r) => r.type === "image");\r\n        if (firstImage) {\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: firstImage.base64 },\r\n            role: "first_frame",\r\n          });\r\n        }\r\n        break;\r\n      }\r\n      case "startFrameOptional": {\r\n        const images = config.referenceList?.filter((r) => r.type === "image") ?? [];\r\n        if (images.length > 0) {\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: images[0].base64 },\r\n            role: "first_frame",\r\n          });\r\n          if (images.length > 1) {\r\n            content.push({\r\n              type: "image_url",\r\n              image_url: { url: images[1].base64 },\r\n              role: "last_frame",\r\n            });\r\n          }\r\n        }\r\n        break;\r\n      }\r\n      case "startEndRequired": {\r\n        const images = config.referenceList?.filter((r) => r.type === "image") ?? [];\r\n        if (images.length >= 2) {\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: images[0].base64 },\r\n            role: "first_frame",\r\n          });\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: images[1].base64 },\r\n            role: "last_frame",\r\n          });\r\n        }\r\n        break;\r\n      }\r\n      case "endFrameOptional": {\r\n        const images = config.referenceList?.filter((r) => r.type === "image") ?? [];\r\n        if (images.length > 0) {\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: images[0].base64 },\r\n            role: "first_frame",\r\n          });\r\n          if (images.length > 1) {\r\n            content.push({\r\n              type: "image_url",\r\n              image_url: { url: images[1].base64 },\r\n              role: "last_frame",\r\n            });\r\n          }\r\n        }\r\n        break;\r\n      }\r\n      case "text":\r\n      default:\r\n        break;\r\n    }\r\n  } else if (Array.isArray(config.mode)) {\r\n    // \u591A\u6A21\u6001\u53C2\u8003\u6A21\u5F0F\uFF1A\u6309\u7C7B\u578B\u5206\u522B\u63D0\u53D6\u5E76\u6DFB\u52A0\r\n    const imageRefs = config.referenceList?.filter((r) => r.type === "image") ?? [];\r\n    const videoRefs = config.referenceList?.filter((r) => r.type === "video") ?? [];\r\n    const audioRefs = config.referenceList?.filter((r) => r.type === "audio") ?? [];\r\n\r\n    for (const refDef of config.mode) {\r\n      if (typeof refDef === "string") {\r\n        if (refDef.startsWith("imageReference:")) {\r\n          const maxCount = parseInt(refDef.split(":")[1], 10);\r\n          for (const ref of imageRefs.slice(0, maxCount)) {\r\n            content.push({\r\n              type: "image_url",\r\n              image_url: { url: ref.base64 },\r\n              role: "reference_image",\r\n            });\r\n          }\r\n        } else if (refDef.startsWith("videoReference:")) {\r\n          const maxCount = parseInt(refDef.split(":")[1], 10);\r\n          for (const ref of videoRefs.slice(0, maxCount)) {\r\n            content.push({\r\n              type: "video_url",\r\n              video_url: { url: ref.base64 },\r\n              role: "reference_video",\r\n            });\r\n          }\r\n        } else if (refDef.startsWith("audioReference:")) {\r\n          const maxCount = parseInt(refDef.split(":")[1], 10);\r\n          for (const ref of audioRefs.slice(0, maxCount)) {\r\n            content.push({\r\n              type: "audio_url",\r\n              audio_url: { url: ref.base64 },\r\n              role: "reference_audio",\r\n            });\r\n          }\r\n        }\r\n      }\r\n    }\r\n  }\r\n\r\n  const body: any = {\r\n    model: model.modelName,\r\n    content,\r\n    ratio: config.aspectRatio,\r\n    duration: config.duration,\r\n    resolution: config.resolution || "720p",\r\n    watermark: false,\r\n  };\r\n\r\n  if (model.audio === "optional") {\r\n    body.generate_audio = config.audio !== false;\r\n  } else if (model.audio === true) {\r\n    body.generate_audio = true;\r\n  } else {\r\n    body.generate_audio = false;\r\n  }\r\n\r\n  logger(`[\u89C6\u9891\u751F\u6210] \u63D0\u4EA4\u4EFB\u52A1, \u6A21\u578B: ${model.modelName}, \u65F6\u957F: ${config.duration}s, \u5206\u8FA8\u7387: ${config.resolution}`);\r\n\r\n  const createResponse = await axios.post(`${baseUrl}/contents/generations/tasks`, body, { headers });\r\n  const taskId = createResponse.data?.id;\r\n\r\n  if (!taskId) {\r\n    throw new Error("\u89C6\u9891\u751F\u6210\u4EFB\u52A1\u521B\u5EFA\u5931\u8D25\uFF1A\u672A\u8FD4\u56DE\u4EFB\u52A1ID");\r\n  }\r\n\r\n  logger(`[\u89C6\u9891\u751F\u6210] \u4EFB\u52A1\u5DF2\u521B\u5EFA, ID: ${taskId}`);\r\n\r\n  const result = await pollTask(\r\n    async (): Promise<PollResult> => {\r\n      const queryResponse = await axios.get(`${baseUrl}/contents/generations/tasks/${taskId}`, { headers });\r\n      const task = queryResponse.data;\r\n\r\n      logger(`[\u89C6\u9891\u751F\u6210] \u4EFB\u52A1\u72B6\u6001: ${task.status}`);\r\n\r\n      switch (task.status) {\r\n        case "succeeded":\r\n          if (task.content?.video_url) {\r\n            return { completed: true, data: task.content.video_url };\r\n          }\r\n          return { completed: true, error: "\u4EFB\u52A1\u6210\u529F\u4F46\u672A\u8FD4\u56DE\u89C6\u9891URL" };\r\n        case "failed":\r\n          return { completed: true, error: task.error?.message || "\u89C6\u9891\u751F\u6210\u5931\u8D25" };\r\n        case "expired":\r\n          return { completed: true, error: "\u89C6\u9891\u751F\u6210\u4EFB\u52A1\u8D85\u65F6" };\r\n        case "cancelled":\r\n          return { completed: true, error: "\u89C6\u9891\u751F\u6210\u4EFB\u52A1\u5DF2\u53D6\u6D88" };\r\n        default:\r\n          return { completed: false };\r\n      }\r\n    },\r\n    10000,\r\n    600000 * 3,\r\n  );\r\n\r\n  if (result.error) {\r\n    throw new Error(result.error);\r\n  }\r\n\r\n  return await urlToBase64(result.data!);\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "" };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \u5BFC\u51FA\r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\nexport {};\r\n'
+      "atlascloud.ts": '/**\r\n * Toonflow AI - AtlasCloud MASS\r\n * @version 0.8\r\n *\r\n * \uFF1A\r\n * 1)  OpenAI \uFF1Ahttps://api.atlascloud.ai/v1\r\n * 2) / Atlas Cloud \uFF1Ahttps://api.atlascloud.ai/api/v1\r\n * 3) /\uFF1A /api/v1/model/prediction/{id}\r\n */\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string; disabled?: boolean }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\ntype AtlasVideoModelKind =\r\n  | "seedanceTextToVideo"\r\n  | "seedanceReferenceToVideo"\r\n  | "seedanceImageToVideo"\r\n  | "wanReferenceToVideo"\r\n  | "generic";\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "atlascloud",\r\n  version: "1.0",\r\n  author: "AtlasCloud",\r\n  name: "AtlasCloud MASS",\r\n  description: "AtlasCloud  Toonflow\u3002\u3001\u3001\u3002",\r\n  inputs: [\r\n    { key: "apiKey", label: "API", type: "password", required: true, placeholder: "AtlasCloud API Key" },\r\n    { key: "chatBaseUrl", label: "", type: "url", required: true, placeholder: "https://api.atlascloud.ai/v1", disabled: true },\r\n    { key: "mediaBaseUrl", label: "", type: "url", required: true, placeholder: "https://api.atlascloud.ai/api/v1", disabled: true },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    chatBaseUrl: "https://api.atlascloud.ai/v1",\r\n    mediaBaseUrl: "https://api.atlascloud.ai/api/v1",\r\n  },\r\n  models: [\r\n    { name: "DeepSeek V4 Pro", modelName: "deepseek-ai/deepseek-v4-pro", type: "text", think: false },\r\n    { name: "DeepSeek V4 Flash", modelName: "deepseek-ai/deepseek-v4-flash", type: "text", think: false },\r\n    { name: "Kimi K2.6", modelName: "moonshotai/kimi-k2.6", type: "text", think: false },\r\n    { name: "GLM 5.1", modelName: "zai-org/glm-5.1", type: "text", think: false },\r\n    { name: "MiniMax M2.7", modelName: "minimaxai/minimax-m2.7", type: "text", think: false },\r\n    { name: "GPT Image 2", modelName: "openai/gpt-image-2/text-to-image", type: "image", mode: ["text", "singleImage"] },\r\n    { name: "Nano Banana Pro", modelName: "google/nano-banana-pro/text-to-image", type: "image", mode: ["text", "singleImage", "multiReference"] },\r\n    { name: "Nano Banana 2", modelName: "google/nano-banana-2/text-to-image", type: "image", mode: ["text", "singleImage", "multiReference"] },\r\n    { name: "Seedream v5", modelName: "bytedance/seedream-v5.0-lite/sequential", type: "image", mode: ["text"] },\r\n    { name: "Qwen Image 2 Pro", modelName: "qwen/qwen-image-2.0-pro/text-to-image", type: "image", mode: ["text"] },\r\n    {\r\n      name: "Seedance 2.0 Audio-Visual",\r\n      modelName: "bytedance/seedance-2.0/text-to-video",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Seedance 2.0 Reference-to-Video",\r\n      modelName: "bytedance/seedance-2.0/reference-to-video",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance 2.0 Multi-Image-to-Video",\r\n      modelName: "bytedance/seedance-2.0/image-to-video",\r\n      type: "video",\r\n      mode: ["startFrameOptional", ["imageReference:4"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance 2.0 Fast Audio-Visual",\r\n      modelName: "bytedance/seedance-2.0-fast/text-to-video",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Seedance 2.0 Fast Reference-to-Video",\r\n      modelName: "bytedance/seedance-2.0-fast/reference-to-video",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Wan-2.7 Reference-to-video",\r\n      modelName: "alibaba/wan-2.7/reference-to-video",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["720p", "1080p"] }],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst getChatBaseUrl = () => vendor.inputValues.chatBaseUrl.replace(/\\/+$/, "");\r\n\r\nconst getMediaBaseUrl = () => vendor.inputValues.mediaBaseUrl.replace(/\\/+$/, "");\r\n\r\nconst joinUrl = (base: string, path: string) => `${base}${path.startsWith("/") ? "" : "/"}${path}`;\r\n\r\nconst getHeaders = () => {\r\n  if (!vendor.inputValues.apiKey) throw new Error(" API Key");\r\n  return {\r\n    "Content-Type": "application/json",\r\n    Authorization: `Bearer ${vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "")}`,\r\n  };\r\n};\r\n\r\nconst readByPath = (obj: any, path: string): any => {\r\n  if (!obj || !path) return undefined;\r\n  const normalizedPath = path.replace(/\\[(\\d+)\\]/g, ".$1");\r\n  return normalizedPath.split(".").reduce((acc, key) => (acc == null ? undefined : acc[key]), obj);\r\n};\r\n\r\nconst pickFirstPath = (obj: any, paths: string[]): any => {\r\n  for (const path of paths) {\r\n    const value = readByPath(obj, path);\r\n    if (value !== undefined && value !== null && value !== "") return value;\r\n  }\r\n  return undefined;\r\n};\r\n\r\nconst extractTaskId = (data: any): string | undefined => {\r\n  return pickFirstPath(data, ["id", "taskId", "task_id", "data.id", "data.taskId", "data.task_id"]);\r\n};\r\n\r\nconst extractUrl = (data: any): string | undefined => {\r\n  return (\r\n    (Array.isArray(readByPath(data, "data.outputs")) ? readByPath(data, "data.outputs")[0] : undefined) ||\r\n    (Array.isArray(readByPath(data, "outputs")) ? readByPath(data, "outputs")[0] : undefined) ||\r\n    readByPath(data, "url") ||\r\n    readByPath(data, "video_url") ||\r\n    readByPath(data, "image_url") ||\r\n    readByPath(data, "data.url") ||\r\n    readByPath(data, "data.video_url") ||\r\n    readByPath(data, "data.image_url") ||\r\n    readByPath(data, "data.output.url") ||\r\n    readByPath(data, "data.output.video_url") ||\r\n    readByPath(data, "output.url")\r\n  );\r\n};\r\n\r\nconst extractB64 = (data: any): string | undefined => {\r\n  return pickFirstPath(data, ["b64_json", "data.b64_json", "data.0.b64_json", "data[0].b64_json"]);\r\n};\r\n\r\nconst extractStatus = (data: any): string => {\r\n  const statusRaw = pickFirstPath(data, ["status", "data.status", "data.state", "state"]);\r\n  return String(statusRaw || "").toLowerCase();\r\n};\r\n\r\nconst extractError = (data: any): string | undefined => {\r\n  return pickFirstPath(data, ["error.message", "message", "msg", "data.error.message", "data.message"]);\r\n};\r\n\r\nconst isDnsOrNetworkError = (err: any): boolean => {\r\n  const msg = String(err?.message || err || "");\r\n  return /ENOTFOUND|EAI_AGAIN|ECONNRESET|ETIMEDOUT|timeout/i.test(msg);\r\n};\r\n\r\nconst withNetworkRetry = async <T>(fn: () => Promise<T>, maxRetry = 3, waitMs = 1500): Promise<T> => {\r\n  let lastErr: any;\r\n  for (let i = 0; i < maxRetry; i += 1) {\r\n    try {\r\n      return await fn();\r\n    } catch (err) {\r\n      lastErr = err;\r\n      if (!isDnsOrNetworkError(err) || i === maxRetry - 1) throw err;\r\n      await new Promise((resolve) => setTimeout(resolve, waitMs * (i + 1)));\r\n    }\r\n  }\r\n  throw lastErr;\r\n};\r\n\r\nconst resolveAtlasImageModelName = (modelName: string, hasImageRefs: boolean): string => {\r\n  if (!hasImageRefs) return modelName;\r\n\r\n  switch (modelName) {\r\n    case "google/nano-banana-pro/text-to-image":\r\n      return "google/nano-banana-pro/edit";\r\n    case "google/nano-banana-2/text-to-image":\r\n      return "google/nano-banana-2/edit";\r\n    default:\r\n      return modelName;\r\n  }\r\n};\r\n\r\nconst resolveAtlasVideoModelKind = (modelName: string): AtlasVideoModelKind => {\r\n  if (modelName === "alibaba/wan-2.7/reference-to-video") return "wanReferenceToVideo";\r\n  if (/^bytedance\\/seedance-2\\.0(?:-fast)?\\/reference-to-video$/.test(modelName)) return "seedanceReferenceToVideo";\r\n  if (/^bytedance\\/seedance-2\\.0(?:-fast)?\\/image-to-video$/.test(modelName)) return "seedanceImageToVideo";\r\n  if (/^bytedance\\/seedance-2\\.0(?:-fast)?\\/text-to-video$/.test(modelName)) return "seedanceTextToVideo";\r\n  return "generic";\r\n};\r\n\r\nconst clampNumber = (value: unknown, min: number, max: number, fallback: number): number => {\r\n  const num = Number(value);\r\n  if (!Number.isFinite(num)) return fallback;\r\n  return Math.max(min, Math.min(max, num));\r\n};\r\n\r\nconst normalizeResolution = (value: unknown, allowed: string[], fallback: string): string => {\r\n  const lower = String(value || "").toLowerCase();\r\n  const matched = allowed.find((item) => item.toLowerCase() === lower);\r\n  if (matched) return matched;\r\n  if (/1080/.test(lower)) return allowed.find((item) => /1080/i.test(item)) || fallback;\r\n  if (/720/.test(lower)) return allowed.find((item) => /720/i.test(item)) || fallback;\r\n  if (/480/.test(lower)) return allowed.find((item) => /480/i.test(item)) || fallback;\r\n  return fallback;\r\n};\r\n\r\nconst getReferenceLimit = (\r\n  modes: VideoMode[],\r\n  prefix: "imageReference" | "videoReference" | "audioReference",\r\n): number | undefined => {\r\n  for (const mode of modes) {\r\n    if (!Array.isArray(mode)) continue;\r\n    for (const entry of mode) {\r\n      if (!entry.startsWith(`${prefix}:`)) continue;\r\n      const limit = Number(entry.split(":")[1]);\r\n      if (Number.isFinite(limit) && limit > 0) return limit;\r\n    }\r\n  }\r\n  return undefined;\r\n};\r\n\r\nconst limitReferences = (refs: string[], maxCount?: number): string[] => {\r\n  if (!maxCount || maxCount < 1) return refs;\r\n  return refs.slice(0, maxCount);\r\n};\r\n\r\nconst summarizeRefCount = (usedCount: number, rawCount: number): string => {\r\n  return usedCount === rawCount ? String(usedCount) : `${usedCount}/${rawCount}`;\r\n};\r\n\r\nconst buildAtlasVideoPayload = (config: VideoConfig, model: VideoModel) => {\r\n  const rawImageRefs = (config.referenceList || []).filter((r) => r.type === "image").map((r) => r.base64).filter(Boolean);\r\n  const rawVideoRefs = (config.referenceList || []).filter((r) => r.type === "video").map((r) => r.base64).filter(Boolean);\r\n  const rawAudioRefs = (config.referenceList || []).filter((r) => r.type === "audio").map((r) => r.base64).filter(Boolean);\r\n\r\n  const imageRefs = limitReferences(rawImageRefs, getReferenceLimit(model.mode, "imageReference"));\r\n  const videoRefs = limitReferences(rawVideoRefs, getReferenceLimit(model.mode, "videoReference"));\r\n  const audioRefs = limitReferences(rawAudioRefs, getReferenceLimit(model.mode, "audioReference"));\r\n  const kind = resolveAtlasVideoModelKind(model.modelName);\r\n  const ratio = config.aspectRatio || "16:9";\r\n  const shouldGenerateAudio = model.audio === true || (model.audio === "optional" && config.audio !== false);\r\n  const body: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt || "",\r\n  };\r\n\r\n  if (kind === "wanReferenceToVideo") {\r\n    if (imageRefs.length < 1) {\r\n      throw new Error(`${model.name}  1 `);\r\n    }\r\n    body.images = [imageRefs[0]];\r\n    body.ratio = ratio;\r\n    body.duration = clampNumber(config.duration, 2, 10, 5);\r\n    body.resolution = normalizeResolution(config.resolution, ["720P", "1080P"], "720P");\r\n    body.prompt_extend = false;\r\n    body.seed = -1;\r\n  } else if (kind === "seedanceReferenceToVideo") {\r\n    if (imageRefs.length < 1) {\r\n      throw new Error(`${model.name}  1 `);\r\n    }\r\n    if (shouldGenerateAudio) body.generate_audio = true;\r\n    body.images = [imageRefs[0]];\r\n    body.ratio = ratio;\r\n    body.duration = clampNumber(config.duration, 4, 15, 5);\r\n    body.resolution = normalizeResolution(config.resolution, ["480p", "720p", "1080p"], "720p");\r\n    body.watermark = false;\r\n  } else if (kind === "seedanceImageToVideo") {\r\n    if (imageRefs.length < 1) {\r\n      throw new Error(`${model.name}  1 `);\r\n    }\r\n    if (shouldGenerateAudio) body.generate_audio = true;\r\n    body.images = imageRefs;\r\n    body.ratio = ratio;\r\n    body.duration = clampNumber(config.duration, 4, 15, 5);\r\n    body.resolution = normalizeResolution(config.resolution, ["480p", "720p", "1080p"], "720p");\r\n    body.watermark = false;\r\n  } else {\r\n    if (shouldGenerateAudio) body.generate_audio = true;\r\n    if (imageRefs.length > 0) body.reference_images = imageRefs;\r\n    if (videoRefs.length > 0) body.reference_videos = videoRefs;\r\n    if (audioRefs.length > 0) body.reference_audios = audioRefs;\r\n    body.ratio = ratio;\r\n    body.duration = clampNumber(config.duration, 4, 15, 5);\r\n    body.resolution = normalizeResolution(config.resolution, ["480p", "720p"], "720p");\r\n    body.watermark = false;\r\n  }\r\n\r\n  return {\r\n    body,\r\n    summary: `kind=${kind} imageRefs=${summarizeRefCount(imageRefs.length, rawImageRefs.length)} videoRefs=${summarizeRefCount(videoRefs.length, rawVideoRefs.length)} audioRefs=${summarizeRefCount(audioRefs.length, rawAudioRefs.length)} resolution=${body.resolution} duration=${body.duration}${shouldGenerateAudio ? " audio=on" : " audio=off"}`,\r\n  };\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error(" API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  const effortMap: Record<number, string> = { 0: "minimal", 1: "low", 2: "medium", 3: "high" };\r\n\r\n  return createOpenAICompatible({\r\n    name: "atlascloud",\r\n    baseURL: getChatBaseUrl(),\r\n    apiKey,\r\n    fetch: async (url: string, options?: RequestInit) => {\r\n      const rawBody = JSON.parse((options?.body as string) ?? "{}");\r\n      const body = think\r\n        ? {\r\n          ...rawBody,\r\n          thinking: { type: "enabled" },\r\n          reasoning_effort: effortMap[thinkLevel],\r\n        }\r\n        : rawBody;\r\n      return await fetch(url, { ...options, body: JSON.stringify(body) });\r\n    },\r\n  }).chatModel(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  const headers = getHeaders();\r\n  const url = joinUrl(getMediaBaseUrl(), "/model/generateImage");\r\n  const sizeToResolution: Record<ImageConfig["size"], string> = {\r\n    "1K": "1k",\r\n    "2K": "2k",\r\n    "4K": "4k",\r\n  };\r\n  const imageRefs = (config.referenceList || []).map((ref) => ref.base64).filter(Boolean);\r\n  const resolvedModelName = resolveAtlasImageModelName(model.modelName, imageRefs.length > 0);\r\n  const isNanoModel = /^google\\/nano-banana-(pro|2)\\//.test(resolvedModelName);\r\n  const supportsImageConditioning = /^(openai\\/gpt-image-2\\/text-to-image|google\\/nano-banana-(pro|2)\\/edit)$/.test(resolvedModelName);\r\n\r\n  const body: any = {\r\n    model: resolvedModelName,\r\n    prompt: config.prompt || "",\r\n  };\r\n  if (supportsImageConditioning && imageRefs.length > 0) {\r\n    body.images = imageRefs;\r\n  }\r\n  if (isNanoModel) {\r\n    body.aspect_ratio = config.aspectRatio || "16:9";\r\n    body.resolution = sizeToResolution[config.size || "1K"] || "1k";\r\n  }\r\n\r\n  logger(`[AtlasCloud ] : ${model.modelName} -> ${resolvedModelName}, refs=${imageRefs.length}`);\r\n  const submitResp = await axios.post(url, body, { headers });\r\n  const submitData = submitResp.data;\r\n\r\n  // \uFF08\uFF09\r\n  const syncB64 = extractB64(submitData);\r\n  if (syncB64) return syncB64;\r\n  const syncUrl = extractUrl(submitData);\r\n  if (syncUrl) return await urlToBase64(syncUrl);\r\n\r\n  // \uFF08 taskId \uFF09\r\n  const taskId = extractTaskId(submitData);\r\n  if (!taskId) {\r\n    throw new Error(`\uFF1AID\u3002\uFF1A${JSON.stringify(submitData).slice(0, 500)}`);\r\n  }\r\n\r\n  const pollResult = await pollTask(\r\n    async (): Promise<PollResult> => {\r\n      const resultUrl = joinUrl(getMediaBaseUrl(), `/model/prediction/${taskId}`);\r\n      const resultResp = await axios.get(resultUrl, { headers });\r\n      const data = resultResp.data;\r\n      const status = extractStatus(data);\r\n\r\n      if (["succeeded", "success", "done", "completed"].includes(status)) {\r\n        const b64 = extractB64(data);\r\n        if (b64) return { completed: true, data: b64 };\r\n        const mediaUrl = extractUrl(data);\r\n        if (mediaUrl) return { completed: true, data: mediaUrl };\r\n        return { completed: true, error: "" };\r\n      }\r\n      if (["failed", "error", "cancelled", "canceled", "expired"].includes(status)) {\r\n        return { completed: true, error: extractError(data) || "" };\r\n      }\r\n      return { completed: false };\r\n    },\r\n    3000,\r\n    600000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  if (!pollResult.data) throw new Error("\uFF1A");\r\n  if (pollResult.data.startsWith("data:")) return pollResult.data;\r\n  if (pollResult.data.startsWith("http")) return await urlToBase64(pollResult.data);\r\n  return pollResult.data;\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  const headers = getHeaders();\r\n  const url = joinUrl(getMediaBaseUrl(), "/model/generateVideo");\r\n  const { body, summary } = buildAtlasVideoPayload(config, model);\r\n\r\n  logger(`[AtlasCloud ] : ${model.modelName}, ${summary}`);\r\n  const submitResp: any = await withNetworkRetry<any>(() => axios.post(url, body, { headers }), 3, 1500);\r\n  const submitData = submitResp.data;\r\n\r\n  const taskId = extractTaskId(submitData);\r\n  if (!taskId) {\r\n    const syncUrl = extractUrl(submitData);\r\n    if (syncUrl) return await urlToBase64(syncUrl);\r\n    throw new Error(`\uFF1AID\u3002\uFF1A${JSON.stringify(submitData).slice(0, 500)}`);\r\n  }\r\n\r\n  const pollResult = await pollTask(\r\n    async (): Promise<PollResult> => {\r\n      const resultUrl = joinUrl(getMediaBaseUrl(), `/model/prediction/${taskId}`);\r\n      const resultResp: any = await withNetworkRetry<any>(() => axios.get(resultUrl, { headers }), 3, 1200);\r\n      const data = resultResp.data;\r\n      const status = extractStatus(data);\r\n\r\n      if (["succeeded", "success", "done", "completed"].includes(status)) {\r\n        const mediaUrl = extractUrl(data);\r\n        if (mediaUrl) return { completed: true, data: mediaUrl };\r\n        return { completed: true, error: "" };\r\n      }\r\n      if (["failed", "error", "cancelled", "canceled", "expired"].includes(status)) {\r\n        return { completed: true, error: extractError(data) || "" };\r\n      }\r\n      return { completed: false };\r\n    },\r\n    5000,\r\n    1800000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  if (!pollResult.data) throw new Error("\uFF1A");\r\n  return await urlToBase64(pollResult.data);\r\n};\r\n\r\nconst ttsRequest = async (_config: TTSConfig, _model: TTSModel): Promise<string> => {\r\n  // AtlasCloud  TTS\u3002\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return {\r\n    hasUpdate: false,\r\n    latestVersion: vendor.version,\r\n    notice: "AtlasCloud MASS \u3002",\r\n  };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\nexport { };\r\n',
+      "deepseek.ts": '/**\r\n * Toonflow AI - DeepSeek\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  imageBase64: string[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  imageBase64?: string[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "deepseek",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "DeepSeek",\r\n  description:\r\n    "DeepSeek \uFF0C V4 \uFF08\uFF09\u3002\\n\\n[](https://platform.deepseek.com/)",\r\n  icon: "",\r\n  inputs: [\r\n    { key: "apiKey", label: "API", type: "password", required: true },\r\n    { key: "baseUrl", label: "", type: "url", required: true, placeholder: "\uFF1Ahttps://api.deepseek.com" },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://api.deepseek.com/v1",\r\n  },\r\n  models: [\r\n    { name: "DeepSeek V4 Pro", modelName: "deepseek-v4-pro", type: "text", think: true },\r\n    { name: "DeepSeek V4 Flash", modelName: "deepseek-v4-flash", type: "text", think: true },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n\r\n  // DeepSeek  high / max\uFF08low\u3001medium  high\uFF0Cxhigh  max\uFF09\r\n  // thinkLevel: 0/1/2 \u2192 high, 3 \u2192 max\r\n  const effortMap: Record<0 | 1 | 2 | 3, "high" | "max"> = {\r\n    0: "high",\r\n    1: "high",\r\n    2: "high",\r\n    3: "max",\r\n  };\r\n\r\n  const enableThinking = model.think && think;\r\n  const extraBody: Record<string, any> = {\r\n    thinking: { type: enableThinking ? "enabled" : "disabled" },\r\n  };\r\n  if (enableThinking) {\r\n    extraBody.reasoning_effort = effortMap[thinkLevel];\r\n  }\r\n\r\n  return createDeepSeek({\r\n    baseURL: vendor.inputValues.baseUrl,\r\n    apiKey,\r\n    extraBody,\r\n  }).chat(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "" };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\nexport { };',
+      "grsai.ts": '/**\r\n * Toonflow AI\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage" //\r\n  | "startEndRequired" //\uFF08\uFF09\r\n  | "endFrameOptional" //\uFF08\uFF09\r\n  | "startFrameOptional" //\uFF08\uFF09\r\n  | "text" //\r\n  | (\r\n      | `videoReference:${number}`\r\n      | `imageReference:${number}`\r\n      | `audioReference:${number}`\r\n    )[]; //\uFF08\uFF09\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string; //ID\uFF0C\uFF0C\r\n  version: string; //\uFF0Cx.y\uFF0C\r\n  name: string; //\r\n  author: string; //\r\n  description?: string; //\uFF0CMarkdown\r\n  icon?: string; //\uFF0CBase64\uFF0C128x128\r\n  inputs: {\r\n    key: string;\r\n    label: string;\r\n    type: "text" | "password" | "url";\r\n    required: boolean;\r\n    placeholder?: string;\r\n  }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ndeclare const axios: any; // HTTP\r\ndeclare const logger: (msg: string) => void; // \r\ndeclare const jsonwebtoken: any; // JWT\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>; // \uFF0Cbase64\r\ndeclare const zipImageResolution: (\r\n  base64: string,\r\n  w: number,\r\n  h: number,\r\n) => Promise<string>; // \uFF0Cbase64\r\ndeclare const mergeImages: (\r\n  base64Arr: string[],\r\n  maxSize?: string,\r\n) => Promise<string>; // \uFF0Cbase64\r\ndeclare const urlToBase64: (url: string) => Promise<string>; // URLBase64\uFF0Cbase64\r\ndeclare const pollTask: (\r\n  fn: () => Promise<PollResult>,\r\n  interval?: number,\r\n  timeout?: number,\r\n) => Promise<PollResult>; // \uFF0Cfn\uFF0Cinterval\uFF0Ctimeout\uFF0Cfn\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any; //\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>; //\uFF0Cbase64\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>; //\uFF0Cbase64\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>; //\uFF08\uFF09\uFF0Cbase64\r\n  checkForUpdates?: () => Promise<{\r\n    hasUpdate: boolean;\r\n    latestVersion: string;\r\n    notice: string;\r\n  }>; //\uFF0C\uFF08Markdown\uFF09\r\n  updateVendor?: () => Promise<string>; //\uFF0C\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "grsai",\r\n  version: "2.1",\r\n  author: "Toonflow",\r\n  name: "Grsai",\r\n  description:\r\n    "Grsai AI\uFF0C\u3001\u3001\u3001Gemini \\n [](https://tf.grsai.ai/zh)",\r\n  inputs: [\r\n    { key: "apiKey", label: "API", type: "password", required: true },\r\n    {\r\n      key: "baseUrl",\r\n      label: "",\r\n      type: "url",\r\n      required: true,\r\n      placeholder: "\uFF1Ahttps://grsai.dakka.com.cn",\r\n    },\r\n  ],\r\n  inputValues: { apiKey: "", baseUrl: "https://grsai.dakka.com.cn" },\r\n  models: [\r\n    {\r\n      name: "GPT Image 2",\r\n      modelName: "gpt-image-2",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Nano Banana Fast",\r\n      modelName: "nano-banana-fast",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Nano Banana 2",\r\n      modelName: "nano-banana-2",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Nano Banana Pro",\r\n      modelName: "nano-banana-pro",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst getHeaders = () => {\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return {\r\n    "Content-Type": "application/json",\r\n    Authorization: `Bearer ${apiKey}`,\r\n  };\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst textRequest = (\r\n  model: TextModel,\r\n  think: boolean,\r\n  thinkLevel: 0 | 1 | 2 | 3,\r\n) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return createGoogleGenerativeAI({\r\n    baseURL: `${vendor.inputValues.baseUrl}/v1beta`,\r\n    apiKey,\r\n  }).chat(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (\r\n  config: ImageConfig,\r\n  model: ImageModel,\r\n): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const baseUrl = vendor.inputValues.baseUrl;\r\n  const headers = getHeaders();\r\n\r\n  // \r\n  const requestBody: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt,\r\n    aspectRatio: config.aspectRatio,\r\n    webHook: "-1",\r\n    shutProgress: true,\r\n  };\r\n\r\n  // \r\n  if (model.modelName.startsWith("nano-banana")) {\r\n    requestBody.imageSize = config.size;\r\n  } else {\r\n    requestBody.size = config.aspectRatio;\r\n    requestBody.variants = 1;\r\n  }\r\n\r\n  // \r\n  if (config.referenceList && config.referenceList.length > 0) {\r\n    requestBody.urls = config.referenceList.map((img) => img.base64);\r\n  }\r\n\r\n  // \r\n  const apiPath = model.modelName.startsWith("nano-banana")\r\n    ? "/v1/draw/nano-banana"\r\n    : "/v1/draw/completions";\r\n\r\n  logger(`\uFF0C\uFF1A${model.modelName}`);\r\n  const submitResp = await axios.post(`${baseUrl}${apiPath}`, requestBody, {\r\n    headers,\r\n  });\r\n  if (submitResp.data.code !== 0)\r\n    throw new Error(`\uFF1A${submitResp.data.msg}`);\r\n\r\n  const taskId = submitResp.data.data.id;\r\n  logger(`\uFF0CID\uFF1A${taskId}`);\r\n\r\n  // \r\n  const pollResult = await pollTask(\r\n    async () => {\r\n      const resp = await axios.post(\r\n        `${baseUrl}/v1/draw/result`,\r\n        { id: taskId },\r\n        { headers },\r\n      );\r\n      if (resp.data.code !== 0)\r\n        return { completed: true, error: resp.data.msg };\r\n\r\n      const taskData = resp.data.data;\r\n      if (taskData.status === "failed")\r\n        return {\r\n          completed: true,\r\n          error: taskData.failure_reason || taskData.error,\r\n        };\r\n      if (taskData.status === "succeeded") {\r\n        const imgUrl = taskData.results?.[0]?.url || taskData.url;\r\n        return { completed: true, data: imgUrl };\r\n      }\r\n      logger(`\uFF0C\uFF1A${taskData.progress}%`);\r\n      return { completed: false };\r\n    },\r\n    3000,\r\n    600000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  logger(`\uFF0CBase64`);\r\n  return await urlToBase64(pollResult.data!);\r\n};\r\n\r\nconst videoRequest = async (\r\n  config: VideoConfig,\r\n  model: VideoModel,\r\n): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const baseUrl = vendor.inputValues.baseUrl;\r\n  const headers = getHeaders();\r\n\r\n  // \r\n  const requestBody: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt,\r\n    aspectRatio: config.aspectRatio,\r\n    webHook: "-1",\r\n    shutProgress: true,\r\n  };\r\n\r\n  // \r\n  if (config.referenceList && config.referenceList.length > 0) {\r\n    const imageRefs = config.referenceList.filter(\r\n      (item) => item.type === "image",\r\n    ) as Extract<ReferenceList, { type: "image" }>[];\r\n    if (config.mode.includes("endFrameOptional") && imageRefs.length >= 1) {\r\n      requestBody.firstFrameUrl = imageRefs[0].base64;\r\n      if (imageRefs.length >= 2) requestBody.lastFrameUrl = imageRefs[1].base64;\r\n    } else if (\r\n      config.mode.some(\r\n        (m) => Array.isArray(m) && m.includes("imageReference:3"),\r\n      )\r\n    ) {\r\n      requestBody.urls = imageRefs.map((img) => img.base64);\r\n    }\r\n  }\r\n\r\n  logger(`\uFF0C\uFF1A${model.modelName}`);\r\n  const submitResp = await axios.post(`${baseUrl}/v1/video/veo`, requestBody, {\r\n    headers,\r\n  });\r\n  if (submitResp.data.code !== 0)\r\n    throw new Error(`\uFF1A${submitResp.data.msg}`);\r\n\r\n  const taskId = submitResp.data.data.id;\r\n  logger(`\uFF0CID\uFF1A${taskId}`);\r\n\r\n  // \r\n  const pollResult = await pollTask(\r\n    async () => {\r\n      const resp = await axios.post(\r\n        `${baseUrl}/v1/draw/result`,\r\n        { id: taskId },\r\n        { headers },\r\n      );\r\n      if (resp.data.code !== 0)\r\n        return { completed: true, error: resp.data.msg };\r\n\r\n      const taskData = resp.data.data;\r\n      if (taskData.status === "failed")\r\n        return {\r\n          completed: true,\r\n          error: taskData.failure_reason || taskData.error,\r\n        };\r\n      if (taskData.status === "succeeded") {\r\n        return { completed: true, data: taskData.url };\r\n      }\r\n      logger(`\uFF0C\uFF1A${taskData.progress}%`);\r\n      return { completed: false };\r\n    },\r\n    5000,\r\n    1800000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  logger(`\uFF0CBase64`);\r\n  return await urlToBase64(pollResult.data!);\r\n};\r\n\r\nconst ttsRequest = async (\r\n  config: TTSConfig,\r\n  model: TTSModel,\r\n): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{\r\n  hasUpdate: boolean;\r\n  latestVersion: string;\r\n  notice: string;\r\n}> => {\r\n  return {\r\n    hasUpdate: false,\r\n    latestVersion: "1.0",\r\n    notice: "## ",\r\n  };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\n// \uFF0C\r\nexport {};\r\n',
+      "klingai.ts": '/**\r\n * Toonflow AI - AI\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "klingai",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "AI",\r\n  description:\r\n    "AI\\n\\n\uFF0C kling-video-o1\u3001kling-v3-omni\u3001kling-v3\u3001kling-v2-6\u3001kling-v2-5-turbo\u3001kling-v2-1\u3001kling-v2-master\u3001kling-v1-6\u3001kling-v1-5\u3001kling-v1 \u3002\\n\\n[AI](https://klingai.com)\\n\\n Access Key  Secret Key\u3002",\r\n  inputs: [\r\n    { key: "accessKey", label: "Access Key", type: "password", required: true, placeholder: "AIAccess Key" },\r\n    { key: "secretKey", label: "Secret Key", type: "password", required: true, placeholder: "AISecret Key" },\r\n    { key: "baseUrl", label: "", type: "url", required: true, placeholder: "\uFF1Ahttps://api-beijing.klingai.com" },\r\n  ],\r\n  inputValues: { accessKey: "", secretKey: "", baseUrl: "https://api-beijing.klingai.com" },\r\n  models: [\r\n    // kling-video-o1 (Omni)\r\n    {\r\n      name: "kling-video-o1 ",\r\n      modelName: "kling-video-o1:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired", ["imageReference:7", "videoReference:1"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-video-o1 ",\r\n      modelName: "kling-video-o1:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired", ["imageReference:7", "videoReference:1"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    // kling-v3-omni (Omni)\r\n    {\r\n      name: "kling-v3-omni ",\r\n      modelName: "kling-v3-omni:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired", ["imageReference:7", "videoReference:1"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v3-omni ",\r\n      modelName: "kling-v3-omni:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired", ["imageReference:7", "videoReference:1"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n    },\r\n    // kling-v3\r\n    {\r\n      name: "kling-v3 ",\r\n      modelName: "kling-v3:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v3 ",\r\n      modelName: "kling-v3:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n    },\r\n    // kling-v2-6\r\n    {\r\n      name: "kling-v2-6 ",\r\n      modelName: "kling-v2-6:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v2-6 ",\r\n      modelName: "kling-v2-6:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v2-5-turbo\r\n    {\r\n      name: "kling-v2-5-turbo ",\r\n      modelName: "kling-v2-5-turbo:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    {\r\n      name: "kling-v2-5-turbo ",\r\n      modelName: "kling-v2-5-turbo:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v2-1\r\n    {\r\n      name: "kling-v2-1 ",\r\n      modelName: "kling-v2-1:std",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v2-1 ",\r\n      modelName: "kling-v2-1:pro",\r\n      type: "video",\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v2-1-master\r\n    {\r\n      name: "kling-v2-1 Master",\r\n      modelName: "kling-v2-1-master:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v2-master\r\n    {\r\n      name: "kling-v2 Master",\r\n      modelName: "kling-v2-master:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    // kling-v1-6\r\n    {\r\n      name: "kling-v1-6 ",\r\n      modelName: "kling-v1-6:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", ["imageReference:4"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v1-6 ",\r\n      modelName: "kling-v1-6:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "endFrameOptional", ["imageReference:4"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v1-5\r\n    {\r\n      name: "kling-v1-5 ",\r\n      modelName: "kling-v1-5:std",\r\n      type: "video",\r\n      mode: ["singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v1-5 ",\r\n      modelName: "kling-v1-5:pro",\r\n      type: "video",\r\n      mode: ["singleImage", "endFrameOptional"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["1080p"] }],\r\n    },\r\n    // kling-v1\r\n    {\r\n      name: "kling-v1 ",\r\n      modelName: "kling-v1:std",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n    {\r\n      name: "kling-v1 ",\r\n      modelName: "kling-v1:pro",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [5, 10], resolution: ["720p"] }],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\n/**\r\n * AIJWTToken\r\n */\r\nconst generateAuthToken = (): string => {\r\n  const now = Math.floor(Date.now() / 1000);\r\n  const payload = {\r\n    iss: vendor.inputValues.accessKey,\r\n    exp: now + 1800,\r\n    nbf: now - 5,\r\n  };\r\n  return jsonwebtoken.sign(payload, vendor.inputValues.secretKey, {\r\n    algorithm: "HS256",\r\n    header: { alg: "HS256", typ: "JWT" },\r\n  });\r\n};\r\n\r\n/**\r\n * \r\n */\r\nconst getBaseUrl = (): string => {\r\n  return vendor.inputValues.baseUrl || "https://api-beijing.klingai.com";\r\n};\r\n\r\n/**\r\n *  ReferenceList \r\n *  url  url\uFF0C base64  base64\uFF08 data: \uFF09\r\n */\r\nconst extractRawBase64 = (ref: ReferenceList): string => {\r\n  return ref.base64.replace(/^data:[^;]+;base64,/, "");\r\n};\r\n\r\n/**\r\n *  ReferenceList  base64  url\r\n *  omni-video \uFF0C image_url  base64  url\r\n */\r\nconst extractImageUrl = (ref: ReferenceList): string => {\r\n  return ref.base64.startsWith("data:") ? ref.base64 : `data:image/jpeg;base64,${ref.base64}`;\r\n};\r\n\r\n/**\r\n * \r\n */\r\nconst submitAndPoll = async (submitUrl: string, queryUrlBase: string, requestBody: any): Promise<string> => {\r\n  const token = generateAuthToken();\r\n\r\n  logger(`AI: ${submitUrl}`);\r\n  logger(\r\n    `: ${JSON.stringify({\r\n      ...requestBody,\r\n      image: requestBody.image ? "[BASE64]" : undefined,\r\n      image_tail: requestBody.image_tail ? "[BASE64]" : undefined,\r\n      image_list: requestBody.image_list ? "[IMAGES]" : undefined,\r\n    })}`,\r\n  );\r\n\r\n  const submitResp = await axios.post(submitUrl, requestBody, {\r\n    headers: {\r\n      "Content-Type": "application/json",\r\n      Authorization: `Bearer ${token}`,\r\n    },\r\n  });\r\n\r\n  if (submitResp.data.code !== 0) {\r\n    throw new Error(`: ${submitResp.data.message || JSON.stringify(submitResp.data)}`);\r\n  }\r\n\r\n  const taskId = submitResp.data.data.task_id;\r\n  logger(`\uFF0CID: ${taskId}`);\r\n\r\n  const result = await pollTask(\r\n    async () => {\r\n      const freshToken = generateAuthToken();\r\n      const queryResp = await axios.get(`${queryUrlBase}/${taskId}`, {\r\n        headers: {\r\n          Authorization: `Bearer ${freshToken}`,\r\n        },\r\n      });\r\n\r\n      if (queryResp.data.code !== 0) {\r\n        return { completed: true, error: `: ${queryResp.data.message}` };\r\n      }\r\n\r\n      const taskData = queryResp.data.data;\r\n      const status = taskData.task_status;\r\n      logger(`... : ${status}`);\r\n\r\n      if (status === "succeed") {\r\n        const videoUrl = taskData.task_result?.videos?.[0]?.url;\r\n        if (!videoUrl) {\r\n          return { completed: true, error: "URL" };\r\n        }\r\n        return { completed: true, data: videoUrl };\r\n      }\r\n\r\n      if (status === "failed") {\r\n        return { completed: true, error: `: ${taskData.task_status_msg || ""}` };\r\n      }\r\n\r\n      return { completed: false };\r\n    },\r\n    5000,\r\n    600000,\r\n  );\r\n\r\n  if (result.error) throw new Error(result.error);\r\n  logger(`\uFF0CBase64...`);\r\n  return await urlToBase64(result.data!);\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  throw new Error("AI");\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  throw new Error("AI");\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  if (!vendor.inputValues.accessKey) throw new Error("Access Key");\r\n  if (!vendor.inputValues.secretKey) throw new Error("Secret Key");\r\n\r\n  const baseUrl = getBaseUrl();\r\n\r\n  //  modelName\uFF0C\uFF1Akling-video-o1:pro => modelName=kling-video-o1, mode=pro\r\n  const colonIdx = model.modelName.indexOf(":");\r\n  const modelName = colonIdx > -1 ? model.modelName.substring(0, colonIdx) : model.modelName;\r\n  const mode = colonIdx > -1 ? model.modelName.substring(colonIdx + 1) : "pro";\r\n\r\n  //  Omni \r\n  const isOmniModel = modelName === "kling-video-o1" || modelName === "kling-v3-omni";\r\n\r\n  // \r\n  const currentMode = config.mode;\r\n  const isText = currentMode.includes("text");\r\n  const isSingleImage = currentMode.includes("singleImage");\r\n  const isStartEndRequired = currentMode.includes("startEndRequired");\r\n  const isEndFrameOptional = currentMode.includes("endFrameOptional");\r\n  const isStartFrameOptional = currentMode.includes("startFrameOptional");\r\n  const hasMultiRef = Array.isArray(currentMode) && currentMode.some((m) => Array.isArray(m));\r\n\r\n  // \r\n  const imageRefs = (config.referenceList || []).filter((r) => r.type === "image");\r\n  const videoRefs = (config.referenceList || []).filter((r) => r.type === "video");\r\n\r\n  // =====================================================\r\n  // Omni  \u2014\u2014  /v1/videos/omni-video \r\n  // =====================================================\r\n  if (isOmniModel) {\r\n    const requestBody: any = {\r\n      model_name: modelName,\r\n      mode: mode,\r\n      duration: String(config.duration),\r\n      sound: config.audio === true ? "on" : "off",\r\n    };\r\n\r\n    if (config.prompt) {\r\n      requestBody.prompt = config.prompt;\r\n    }\r\n\r\n    if (isSingleImage && imageRefs.length > 0) {\r\n      const imageUrl = extractImageUrl(imageRefs[0]);\r\n      requestBody.image_list = [{ image_url: imageUrl, type: "first_frame" }];\r\n      if (!requestBody.prompt) requestBody.prompt = "";\r\n    } else if (isStartEndRequired && imageRefs.length >= 2) {\r\n      const firstUrl = extractImageUrl(imageRefs[0]);\r\n      const endUrl = extractImageUrl(imageRefs[1]);\r\n      requestBody.image_list = [\r\n        { image_url: firstUrl, type: "first_frame" },\r\n        { image_url: endUrl, type: "end_frame" },\r\n      ];\r\n      if (!requestBody.prompt) requestBody.prompt = "";\r\n    } else if (isEndFrameOptional && imageRefs.length >= 1) {\r\n      const firstUrl = extractImageUrl(imageRefs[0]);\r\n      requestBody.image_list = [{ image_url: firstUrl, type: "first_frame" }];\r\n      if (imageRefs.length >= 2) {\r\n        const endUrl = extractImageUrl(imageRefs[1]);\r\n        requestBody.image_list.push({ image_url: endUrl, type: "end_frame" });\r\n      }\r\n      if (!requestBody.prompt) requestBody.prompt = "";\r\n    } else if (isStartFrameOptional && imageRefs.length >= 1) {\r\n      if (imageRefs.length >= 2) {\r\n        const firstUrl = extractImageUrl(imageRefs[0]);\r\n        const endUrl = extractImageUrl(imageRefs[1]);\r\n        requestBody.image_list = [\r\n          { image_url: firstUrl, type: "first_frame" },\r\n          { image_url: endUrl, type: "end_frame" },\r\n        ];\r\n      } else {\r\n        const endUrl = extractImageUrl(imageRefs[0]);\r\n        requestBody.image_list = [{ image_url: endUrl, type: "end_frame" }];\r\n      }\r\n      if (!requestBody.prompt) requestBody.prompt = "";\r\n    } else if (hasMultiRef && (imageRefs.length > 0 || videoRefs.length > 0)) {\r\n      requestBody.image_list = [];\r\n      for (let i = 0; i < imageRefs.length; i++) {\r\n        const imageUrl = extractImageUrl(imageRefs[i]);\r\n        requestBody.image_list.push({ image_url: imageUrl });\r\n      }\r\n      if (!requestBody.prompt) {\r\n        const refs = imageRefs.map((_, idx) => `<<<image_${idx + 1}>>>`).join("\u3001");\r\n        requestBody.prompt = `${refs}`;\r\n      }\r\n    }\r\n\r\n    // \r\n    const hasImageInput = requestBody.image_list && requestBody.image_list.length > 0;\r\n    if (!hasImageInput) {\r\n      requestBody.aspect_ratio = config.aspectRatio || "16:9";\r\n      if (!requestBody.prompt) throw new Error("");\r\n    }\r\n\r\n    const apiPath = "/v1/videos/omni-video";\r\n    return await submitAndPoll(`${baseUrl}${apiPath}`, `${baseUrl}${apiPath}`, requestBody);\r\n  }\r\n\r\n  // =====================================================\r\n  //  Omni  \u2014\u2014 \r\n  // =====================================================\r\n\r\n  //  \u2014\u2014  /v1/videos/multi-image2video \uFF08 kling-v1-6 \uFF09\r\n  if (hasMultiRef && imageRefs.length > 0) {\r\n    const imageList = [];\r\n    for (let i = 0; i < imageRefs.length; i++) {\r\n      const rawBase64 = extractRawBase64(imageRefs[i]);\r\n      imageList.push({ image: rawBase64 });\r\n    }\r\n\r\n    const requestBody: any = {\r\n      model_name: modelName,\r\n      image_list: imageList,\r\n      prompt: config.prompt || "",\r\n      mode: mode,\r\n      duration: String(config.duration),\r\n      aspect_ratio: config.aspectRatio || "16:9",\r\n    };\r\n\r\n    const apiPath = "/v1/videos/multi-image2video";\r\n    return await submitAndPoll(`${baseUrl}${apiPath}`, `${baseUrl}${apiPath}`, requestBody);\r\n  }\r\n\r\n  //  \u2014\u2014  /v1/videos/text2video \r\n  if (isText) {\r\n    if (!config.prompt) throw new Error("");\r\n\r\n    const requestBody: any = {\r\n      model_name: modelName,\r\n      prompt: config.prompt,\r\n      mode: mode,\r\n      duration: String(config.duration),\r\n      aspect_ratio: config.aspectRatio || "16:9",\r\n      sound: config.audio === true ? "on" : "off",\r\n    };\r\n\r\n    const apiPath = "/v1/videos/text2video";\r\n    return await submitAndPoll(`${baseUrl}${apiPath}`, `${baseUrl}${apiPath}`, requestBody);\r\n  }\r\n\r\n  // \uFF08 /  / \uFF09\u2014\u2014  /v1/videos/image2video \r\n  if ((isSingleImage || isStartEndRequired || isEndFrameOptional || isStartFrameOptional) && imageRefs.length > 0) {\r\n    const requestBody: any = {\r\n      model_name: modelName,\r\n      prompt: config.prompt || "",\r\n      mode: mode,\r\n      duration: String(config.duration),\r\n      sound: config.audio === true ? "on" : "off",\r\n    };\r\n\r\n    if (isSingleImage) {\r\n      requestBody.image = extractRawBase64(imageRefs[0]);\r\n    } else if (isStartEndRequired && imageRefs.length >= 2) {\r\n      requestBody.image = extractRawBase64(imageRefs[0]);\r\n      requestBody.image_tail = extractRawBase64(imageRefs[1]);\r\n    } else if (isEndFrameOptional) {\r\n      requestBody.image = extractRawBase64(imageRefs[0]);\r\n      if (imageRefs.length >= 2) {\r\n        requestBody.image_tail = extractRawBase64(imageRefs[1]);\r\n      }\r\n    } else if (isStartFrameOptional) {\r\n      if (imageRefs.length >= 2) {\r\n        requestBody.image = extractRawBase64(imageRefs[0]);\r\n        requestBody.image_tail = extractRawBase64(imageRefs[1]);\r\n      } else {\r\n        requestBody.image = extractRawBase64(imageRefs[0]);\r\n      }\r\n    }\r\n\r\n    const apiPath = "/v1/videos/image2video";\r\n    return await submitAndPoll(`${baseUrl}${apiPath}`, `${baseUrl}${apiPath}`, requestBody);\r\n  }\r\n\r\n  throw new Error("");\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\n\r\n// \uFF0C\r\nexport {};\r\n',
+      "minimax.ts": '/**\r\n * Toonflow AI - MiniMax(AI)\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  uploadReference: (base64: string, fileType: "image" | "audio" | "video") => Promise<ReferenceList>;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "minimax",\r\n  version: "2.1",\r\n  author: "Toonflow",\r\n  name: "MiniMax(AI)",\r\n  description: "MiniMax\uFF0CM\u3001/\u3001\uFF08\u3001\u3001\uFF09 \\n [](https://minimaxi.com/)",\r\n  inputs: [\r\n    { key: "apiKey", label: "API", type: "password", required: true },\r\n    { key: "baseUrl", label: "", type: "url", required: true, placeholder: "\uFF1Ahttps://api.minimaxi.com" },\r\n  ],\r\n  inputValues: { apiKey: "", baseUrl: "https://api.minimaxi.com" },\r\n  models: [\r\n    // \r\n    { name: "MiniMax-M2.7 ()", modelName: "MiniMax-M2.7", type: "text", think: true },\r\n    { name: "MiniMax-M2.7  ()", modelName: "MiniMax-M2.7-highspeed", type: "text", think: true },\r\n    { name: "MiniMax-M2.5 ()", modelName: "MiniMax-M2.5", type: "text", think: true },\r\n    { name: "MiniMax-M2.5  ()", modelName: "MiniMax-M2.5-highspeed", type: "text", think: true },\r\n    { name: "MiniMax-M2.1 ()", modelName: "MiniMax-M2.1", type: "text", think: true },\r\n    { name: "MiniMax-M2.1  ()", modelName: "MiniMax-M2.1-highspeed", type: "text", think: true },\r\n    { name: "MiniMax-M2 (Agent)", modelName: "MiniMax-M2", type: "text", think: false },\r\n    // \r\n    { name: "V1", modelName: "image-01", type: "image", mode: ["text", "singleImage"] },\r\n    { name: "V1 Live", modelName: "image-01-live", type: "image", mode: ["text", "singleImage"], associationSkills: "" },\r\n    // \r\n    {\r\n      name: "2.3",\r\n      modelName: "MiniMax-Hailuo-2.3",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [\r\n        { duration: [6], resolution: ["768P", "1080P"] },\r\n        { duration: [10], resolution: ["768P"] },\r\n      ],\r\n    },\r\n    {\r\n      name: "2.3",\r\n      modelName: "MiniMax-Hailuo-2.3-Fast",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [\r\n        { duration: [6], resolution: ["768P", "1080P"] },\r\n        { duration: [10], resolution: ["768P"] },\r\n      ],\r\n    },\r\n    {\r\n      name: "02",\r\n      modelName: "MiniMax-Hailuo-02",\r\n      type: "video",\r\n      mode: ["text", "singleImage", "startEndRequired"],\r\n      audio: false,\r\n      durationResolutionMap: [\r\n        { duration: [6], resolution: ["512P", "768P", "1080P"] },\r\n        { duration: [10], resolution: ["512P", "768P"] },\r\n      ],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\n/**\r\n * \r\n */\r\nconst getHeaders = (): Record<string, string> => {\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return {\r\n    Authorization: `Bearer ${apiKey}`,\r\n    "Content-Type": "application/json",\r\n  };\r\n};\r\n\r\n/**\r\n * \r\n */\r\nconst getBaseUrl = (): string => {\r\n  return vendor.inputValues.baseUrl.replace(/\\/$/, "");\r\n};\r\n\r\n/**\r\n *  ReferenceList  base64 \r\n */\r\nconst extractBase64WithHead = (ref: ReferenceList): string => {\r\n  return ref.base64.startsWith("data:") ? ref.base64 : `data:image/png;base64,${ref.base64}`;\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  const baseUrl = getBaseUrl();\r\n\r\n  const openaiBaseUrl = `${baseUrl}/v1`;\r\n  const extraBody = model.think ? { reasoning_split: true } : {};\r\n  return createOpenAI({ baseURL: openaiBaseUrl, apiKey, extraBody }).chat(model.modelName);\r\n};\r\n\r\nconst uploadReference = async (base64: string, fileType: "image" | "audio" | "video"): Promise<ReferenceList> => {\r\n  // MiniMax base64\uFF0C\r\n  if (fileType === "image") {\r\n    const compressed = await zipImage(base64, 10 * 1024);\r\n    return { type: "image", sourceType: "base64", base64: compressed };\r\n  }\r\n  //  base64\uFF0C20MB\r\n  return { type: fileType, sourceType: "base64", base64 } as ReferenceList;\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const baseUrl = getBaseUrl();\r\n  const headers = getHeaders();\r\n\r\n  const reqBody: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt,\r\n    aspect_ratio: config.aspectRatio,\r\n    response_format: "base64",\r\n    n: 1,\r\n    prompt_optimizer: true,\r\n    aigc_watermark: false,\r\n  };\r\n\r\n  // \r\n  const imageRefs = config.referenceList || [];\r\n  if (imageRefs.length > 0) {\r\n    const refBase64 = extractBase64WithHead(imageRefs[0]);\r\n    reqBody.subject_reference = [{ type: "character", image_file: refBase64 }];\r\n  }\r\n\r\n  logger("MiniMax");\r\n  const resp = await axios.post(`${baseUrl}/v1/image_generation`, reqBody, { headers });\r\n  if (resp.data.base_resp.status_code !== 0) {\r\n    throw new Error(`\uFF1A${resp.data.base_resp.status_msg}`);\r\n  }\r\n  if (resp.data.metadata.success_count === 0) {\r\n    throw new Error("\uFF0Cprompt");\r\n  }\r\n\r\n  const imgBase64 = resp.data.data.image_base64[0];\r\n  return imgBase64.startsWith("data:") ? imgBase64 : `data:image/png;base64,${imgBase64}`;\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const baseUrl = getBaseUrl();\r\n  const headers = getHeaders();\r\n\r\n  const reqBody: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt,\r\n    duration: config.duration,\r\n    resolution: config.resolution,\r\n    aigc_watermark: false,\r\n    prompt_optimizer: true,\r\n  };\r\n\r\n  // \r\n  const imageRefs = (config.referenceList || []).filter((r) => r.type === "image");\r\n\r\n  if (imageRefs.length > 0) {\r\n    // 20MB\r\n    const compressedImages: string[] = [];\r\n    for (const ref of imageRefs) {\r\n      const base64 = extractBase64WithHead(ref);\r\n      const compressed = await zipImage(base64, 20 * 1024);\r\n      compressedImages.push(compressed);\r\n    }\r\n\r\n    if (config.mode.includes("startEndRequired")) {\r\n      if (compressedImages.length < 2) throw new Error("");\r\n      reqBody.first_frame_image = compressedImages[0];\r\n      reqBody.last_frame_image = compressedImages[1];\r\n    } else if (config.mode.includes("singleImage")) {\r\n      reqBody.first_frame_image = compressedImages[0];\r\n    }\r\n  }\r\n\r\n  logger("MiniMax");\r\n  const submitResp = await axios.post(`${baseUrl}/v1/video_generation`, reqBody, { headers });\r\n  if (submitResp.data.base_resp.status_code !== 0) {\r\n    throw new Error(`\uFF1A${submitResp.data.base_resp.status_msg}`);\r\n  }\r\n  const taskId = submitResp.data.task_id;\r\n  logger(`\uFF0CID: ${taskId}`);\r\n\r\n  // \r\n  const pollResult = await pollTask(\r\n    async () => {\r\n      const queryResp = await axios.get(`${baseUrl}/v1/query/video_generation`, {\r\n        headers: getHeaders(),\r\n        params: { task_id: taskId },\r\n      });\r\n      if (queryResp.data.base_resp.status_code !== 0) {\r\n        return { completed: true, error: queryResp.data.base_resp.status_msg };\r\n      }\r\n      const status = queryResp.data.status;\r\n      if (status === "Success") {\r\n        return { completed: true, data: queryResp.data.file_id };\r\n      }\r\n      if (status === "Fail") {\r\n        return { completed: true, error: "" };\r\n      }\r\n      logger(`\uFF0C\uFF1A${status}`);\r\n      return { completed: false };\r\n    },\r\n    5000,\r\n    600000,\r\n  );\r\n\r\n  if (pollResult.error) throw new Error(pollResult.error);\r\n  const fileId = pollResult.data!;\r\n  logger(`\uFF0CID: ${fileId}`);\r\n\r\n  // \r\n  const fileResp = await axios.get(`${baseUrl}/v1/files/retrieve`, {\r\n    headers: getHeaders(),\r\n    params: { file_id: fileId },\r\n  });\r\n  if (fileResp.data.base_resp.status_code !== 0) {\r\n    throw new Error(`\uFF1A${fileResp.data.base_resp.status_msg}`);\r\n  }\r\n  const downloadUrl = fileResp.data.file.download_url;\r\n  logger(`\uFF0CBase64`);\r\n\r\n  return await urlToBase64(downloadUrl);\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return {\r\n    hasUpdate: false,\r\n    latestVersion: "2.0",\r\n    notice:\r\n      "## \\n1. \uFF0C ReferenceList \\n2.  uploadReference \\n3. ",\r\n  };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.uploadReference = uploadReference;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\n// \uFF0C\r\nexport {};',
+      "null.ts": '/**\r\n * Toonflow AI\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage" //\r\n  | "startEndRequired" //\uFF08\uFF09\r\n  | "endFrameOptional" //\uFF08\uFF09\r\n  | "startFrameOptional" //\uFF08\uFF09\r\n  | "text" //\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[]; //\uFF08\uFF09\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string; //ID\uFF0C\uFF0C\r\n  version: string; //\uFF0Cx.y\uFF0C\r\n  name: string; //\r\n  author: string; //\r\n  description?: string; //\uFF0CMarkdown\r\n  icon?: string; //\uFF0CBase64\uFF0C128x128\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ndeclare const axios: any; // HTTP\r\ndeclare const logger: (msg: string) => void; // \r\ndeclare const jsonwebtoken: any; // JWT\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>; // \uFF0Cbase64\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>; // \uFF0Cbase64\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>; // \uFF0Cbase64\r\ndeclare const urlToBase64: (url: string) => Promise<string>; // URLBase64\uFF0Cbase64\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>; // \uFF0Cfn\uFF0Cinterval\uFF0Ctimeout\uFF0Cfn\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any; //\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>; //\uFF0Cbase64\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>; //\uFF0Cbase64\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>; //\uFF08\uFF09\uFF0Cbase64\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>; //\uFF0C\uFF08Markdown\uFF09\r\n  updateVendor?: () => Promise<string>; //\uFF0C\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "null",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "",\r\n  description: "## \uFF0CVibe Coding",\r\n  inputs: [\r\n    { key: "apiKey", label: "API", type: "password", required: true },\r\n    { key: "baseUrl", label: "", type: "url", required: true, placeholder: "\uFF1Ahttps://api.openai.com/v1" },\r\n  ],\r\n  inputValues: { apiKey: "", baseUrl: "https://api.openai.com/v1" },\r\n  models: [{ name: "GPT-4o", modelName: "gpt-4o", type: "text", think: false }],\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return createOpenAI({ baseURL: vendor.inputValues.baseUrl, apiKey }).chat(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "## " };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\n// \uFF0C\r\nexport {};\r\n\r\n/**\r\n * ============================================================\r\n * AI \r\n * ============================================================\r\n *\r\n * \u3010\u3011\r\n *  Toonflow AI \u3002AI \uFF0C\r\n * \uFF0C curl  API \u3002\r\n *\r\n * \u3010\u3011\r\n * \uFF0C\uFF08\uFF09\uFF1A\r\n *   1.  API  curl \uFF08\u3001Headers\u3001Body \u3001\uFF09\r\n *   2.  API /\r\n *   3. \uFF08text / image / video / tts\uFF09\r\n * \uFF0C\uFF0C API \u3002\r\n *\r\n * \u3010\u3011\r\n *\r\n * 1. \r\n *     import / require\uFF0C\u300C\u300D\uFF0C\r\n *    \uFF1Aaxios\u3001logger\u3001jsonwebtoken\u3001zipImage\u3001zipImageResolution\u3001mergeImages\u3001\r\n *    urlToBase64\u3001pollTask\uFF0C createOpenAI\u3001createDeepSeek\u3001createZhipu\u3001createQwen\u3001\r\n *    createAnthropic\u3001createOpenAICompatible\u3001createXai\u3001createMinimax\u3001\r\n *    createGoogleGenerativeAI  AI SDK \u3002\r\n *\r\n * 2.  exports.* \r\n *    \uFF1Aconst API_URL = "https://..."; const MAX_RETRY = 3;\r\n *    \uFF0C vendor.inputValues \uFF0C\r\n *     vendor.inputValues.xxx \uFF0C\u3002\r\n *    \uFF0C exports.* \uFF0C\u3002\r\n *\r\n * 3.  exports.* \r\n *    \uFF08textRequest / imageRequest / videoRequest / ttsRequest\uFF09\r\n *    \uFF0C\u3001\u3001\u3001\uFF0C\u3002\r\n *    \uFF08\u3001Token \u3001\uFF09\uFF0C\r\n *    \uFF0C\u300C\u300D\u300C\u300D\uFF0C\r\n *    \u3002\r\n *\r\n * 4. \r\n *    \u3001\uFF08camelCase\uFF09\uFF0C UPPER_SNAKE_CASE\u3002\r\n *\r\n * 5. \r\n *    \uFF08VendorConfig\u3001ImageConfig\u3001VideoConfig\u3001\r\n *    TTSConfig\u3001TextModel\u3001ImageModel\u3001VideoModel\u3001TTSModel\u3001ReferenceList\u3001PollResult \uFF09\uFF0C\r\n *    AI \uFF0C\u3002\r\n *\r\n * 6. \r\n *    - textRequest(model)\uFF1A AI SDK  chat model \uFF08 createOpenAI \uFF09\u3002\r\n *    - imageRequest(config, model)\uFF1A base64 \uFF08 "data:image/png;base64,..."\uFF09\u3002\r\n *      config.referenceList  Extract<ReferenceList, { type: "image" }>[] \uFF0C\r\n *       base64 \uFF08sourceType  "base64"\uFF09\u3002\r\n *    - videoRequest(config, model)\uFF1A base64 \uFF08 "data:video/mp4;base64,..."\uFF09\u3002\r\n *      config.referenceList  ReferenceList[] \uFF0C image / video / audio \uFF0C\r\n *       base64 \uFF08sourceType  "base64"\uFF09\u3002\r\n *      config.mode \uFF0C mode  referenceList\u3002\r\n *    - ttsRequest(config, model)\uFF1A base64 \uFF08 "data:audio/mp3;base64,..."\uFF09\u3002\r\n *      config.referenceList  Extract<ReferenceList, { type: "audio" }>[] \uFF08\uFF09\u3002\r\n *     API  URL \uFF0C urlToBase64(url) \u3002\r\n *\r\n * 7. ReferenceList  VideoMode \r\n *    ReferenceList \uFF0C\uFF1A\r\n *      - type: "image" | "audio" | "video"\uFF08\uFF09\r\n *      - sourceType: "base64"\uFF08 base64\uFF09\r\n *      - base64\uFF08\uFF09\r\n *\r\n *    VideoMode \uFF1A\r\n *      - "text"\uFF1A\r\n *      - "singleImage"\uFF1A\r\n *      - "startEndRequired"\uFF1A\uFF08\uFF09\r\n *      - "endFrameOptional"\uFF1A\uFF08\uFF09\r\n *      - "startFrameOptional"\uFF1A\uFF08\uFF09\r\n *      -  ["imageReference:9", "videoReference:3", "audioReference:3"]\uFF1A\r\n *        \uFF0C\u3002\r\n *\r\n *     videoRequest \uFF0Cconfig.mode \uFF0C\uFF1A\r\n *      -  config.referenceList \r\n *      -  API //\r\n *\r\n * 8. \r\n *    \uFF0C pollTask \uFF1A\r\n *    const result = await pollTask(async () => {\r\n *      const resp = await axios.get(...);\r\n *      if (resp.data.status === "SUCCESS") return { completed: true, data: resp.data.url };\r\n *      if (resp.data.status === "FAILED") return { completed: true, error: resp.data.message };\r\n *      return { completed: false };\r\n *    }, 5000, 600000); // 5\uFF0C10\r\n *    if (result.error) throw new Error(result.error);\r\n *    return await urlToBase64(result.data!);\r\n *\r\n * 9. \r\n *    \uFF08 API Key\uFF09\uFF0C throw new Error("...") \u3002\r\n *    API \uFF0C\uFF0C\u3002\r\n *\r\n * 10. \r\n *      logger("...") \uFF08""\u3001"ID: xxx"\u3001"..."\uFF09\uFF0C\r\n *     \u3002\r\n *\r\n * 11. vendor \r\n *     - id\uFF1A\uFF0C\uFF0C\u3002\r\n *     - version\uFF1A "x.y"\u3002\r\n *     - inputs\uFF1A API \uFF08API Key\u3001Secret\u3001\uFF09\u3002\r\n *     - models\uFF1A\uFF0C type \u3002\r\n *       - VideoModel  mode  API \uFF08 7  VideoMode \uFF09\u3002\r\n *       - VideoModel  audio \uFF1Atrue\uFF08\uFF09\u3001false\uFF08\uFF09\u3001"optional"\uFF08\uFF09\u3002\r\n *       - VideoModel  durationResolutionMap \u3002\r\n *       - VideoModel  associationSkills \uFF0C\u3002\r\n *       - ImageModel  mode  API \uFF08"text" \u3001"singleImage" \u3001"multiReference" \uFF09\u3002\r\n *       - TTSModel  voices \u3002\r\n *\r\n * 12. \r\n *     -  zipImage(base64, maxSizeKB)\u3002\r\n *     -  zipImageResolution(base64, width, height)\u3002\r\n *     -  mergeImages(base64Arr, maxSize)\u3002\r\n *     -  base64 \u3002\r\n *\r\n * 13. \r\n *     \uFF1A\r\n *      \u2192  \u2192  \u2192 [\uFF08\uFF09] \u2192  \u2192 \r\n *     \uFF0C\u3002\r\n *     \uFF08 getHeaders\u3001getBaseUrl\uFF09\u3002\r\n *\r\n * 14. \r\n *     \uFF08 exports.xxx = xxx \uFF09\uFF1A\r\n *       - exports.vendor\uFF08\uFF09\r\n *       - exports.textRequest\uFF08\uFF09\r\n *       - exports.imageRequest\uFF08\uFF09\r\n *       - exports.videoRequest\uFF08\uFF09\r\n *       - exports.ttsRequest\uFF08\uFF09\r\n *       - exports.checkForUpdates\uFF08\uFF09\r\n *       - exports.updateVendor\uFF08\uFF09\r\n *     \uFF08return ""\uFF09\uFF0C\u3002\r\n *      export {}; \u3002\r\n *\r\n * \u3010\u3011\r\n * \uFF1A\r\n *   1.  curl  API \u3002\r\n *   2.  API \u3001\u3001/\u3002\r\n *   3. \uFF0C vendor \u3002\r\n *   4.  ReferenceList \uFF0C base64  referenceList\u3002\r\n *   5. \uFF0C\uFF08return ""\uFF09\u3002\r\n *   6. \uFF0C\u3001\u3002\r\n */\r\n',
+      "openai.ts": '/**\r\n * Toonflow AI\r\n * @version 2.0\r\n */\r\n// ============================================================\r\n// \r\n// ============================================================\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  imageBase64: string[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  imageBase64?: string[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n}\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n// ============================================================\r\n// \r\n// ============================================================\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n// ============================================================\r\n// \r\n// ============================================================\r\nconst vendor: VendorConfig = {\r\n  id: "openai",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "OpenAI",\r\n  description: "OpenAI\uFF0C\u3002",\r\n  icon: "",\r\n  inputs: [\r\n    { key: "apiKey", label: "API", type: "password", required: true },\r\n    { key: "baseUrl", label: "", type: "url", required: true, placeholder: "v1\uFF0C\uFF1Ahttps://api.openai.com/v1" },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://api.openai.com/v1",\r\n  },\r\n  models: [\r\n    { name: "GPT-4o", modelName: "gpt-4o", type: "text", think: false },\r\n    { name: "GPT-4.1", modelName: "gpt-4.1", type: "text", think: false },\r\n    { name: "GPT-5.1", modelName: "gpt-5.1", type: "text", think: false },\r\n    { name: "GPT-5.2", modelName: "gpt-5.2", type: "text", think: false },\r\n    { name: "GPT-5.4", modelName: "gpt-5.4", type: "text", think: false },\r\n  ],\r\n};\r\n// ============================================================\r\n// \r\n// ============================================================\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return createOpenAI({ baseURL: vendor.inputValues.baseUrl, apiKey }).chat(model.modelName);\r\n};\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  return "";\r\n};\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  return "";\r\n};\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "" };\r\n};\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n// ============================================================\r\n// \r\n// ============================================================\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\nexport {};',
+      "toonflow.ts": '/**\r\n * Toonflow \r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "toonflow",\r\n  version: "2.0",\r\n  author: "Toonflow",\r\n  name: "Toonflow",\r\n  description:\r\n    "## Toonflow\\n\\nToonflow\uFF0C**\u3001\u3001\u3001**\uFF0C\uFF0C\u3002\\n\\n\u{1F517} [](https://api.toonflow.net/)\\n\\n\uFF0C \u2615",\r\n  icon: "",\r\n  inputs: [{ key: "apiKey", label: "API", type: "password", required: true }],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://api.toonflow.net/v1",\r\n  },\r\n  models: [\r\n    { name: "claude-sonnet-4-6", type: "text", modelName: "claude-sonnet-4-6", think: false },\r\n    { name: "claude-opus-4-6", type: "text", modelName: "claude-opus-4-6", think: false },\r\n    { name: "claude-sonnet-4-5-20250929", type: "text", modelName: "claude-sonnet-4-5-20250929", think: false },\r\n    { name: "claude-opus-4-5-20251101", type: "text", modelName: "claude-opus-4-5-20251101", think: false },\r\n    { name: "claude-haiku-4-5-20251001", type: "text", modelName: "claude-haiku-4-5-20251001", think: false },\r\n    { name: "gpt-5.4", type: "text", modelName: "gpt-5.4", think: false },\r\n    { name: "gpt-5.2", type: "text", modelName: "gpt-5.2", think: false },\r\n    { name: "MiniMax-M2.7", type: "text", modelName: "MiniMax-M2.7", think: true },\r\n    { name: "MiniMax-M2.5", type: "text", modelName: "MiniMax-M2.5", think: true },\r\n    {\r\n      name: "Wan2.6 I2V 1080P ()",\r\n      type: "video",\r\n      modelName: "Wan2.6-I2V-1080P",\r\n      mode: ["text", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["1080p"] }],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "Wan2.6 I2V 720P ()",\r\n      type: "video",\r\n      modelName: "Wan2.6-I2V-720P",\r\n      mode: ["text", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["720p"] }],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "Seedance 1.5 Pro",\r\n      type: "video",\r\n      modelName: "doubao-seedance-1-5-pro-251215",\r\n      mode: ["text", "endFrameOptional"],\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "vidu2 turbo",\r\n      type: "video",\r\n      modelName: "ViduQ2-turbo",\r\n      mode: ["singleImage", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],\r\n      audio: false,\r\n    },\r\n    {\r\n      name: "ViduQ3 pro",\r\n      type: "video",\r\n      modelName: "ViduQ3-pro",\r\n      mode: ["singleImage", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], resolution: ["540p", "720p", "1080p"] }],\r\n      audio: false,\r\n    },\r\n    {\r\n      name: "ViduQ2 pro",\r\n      type: "video",\r\n      modelName: "ViduQ2-pro",\r\n      mode: ["singleImage", "startEndRequired"],\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],\r\n      audio: false,\r\n    },\r\n    {\r\n      name: "Doubao Seedream 5.0 Lite",\r\n      type: "image",\r\n      modelName: "Doubao-Seedream-5.0-Lite",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Doubao Seedream 4.5",\r\n      type: "image",\r\n      modelName: "doubao-seedream-4-5-251128",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\n//  markdown \r\nfunction extractFirstImageFromMd(content: string) {\r\n  const regex = /!\\[([^\\]]*)\\]\\((data:image\\/[^;]+;base64,[A-Za-z0-9+/=]+|https?:\\/\\/[^\\s)]+|\\/\\/[^\\s)]+|[^\\s)]+)\\)/;\r\n  const match = content.match(regex);\r\n  if (!match) return null;\r\n  const raw = match[2].trim();\r\n  const url = raw.startsWith("data:") ? raw : raw.split(/\\s+/)[0];\r\n  return { alt: match[1], url, type: url.startsWith("data:image") ? "base64" : "url" };\r\n}\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  return createOpenAI({ baseURL: vendor.inputValues.baseUrl, apiKey }).chat(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  const baseUrl = vendor.inputValues.baseUrl;\r\n  const lowerName = model.modelName.toLowerCase();\r\n  const imageBase64List = (config.referenceList ?? []).map((r) => r.base64);\r\n\r\n  // Gemini / nano \uFF1A chat/completions \uFF0C markdown \r\n  if (lowerName.includes("gemini") || lowerName.includes("nano")) {\r\n    const imageConfigGoogle: Record<string, string> = {\r\n      aspect_ratio: config.aspectRatio,\r\n      image_size: config.size,\r\n    };\r\n    const messages: any[] = [];\r\n    if (imageBase64List.length) {\r\n      messages.push({\r\n        role: "user",\r\n        content: imageBase64List.map((b) => ({ type: "image_url", image_url: { url: b } })),\r\n      });\r\n    }\r\n    messages.push({ role: "user", content: config.prompt + "" });\r\n    const body = {\r\n      model: model.modelName,\r\n      messages,\r\n      extra_body: { google: { image_config: imageConfigGoogle } },\r\n    };\r\n    logger(`[imageRequest]  gemini \uFF0C: ${model.modelName}`);\r\n    const response = await fetch(`${baseUrl}/chat/completions`, {\r\n      method: "POST",\r\n      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n      body: JSON.stringify(body),\r\n    });\r\n    if (!response.ok) {\r\n      const errorText = await response.text();\r\n      throw new Error(`\uFF0C: ${response.status}, : ${errorText}`);\r\n    }\r\n    const data = await response.json();\r\n    const imageResult = extractFirstImageFromMd(data.choices[0].message.content);\r\n    if (!imageResult) throw new Error("");\r\n    if (imageResult.type === "base64") return imageResult.url;\r\n    return await urlToBase64(imageResult.url);\r\n  }\r\n\r\n  //  / seedream \uFF1A images/generations \r\n  if (lowerName.includes("doubao") || lowerName.includes("seedream")) {\r\n    const effectiveSize = config.size === "1K" ? "2K" : config.size;\r\n    const sizeMap: Record<string, Record<string, string>> = {\r\n      "16:9": { "2K": "2848x1600", "4K": "4096x2304" },\r\n      "9:16": { "2K": "1600x2848", "4K": "2304x4096" },\r\n    };\r\n    const resolvedSize = sizeMap[config.aspectRatio]?.[effectiveSize];\r\n    const body: Record<string, any> = {\r\n      model: model.modelName,\r\n      prompt: config.prompt,\r\n      size: resolvedSize,\r\n      response_format: "url",\r\n      sequential_image_generation: "disabled",\r\n      stream: false,\r\n      watermark: false,\r\n      ...(imageBase64List.length && { image: imageBase64List }),\r\n    };\r\n    logger(`[imageRequest]  doubao \uFF0C: ${model.modelName}`);\r\n    const response = await fetch(`${baseUrl}/images/generations`, {\r\n      method: "POST",\r\n      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n      body: JSON.stringify(body),\r\n    });\r\n    if (!response.ok) {\r\n      const errorText = await response.text();\r\n      throw new Error(`\uFF0C: ${response.status}, : ${errorText}`);\r\n    }\r\n    const data = await response.json();\r\n    const resultUrl = data.data[0].url;\r\n    return await urlToBase64(resultUrl);\r\n  }\r\n\r\n  throw new Error(`: ${model.modelName}`);\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n  const baseUrl = vendor.inputValues.baseUrl;\r\n  const lowerName = model.modelName.toLowerCase();\r\n\r\n  //  VideoMode\uFF08\uFF0C\uFF09\r\n  const activeMode = config.mode;\r\n  const imageRefs = (config.referenceList ?? []).filter((r) => r.type === "image").map((r) => r.base64);\r\n  const videoRefs = (config.referenceList ?? []).filter((r) => r.type === "video").map((r) => r.base64);\r\n  const audioRefs = (config.referenceList ?? []).filter((r) => r.type === "audio").map((r) => r.base64);\r\n\r\n  //  metadata\r\n  let metadata: Record<string, any> = {};\r\n\r\n  if (lowerName.includes("wan")) {\r\n    // \r\n    if ((activeMode === "startEndRequired" || activeMode === "endFrameOptional" || activeMode === "startFrameOptional") && imageRefs.length >= 2) {\r\n      if (imageRefs[0]) metadata.first_frame_url = imageRefs[0];\r\n      if (imageRefs[1]) metadata.last_frame_url = imageRefs[1];\r\n    } else if (imageRefs.length) {\r\n      metadata.img_url = imageRefs[0];\r\n    }\r\n    if (typeof config.audio === "boolean") metadata.audio = config.audio;\r\n\r\n    //  size \r\n    const wanSizeMap: Record<string, Record<string, string>> = {\r\n      "480p": { "16:9": "832*480", "9:16": "480*832" },\r\n      "720p": { "16:9": "1280*720", "9:16": "720*1280" },\r\n      "1080p": { "16:9": "1920*1080", "9:16": "1080*1920" },\r\n    };\r\n    const wanSize = wanSizeMap[config.resolution]?.[config.aspectRatio];\r\n    const body: Record<string, any> = {\r\n      model: model.modelName,\r\n      prompt: config.prompt,\r\n      duration: config.duration,\r\n      size: wanSize,\r\n      metadata,\r\n    };\r\n    logger(`[videoRequest] \uFF0C: ${model.modelName}`);\r\n    const response = await fetch(`${baseUrl}/video/generations`, {\r\n      method: "POST",\r\n      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n      body: JSON.stringify(body),\r\n    });\r\n    if (!response.ok) {\r\n      const errorText = await response.text();\r\n      throw new Error(`\uFF0C: ${response.status}, : ${errorText}`);\r\n    }\r\n    const data = await response.json();\r\n    const taskId = data.id;\r\n    logger(`[videoRequest] ID: ${taskId}`);\r\n    const res = await pollTask(async () => {\r\n      const queryResponse = await fetch(`${baseUrl}/video/generations/${taskId}`, {\r\n        method: "GET",\r\n        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n      });\r\n      if (!queryResponse.ok) {\r\n        const errorText = await queryResponse.text();\r\n        throw new Error(`\uFF0C: ${queryResponse.status}, : ${errorText}`);\r\n      }\r\n      const queryData = await queryResponse.json();\r\n      const status = queryData?.status ?? queryData?.data?.status;\r\n      switch (status) {\r\n        case "completed":\r\n        case "SUCCESS":\r\n        case "success":\r\n          return { completed: true, data: queryData.data.result_url };\r\n        case "FAILURE":\r\n        case "failed":\r\n          return { completed: true, error: queryData?.data?.fail_reason ?? "" };\r\n        default:\r\n          return { completed: false };\r\n      }\r\n    });\r\n    if (res.error) throw new Error(res.error);\r\n    return await urlToBase64(res.data!);\r\n  }\r\n\r\n  if (lowerName.includes("doubao") || lowerName.includes("seedance")) {\r\n    // /Seedance \r\n    metadata = {\r\n      ...(typeof config.audio === "boolean" && { generate_audio: config.audio }),\r\n      ratio: config.aspectRatio,\r\n      image_roles: [] as string[],\r\n      references: [] as string[],\r\n    };\r\n    if (Array.isArray(activeMode)) {\r\n      // \r\n      imageRefs.forEach((b) => metadata.references.push(b));\r\n      videoRefs.forEach((b) => metadata.references.push(b));\r\n      audioRefs.forEach((b) => metadata.references.push(b));\r\n    } else if (activeMode === "startEndRequired" || activeMode === "endFrameOptional" || activeMode === "startFrameOptional") {\r\n      imageRefs.forEach((_, i) => (metadata.image_roles as string[]).push(i === 0 ? "first_frame" : "last_frame"));\r\n    } else if (activeMode === "singleImage") {\r\n      imageRefs.forEach(() => (metadata.image_roles as string[]).push("reference_image"));\r\n    }\r\n  } else if (lowerName.includes("vidu")) {\r\n    // Vidu \r\n    metadata = {\r\n      aspect_ratio: config.aspectRatio,\r\n      audio: config.audio ?? false,\r\n      off_peak: false,\r\n    };\r\n  } else if (lowerName.includes("kling")) {\r\n    // \r\n    metadata = { aspect_ratio: config.aspectRatio };\r\n    if (Array.isArray(activeMode)) {\r\n      metadata.reference = [...imageRefs, ...videoRefs, ...audioRefs];\r\n    } else if (activeMode === "endFrameOptional" && imageRefs.length) {\r\n      metadata.image_tail = imageRefs[0];\r\n    } else if (activeMode === "startEndRequired" && imageRefs.length >= 2) {\r\n      metadata.image_list = [\r\n        { image_url: imageRefs[0], type: "first_frame" },\r\n        { image_url: imageRefs[1], type: "last_frame" },\r\n      ];\r\n    } else if (activeMode === "singleImage" && imageRefs.length) {\r\n      metadata.image = imageRefs[0];\r\n    }\r\n  }\r\n\r\n  // \uFF08\uFF09\r\n  const publicBody: Record<string, any> = {\r\n    model: model.modelName,\r\n    ...(!Array.isArray(activeMode) && imageRefs.length ? { images: imageRefs } : {}),\r\n    prompt: config.prompt,\r\n    duration: config.duration,\r\n    metadata,\r\n  };\r\n\r\n  logger(`[videoRequest] \uFF0C: ${model.modelName}`);\r\n  const response = await fetch(`${baseUrl}/video/generations`, {\r\n    method: "POST",\r\n    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n    body: JSON.stringify(publicBody),\r\n  });\r\n  if (!response.ok) {\r\n    const errorText = await response.text();\r\n    throw new Error(`\uFF0C: ${response.status}, : ${errorText}`);\r\n  }\r\n  const data = await response.json();\r\n  const taskId = data.id;\r\n  logger(`[videoRequest] ID: ${taskId}`);\r\n\r\n  const res = await pollTask(async () => {\r\n    const queryResponse = await fetch(`${baseUrl}/video/generations/${taskId}`, {\r\n      method: "GET",\r\n      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },\r\n    });\r\n    if (!queryResponse.ok) {\r\n      const errorText = await queryResponse.text();\r\n      throw new Error(`\uFF0C: ${queryResponse.status}, : ${errorText}`);\r\n    }\r\n    const queryData = await queryResponse.json();\r\n    const status = queryData?.status ?? queryData?.data?.status;\r\n    switch (status) {\r\n      case "completed":\r\n      case "SUCCESS":\r\n      case "success":\r\n        return { completed: true, data: queryData.data.result_url };\r\n      case "FAILURE":\r\n      case "failed":\r\n        return { completed: true, error: queryData?.data?.fail_reason ?? "" };\r\n      default:\r\n        return { completed: false };\r\n    }\r\n  });\r\n\r\n  if (res.error) throw new Error(res.error);\r\n  return await urlToBase64(res.data!);\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "" };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\nexport {};\r\n',
+      "vidu.ts": '//AItoonflownpx @ai-sdk/devtools \uFF08\uFF0Ctoonflow.devtools\uFF09\r\n// ====================  ====================\r\n// \r\ninterface TextModel {\r\n  name: string; // \r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean; // \r\n}\r\n\r\n// \r\ninterface ImageModel {\r\n  name: string; // \r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string; // \uFF0C\r\n}\r\n// \r\ninterface VideoModel {\r\n  name: string; // \r\n  modelName: string; //\r\n  type: "video";\r\n  mode: (\r\n    | "singleImage" // \r\n    | "startEndRequired" // \uFF08\uFF09\r\n    | "endFrameOptional" // \uFF08\uFF09\r\n    | "startFrameOptional" // \uFF08\uFF09\r\n    | "text" // \r\n    | ("videoReference" | "imageReference" | "audioReference" | "textReference")[] // \r\n  )[];\r\n  associationSkills?: string; // \uFF0C\r\n  audio: "optional" | false | true; // \r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string; // \r\n  modelName: string;\r\n  type: "tts";\r\n  voices: {\r\n    title: string; //\r\n    voice: string; //\r\n  }[];\r\n}\r\n// \r\ninterface VendorConfig {\r\n  id: string; //\uFF0C\r\n  author: string;\r\n  description?: string; //md5\r\n  name: string;\r\n  icon?: string; //base64\r\n  inputs: {\r\n    key: string;\r\n    label: string;\r\n    type: "text" | "password" | "url";\r\n    required: boolean;\r\n    placeholder?: string;\r\n  }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel)[];\r\n}\r\n// ====================  ====================\r\n//Axios\r\n//(1MB = 1 * 1024 * 1024)\r\ndeclare const zipImage: (completeBase64: string, size: number) => Promise<string>;\r\n//\r\ndeclare const zipImageResolution: (completeBase64: string, width: number, height: number) => Promise<string>;\r\n// maxSize  \uFF0C 10mb\r\ndeclare const mergeImages: (completeBase64: string[], maxSize?: string) => Promise<string>;\r\n//UrlBase64\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\n//\r\ndeclare const pollTask: (\r\n  fn: () => Promise<{ completed: boolean; data?: string; error?: string }>,\r\n  interval?: number,\r\n  timeout?: number,\r\n) => Promise<{ completed: boolean; data?: string; error?: string }>;\r\ndeclare const axios: any;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const logger: (logstring: string) => void;\r\ndeclare const jsonwebtoken: any;\r\n// ====================  ====================\r\nconst vendor: VendorConfig = {\r\n  id: "vidu",\r\n  author: "Coder",\r\n  description:\r\n    "Vidu \u3002 [](https://platform.vidu.cn/login/)",\r\n  name: "Vidu ",\r\n  inputs: [\r\n    { key: "apiKey", label: "API", type: "password", required: true, placeholder: "Vidu" },\r\n    { key: "baseUrl", label: "", type: "url", required: true, placeholder: "https://api.vidu.cn/ent/v2" },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://api.vidu.cn/ent/v2",\r\n  },\r\n  models: [\r\n    {\r\n      name: "ViduQ3 turbo",\r\n      type: "video",\r\n      modelName: "ViduQ3-turbo",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], resolution: ["540p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired", "text"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ3 pro",\r\n      type: "video",\r\n      modelName: "ViduQ3-pro",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], resolution: ["540p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired", "text"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ2 pro fast",\r\n      type: "video",\r\n      modelName: "ViduQ2-pro-fast",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "viduQ2 turbo",\r\n      type: "video",\r\n      modelName: "ViduQ2-turbo",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ2 pro",\r\n      type: "video",\r\n      modelName: "ViduQ2-pro",\r\n      durationResolutionMap: [{ duration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], resolution: ["540p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"], //\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ2",\r\n      type: "video",\r\n      modelName: "ViduQ2",\r\n      durationResolutionMap: [{ duration: [5], resolution: ["1080p"] }],\r\n      mode: ["text"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ1",\r\n      type: "video",\r\n      modelName: "ViduQ1",\r\n      durationResolutionMap: [{ duration: [5], resolution: ["1080p"] }],\r\n      mode: ["singleImage", "startEndRequired", "text"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "ViduQ1 classic",\r\n      type: "video",\r\n      modelName: "viduQ1-classic",\r\n      durationResolutionMap: [{ duration: [5], resolution: ["1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "Vidu2.0",\r\n      type: "video",\r\n      modelName: "vidu2.0",\r\n      durationResolutionMap: [{ duration: [4, 8], resolution: ["360p", "720p", "1080p"] }],\r\n      mode: ["singleImage", "startEndRequired"],\r\n      audio: true,\r\n    },\r\n    {\r\n      name: "viduq1 for image",\r\n      type: "image",\r\n      modelName: "viduq1",\r\n      mode: ["text"],\r\n    },\r\n    {\r\n      name: "viduq2 for image",\r\n      type: "image",\r\n      modelName: "viduq2",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n  ],\r\n};\r\nexports.vendor = vendor;\r\n\r\n// ====================  ====================\r\n\r\n// \r\nconst textRequest: (textModel: TextModel) => { url: string; model: string } = (textModel) => {\r\n  throw new Error("\uFF0C\uFF01");\r\n};\r\nexports.textRequest = textRequest;\r\n\r\n//\r\ninterface ImageConfig {\r\n  prompt: string; //\r\n  imageBase64: string[]; //\r\n  size: "1K" | "2K" | "4K"; // \r\n  aspectRatio: `${number}:${number}`; // \r\n}\r\nconst imageRequest = async (imageConfig: ImageConfig, imageModel: ImageModel) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace("Token ", "");\r\n\r\n  const size = imageConfig.size === "1K" ? "2K" : imageConfig.size;\r\n  const sizeMap: Record<string, Record<string, string>> = {\r\n    "16:9": {\r\n      "1k": "1920x1080",\r\n      "2K": "2848x1600",\r\n      "4K": "4096x2304",\r\n    },\r\n    "9:16": {\r\n      "1k": "1920x1080",\r\n      "2K": "1600x2848",\r\n      "4K": "2304x4096",\r\n    },\r\n  };\r\n\r\n  const body: Record<string, any> = {\r\n    model: imageModel.modelName,\r\n    prompt: imageConfig.prompt,\r\n    aspect_ratio: sizeMap[imageConfig.aspectRatio][size],\r\n    seed: 0,\r\n    resolution: size,\r\n    ...(imageConfig.imageBase64 && { image: imageConfig.imageBase64 }),\r\n  };\r\n\r\n  const createImageUrl = vendor.inputValues.baseUrl + "/reference2image";\r\n  const response = await fetch(createImageUrl, {\r\n    method: "POST",\r\n    headers: { Authorization: `Token ${apiKey}`, "Content-Type": "application/json" },\r\n    body: JSON.stringify(body),\r\n  });\r\n  if (!response.ok) {\r\n    const errorText = await response.text(); // \r\n    console.error("\uFF0C:", response.status, ", :", errorText);\r\n    throw new Error(`\uFF0C: ${response.status}, : ${errorText}`);\r\n  }\r\n  const data = await response.json();\r\n  const res = await checkTaskResult(data.task_id);\r\n  if (!res.data) {\r\n    throw new Error("");\r\n  }\r\n  const list = JSON.parse(JSON.stringify(res.data));\r\n  return list[0].url;\r\n};\r\nexports.imageRequest = imageRequest;\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  imageBase64?: string[];\r\n  audio?: boolean;\r\n  mode:\r\n    | "singleImage" // \r\n    | "multiImage" // \r\n    | "gridImage" // \uFF08\uFF0C\uFF09\r\n    | "startEndRequired" // \uFF08\uFF09\r\n    | "endFrameOptional" // \uFF08\uFF09\r\n    | "startFrameOptional" // \uFF08\uFF09\r\n    | "text" // \r\n    | ("video" | "image" | "audio" | "text")[]; // \r\n}\r\n\r\n//  metadata\r\n\r\nconst buildViduMetadata = (videoConfig: VideoConfig) => ({\r\n  aspect_ratio: videoConfig.aspectRatio,\r\n  audio: videoConfig.audio ?? false,\r\n  off_peak: false,\r\n});\r\n\r\ntype MetadataBuilder = (config: VideoConfig) => Record<string, any>;\r\nconst METADATA_BUILDERS: Array<[string, MetadataBuilder]> = [["vidu", buildViduMetadata]];\r\nconst buildModelMetadata = (modelName: string, videoConfig: VideoConfig) => {\r\n  const lowerName = modelName.toLowerCase();\r\n  const match = METADATA_BUILDERS.find(([key]) => lowerName.includes(key));\r\n  return match ? match[1](videoConfig) : {};\r\n};\r\n// \r\nconst checkTaskResult = async (taskId: string) => {\r\n  const queryUrl = vendor.inputValues.baseUrl + "/tasks/{id}/creations";\r\n  const apiKey = vendor.inputValues.apiKey;\r\n  const res = await pollTask(async () => {\r\n    const queryResponse = await fetch(queryUrl.replace("{id}", taskId), {\r\n      method: "GET",\r\n      headers: { Authorization: `Token ${apiKey}`, "Content-Type": "application/json" },\r\n    });\r\n    if (!queryResponse.ok) {\r\n      const errorText = await queryResponse.text(); // \r\n      console.error("\uFF0C:", queryResponse.status, ", :", errorText);\r\n      throw new Error(`\uFF0C: ${queryResponse.status}, : ${errorText}`);\r\n    }\r\n    const queryData = await queryResponse.json();\r\n    const status = queryData?.state ?? queryData?.data?.state;\r\n    const fail_reason = queryData?.data?.err_code ?? queryData?.data;\r\n    switch (status) {\r\n      case "completed":\r\n      case "SUCCESS":\r\n      case "success":\r\n        return { completed: true, data: queryData.creations };\r\n      case "FAILURE":\r\n      case "failed":\r\n        return { completed: false, error: fail_reason || "" };\r\n      default:\r\n        return { completed: false };\r\n    }\r\n  });\r\n  if (res.error) throw new Error(res.error);\r\n  return res;\r\n};\r\n\r\nconst videoRequest = async (videoConfig: VideoConfig, videoModel: VideoModel) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace("Token ", "");\r\n\r\n  // \r\n  const metadata = buildModelMetadata(videoModel.modelName, videoConfig);\r\n\r\n  //\r\n  const publicBody = {\r\n    model: videoModel.modelName,\r\n    ...(videoConfig.imageBase64 && videoConfig.imageBase64.length ? { images: videoConfig.imageBase64 } : {}),\r\n    prompt: videoConfig.prompt,\r\n    size: videoConfig.resolution,\r\n    duration: videoConfig.duration,\r\n    metadata: metadata,\r\n  };\r\n\r\n  const requestUrl = vendor.inputValues.baseUrl + "/start-end2video";\r\n  const response = await fetch(requestUrl, {\r\n    method: "POST",\r\n    headers: { Authorization: `Token ${apiKey}`, "Content-Type": "application/json" },\r\n    body: JSON.stringify(publicBody),\r\n  });\r\n  if (!response.ok) {\r\n    const errorText = await response.text(); // \r\n    console.error("\uFF0C:", response.status, ", :", errorText);\r\n    throw new Error(`\uFF0C: ${response.status}, : ${errorText}`);\r\n  }\r\n  const data = await response.json();\r\n  const taskId = data.id;\r\n  const result = await checkTaskResult(taskId);\r\n  return result.data;\r\n};\r\nexports.videoRequest = videoRequest;\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n}\r\nconst ttsRequest = async (ttsConfig: TTSConfig, ttsModel: TTSModel) => {\r\n  throw new Error("Vidu \uFF08TTS\uFF09");\r\n};\r\n',
+      "volcengine.ts": '/**\r\n * Toonflow AI - ()\r\n * @version 2.0\r\n */\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ntype VideoMode =\r\n  | "singleImage"\r\n  | "startEndRequired"\r\n  | "endFrameOptional"\r\n  | "startFrameOptional"\r\n  | "text"\r\n  | (`videoReference:${number}` | `imageReference:${number}` | `audioReference:${number}`)[];\r\n\r\ninterface TextModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "text";\r\n  think: boolean;\r\n}\r\n\r\ninterface ImageModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "image";\r\n  mode: ("text" | "singleImage" | "multiReference")[];\r\n  associationSkills?: string;\r\n}\r\n\r\ninterface VideoModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "video";\r\n  mode: VideoMode[];\r\n  associationSkills?: string;\r\n  audio: "optional" | false | true;\r\n  durationResolutionMap: { duration: number[]; resolution: string[] }[];\r\n}\r\n\r\ninterface TTSModel {\r\n  name: string;\r\n  modelName: string;\r\n  type: "tts";\r\n  voices: { title: string; voice: string }[];\r\n}\r\n\r\ninterface VendorConfig {\r\n  id: string;\r\n  version: string;\r\n  name: string;\r\n  author: string;\r\n  description?: string;\r\n  icon?: string;\r\n  inputs: { key: string; label: string; type: "text" | "password" | "url"; required: boolean; placeholder?: string }[];\r\n  inputValues: Record<string, string>;\r\n  models: (TextModel | ImageModel | VideoModel | TTSModel)[];\r\n}\r\n\r\ntype ReferenceList =\r\n  | { type: "image"; sourceType: "base64"; base64: string }\r\n  | { type: "audio"; sourceType: "base64"; base64: string }\r\n  | { type: "video"; sourceType: "base64"; base64: string };\r\n\r\ninterface ImageConfig {\r\n  prompt: string;\r\n  referenceList?: Extract<ReferenceList, { type: "image" }>[];\r\n  size: "1K" | "2K" | "4K";\r\n  aspectRatio: `${number}:${number}`;\r\n}\r\n\r\ninterface VideoConfig {\r\n  duration: number;\r\n  resolution: string;\r\n  aspectRatio: "16:9" | "9:16";\r\n  prompt: string;\r\n  referenceList?: ReferenceList[];\r\n  audio?: boolean;\r\n  mode: VideoMode[];\r\n}\r\n\r\ninterface TTSConfig {\r\n  text: string;\r\n  voice: string;\r\n  speechRate: number;\r\n  pitchRate: number;\r\n  volume: number;\r\n  referenceList?: Extract<ReferenceList, { type: "audio" }>[];\r\n}\r\n\r\ninterface PollResult {\r\n  completed: boolean;\r\n  data?: string;\r\n  error?: string;\r\n}\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\ndeclare const axios: any;\r\ndeclare const logger: (msg: string) => void;\r\ndeclare const jsonwebtoken: any;\r\ndeclare const zipImage: (base64: string, size: number) => Promise<string>;\r\ndeclare const zipImageResolution: (base64: string, w: number, h: number) => Promise<string>;\r\ndeclare const mergeImages: (base64Arr: string[], maxSize?: string) => Promise<string>;\r\ndeclare const urlToBase64: (url: string) => Promise<string>;\r\ndeclare const pollTask: (fn: () => Promise<PollResult>, interval?: number, timeout?: number) => Promise<PollResult>;\r\ndeclare const createOpenAI: any;\r\ndeclare const createDeepSeek: any;\r\ndeclare const createZhipu: any;\r\ndeclare const createQwen: any;\r\ndeclare const createAnthropic: any;\r\ndeclare const createOpenAICompatible: any;\r\ndeclare const createXai: any;\r\ndeclare const createMinimax: any;\r\ndeclare const createGoogleGenerativeAI: any;\r\ndeclare const exports: {\r\n  vendor: VendorConfig;\r\n  textRequest: (m: TextModel, t: boolean, tl: 0 | 1 | 2 | 3) => any;\r\n  imageRequest: (c: ImageConfig, m: ImageModel) => Promise<string>;\r\n  videoRequest: (c: VideoConfig, m: VideoModel) => Promise<string>;\r\n  ttsRequest: (c: TTSConfig, m: TTSModel) => Promise<string>;\r\n  checkForUpdates?: () => Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }>;\r\n  updateVendor?: () => Promise<string>;\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst vendor: VendorConfig = {\r\n  id: "volcengine",\r\n  version: "2.3",\r\n  author: "leeqi",\r\n  name: "()",\r\n  description: "\uFF0C\u3001\u3001\u3002\\n\\n[](https://console.volcengine.com/ark)API\u3002",\r\n  icon: "",\r\n  inputs: [\r\n    { key: "apiKey", label: "API", type: "password", required: true, placeholder: "API Key" },\r\n    { key: "baseUrl", label: "", type: "url", required: true, placeholder: "v3\uFF0C\uFF1Ahttps://ark.cn-beijing.volces.com/api/v3" },\r\n  ],\r\n  inputValues: {\r\n    apiKey: "",\r\n    baseUrl: "https://ark.cn-beijing.volces.com/api/v3",\r\n  },\r\n  models: [\r\n    // =====================  -  =====================\r\n    { name: "Doubao-Seed-2.0-Pro", modelName: "doubao-seed-2-0-pro-260215", type: "text", think: true },\r\n    { name: "Doubao-Seed-2.0-Lite", modelName: "doubao-seed-2-0-lite-260215", type: "text", think: true },\r\n    { name: "Doubao-Seed-2.0-Mini", modelName: "doubao-seed-2-0-mini-260215", type: "text", think: true },\r\n    { name: "Doubao-Seed-2.0-Code-Preview", modelName: "doubao-seed-2-0-code-preview-260215", type: "text", think: true },\r\n    { name: "Doubao-Seed-Character", modelName: "doubao-seed-character-251128", type: "text", think: false },\r\n    // =====================  -  =====================\r\n    { name: "Doubao-Seed-1.8", modelName: "doubao-seed-1-8-251228", type: "text", think: true },\r\n    { name: "Doubao-Seed-Code-Preview", modelName: "doubao-seed-code-preview-251028", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6-Lite", modelName: "doubao-seed-1-6-lite-251015", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6-Flash(0828)", modelName: "doubao-seed-1-6-flash-250828", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6-Vision", modelName: "doubao-seed-1-6-vision-250815", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6(1015)", modelName: "doubao-seed-1-6-251015", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6(0615)", modelName: "doubao-seed-1-6-250615", type: "text", think: true },\r\n    { name: "Doubao-Seed-1.6-Flash(0615)", modelName: "doubao-seed-1-6-flash-250615", type: "text", think: true },\r\n    { name: "Doubao-Seed-Translation", modelName: "doubao-seed-translation-250915", type: "text", think: false },\r\n    { name: "Doubao-1.5-Pro-32K", modelName: "doubao-1-5-pro-32k-250115", type: "text", think: false },\r\n    { name: "Doubao-1.5-Pro-32K-Character(0715)", modelName: "doubao-1-5-pro-32k-character-250715", type: "text", think: false },\r\n    { name: "Doubao-1.5-Pro-32K-Character(0228)", modelName: "doubao-1-5-pro-32k-character-250228", type: "text", think: false },\r\n    { name: "Doubao-1.5-Lite-32K", modelName: "doubao-1-5-lite-32k-250115", type: "text", think: false },\r\n    { name: "Doubao-1.5-Vision-Pro-32K", modelName: "doubao-1-5-vision-pro-32k-250115", type: "text", think: false },\r\n    // =====================  - () =====================\r\n    { name: "GLM-4-7", modelName: "glm-4-7-251222", type: "text", think: true },\r\n    { name: "DeepSeek-V3-2", modelName: "deepseek-v3-2-251201", type: "text", think: true },\r\n    { name: "DeepSeek-V3-1-Terminus", modelName: "deepseek-v3-1-terminus", type: "text", think: true },\r\n    { name: "DeepSeek-V3(0324)", modelName: "deepseek-v3-250324", type: "text", think: false },\r\n    { name: "DeepSeek-R1(0528)", modelName: "deepseek-r1-250528", type: "text", think: true },\r\n    { name: "Qwen3-32B", modelName: "qwen3-32b-20250429", type: "text", think: false },\r\n    { name: "Qwen3-14B", modelName: "qwen3-14b-20250429", type: "text", think: false },\r\n    { name: "Qwen3-8B", modelName: "qwen3-8b-20250429", type: "text", think: false },\r\n    { name: "Qwen3-0.6B", modelName: "qwen3-0-6b-20250429", type: "text", think: false },\r\n    { name: "Qwen2.5-72B", modelName: "qwen2-5-72b-20240919", type: "text", think: false },\r\n    { name: "GLM-4.5-Air", modelName: "glm-4-5-air", type: "text", think: false },\r\n    // =====================  =====================\r\n    {\r\n      name: "Seedream-5.0",\r\n      modelName: "doubao-seedream-5-0-260128",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Seedream-5.0-Lite",\r\n      modelName: "doubao-seedream-5-0-lite-260128",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Seedream-4.5",\r\n      modelName: "doubao-seedream-4-5-251128",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Seedream-4.0",\r\n      modelName: "doubao-seedream-4-0-250828",\r\n      type: "image",\r\n      mode: ["text", "singleImage", "multiReference"],\r\n    },\r\n    {\r\n      name: "Seedream-3.0-T2I",\r\n      modelName: "doubao-seedream-3-0-t2i-250415",\r\n      type: "image",\r\n      mode: ["text"],\r\n    },\r\n    // =====================  =====================\r\n    {\r\n      name: "Seedance-2.0()",\r\n      modelName: "doubao-seedance-2-0-260128",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-2.0-Fast()",\r\n      modelName: "doubao-seedance-2-0-fast-260128",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional", ["imageReference:9", "videoReference:3", "audioReference:3"]],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], resolution: ["480p", "720p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.5-Pro()",\r\n      modelName: "doubao-seedance-1-5-pro-251215",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional"],\r\n      audio: "optional",\r\n      durationResolutionMap: [{ duration: [4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.0-Pro",\r\n      modelName: "doubao-seedance-1-0-pro-250528",\r\n      type: "video",\r\n      mode: ["text", "startFrameOptional"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.0-Pro-Fast",\r\n      modelName: "doubao-seedance-1-0-pro-fast-251015",\r\n      type: "video",\r\n      mode: ["text", "singleImage"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.0-Lite-T2V",\r\n      modelName: "doubao-seedance-1-0-lite-t2v-250428",\r\n      type: "video",\r\n      mode: ["text"],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n    {\r\n      name: "Seedance-1.0-Lite-I2V",\r\n      modelName: "doubao-seedance-1-0-lite-i2v-250428",\r\n      type: "video",\r\n      mode: ["startFrameOptional", ["imageReference:4"]],\r\n      audio: false,\r\n      durationResolutionMap: [{ duration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], resolution: ["480p", "720p", "1080p"] }],\r\n    },\r\n  ],\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst getHeaders = () => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  return {\r\n    "Content-Type": "application/json",\r\n    Authorization: `Bearer ${vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "")}`,\r\n  };\r\n};\r\n\r\nconst getBaseUrl = () => vendor.inputValues.baseUrl.replace(/\\/+$/, "");\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nconst textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {\r\n  if (!vendor.inputValues.apiKey) throw new Error("API Key");\r\n  const apiKey = vendor.inputValues.apiKey.replace(/^Bearer\\s+/i, "");\r\n\r\n  const effortMap: Record<number, string> = {\r\n    0: "minimal",\r\n    1: "low",\r\n    2: "medium",\r\n    3: "high",\r\n  };\r\n\r\n  return createOpenAICompatible({\r\n    name: "volcengine",\r\n    baseURL: getBaseUrl(),\r\n    apiKey,\r\n    fetch: async (url: string, options?: RequestInit) => {\r\n      const rawBody = JSON.parse((options?.body as string) ?? "{}");\r\n      const modifiedBody = {\r\n        ...rawBody,\r\n        thinking: {\r\n          type: "enabled",\r\n        },\r\n        reasoning_effort: effortMap[thinkLevel],\r\n      };\r\n      return await fetch(url, {\r\n        ...options,\r\n        body: JSON.stringify(modifiedBody),\r\n      });\r\n    },\r\n  }).chatModel(model.modelName);\r\n};\r\n\r\nconst imageRequest = async (config: ImageConfig, model: ImageModel): Promise<string> => {\r\n  const baseUrl = getBaseUrl();\r\n  const headers = getHeaders();\r\n\r\n  const body: any = {\r\n    model: model.modelName,\r\n    prompt: config.prompt || "",\r\n    response_format: "url",\r\n    watermark: false,\r\n  };\r\n\r\n  const isOldModel = model.modelName.includes("seedream-3-0");\r\n  const is5Lite = model.modelName.includes("seedream-5-0-lite");\r\n\r\n  // sequential_image_generation  seedream 5.0-lite/4.5/4.0 \r\n  if (!isOldModel) {\r\n    body.sequential_image_generation = "disabled";\r\n  }\r\n\r\n  // \uFF1A string\uFF0C array\uFF08seedream-3.0-t2i  image \uFF09\r\n  if (!isOldModel && config.referenceList && config.referenceList.length > 0) {\r\n    const images = config.referenceList.map((ref) => ref.base64);\r\n    body.image = images.length === 1 ? images[0] : images;\r\n  }\r\n\r\n  // \uFF1A\uFF0C\r\n  const [w, h] = config.aspectRatio.split(":").map(Number);\r\n  const sizeTable: Record<string, Record<string, string>> = {\r\n    "1K": {\r\n      "1:1": "1024x1024",\r\n      "4:3": "1152x864",\r\n      "3:4": "864x1152",\r\n      "16:9": "1280x720",\r\n      "9:16": "720x1280",\r\n      "3:2": "1248x832",\r\n      "2:3": "832x1248",\r\n      "21:9": "1512x648",\r\n    },\r\n    "2K": {\r\n      "1:1": "2048x2048",\r\n      "4:3": "2304x1728",\r\n      "3:4": "1728x2304",\r\n      "16:9": "2848x1600",\r\n      "9:16": "1600x2848",\r\n      "3:2": "2496x1664",\r\n      "2:3": "1664x2496",\r\n      "21:9": "3136x1344",\r\n    },\r\n    "4K": {\r\n      "1:1": "4096x4096",\r\n      "4:3": "4704x3520",\r\n      "3:4": "3520x4704",\r\n      "16:9": "5504x3040",\r\n      "9:16": "3040x5504",\r\n      "3:2": "4992x3328",\r\n      "2:3": "3328x4992",\r\n      "21:9": "6240x2656",\r\n    },\r\n  };\r\n\r\n  const sizeKey = config.size || "2K";\r\n  const ratioKey = config.aspectRatio;\r\n  const table = sizeTable[sizeKey];\r\n\r\n  if (table && table[ratioKey]) {\r\n    // \uFF0C\r\n    const [pw, ph] = table[ratioKey].split("x").map(Number);\r\n    const totalPixels = pw * ph;\r\n    if (isOldModel) {\r\n      // seedream-3.0-t2i:  [512x512, 2048x2048]\r\n      body.size = table[ratioKey];\r\n    } else if (totalPixels < 3686400) {\r\n      // 1K \uFF0C "2K" \r\n      body.size = "2K";\r\n    } else if (is5Lite && totalPixels > 10404496) {\r\n      // seedream-5.0-lite  10404496\uFF0C4K \uFF0C "2K"\r\n      body.size = "2K";\r\n    } else {\r\n      body.size = table[ratioKey];\r\n    }\r\n  } else if (isOldModel) {\r\n    // seedream-3.0-t2i:  [512x512, 2048x2048]\uFF0C\r\n    const base = sizeKey === "1K" ? 1024 : 2048;\r\n    const calcW = Math.min(2048, Math.round(base * Math.sqrt(w / h)));\r\n    const calcH = Math.min(2048, Math.round(base * Math.sqrt(h / w)));\r\n    body.size = `${Math.max(512, calcW)}x${Math.max(512, calcH)}`;\r\n  } else {\r\n    // \uFF0C\uFF081\uFF09\uFF0C prompt \r\n    // seedream 5.0-lite  "2K"/"3K"\uFF0Cseedream 4.5  "2K"/"4K"\uFF0Cseedream 4.0  "1K"/"2K"/"4K"\r\n    if (is5Lite) {\r\n      body.size = sizeKey === "4K" ? "3K" : sizeKey === "1K" ? "2K" : sizeKey;\r\n    } else {\r\n      body.size = sizeKey === "1K" ? "2K" : sizeKey;\r\n    }\r\n  }\r\n\r\n  logger(`[] : ${model.modelName}, : ${body.size}`);\r\n\r\n  const response = await axios.post(`${baseUrl}/images/generations`, body, { headers });\r\n  const data = response.data;\r\n\r\n  if (data?.error) {\r\n    throw new Error(`\uFF1A${data.error.message || data.error.code}`);\r\n  }\r\n\r\n  //  data \r\n  if (data?.data && data.data.length > 0) {\r\n    for (const item of data.data) {\r\n      if (item.url) {\r\n        return await urlToBase64(item.url);\r\n      }\r\n      if (item.b64_json) {\r\n        return item.b64_json;\r\n      }\r\n      if (item.error) {\r\n        throw new Error(`\uFF1A${item.error.message || item.error.code}`);\r\n      }\r\n    }\r\n  }\r\n\r\n  throw new Error("\uFF1A");\r\n};\r\n\r\nconst videoRequest = async (config: VideoConfig, model: VideoModel): Promise<string> => {\r\n  const baseUrl = getBaseUrl();\r\n  const headers = getHeaders();\r\n\r\n  const content: any[] = [];\r\n\r\n  if (config.prompt) {\r\n    content.push({ type: "text", text: config.prompt });\r\n  }\r\n\r\n  if (typeof config.mode === "string") {\r\n    switch (config.mode) {\r\n      case "singleImage": {\r\n        const firstImage = config.referenceList?.find((r) => r.type === "image");\r\n        if (firstImage) {\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: firstImage.base64 },\r\n            role: "first_frame",\r\n          });\r\n        }\r\n        break;\r\n      }\r\n      case "startFrameOptional": {\r\n        const images = config.referenceList?.filter((r) => r.type === "image") ?? [];\r\n        if (images.length > 0) {\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: images[0].base64 },\r\n            role: "first_frame",\r\n          });\r\n          if (images.length > 1) {\r\n            content.push({\r\n              type: "image_url",\r\n              image_url: { url: images[1].base64 },\r\n              role: "last_frame",\r\n            });\r\n          }\r\n        }\r\n        break;\r\n      }\r\n      case "startEndRequired": {\r\n        const images = config.referenceList?.filter((r) => r.type === "image") ?? [];\r\n        if (images.length >= 2) {\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: images[0].base64 },\r\n            role: "first_frame",\r\n          });\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: images[1].base64 },\r\n            role: "last_frame",\r\n          });\r\n        }\r\n        break;\r\n      }\r\n      case "endFrameOptional": {\r\n        const images = config.referenceList?.filter((r) => r.type === "image") ?? [];\r\n        if (images.length > 0) {\r\n          content.push({\r\n            type: "image_url",\r\n            image_url: { url: images[0].base64 },\r\n            role: "first_frame",\r\n          });\r\n          if (images.length > 1) {\r\n            content.push({\r\n              type: "image_url",\r\n              image_url: { url: images[1].base64 },\r\n              role: "last_frame",\r\n            });\r\n          }\r\n        }\r\n        break;\r\n      }\r\n      case "text":\r\n      default:\r\n        break;\r\n    }\r\n  } else if (Array.isArray(config.mode)) {\r\n    // \uFF1A\r\n    const imageRefs = config.referenceList?.filter((r) => r.type === "image") ?? [];\r\n    const videoRefs = config.referenceList?.filter((r) => r.type === "video") ?? [];\r\n    const audioRefs = config.referenceList?.filter((r) => r.type === "audio") ?? [];\r\n\r\n    for (const refDef of config.mode) {\r\n      if (typeof refDef === "string") {\r\n        if (refDef.startsWith("imageReference:")) {\r\n          const maxCount = parseInt(refDef.split(":")[1], 10);\r\n          for (const ref of imageRefs.slice(0, maxCount)) {\r\n            content.push({\r\n              type: "image_url",\r\n              image_url: { url: ref.base64 },\r\n              role: "reference_image",\r\n            });\r\n          }\r\n        } else if (refDef.startsWith("videoReference:")) {\r\n          const maxCount = parseInt(refDef.split(":")[1], 10);\r\n          for (const ref of videoRefs.slice(0, maxCount)) {\r\n            content.push({\r\n              type: "video_url",\r\n              video_url: { url: ref.base64 },\r\n              role: "reference_video",\r\n            });\r\n          }\r\n        } else if (refDef.startsWith("audioReference:")) {\r\n          const maxCount = parseInt(refDef.split(":")[1], 10);\r\n          for (const ref of audioRefs.slice(0, maxCount)) {\r\n            content.push({\r\n              type: "audio_url",\r\n              audio_url: { url: ref.base64 },\r\n              role: "reference_audio",\r\n            });\r\n          }\r\n        }\r\n      }\r\n    }\r\n  }\r\n\r\n  const body: any = {\r\n    model: model.modelName,\r\n    content,\r\n    ratio: config.aspectRatio,\r\n    duration: config.duration,\r\n    resolution: config.resolution || "720p",\r\n    watermark: false,\r\n  };\r\n\r\n  if (model.audio === "optional") {\r\n    body.generate_audio = config.audio !== false;\r\n  } else if (model.audio === true) {\r\n    body.generate_audio = true;\r\n  } else {\r\n    body.generate_audio = false;\r\n  }\r\n\r\n  logger(`[] , : ${model.modelName}, : ${config.duration}s, : ${config.resolution}`);\r\n\r\n  const createResponse = await axios.post(`${baseUrl}/contents/generations/tasks`, body, { headers });\r\n  const taskId = createResponse.data?.id;\r\n\r\n  if (!taskId) {\r\n    throw new Error("\uFF1AID");\r\n  }\r\n\r\n  logger(`[] , ID: ${taskId}`);\r\n\r\n  const result = await pollTask(\r\n    async (): Promise<PollResult> => {\r\n      const queryResponse = await axios.get(`${baseUrl}/contents/generations/tasks/${taskId}`, { headers });\r\n      const task = queryResponse.data;\r\n\r\n      logger(`[] : ${task.status}`);\r\n\r\n      switch (task.status) {\r\n        case "succeeded":\r\n          if (task.content?.video_url) {\r\n            return { completed: true, data: task.content.video_url };\r\n          }\r\n          return { completed: true, error: "URL" };\r\n        case "failed":\r\n          return { completed: true, error: task.error?.message || "" };\r\n        case "expired":\r\n          return { completed: true, error: "" };\r\n        case "cancelled":\r\n          return { completed: true, error: "" };\r\n        default:\r\n          return { completed: false };\r\n      }\r\n    },\r\n    10000,\r\n    600000 * 3,\r\n  );\r\n\r\n  if (result.error) {\r\n    throw new Error(result.error);\r\n  }\r\n\r\n  return await urlToBase64(result.data!);\r\n};\r\n\r\nconst ttsRequest = async (config: TTSConfig, model: TTSModel): Promise<string> => {\r\n  return "";\r\n};\r\n\r\nconst checkForUpdates = async (): Promise<{ hasUpdate: boolean; latestVersion: string; notice: string }> => {\r\n  return { hasUpdate: false, latestVersion: "2.0", notice: "" };\r\n};\r\n\r\nconst updateVendor = async (): Promise<string> => {\r\n  return "";\r\n};\r\n\r\n// ============================================================\r\n// \r\n// ============================================================\r\n\r\nexports.vendor = vendor;\r\nexports.textRequest = textRequest;\r\nexports.imageRequest = imageRequest;\r\nexports.videoRequest = videoRequest;\r\nexports.ttsRequest = ttsRequest;\r\nexports.checkForUpdates = checkForUpdates;\r\nexports.updateVendor = updateVendor;\r\n\r\nexport {};\r\n'
     };
   }
 });
 
 // src/lib/fixDB.ts
-async function tempOnsert(tsCode) {
+async function tempopensert(tsCode) {
   const jsCode = (0, import_sucrase.transform)(tsCode, { transforms: ["typescript"] }).code;
   const exports2 = utils_default.vm(jsCode);
   const vendor = exports2.vendor;
@@ -105805,27 +105805,27 @@ var init_fixDB = __esm({
       };
       await db_default("o_novel").where("eventState", 0).update({
         eventState: -1,
-        errorReason: "\u8F6F\u4EF6\u9000\u51FA\u5BFC\u81F4\u5931\u8D25"
+        errorReason: "Failed"
       });
       await db_default("o_script").where("extractState", 0).update({
         extractState: -1,
-        errorReason: "\u8F6F\u4EF6\u9000\u51FA\u5BFC\u81F4\u5931\u8D25"
+        errorReason: "Failed"
       });
-      await db_default("o_assets").where("promptState", "\u751F\u6210\u4E2D").update({
-        promptState: "\u751F\u6210\u5931\u8D25",
-        promptErrorReason: "\u8F6F\u4EF6\u9000\u51FA\u5BFC\u81F4\u5931\u8D25"
+      await db_default("o_assets").where("promptState", "Generating").update({
+        promptState: "Generation failed",
+        promptErrorReason: "Failed"
       });
-      await db_default("o_image").where("state", "\u751F\u6210\u4E2D").update({
-        state: "\u751F\u6210\u5931\u8D25",
-        errorReason: "\u8F6F\u4EF6\u9000\u51FA\u5BFC\u81F4\u5931\u8D25"
+      await db_default("o_image").where("state", "Generating").update({
+        state: "Generation failed",
+        errorReason: "Failed"
       });
-      await db_default("o_storyboard").where("state", "\u751F\u6210\u4E2D").update({
-        state: "\u751F\u6210\u5931\u8D25",
-        reason: "\u8F6F\u4EF6\u9000\u51FA\u5BFC\u81F4\u5931\u8D25"
+      await db_default("o_storyboard").where("state", "Generating").update({
+        state: "Generation failed",
+        reason: "Failed"
       });
-      await db_default("o_video").where("state", "\u751F\u6210\u4E2D").update({
-        state: "\u751F\u6210\u5931\u8D25",
-        errorReason: "\u8F6F\u4EF6\u9000\u51FA\u5BFC\u81F4\u5931\u8D25"
+      await db_default("o_video").where("state", "Generating").update({
+        state: "Generation failed",
+        errorReason: "Failed"
       });
       await addColumn("o_prompt", "useData", "text");
       await addColumn("o_agentDeploy", "type", "string");
@@ -105854,14 +105854,14 @@ var init_fixDB = __esm({
       const existAudioPrompt = await db_default("o_prompt").where("type", "audioBindPrompt").first();
       if (!existAudioPrompt)
         await db_default("o_prompt").insert({
-          name: "\u97F3\u8272\u7ED1\u5B9A",
+          name: "",
           type: "audioBindPrompt",
-          data: `\u4F60\u662F\u4E00\u4E2A\u97F3\u8272\u5339\u914D\u52A9\u624B\u3002
-\u4F60\u7684\u4EFB\u52A1\u662F\uFF1A\u6839\u636E\u7ED9\u5B9A\u89D2\u8272\u8D44\u4EA7\u7684\u540D\u79F0\u4E0E\u63CF\u8FF0\uFF0C\u4ECE\u5019\u9009\u97F3\u9891\u5217\u8868\u4E2D\u9009\u51FA\u6700\u5408\u9002\u7684\u97F3\u8272\u3002
-\u5339\u914D\u89C4\u5219\uFF1A
-1. \u4F18\u5148\u6839\u636E\u89D2\u8272\u6027\u522B\u3001\u5E74\u9F84\u3001\u6027\u683C\u7B49\u7279\u5F81\u4E0E\u97F3\u8272\u63CF\u8FF0\u8FDB\u884C\u8BED\u4E49\u5339\u914D\uFF1B
-2. \u540C\u4E00\u89D2\u8272\u4EC5\u53EF\u5339\u914D\u4E00\u4E2A\u97F3\u8272\uFF1B
-3. \u82E5\u5019\u9009\u5217\u8868\u4E2D\u6CA1\u6709\u5408\u9002\u7684\u97F3\u8272\uFF0C\u5219\u65E0\u9700\u8FD4\u56DE audioId\uFF1B`
+          data: `youismatch
+youoftaskisbased onCharacterAssetofNameDescriptionaudiolistof
+match
+1. based onCharacterDescriptionmatch
+2. Charactermatch
+3. listofnoreturn audioId`
         });
       const agentUserMode = await utils_default.db("o_setting").where("key", "agentUseMode").first();
       if (!agentUserMode) {
@@ -105874,19 +105874,19 @@ var init_fixDB = __esm({
         });
       }
       const advancedAgentList = [
-        { key: "scriptAgent:decisionAgent", name: "\u5267\u672CAgent:\u51B3\u7B56\u5C42", desc: "\u51B3\u7B56\u5C42" },
-        { key: "scriptAgent:supervisionAgent", name: "\u5267\u672CAgent:\u76D1\u7763\u5C42", desc: "\u76D1\u7763\u5C42" },
-        { key: "scriptAgent:storySkeletonAgent", name: "\u5267\u672CAgent:\u6545\u4E8B\u9AA8\u67B6", desc: "\u6545\u4E8B\u9AA8\u67B6\u751F\u6210" },
-        { key: "scriptAgent:adaptationStrategyAgent", name: "\u5267\u672CAgent:\u6539\u7F16\u7B56\u7565", desc: "\u6539\u7F16\u7B56\u7565\u751F\u6210" },
-        { key: "scriptAgent:scriptAgent", name: "\u5267\u672CAgent:\u5267\u672C\u751F\u6210", desc: "\u5267\u672C\u751F\u6210" },
-        { key: "productionAgent:decisionAgent", name: "\u751F\u4EA7Agent:\u51B3\u7B56\u5C42", desc: "\u51B3\u7B56\u5C42" },
-        { key: "productionAgent:supervisionAgent", name: "\u751F\u4EA7Agent:\u76D1\u7763\u5C42", desc: "\u76D1\u7763\u5C42" },
-        { key: "productionAgent:deriveAssetsAgent", name: "\u751F\u4EA7Agent:\u884D\u751F\u8D44\u4EA7", desc: "\u884D\u751F\u8D44\u4EA7" },
-        { key: "productionAgent:generateAssetsAgent", name: "\u751F\u4EA7Agent:\u751F\u6210\u8D44\u4EA7", desc: "\u751F\u6210\u8D44\u4EA7" },
-        { key: "productionAgent:directorPlanAgent", name: "\u751F\u4EA7Agent:\u5BFC\u6F14\u89C4\u5212", desc: "\u5BFC\u6F14\u89C4\u5212" },
-        { key: "productionAgent:storyboardGenAgent", name: "\u751F\u4EA7Agent:\u5206\u955C\u751F\u6210", desc: "\u5206\u955C\u751F\u6210" },
-        { key: "productionAgent:storyboardPanelAgent", name: "\u751F\u4EA7Agent:\u5206\u955C\u9762\u677F", desc: "\u5206\u955C\u9762\u677F\u751F\u6210" },
-        { key: "productionAgent:storyboardTableAgent", name: "\u751F\u4EA7Agent:\u5206\u955C\u8868\u683C", desc: "\u5206\u955C\u8868\u683C\u751F\u6210" }
+        { key: "scriptAgent:decisionAgent", name: "ScriptAgent:", desc: "" },
+        { key: "scriptAgent:supervisionAgent", name: "ScriptAgent:", desc: "" },
+        { key: "scriptAgent:storySkeletonAgent", name: "ScriptAgent:", desc: "" },
+        { key: "scriptAgent:adaptationStrategyAgent", name: "ScriptAgent:adaptation strategy", desc: "adaptation strategy" },
+        { key: "scriptAgent:scriptAgent", name: "ScriptAgent:Script", desc: "Script" },
+        { key: "productionAgent:decisionAgent", name: "Agent:", desc: "" },
+        { key: "productionAgent:supervisionAgent", name: "Agent:", desc: "" },
+        { key: "productionAgent:deriveAssetsAgent", name: "Agent:derivedAsset", desc: "derivedAsset" },
+        { key: "productionAgent:generateAssetsAgent", name: "Agent:Asset", desc: "Asset" },
+        { key: "productionAgent:directorPlanAgent", name: "Agent:", desc: "" },
+        { key: "productionAgent:storyboardGenAgent", name: "Agent:Storyboard", desc: "Storyboard" },
+        { key: "productionAgent:storyboardPanelAgent", name: "Agent:Storyboard", desc: "Storyboard" },
+        { key: "productionAgent:storyboardTableAgent", name: "Agent:Storyboardtable", desc: "Storyboardtable" }
       ];
       for (const agent of advancedAgentList) {
         const exists = await db_default("o_agentDeploy").where("key", agent.key).select("*").first();
@@ -105907,328 +105907,328 @@ var init_fixDB = __esm({
       await db_default("o_prompt").where("type", "scriptAssetExtraction").update({
         data: `---
 name: universal_agent
-description: \u4E13\u6CE8\u4E8E\u4ECE\u5267\u672C\u5185\u5BB9\u4E2D\u63D0\u53D6\u6240\u4F7F\u7528\u7684\u8D44\u4EA7\uFF08\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177\uFF09\u5E76\u751F\u6210\u7ED3\u6784\u5316\u8D44\u4EA7\u5217\u8868\u7684\u52A9\u624B\u3002
+description: ScriptcontentextractusedAssetCharacterScenePropAssetlistof
 ---
 
 # Script Assets Extract
 
-\u4F60\u662F\u4E00\u4E2A\u4E13\u4E1A\u7684\u5267\u672C\u5185\u5BB9\u5206\u6790\u52A9\u624B\uFF0C\u4E13\u6CE8\u4E8E\u4ECE\u5267\u672C\u6587\u672C\u4E2D\u8BC6\u522B\u548C\u63D0\u53D6\u6240\u6709\u6D89\u53CA\u7684\u8D44\u4EA7\uFF08\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177\uFF09\uFF0C\u5E76\u4E3A\u6BCF\u9879\u8D44\u4EA7\u751F\u6210\u53EF\u4F9B\u4E0B\u6E38\u5236\u4F5C\u6D41\u7A0B\u4F7F\u7528\u7684\u7ED3\u6784\u5316\u63CF\u8FF0\u548C\u63D0\u793A\u8BCD\u3002
+youisofScriptcontentScripttextandextractallofAssetCharacterScenePropAsset generationunderprocessusedDescriptionandPrompt
 
-## \u4F55\u65F6\u4F7F\u7528
+## whenuse
 
-\u7528\u6237\u63D0\u4F9B\u5267\u672C\u5185\u5BB9\uFF0C\u4F60\u9700\u8981\u9010\u6BB5\u9605\u8BFB\u5E76\u63D0\u53D6\u5176\u4E2D\u6D89\u53CA\u7684\u6240\u6709\u8D44\u4EA7\uFF08\u4EBA\u7269\u89D2\u8272\u3001\u573A\u666F\u5730\u70B9\u3001\u9053\u5177\u7269\u4EF6\uFF09\uFF0C\u8F93\u51FA\u4E3A\u7ED3\u6784\u5316\u7684\u8D44\u4EA7\u5217\u8868\u3002\u4EA7\u51FA\u7684\u8D44\u4EA7\u63CF\u8FF0\u5C06\u7528\u4E8E\u540E\u7EED AI \u56FE\u7247\u751F\u6210\u548C\u5236\u4F5C\u6D41\u7A0B\u3002
+Scriptcontent,youneedextractinvolved inallAssetCharacterScenePropofAssetlistofasset description AI imageandprocess
 
-## \u4E0E\u7CFB\u7EDF\u7684\u5BF9\u5E94\u5173\u7CFB
+## Systemofrelated
 
-- \u8D44\u4EA7\u7C7B\u578B\uFF1A
-  - \`role\` \u2014 \u89D2\u8272\uFF08\u5BF9\u5E94 \`o_assets.type = "role"\`\uFF09
-  - \`scene\` \u2014 \u573A\u666F\uFF08\u5BF9\u5E94 \`o_assets.type = "scene"\`\uFF09
-  - \`tool\` \u2014 \u9053\u5177\uFF08\u5BF9\u5E94 \`o_assets.type = "tool"\`\uFF09
-- \u4E0B\u6E38\u7528\u9014\uFF1A\u8D44\u4EA7\u63D0\u793A\u8BCD\u751F\u6210 \u2192 AI \u8D44\u4EA7\u56FE\u751F\u6210 \u2192 \u5206\u955C\u5236\u4F5C
+- AssetType
+ - \`role\` \u2014 Character \`o_assets.type = "role"\`
+ - \`scene\` \u2014 Scene \`o_assets.type = "scene"\`
+ - \`tool\` \u2014 Prop \`o_assets.type = "tool"\`
+- underAssetPrompt \u2192 AI Assetimage \u2192 Storyboard
 
-## \u8F93\u51FA\u8981\u6C42
+## 
 
-**\u5FC5\u987B\u901A\u8FC7\u8C03\u7528 \`resultTool\` \u5DE5\u5177\u8FD4\u56DE\u7ED3\u679C**\uFF0C\u7981\u6B62\u4EE5\u7EAF\u6587\u672C\u3001Markdown \u8868\u683C\u6216 JSON \u4EE3\u7801\u5757\u7B49\u5F62\u5F0F\u76F4\u63A5\u8F93\u51FA\u8D44\u4EA7\u5217\u8868\u3002
-\`resultTool\` \u7684 schema \u4F1A\u5BF9\u5B57\u6BB5\u7C7B\u578B\u548C\u679A\u4E3E\u503C\u505A\u5F3A\u6821\u9A8C\uFF0C\u8C03\u7528\u65F6\u8BF7\u4E25\u683C\u6309\u7167\u4E0B\u65B9\u5B57\u6BB5\u5B9A\u4E49\u586B\u5199\uFF0C\u786E\u4FDD\u6570\u636E\u7ED3\u6784\u6B63\u786E\u3001\u5B57\u6BB5\u5B8C\u6574\u3001\u7C7B\u578B\u5339\u914D\u3002
+** \`resultTool\` toolreturnresult**textMarkdown table JSON Assetlist
+\`resultTool\` of schema fieldTypeandvalidatewhenstrictly followunderfielddefinitionensuredatafieldTypematch
 
-\u6BCF\u4E2A\u8D44\u4EA7\u5BF9\u8C61\u5305\u542B\u4EE5\u4E0B\u5B57\u6BB5\uFF1A
+Assetthe followingfield
 
-| \u5B57\u6BB5 | \u7C7B\u578B | \u5FC5\u586B | \u8BF4\u660E |
+| field | Type | Required | |
 | ---- | ---- | ---- | ---- |
-| \`name\` | string | \u662F | \u8D44\u4EA7\u540D\u79F0\uFF0C\u4F7F\u7528\u5267\u672C\u4E2D\u7684\u539F\u59CB\u79F0\u547C,\u4E0D\u505A\u5176\u4ED6\u591A\u4F59\u63CF\u8FF0 |
-| \`desc\` | string | \u662F | \u8D44\u4EA7\u63CF\u8FF0\uFF0C30-80 \u5B57\u7684\u89C6\u89C9\u5316\u63CF\u8FF0 |
-| \`prompt\` | string | \u662F | \u751F\u6210\u63D0\u793A\u8BCD\uFF0C\u82F1\u6587\uFF0C\u7528\u4E8E AI \u56FE\u7247\u751F\u6210 |
-| \`type\` | enum | \u662F | \u8D44\u4EA7\u7C7B\u578B\uFF1A\`role\` / \`scene\` / \`tool\`  |
+| \`name\` | string | is | AssetNameuseScriptofstart,notOtherDescription |
+| \`desc\` | string | is | asset description30-80 ofDescription |
+| \`prompt\` | string | is | Generate prompt AI image |
+| \`type\` | enum | is | AssetType\`role\` / \`scene\` / \`tool\` |
 
-## \u63D0\u53D6\u89C4\u5219
+## extract
 
-### \u89D2\u8272\uFF08role\uFF09
+### Characterrole
 
-- \u63D0\u53D6\u5267\u672C\u4E2D\u51FA\u73B0\u7684\u6240\u6709\u6709\u540D\u5B57\u7684\u89D2\u8272
-- \`desc\`\uFF1A\u5305\u542B\u6027\u522B\u3001\u5916\u8C8C\u7279\u5F81\u3001\u670D\u9970\u98CE\u683C\u3001\u4F53\u6001\u6C14\u8D28\u7B49\u89C6\u89C9\u8981\u7D20\uFF0C\u9700\u5728\u63CF\u8FF0\u5F00\u5934\u660E\u786E\u6807\u6CE8\u89D2\u8272\u6027\u522B\uFF08\u5982"\u7537\u6027\uFF0C\u2026\u2026"\u6216"\u5973\u6027\uFF0C\u2026\u2026"\uFF09
-- \`prompt\`\uFF1A\u82F1\u6587\u63D0\u793A\u8BCD\uFF0C\u63CF\u8FF0\u89D2\u8272\u7684\u5916\u89C2\u7279\u5F81\uFF0C\u9700\u4EE5\u6027\u522B\u8BCD\u5F00\u5934\uFF08\u5982 \`a young man, ...\` \u6216 \`a young woman, ...\`\uFF09\uFF0C\u9002\u7528\u4E8E AI \u89D2\u8272\u56FE\u751F\u6210
-- \u540C\u4E00\u89D2\u8272\u6709\u591A\u4E2A\u79F0\u547C\u65F6\uFF0C\u53D6\u6700\u5E38\u7528\u7684\u4F5C\u4E3A \`name\`
-- \u65E0\u540D\u9F99\u5957\uFF08\u5982"\u8DEF\u4EBA\u7532"\u3001"\u58EB\u5175"\uFF09\u53EF\u8DF3\u8FC7\uFF0C\u9664\u975E\u5176\u9020\u578B\u5BF9\u5267\u60C5\u6709\u91CD\u8981\u89C6\u89C9\u610F\u4E49
+- extractScriptofallofCharacter
+- \`desc\`atDescriptionopenCharacter"\u2026\u2026""\u2026\u2026"
+- \`prompt\`PromptDescriptionCharacterofopen \`a young man, ...\` \`a young woman, ...\` AI Characterimage
+- Characterwhenof \`name\`
+- no""""non-
 
-### \u573A\u666F\uFF08scene\uFF09
+### Scenescene
 
-- \u63D0\u53D6\u5267\u672C\u4E2D\u51FA\u73B0\u7684\u6240\u6709\u573A\u666F/\u5730\u70B9
-- \`desc\`\uFF1A\u5305\u542B\u7A7A\u95F4\u7ED3\u6784\u3001\u5149\u7167\u6C1B\u56F4\u3001\u5173\u952E\u9648\u8BBE\u3001\u8272\u8C03\u57FA\u8C03\u7B49\u89C6\u89C9\u8981\u7D20
-- \`prompt\`\uFF1A\u82F1\u6587\u63D0\u793A\u8BCD\uFF0C\u63CF\u8FF0\u573A\u666F\u7684\u6574\u4F53\u89C6\u89C9\u98CE\u683C\uFF0C\u9002\u7528\u4E8E AI \u573A\u666F\u56FE\u751F\u6210
-- \u540C\u4E00\u573A\u666F\u7684\u4E0D\u540C\u72B6\u6001\uFF08\u5982\u767D\u5929/\u591C\u665A\uFF09\u4E0D\u91CD\u590D\u63D0\u53D6\uFF0C\u5728 \`desc\` \u4E2D\u6CE8\u660E\u5373\u53EF
+- extractScriptofallScene/
+- \`desc\`related
+- \`prompt\`PromptDescriptionSceneof AI Sceneimage
+- SceneofnotStatus/notextractat \`desc\` 
 
-### \u9053\u5177\uFF08tool\uFF09
+### Proptool
 
-- \u63D0\u53D6\u5267\u672C\u4E2D\u51FA\u73B0\u7684\u91CD\u8981\u9053\u5177/\u7269\u54C1
-- \`desc\`\uFF1A\u5305\u542B\u5916\u89C2\u5F62\u72B6\u3001\u989C\u8272\u6750\u8D28\u3001\u5C3A\u5BF8\u53C2\u8003\u3001\u7279\u6B8A\u6548\u679C\u7B49\u89C6\u89C9\u8981\u7D20
-- \`prompt\`\uFF1A\u82F1\u6587\u63D0\u793A\u8BCD\uFF0C\u63CF\u8FF0\u9053\u5177\u7684\u5916\u89C2\u7EC6\u8282\uFF0C\u9002\u7528\u4E8E AI \u9053\u5177\u56FE\u751F\u6210
-- \u4EC5\u63D0\u53D6\u6709\u72EC\u7ACB\u89C6\u89C9\u610F\u4E49\u6216\u5267\u60C5\u529F\u80FD\u7684\u9053\u5177\uFF0C\u901A\u7528\u7269\u54C1\u53EF\u8DF3\u8FC7
+- extractScriptofProp/
+- \`desc\`special
+- \`prompt\`PromptDescriptionPropof AI Propimage
+- extractofProp
 
 
-## \u63D0\u793A\u8BCD\uFF08prompt\uFF09\u751F\u6210\u89C4\u8303
+## Promptprompt
 
-- \u91C7\u7528\u9017\u53F7\u5206\u9694\u7684\u5173\u952E\u8BCD/\u77ED\u8BED\u683C\u5F0F
-- \u4F18\u5148\u63CF\u8FF0**\u89C6\u89C9\u7279\u5F81**\uFF0C\u907F\u514D\u62BD\u8C61\u6982\u5FF5
-- \u5305\u542B\u98CE\u683C\u5173\u952E\u8BCD\uFF08\u5982 anime style, manga style \u7B49\uFF0C\u6839\u636E\u9879\u76EE\u98CE\u683C\u51B3\u5B9A\uFF09
-- \u89D2\u8272 prompt \u793A\u4F8B\uFF1A\`a young man, sharp eyebrows, black hair, pale skin, wearing a gray Taoist robe, slender build, cold expression\`
-- \u573A\u666F prompt \u793A\u4F8B\uFF1A\`dark cave interior, glowing crystals on walls, misty atmosphere, dim blue lighting, stone altar in center\`
-- \u9053\u5177 prompt \u793A\u4F8B\uFF1A\`ancient jade pendant, oval shape, translucent green, carved dragon pattern, glowing faintly\`
+- ofrelatedkeywords/
+- Description****
+- relatedkeywords anime style, manga style based onProject
+- Character prompt example\`a young man, sharp eyebrows, black hair, pale skin, wearing a gray Taoist robe, slender build, cold expression\`
+- Scene prompt example\`dark cave interior, glowing crystals on walls, misty atmosphere, dim blue lighting, stone altar in center\`
+- Prop prompt example\`ancient jade pendant, oval shape, translucent green, carved dragon pattern, glowing faintly\`
 
-## \u63D0\u53D6\u6D41\u7A0B
+## extractprocess
 
-1. \u901A\u8BFB\u5267\u672C\u5168\u6587\uFF0C\u8BC6\u522B\u6240\u6709\u51FA\u73B0\u7684\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177
-2. \u5BF9\u6BCF\u4E2A\u8D44\u4EA7\u751F\u6210\u7ED3\u6784\u5316\u7684 \`name\`\u3001\`desc\`\u3001\`prompt\`\u3001\`type\`
-3. \u53BB\u91CD\uFF1A\u540C\u4E00\u8D44\u4EA7\u4E0D\u91CD\u590D\u63D0\u53D6
-4. **\u5FC5\u987B\u901A\u8FC7\u8C03\u7528 \`resultTool\` \u5DE5\u5177\u8F93\u51FA\u5B8C\u6574\u8D44\u4EA7\u5217\u8868**\uFF0C\u4E0D\u8981\u5206\u591A\u6B21\u8C03\u7528\uFF0C\u4E00\u6B21\u6027\u5C06\u6240\u6709\u8D44\u4EA7\u653E\u5165 \`assetsList\` \u6570\u7EC4\u4E2D\u63D0\u4EA4
+1. ScriptallofCharacterSceneProp
+2. Asset generationof \`name\`\`desc\`\`prompt\`\`type\`
+3. Assetnotextract
+4. ** \`resultTool\` toolAssetlist**notconvert allAsset \`assetsList\` Submit
 
-## \u63D0\u53D6\u539F\u5219
+## extract
 
-1. **\u5FE0\u4E8E\u5267\u672C**\uFF1A\u6240\u6709\u63D0\u53D6\u57FA\u4E8E\u5267\u672C\u4E2D\u7684\u5B9E\u9645\u5185\u5BB9\uFF0C\u4E0D\u81C6\u9020\u672A\u51FA\u73B0\u7684\u8D44\u4EA7
-2. **\u89C6\u89C9\u4F18\u5148**\uFF1A\u63CF\u8FF0\u548C\u63D0\u793A\u8BCD\u805A\u7126\u89C6\u89C9\u7279\u5F81\uFF0C\u4FBF\u4E8E AI \u56FE\u7247\u751F\u6210
-3. **\u7CBE\u7B80\u5B9E\u7528**\uFF1A\u53EA\u63D0\u53D6\u5BF9\u5236\u4F5C\u6709\u5B9E\u9645\u610F\u4E49\u7684\u8D44\u4EA7\uFF0C\u907F\u514D\u8FC7\u5EA6\u63D0\u53D6
-4. **\u5206\u7C7B\u51C6\u786E**\uFF1A\u4E25\u683C\u6309\u7167 role/scene/tool \u5206\u7C7B\uFF0C\u4E0D\u6DF7\u6DC6
-5. **\u63D0\u793A\u8BCD\u8D28\u91CF**\uFF1A\u82F1\u6587\u63D0\u793A\u8BCD\u5E94\u5177\u4F53\u3001\u53EF\u6267\u884C\uFF0C\u80FD\u76F4\u63A5\u7528\u4E8E AI \u56FE\u7247\u751F\u6210
+1. **Script**allextractScriptofcontent,notofAsset
+2. ****DescriptionandPrompt AI image
+3. ****extractofAssetextract
+4. **Category**by role/scene/tool Categorynot
+5. **Prompt**Prompt AI image
 
-## \u6CE8\u610F\u4E8B\u9879
+## 
 
-- \u8D44\u4EA7\u5217\u8868\u4E2D**\u4E0D\u8981\u5305\u542B\u5267\u672C\u5185\u5BB9\u672C\u8EAB**\uFF0C\u4EC5\u63D0\u53D6\u6240\u4F7F\u7528\u5230\u7684\u8D44\u4EA7
-- \u89D2\u8272\u7684\u968F\u8EAB\u7269\u54C1\u5982\u679C\u6709\u72EC\u7ACB\u5267\u60C5\u529F\u80FD\uFF0C\u5E94\u5355\u72EC\u4F5C\u4E3A\u9053\u5177\u63D0\u53D6
-- \u573A\u666F\u4E2D\u7684\u56FA\u5B9A\u9648\u8BBE\u4E0D\u9700\u8981\u5355\u72EC\u63D0\u53D6\u4E3A\u9053\u5177\uFF0C\u9664\u975E\u8BE5\u7269\u4EF6\u6709\u72EC\u7ACB\u5267\u60C5\u4F5C\u7528`
+- Assetlist**notScriptcontent**extractuseofAsset
+- CharacterofPropextract
+- SceneofnotneedextractPropnon-`
       });
       await db_default("o_prompt").where("type", "videoPromptGeneration").update({
-        data: `# \u89C6\u9891\u63D0\u793A\u8BCD\u751F\u6210 Skill
+        data: `# Video prompt Skill
 
-\u4F60\u662F**\u89C6\u9891\u63D0\u793A\u8BCD\u751F\u6210 Agent**\uFF0C\u4E13\u95E8\u8D1F\u8D23\u6839\u636E\u6307\u5B9A\u7684 AI \u89C6\u9891\u6A21\u578B\uFF0C\u8BFB\u53D6\u5206\u955C\u4FE1\u606F\u5E76\u8F93\u51FA\u8BE5\u6A21\u578B\u5BF9\u5E94\u683C\u5F0F\u7684\u89C6\u9891\u63D0\u793A\u8BCD\u3002
+youis**Video prompt Agent**based onspecifiedof AI video modelreadStoryboardInformationofVideo prompt
 
 ---
 
-## \u8F93\u5165\u683C\u5F0F
+## 
 
-### 1. \u6A21\u578B\u4E0E\u6A21\u5F0F\uFF08\u5FC5\u9009\uFF09
+### 1. 
 
 
-#### \u6A21\u5F0F\u8DEF\u7531\u89C4\u5219
+#### 
 
-| \u6761\u4EF6 | \u5339\u914D\u6A21\u5F0F | \u8BF4\u660E |
+| items | match | |
 |------|----------|------|
-| \u6A21\u578B\u540D\u4E3A \`seedance-2-0\` + \`\u591A\u53C2:\u662F\` / \`seedance 2.0\` + \`\u591A\u53C2:\u662F\` / \`\u5373\u68A62.0\` + \`\u591A\u53C2:\u662F\` | **seedance-2-0*\uFF0C\u4E0D\u5305\u542B\u5176\u4ED6\u7248\u672C\u6BD4\u5982seedance-1-5/seedance-1-0 | \u652F\u6301\u89D2\u8272/\u573A\u666F/\u5206\u955C\u56FE\u591A\u53C2\u5F15\u7528 |
-| \u6A21\u578B\u540D\u4E3A \`Wan2.6\` / \`wan 2.6\` / \`\u4E07\u8C612.6\` | **Wan 2.6** | \u56FA\u5B9A\u6A21\u5F0F\uFF0C\u5355\u56FE\uFF08\u9996\u5E27\uFF09+ \u53D9\u4E8B\u6587\u672C\uFF0C\u65E0\u5C3E\u5E27 |
-| \u5176\u4ED6\u4EFB\u4F55\u6A21\u578B + \`\u591A\u53C2:\u662F\` | **\u901A\u7528\u591A\u53C2\u6A21\u5F0F** | \u652F\u6301\u89D2\u8272/\u573A\u666F/\u5206\u955C\u56FE\u591A\u53C2\u5F15\u7528 |
-| \u5176\u4ED6\u4EFB\u4F55\u6A21\u578B/seedance-1-5/seedance-1-0 + \`\u591A\u53C2:\u5426\` | **\u901A\u7528\u9996\u5C3E\u5E27\u6A21\u5F0F** | \u9996\u5E27/\u9996\u5C3E\u5E27 + \u7EAF\u6587\u672C\u63CF\u8FF0 |
+| \`seedance-2-0\` + \`Multi-reference:is\` / \`seedance 2.0\` + \`Multi-reference:is\` / \`2.0\` + \`Multi-reference:is\` | **seedance-2-0*notOtherVersionseedance-1-5/seedance-1-0 | supportsCharacter/Scene/storyboard imageMulti-reference |
+| \`Wan2.6\` / \`wan 2.6\` / \`2.6\` | **Wan 2.6** | Single imageFirst frame+ textnoLast frame |
+| Other + \`Multi-reference:is\` | **Multi-reference** | supportsCharacter/Scene/storyboard imageMulti-reference |
+| Other/seedance-1-5/seedance-1-0 + \`Multi-reference:No\` | **First and last frames** | First frame/First and last frames + textDescription |
 
-> \u6A21\u578B\u540D\u4EC5\u7528\u4E8E\u8BB0\u5F55\uFF0C\u5B9E\u9645\u63D0\u793A\u8BCD\u683C\u5F0F\u7531\u5339\u914D\u5230\u7684\u6A21\u5F0F\u51B3\u5B9A\u3002Seedance 2.0 \u548C Wan 2.6 \u662F\u6307\u5B9A\u6A21\u578B\u540D\u5373\u786E\u5B9A\u6A21\u5F0F\u7684\u7279\u4F8B\u3002
+> PromptmatchofSeedance 2.0 and Wan 2.6 isspecifiedOKof
 
-### 2. \u8D44\u4EA7\u4FE1\u606F
+### 2. AssetInformation
 
 \`\`\`
-\u8D44\u4EA7\u4FE1\u606F[id, type, name], [id, type, name], ...
+AssetInformation[id, type, name], [id, type, name], ...
 \`\`\`
 
-- \`id\`\uFF1A\u8D44\u4EA7\u552F\u4E00\u6807\u8BC6\uFF08\u5982 \`A001\`\uFF09
-- \`type\`\uFF1A\u8D44\u4EA7\u7C7B\u578B\uFF0C\u53D6\u503C \`role\`\uFF08\u89D2\u8272\uFF09/ \`scene\`\uFF08\u573A\u666F\uFF09/ \`prop\`\uFF08\u9053\u5177\uFF09
-- \`name\`\uFF1A\u8D44\u4EA7\u540D\u79F0\uFF08\u5982 \`\u6C88\u8F9E\`\u3001\`\u57CE\u697C\`\u3001\`\u957F\u5251\`\uFF09
+- \`id\`Asset \`A001\`
+- \`type\`AssetType \`role\`Character/ \`scene\`Scene/ \`prop\`Prop
+- \`name\`AssetName \`\`\`\`\`\`
 
-### 3. \u5206\u955C\u4FE1\u606F
+### 3. StoryboardInformation
 
-\u5206\u955C\u4EE5 \`<storyboardItem>\` XML \u6807\u7B7E\u5217\u8868\u7684\u5F62\u5F0F\u4F20\u5165\uFF0C\u6BCF\u6761\u5206\u955C\u7ED3\u6784\u5982\u4E0B\uFF1A
+Storyboard \`<storyboardItem>\` XML TagslistofitemsStoryboardunder
 
 \`\`\`xml
 <storyboardItem
-  videoDesc='\uFF08\u753B\u9762\u63CF\u8FF0\u3001\u573A\u666F\u3001\u5173\u8054\u8D44\u4EA7\u540D\u79F0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u3001\u5173\u8054\u8D44\u4EA7ID\uFF09'
-  prompt='\u5F85\u751F\u6210'
-  track='\u5206\u7EC4'
-  duration='\u89C6\u9891\u63A8\u8350\u65F6\u95F4'
-  associateAssetsIds="[\u8BE5\u5206\u955C\u6240\u9700\u7684\u8D44\u4EA7ID\u5217\u8868]"
-  shouldGenerateImage="true"
+ videoDesc='Visual descriptionScenerelatedAssetNamewhenCharacterrelatedAssetID'
+ prompt=''
+ track=''
+ duration='Time'
+ associateAssetsIds="[StoryboardofAssetIDlist]"
+ shouldGenerateImage="true"
 ></storyboardItem>
 \`\`\`
 
-#### \u8F93\u5165\u5B57\u6BB5\u8BF4\u660E
+#### field
 
-| \u5C5E\u6027 | \u8BF4\u660E | \u6765\u6E90 |
+| | | |
 |------|------|------|
-| \`videoDesc\` | **\u6838\u5FC3\u8F93\u5165**\uFF1A\u5206\u955C\u7684\u7ED3\u6784\u5316\u753B\u9762\u63CF\u8FF0\uFF0C\u5305\u542B\u753B\u9762\u63CF\u8FF0\u3001\u573A\u666F\u3001\u5173\u8054\u8D44\u4EA7\u540D\u79F0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u3001\u5173\u8054\u8D44\u4EA7ID | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
-| \`prompt\` | **\u5DF2\u6709\u5B57\u6BB5**\uFF1A\u4E0A\u6E38\u751F\u6210\u7684\u5206\u955C\u56FE\u63D0\u793A\u8BCD\uFF0C\u4F5C\u4E3A\u8F85\u52A9\u53C2\u8003\u4E0A\u4E0B\u6587\uFF0C**\u4E0D\u4FEE\u6539** | \u4E0A\u6E38\u7CFB\u7EDF\u5DF2\u586B\u5199 |
-| \`track\` | \u5206\u955C\u5206\u7EC4\u6807\u8BC6 | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
-| \`duration\` | \u89C6\u9891\u63A8\u8350\u65F6\u957F\uFF08\u79D2\uFF09 | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
-| \`associateAssetsIds\` | \u8BE5\u5206\u955C\u5173\u8054\u7684\u8D44\u4EA7ID\u5217\u8868 | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
-| \`shouldGenerateImage\` | \u662F\u5426\u9700\u8981\u751F\u6210\u5206\u955C\u56FE\u7247\uFF0C\u9ED8\u8BA4 \`true\` | \u7528\u6237/\u4E0A\u6E38\u7CFB\u7EDF\u586B\u5199 |
+| \`videoDesc\` | ****StoryboardofVisual descriptionVisual descriptionScenerelatedAssetNamewhenCharacterrelatedAssetID | /System |
+| \`prompt\` | **alreadyfield**ofstoryboard imagePromptunder**notedit** | Systemalready |
+| \`track\` | Storyboard | /System |
+| \`duration\` | when | /System |
+| \`associateAssetsIds\` | StoryboardrelatedofAssetIDlist | /System |
+| \`shouldGenerateImage\` | whetherneedGenerate storyboardimageDefault \`true\` | /System |
 
 ---
 
-## \u4EFB\u52A1\u76EE\u6807
+## task
 
-\u8BFB\u53D6\u6240\u6709 \`<storyboardItem>\` \u7684\u5C5E\u6027\uFF0C\u7ED3\u5408\u8D44\u4EA7\u4FE1\u606F\uFF0C\u6839\u636E\u6307\u5B9A\u6A21\u578B\u7684\u63D0\u793A\u8BCD\u683C\u5F0F\uFF0C\u5C06\u5168\u90E8\u5206\u955C\u6574\u5408\u4E3A\u4E00\u4E2A\u5B8C\u6574\u7684\u89C6\u9891\u63D0\u793A\u8BCD\u3002
+readall \`<storyboardItem>\` ofAssetInformationbased onspecifiedofPromptAllStoryboardofVideo prompt
 
 ---
 
-## \u8F93\u51FA\u683C\u5F0F
+## 
 
-\u5C06\u6240\u6709\u5206\u955C\u6574\u5408\u4E3A**\u4E00\u4E2A\u5B8C\u6574\u7684\u89C6\u9891\u63D0\u793A\u8BCD**\u8F93\u51FA\uFF08\u975E\u9010\u6761\u72EC\u7ACB\uFF09\uFF1A
+convert allStoryboard**ofVideo prompt**non-items
 
-| \u6A21\u5F0F | \u6574\u5408\u65B9\u5F0F |
+| | |
 |------|----------|
-| **\u901A\u7528\u591A\u53C2\u6A21\u5F0F** | \`[References]\` \u6C47\u603B\u6240\u6709 \`@\u56FEN \` \u5F15\u7528\uFF1B\`[Instruction]\` \u6309\u65F6\u95F4\u987A\u5E8F\u63CF\u8FF0\u5B8C\u6574\u53D9\u4E8B |
-| **\u901A\u7528\u9996\u5C3E\u5E27\u6A21\u5F0F** | \u7EAF\u6587\u672C\u4E94\u7EF4\u5EA6\uFF08Visual / Motion / Camera / Audio / Narrative\uFF09\uFF0C\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528\uFF0C\u6309\u65F6\u95F4\u8F74\u8FDE\u7EED\u7F16\u6392\uFF08\`[Motion]\` 0s \u2192 \u603B\u65F6\u957F\uFF0C\u6BCF\u6BB5\u6700\u4F4E 1 \u79D2\uFF09\uFF0C\u5168\u7A0B\u5355\u4E00\u8FDE\u8D2F\u955C\u5934\uFF0C\u4E0D\u5207\u955C |
-| **Seedance 2.0** | \`\u751F\u6210\u4E00\u4E2A\u7531\u4EE5\u4E0B N \u4E2A\u5206\u955C\u7EC4\u6210\u7684\u89C6\u9891\`\uFF0C\u6BCF\u6761\u5BF9\u5E94 \`\u5206\u955CN{N}s\` \u6BB5\u843D |
-| **Wan 2.6** | \u5355\u56FE\u9996\u5E27\u6A21\u5F0F\uFF0C\u6BCF\u6B21\u4EC5\u8F93\u5165\u4E00\u6761\u5206\u955C\uFF0C\u8F93\u51FA\u4E00\u6BB5\u53D9\u4E8B\u5F0F\u82F1\u6587\u63D0\u793A\u8BCD\uFF08\u4E09\u6BB5\u5F0F\uFF1A\u98CE\u683C\u57FA\u8C03 \u2192 \u4E3B\u4F53\u52A8\u4F5C+\u573A\u666F\u73AF\u5883+\u5149\u7EBF\u6C1B\u56F4 \u2192 \u955C\u5934\u6536\u5C3E\uFF09\uFF0C\u4E0D\u4F7F\u7528 \`@\u56FEN \` \u5F15\u7528 |
+| **Multi-reference** | \`[References]\` all \`@imageN \` \`[Instruction]\` byTimeDescription |
+| **First and last frames** | textVisual / Motion / Camera / Audio / Narrativenotuse \`@imageN \` byTime\`[Motion]\` 0s \u2192 when 1 not |
+| **Seedance 2.0** | \`the following N Storyboardof\`items \`StoryboardN{N}s\` |
+| **Wan 2.6** | Single imageFirst frameitemsStoryboardPrompt \u2192 +Scene+ \u2192 notuse \`@imageN \` |
 
-- \u4EC5\u8F93\u51FA\u89C6\u9891\u63D0\u793A\u8BCD\u6587\u672C\uFF0C\u4E0D\u8F93\u51FA XML \u6807\u7B7E\uFF0C\u4E0D\u9644\u52A0\u89E3\u91CA
+- Video prompttextnot XML Tagsnot
 
 ---
 
-## videoDesc \u89E3\u6790\u89C4\u5219
+## videoDesc parse
 
-\u4ECE \`videoDesc\` \u62EC\u53F7\u5185\u6309\u987F\u53F7\u5206\u9694\u63D0\u53D6\u4EE5\u4E0B\u7ED3\u6784\u5316\u5B57\u6BB5\uFF1A
+ \`videoDesc\` byseparated by enumeration commaextractthe followingfield
 
 \`\`\`
-\uFF08{\u753B\u9762\u63CF\u8FF0}\u3001{\u573A\u666F}\u3001{\u5173\u8054\u8D44\u4EA7\u540D\u79F0}\u3001{\u65F6\u957F}\u3001{\u666F\u522B}\u3001{\u8FD0\u955C}\u3001{\u89D2\u8272\u52A8\u4F5C}\u3001{\u60C5\u7EEA}\u3001{\u5149\u5F71\u6C1B\u56F4}\u3001{\u53F0\u8BCD}\u3001{\u97F3\u6548}\u3001{\u5173\u8054\u8D44\u4EA7ID}\uFF09
+{Visual description}{Scene}{relatedAssetName}{when}{}{}{Character}{}{}{}{}{relatedAssetID}
 \`\`\`
 
-| \u5E8F\u53F7 | \u5B57\u6BB5 | \u7528\u9014 | \u793A\u4F8B |
+| | field | | example |
 |------|------|------|------|
-| 1 | \u753B\u9762\u63CF\u8FF0 | prompt \u7684\u53D9\u4E8B\u4E3B\u5E72 | \u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730 |
-| 2 | \u573A\u666F | \u5339\u914D\u573A\u666F\u8D44\u4EA7 | \u57CE\u697C |
-| 3 | \u5173\u8054\u8D44\u4EA7\u540D\u79F0 | \u5339\u914D\u89D2\u8272/\u9053\u5177\u8D44\u4EA7 | \u6C88\u8F9E/\u57CE\u697C |
-| 4 | \u65F6\u957F | \u63A7\u5236\u65F6\u957F\u53C2\u6570 | 4s |
-| 5 | \u666F\u522B | \u63A7\u5236\u955C\u5934\u666F\u522B | \u5168\u666F |
-| 6 | \u8FD0\u955C | \u63A7\u5236\u8FD0\u955C\u65B9\u5F0F | \u9759\u6B62 |
-| 7 | \u89D2\u8272\u52A8\u4F5C | prompt \u52A8\u4F5C\u63CF\u5199 | \u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C |
-| 8 | \u60C5\u7EEA | prompt \u60C5\u7EEA\u6C1B\u56F4 | \u575A\u5B9A\u51B3\u7EDD |
-| 9 | \u5149\u5F71\u6C1B\u56F4 | prompt \u5149\u5F71\u63CF\u5199 | \u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149 |
-| 10 | \u53F0\u8BCD | prompt \u53F0\u8BCD/\u97F3\u9891\u6BB5 | \u65E0\u53F0\u8BCD / \u5177\u4F53\u53F0\u8BCD\u5185\u5BB9 |
-| 11 | \u97F3\u6548 | prompt \u97F3\u6548\u63CF\u5199 | \u98CE\u58F0\u8863\u8882\u58F0 |
-| 12 | \u5173\u8054\u8D44\u4EA7ID | \u7528\u4E8E\u8D44\u4EA7ID\u2194\u89D2\u8272\u6807\u7B7E\u6620\u5C04 | A001/A002 |
+| 1 | Visual description | prompt of | |
+| 2 | Scene | matchSceneAsset | |
+| 3 | relatedAssetName | matchCharacter/PropAsset | / |
+| 4 | when | when | 4s |
+| 5 | | | |
+| 6 | | | |
+| 7 | Character | prompt | |
+| 8 | | prompt | |
+| 9 | | prompt | |
+| 10 | | prompt /audio | no / content |
+| 11 | | prompt | |
+| 12 | relatedAssetID | AssetID\u2194CharacterTagsmapping | A001/A002 |
 
 ---
 
-## \u8D44\u4EA7\u5F15\u7528\u7F16\u53F7\u89C4\u5219
+## Asset
 
-\u6240\u6709\u6A21\u578B\u7EDF\u4E00\u4F7F\u7528 \`@\u56FEN \` \u683C\u5F0F\u5F15\u7528\u8D44\u4EA7\u548C\u5206\u955C\u56FE\uFF0C\u7F16\u53F7\u6309\u8F93\u5165\u987A\u5E8F\u8FDE\u7EED\u9012\u589E\uFF1A
+alluse \`@imageN \` Assetandstoryboard imageby
 
-1. **\u8D44\u4EA7**\uFF1A\u6309\u8D44\u4EA7\u4FE1\u606F\u4E2D \`[id, type, name]\` \u7684\u51FA\u73B0\u987A\u5E8F\uFF0C\u4ECE \`@\u56FE1 \` \u5F00\u59CB\u7F16\u53F7\uFF08\u4E0D\u533A\u5206 role / scene / prop\uFF09\u3002**\u8D44\u4EA7\u7C7B\u578B\u7684\u51FA\u73B0\u987A\u5E8F\u4E0D\u56FA\u5B9A**\u2014\u2014\u53EF\u80FD\u5148 scene \u540E character\uFF0C\u4E5F\u53EF\u80FD prop \u5728\u524D\u3001character \u5728\u540E\uFF0C\u6216\u4EFB\u610F\u4EA4\u66FF\u51FA\u73B0\uFF0C\u7F16\u53F7\u4E25\u683C\u6309\u8F93\u5165\u4F4D\u7F6E\u5206\u914D\uFF0C\u4E0D\u6309\u7C7B\u578B\u5F52\u7EC4
-2. **\u5206\u955C\u56FE**\uFF1A\u6BCF\u6761 \`<storyboardItem>\` \u5BF9\u5E94\u4E00\u5F20\u5206\u955C\u56FE\uFF0C\u7F16\u53F7\u63A5\u7EED\u8D44\u4EA7\u4E4B\u540E
-3. **\u8DF3\u8FC7\u65E0\u5206\u955C\u56FE\u7684\u6761\u76EE**\uFF1A\u5F53 \`shouldGenerateImage="false"\` \u65F6\uFF0C\u8BE5\u5206\u955C\u672A\u751F\u6210\u56FE\u7247\uFF0C**\u4E0D\u5206\u914D**\u5206\u955C\u56FE\u7F16\u53F7\uFF0C\u540E\u7EED\u7F16\u53F7\u987A\u5EF6
+1. **Asset**byAssetInformation \`[id, type, name]\` of \`@image1 \` openstartnot role / scene / prop**AssetTypeofnot**\u2014\u2014 scene character prop atcharacter atbynotbyType
+2. **storyboard image**items \`<storyboardItem>\` storyboard imageAsset
+3. **nostoryboard imageofitems** \`shouldGenerateImage="false"\` whenStoryboardnot generatedimage**not**storyboard image
 
-#### \u793A\u4F8B
+#### example
 
-\u8F93\u5165 3 \u4E2A\u8D44\u4EA7 + 2 \u6761\u5206\u955C\uFF1A
+ 3 Asset + 2 itemsStoryboard
 \`\`\`
-\u8D44\u4EA7\u4FE1\u606F[A001, role, \u6C88\u8F9E], [A002, role, \u82CF\u9526], [A003, scene, \u57CE\u697C]
-\`\`\`
-\`\`\`xml
-<storyboardItem ...>  <!-- \u5206\u955C1 -->
-<storyboardItem ...>  <!-- \u5206\u955C2 -->
-\`\`\`
-
-\u7F16\u53F7\u7ED3\u679C\uFF1A
-
-| \u8F93\u5165\u9879 | \u5F15\u7528\u6807\u7B7E | \u8BF4\u660E |
-|--------|----------|------|
-| [A001, role, \u6C88\u8F9E] | \`@\u56FE1 \` | \u89D2\u8272\xB7\u6C88\u8F9E \u53C2\u8003\u56FE |
-| [A002, role, \u82CF\u9526] | \`@\u56FE2 \` | \u89D2\u8272\xB7\u82CF\u9526 \u53C2\u8003\u56FE |
-| [A003, scene, \u57CE\u697C] | \`@\u56FE3 \` | \u573A\u666F\xB7\u57CE\u697C \u53C2\u8003\u56FE |
-| storyboardItem \u7B2C1\u6761 | \`@\u56FE4 \` | \u5206\u955C\u56FE1 |
-| storyboardItem \u7B2C2\u6761 | \`@\u56FE5 \` | \u5206\u955C\u56FE2 |
-
-**\u6DF7\u5408\u987A\u5E8F\u793A\u4F8B**
-
-\u8F93\u5165 3 \u4E2A\u8D44\u4EA7\uFF08\u573A\u666F\u5728\u524D\uFF09+ 2 \u6761\u5206\u955C\uFF1A
-\`\`\`
-\u8D44\u4EA7\u4FE1\u606F[A003, scene, \u57CE\u697C], [A001, role, \u6C88\u8F9E], [A002, role, \u82CF\u9526]
+AssetInformation[A001, role, ], [A002, role, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem ...>  <!-- \u5206\u955C1 -->
-<storyboardItem ...>  <!-- \u5206\u955C2 -->
+<storyboardItem ...> <!-- Storyboard1 -->
+<storyboardItem ...> <!-- Storyboard2 -->
 \`\`\`
 
-\u7F16\u53F7\u7ED3\u679C\uFF1A
+result
 
-| \u8F93\u5165\u9879 | \u5F15\u7528\u6807\u7B7E | \u8BF4\u660E |
+| | Tags | |
 |--------|----------|------|
-| [A003, scene, \u57CE\u697C] | \`@\u56FE1 \` | \u573A\u666F\xB7\u57CE\u697C \u53C2\u8003\u56FE |
-| [A001, role, \u6C88\u8F9E] | \`@\u56FE2 \` | \u89D2\u8272\xB7\u6C88\u8F9E \u53C2\u8003\u56FE |
-| [A002, role, \u82CF\u9526] | \`@\u56FE3 \` | \u89D2\u8272\xB7\u82CF\u9526 \u53C2\u8003\u56FE |
-| storyboardItem \u7B2C1\u6761 | \`@\u56FE4 \` | \u5206\u955C\u56FE1 |
-| storyboardItem \u7B2C2\u6761 | \`@\u56FE5 \` | \u5206\u955C\u56FE2 |
+| [A001, role, ] | \`@image1 \` | Character\xB7 image |
+| [A002, role, ] | \`@image2 \` | Character\xB7 image |
+| [A003, scene, ] | \`@image3 \` | Scene\xB7 image |
+| storyboardItem chapter1items | \`@image4 \` | storyboard image1 |
+| storyboardItem chapter2items | \`@image5 \` | storyboard image2 |
 
-> **\u5173\u952E**\uFF1A\u6B64\u4F8B\u4E2D \`@\u56FE1 \` \u662F\u573A\u666F\u800C\u975E\u89D2\u8272\uFF0C\`@\u56FE2 \` \`@\u56FE3 \` \u624D\u662F\u89D2\u8272\u3002\u751F\u6210\u63D0\u793A\u8BCD\u65F6\uFF0C\u5FC5\u987B\u6839\u636E\u8D44\u4EA7\u7684\u5B9E\u9645 \`type\` \u5B57\u6BB5\u786E\u5B9A\u5F15\u7528\u65B9\u5F0F\uFF0C\u800C\u975E\u6839\u636E\u7F16\u53F7\u5927\u5C0F\u5047\u5B9A\u7C7B\u578B\u3002
+**example**
+
+ 3 AssetSceneat+ 2 itemsStoryboard
+\`\`\`
+AssetInformation[A003, scene, ], [A001, role, ], [A002, role, ]
+\`\`\`
+\`\`\`xml
+<storyboardItem ...> <!-- Storyboard1 -->
+<storyboardItem ...> <!-- Storyboard2 -->
+\`\`\`
+
+result
+
+| | Tags | |
+|--------|----------|------|
+| [A003, scene, ] | \`@image1 \` | Scene\xB7 image |
+| [A001, role, ] | \`@image2 \` | Character\xB7 image |
+| [A002, role, ] | \`@image3 \` | Character\xB7 image |
+| storyboardItem chapter1items | \`@image4 \` | storyboard image1 |
+| storyboardItem chapter2items | \`@image5 \` | storyboard image2 |
+
+> **related** \`@image1 \` isScenenon-Character\`@image2 \` \`@image3 \` isCharacterGenerate promptwhenbased onAssetof \`type\` fieldOKnon-based onSizeType
 
 ---
 
-## \u6A21\u578B\u63D0\u793A\u8BCD\u751F\u6210\u89C4\u5219
+## Prompt
 
-### \u4E00\u3001\u901A\u7528\u591A\u53C2\u6A21\u5F0F
+### Multi-reference
 
-#### \u6838\u5FC3\u539F\u5219
-- MVL \u591A\u6A21\u6001\u878D\u5408\uFF1A\u81EA\u7136\u8BED\u8A00 + \u56FE\u50CF\u5F15\u7528\u5728\u540C\u4E00\u8BED\u4E49\u7A7A\u95F4
-- \u5206\u955C\u56FE\u5E8F\u5217\u8D1F\u8D23\u52A8\u4F5C/\u65F6\u95F4\u8F74/\u6784\u56FE\uFF0C\u573A\u666F\u53C2\u8003\u56FE\u8D1F\u8D23\u73AF\u5883\u4E00\u81F4\u6027
-- \u6240\u6709\u8D44\u4EA7\u548C\u5206\u955C\u56FE\u7EDF\u4E00\u7528 \`@\u56FEN \` \u5F15\u7528
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728 Instruction \u4E2D\u4F53\u73B0\u53F0\u8BCD\u76F8\u5173\u63CF\u8FF0
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08dialogue\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08inner monologue OS\uFF09\u3001\u753B\u5916\u97F3\uFF08voiceover VO\uFF09\uFF0C\u5728 Instruction \u4E2D\u7528\u62EC\u53F7\u6807\u6CE8
+#### 
+- MVL + imageat
+- storyboard image/Time/imageSceneimageconsistent
+- allAssetandstoryboard image \`@imageN \` 
+- ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardat Instruction relatedDescription
+- **Type**plaindialogueinner monologue OSvoiceover VOat Instruction 
 
-#### prompt \u751F\u6210\u6A21\u677F
+#### prompt template
 
-> **\u6CE8\u610F**\uFF1A\`[References]\` \u4E2D\u7684 \`@\u56FEN\` \u7F16\u53F7\u4E25\u683C\u6309\u8D44\u4EA7\u8F93\u5165\u987A\u5E8F\u5206\u914D\uFF0C\u89D2\u8272/\u573A\u666F/\u9053\u5177\u53EF\u80FD\u51FA\u73B0\u5728\u4EFB\u610F\u7F16\u53F7\u4F4D\u7F6E\u3002\u751F\u6210\u65F6\u9700\u6839\u636E\u6BCF\u4E2A\u8D44\u4EA7\u7684 \`type\` \u5B57\u6BB5\u786E\u5B9A\u5176\u5F15\u7528\u65B9\u5F0F\uFF0C\u4E0D\u53EF\u5047\u5B9A\u56FA\u5B9A\u7684\u7C7B\u578B-\u7F16\u53F7\u5BF9\u5E94\u5173\u7CFB\u3002
+> ****\`[References]\` of \`@imageN\` byAssetCharacter/Scene/Propatwhenbased onAssetof \`type\` fieldOKnotofType-related
 
 \`\`\`
 [References]
-@\u56FE{\u8D44\u4EA71\u7F16\u53F7} : [{\u8D44\u4EA71\u540D\u79F0}\u53C2\u8003\u56FE]   \u2190 \u53EF\u80FD\u662F role/scene/prop \u4E2D\u7684\u4EFB\u610F\u7C7B\u578B
-@\u56FE{\u8D44\u4EA72\u7F16\u53F7} : [{\u8D44\u4EA72\u540D\u79F0}\u53C2\u8003\u56FE]
-@\u56FE{\u8D44\u4EA73\u7F16\u53F7} : [{\u8D44\u4EA73\u540D\u79F0}\u53C2\u8003\u56FE]
+@image{Asset1} : [{Asset1Name}image] \u2190 is role/scene/prop ofType
+@image{Asset2} : [{Asset2Name}image]
+@image{Asset3} : [{Asset3Name}image]
 ...
-@\u56FE{\u5206\u955C\u56FE\u7F16\u53F7} : [\u5206\u955C\u56FE1]            \u2190 \u5206\u955C\u56FE\u7F16\u53F7\u63A5\u7EED\u8D44\u4EA7\u4E4B\u540E
+@image{storyboard image} : [storyboard image1] \u2190 storyboard imageAsset
 
 [Instruction]
-Based on the storyboard @\u56FE{\u5206\u955C\u56FE\u7F16\u53F7} :
-@\u56FE{\u89D2\u8272\u8D44\u4EA7\u7F16\u53F7} {\u52A8\u4F5C/\u72B6\u6001\u63CF\u8FF0\uFF08\u82F1\u6587\uFF09},
-set in the {\u573A\u666F\u63CF\u8FF0\uFF08\u82F1\u6587\uFF09} of @\u56FE{\u573A\u666F\u8D44\u4EA7\u7F16\u53F7} ,
-{\u955C\u5934/\u8FD0\u955C\u63CF\u8FF0\uFF08\u82F1\u6587\uFF09},
-{\u60C5\u611F\u57FA\u8C03\uFF08\u82F1\u6587\uFF09},
-{\u53F0\u8BCD\u63CF\u8FF0\uFF08\u82F1\u6587\uFF0C\u542B dialogue/OS/VO \u6807\u6CE8\uFF09/ No dialogue},
-{\u97F3\u6548\u63CF\u8FF0\uFF08\u82F1\u6587\uFF09}.
+Based on the storyboard @image{storyboard image} :
+@image{CharacterAsset} {/StatusDescription},
+set in the {SceneDescription} of @image{SceneAsset} ,
+{/Description},
+{},
+{Description dialogue/OS/VO / No dialogue},
+{Description}.
 \`\`\`
 
-#### \u751F\u6210\u7EA6\u675F
-1. **Instruction \u5FC5\u987B\u7528\u82F1\u6587**
-2. **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u4FE1\u606F
-3. **\u89D2\u8272\u52A8\u4F5C**\u4ECE videoDesc \u7684\u300C\u89D2\u8272\u52A8\u4F5C\u300D\u5B57\u6BB5\u63D0\u53D6\uFF0C\u7FFB\u8BD1\u4E3A\u7B80\u6D01\u82F1\u6587\u52A8\u4F5C\u63CF\u8FF0
-4. **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728 Instruction \u4E2D\u4F53\u73B0\u53F0\u8BCD\u5185\u5BB9\uFF08\u4FDD\u6301\u539F\u59CB\u8BED\u8A00\uFF0C\u4E0D\u7FFB\u8BD1\uFF09
-5. **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u666E\u901A\u5BF9\u767D\u6807\u6CE8 \`(dialogue)\`\uFF1B\u5185\u5FC3\u72EC\u767D\u6807\u6CE8 \`(inner monologue, OS)\`\uFF1B\u753B\u5916\u97F3\u6807\u6CE8 \`(voiceover, VO)\`
-6. **\u955C\u5934\u98CE\u683C**\u4F7F\u7528\u6807\u51C6\u6807\u7B7E\uFF1A\`cinematic\` / \`wide-angle\` / \`close-up\` / \`slow motion\` / \`surround shooting\` / \`handheld\`
-7. **\u7A7A\u95F4\u5173\u7CFB**\u4F7F\u7528\u6807\u51C6\u52A8\u8BCD\uFF1A\`wearing\` / \`holding\` / \`standing on\` / \`following behind\` / \`sitting in\`
-8. \u5355\u6761\u5206\u955C\u5BF9\u5E94\u5355\u4E2A \`@\u56FEN \`\uFF0C\u4E0D\u505A\u591A\u5E27\u8DE8\u955C\u63CF\u8FF0
-9. \u65E0\u9700\u63CF\u8FF0\u89D2\u8272\u5916\u89C2\uFF08\u7531\u53C2\u8003\u56FE\u8D1F\u8D23\uFF09
-10. \u65E0\u65F6\u957F\u6807\u6CE8\uFF08\u7531\u6A21\u578B\u63A8\u65AD\uFF09
-11. **\u65E0\u5206\u955C\u56FE\u65F6**\uFF1A\u5F53 \`shouldGenerateImage="false"\` \u65F6\uFF0C\u8BE5\u5206\u955C\u65E0\u5206\u955C\u56FE\uFF0C\`[References]\` \u4E2D\u4E0D\u5217\u51FA\u8BE5\u5206\u955C\u56FE\uFF0C\`[Instruction]\` \u4E2D\u4E0D\u4F7F\u7528 \`@\u56FEN \` \u5F15\u7528\u8BE5\u5206\u955C\u56FE\uFF0C\u6539\u4E3A\u7EAF\u6587\u672C\u63CF\u8FF0\u753B\u9762\u5185\u5BB9
+#### 
+1. **Instruction **
+2. ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotInformation
+3. **Character** videoDesc ofCharacterfieldextractDescription
+4. **not**videoDesc ofStoryboardat Instruction contentstartnot
+5. **Type**plain \`(dialogue)\` \`(inner monologue, OS)\` \`(voiceover, VO)\`
+6. ****useTags\`cinematic\` / \`wide-angle\` / \`close-up\` / \`slow motion\` / \`surround shooting\` / \`handheld\`
+7. **related**use\`wearing\` / \`holding\` / \`standing on\` / \`following behind\` / \`sitting in\`
+8. itemsStoryboard \`@imageN \`notDescription
+9. noDescriptionCharacterimage
+10. nowhen
+11. **nostoryboard imagewhen** \`shouldGenerateImage="false"\` whenStoryboardnostoryboard image\`[References]\` notstoryboard image\`[Instruction]\` notuse \`@imageN \` storyboard imagetextDescriptioncontent
 
-#### KlingOmni \u5B8C\u6574\u793A\u4F8B
+#### KlingOmni example
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1AKlingOmni
-\u8D44\u4EA7\u4FE1\u606F[A001, role, \u6C88\u8F9E], [A002, role, \u82CF\u9526], [A003, scene, \u57CE\u697C]
+KlingOmni
+AssetInformation[A001, role, ], [A002, role, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730\u3001\u57CE\u697C\u3001\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u5168\u666F\u3001\u9759\u6B62\u3001\u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C\u3001\u575A\u5B9A\u51B3\u7EDD\u3001\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149\u3001\u65E0\u53F0\u8BCD\u3001\u98CE\u58F0\u8863\u8882\u58F0\u3001A001/A003\uFF09' prompt='\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u57CE\u697C\u4E4B\u4E0A\uFF0C\u6C88\u8F9E\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u98D8\u626C\uFF0C\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
-<storyboardItem videoDesc='\uFF08\u82CF\u9526\u767B\u4E0A\u57CE\u697C\u8D70\u5411\u6C88\u8F9E\u3001\u57CE\u697C\u3001\u82CF\u9526/\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u4E2D\u666F\u3001\u8DDF\u8E2A\u3001\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u6C88\u8F9E\u3001\u62C5\u5FE7\u3001\u9EC4\u660F\u4F59\u6656\u6E10\u6697\u3001\u65E0\u53F0\u8BCD\u3001\u811A\u6B65\u58F0\u98CE\u58F0\u3001A001/A002/A003\uFF09' prompt='\u4E2D\u666F\uFF0C\u8DDF\u8E2A\uFF0C\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u57CE\u697C\u4E0A\u7684\u6C88\u8F9E...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='/4snoA001/A003' prompt='...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='//4snoA001/A002/A003' prompt='of...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
 [References]
-@\u56FE1 : [\u6C88\u8F9E\u53C2\u8003\u56FE]
-@\u56FE2 : [\u82CF\u9526\u53C2\u8003\u56FE]
-@\u56FE3 : [\u57CE\u697C\u53C2\u8003\u56FE]
-@\u56FE4 : [\u5206\u955C\u56FE1]
-@\u56FE5 : [\u5206\u955C\u56FE2]
+@image1 : [image]
+@image2 : [image]
+@image3 : [image]
+@image4 : [storyboard image1]
+@image5 : [storyboard image2]
 
 [Instruction]
-Based on the storyboard from @\u56FE4 to @\u56FE5 :
-@\u56FE1 standing alone atop the city wall, hands clasped behind back, robes billowing in the wind, gazing across the vast land,
-@\u56FE2 ascending the steps toward @\u56FE1 , expression worried,
-set in the ancient city wall environment of @\u56FE3 ,
+Based on the storyboard from @image4 to @image5 :
+@image1 standing alone atop the city wall, hands clasped behind back, robes billowing in the wind, gazing across the vast land,
+@image2 ascending the steps toward @image1 , expression worried,
+set in the ancient city wall environment of @image3 ,
 wide shot transitioning to medium tracking shot, cinematic,
 resolute determination shifting to concerned anticipation, dusk cold-toned side-backlit atmosphere fading,
 no dialogue,
@@ -106237,68 +106237,68 @@ wind howling, fabric flapping, footsteps on stone.
 
 ---
 
-### \u4E8C\u3001\u901A\u7528\u9996\u5C3E\u5E27\u6A21\u5F0F
+### First and last frames
 
-#### \u6838\u5FC3\u539F\u5219
-- **\u7EAF\u6587\u672C\u63D0\u793A\u8BCD**\uFF1A\u63D0\u793A\u8BCD\u5185**\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528**\uFF08\u4E0D\u5F15\u7528\u89D2\u8272\u8D44\u4EA7\u3001\u573A\u666F\u8D44\u4EA7\u3001\u4E5F\u4E0D\u5F15\u7528\u5206\u955C\u56FE\uFF09\uFF0C\u5168\u90E8\u5185\u5BB9\u7528\u7EAF\u6587\u672C\u63CF\u8FF0
-- **\u4E94\u7EF4\u5EA6\u7ED3\u6784**\uFF1AVisual / Motion / Camera / Audio / Narrative
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728 \`[Audio]\` \u4E2D\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u5185\u5BB9
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08dialogue, lip-sync active\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08inner monologue OS, silent lips\uFF09\u3001\u753B\u5916\u97F3\uFF08voiceover VO, silent lips\uFF09\uFF0C\u5E76\u5728 \`[Audio]\` \u4E2D\u660E\u786E\u6807\u6CE8
-- **\u4E0D\u8BF4\u8BDD\u7684\u4E3B\u4F53\u6807\u6CE8 \`silent\`** \u2014 \u9632\u6B62\u8BEF\u751F\u53E3\u578B
-- **\u5168\u7A0B\u5355\u4E00\u8FDE\u8D2F\u955C\u5934**\uFF1A\u4ECE\u5934\u5230\u5C3E\u4E00\u4E2A\u955C\u5934\uFF0C\u4E0D\u5B58\u5728\u5207\u955C
-- **\u65F6\u95F4\u8F74\u5206\u6BB5**\uFF1A\u6BCF\u6BB5\u6700\u4F4E 1 \u79D2\uFF0C\u7528 \`0s-Xs\` \u6807\u6CE8
+#### 
+- **textPrompt**Prompt**notuse \`@imageN \` **notCharacterAssetSceneAssetnotstoryboard imageAllcontenttextDescription
+- ****Visual / Motion / Camera / Audio / Narrative
+- ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardat \`[Audio]\` content
+- **Type**plaindialogue, lip-sync activeinner monologue OS, silent lipsvoiceover VO, silent lipsat \`[Audio]\` 
+- **notof \`silent\`** \u2014 
+- ****notexists
+- **Time** 1 \`0s-Xs\` 
 
-#### prompt \u751F\u6210\u6A21\u677F
+#### prompt template
 
 \`\`\`
 [Visual]
-{\u4E3B\u4F53A\u540D}: {\u5916\u89C2\u7B80\u8FF0}, {\u7AD9\u4F4D/\u59FF\u6001}, {\u8BF4\u8BDD\u72B6\u6001 speaking/silent}.
-{\u4E3B\u4F53B\u540D}: {\u5916\u89C2\u7B80\u8FF0}, {\u7AD9\u4F4D/\u59FF\u6001}, {\u8BF4\u8BDD\u72B6\u6001}.
-{\u573A\u666F\u63CF\u8FF0}, {\u9053\u5177\u63CF\u8FF0}.
-{\u89C6\u89C9\u98CE\u683C\u6807\u7B7E}.
+{A}: {}, {/}, {Status speaking/silent}.
+{B}: {}, {/}, {Status}.
+{SceneDescription}, {PropDescription}.
+{Tags}.
 
 [Motion]
-0s-{X}s: {\u4E3B\u4F53A\u540D} {\u52A8\u4F5C\u63CF\u8FF0\u6BB51}.
-{X}s-{Y}s: {\u4E3B\u4F53B\u540D} {\u52A8\u4F5C\u63CF\u8FF0\u6BB52}.
+0s-{X}s: {A} {Description1}.
+{X}s-{Y}s: {B} {Description2}.
 
 [Camera]
-{\u955C\u5934\u7C7B\u578B}, {\u8FD0\u955C\u65B9\u5F0F}, {\u5168\u7A0B\u5355\u4E00\u8FDE\u8D2F\u955C\u5934\u63CF\u8FF0}.
+{Type}, {}, {Description}.
 
 [Audio]
-{Xs-Ys}: "{\u53F0\u8BCD\u5185\u5BB9}" \u2014 {\u8BF4\u8BDD\u8005\u540D} ({dialogue / inner monologue OS / voiceover VO}), {lip-sync active / silent lips}.
-{\u97F3\u6548\u63CF\u8FF0}.
+{Xs-Ys}: "{content}" \u2014 {} ({dialogue / inner monologue OS / voiceover VO}), {lip-sync active / silent lips}.
+{Description}.
 
 [Narrative]
-{\u60C5\u8282\u70B9\u6982\u8FF0}, {\u53D9\u4E8B\u4F4D\u7F6E}.
+{}, {}.
 \`\`\`
 
-#### \u751F\u6210\u7EA6\u675F
-1. **\u5168\u90E8\u7528\u82F1\u6587**
-2. **\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528**\uFF1A\u63D0\u793A\u8BCD\u5185\u4E0D\u5F15\u7528\u89D2\u8272\u8D44\u4EA7\u3001\u573A\u666F\u8D44\u4EA7\u3001\u5206\u955C\u56FE\uFF0C\u5168\u90E8\u5185\u5BB9\u7528\u7EAF\u6587\u672C\u63CF\u8FF0
-3. **\u4E3B\u4F53\u7528\u6587\u5B57\u63CF\u8FF0**\uFF1A\u5728 [Visual] \u4E2D\u7B80\u8981\u63CF\u8FF0\u4E3B\u4F53\u5916\u89C2\u7279\u5F81\uFF08\u5982\u670D\u9970\u3001\u53D1\u578B\u7B49\u5173\u952E\u8FA8\u8BC6\u7279\u5F81\uFF09
-4. **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u4FE1\u606F
-5. **\u6BCF\u4E2A\u4E3B\u4F53\u5FC5\u987B\u6807\u6CE8\u8BF4\u8BDD\u72B6\u6001**\uFF1A\`speaking\` / \`silent\` / \`speaking simultaneously\`
-6. **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728 \`[Audio]\` \u4E2D\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u5185\u5BB9\uFF08\u4FDD\u6301\u539F\u59CB\u8BED\u8A00\uFF0C\u4E0D\u7FFB\u8BD1\uFF09
-7. **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u666E\u901A\u5BF9\u767D\u6807\u6CE8 \`dialogue, lip-sync active\`\uFF1B\u5185\u5FC3\u72EC\u767D\u6807\u6CE8 \`inner monologue (OS), silent lips\`\uFF1B\u753B\u5916\u97F3\u6807\u6CE8 \`voiceover (VO), silent lips\`
-8. **Motion \u65F6\u95F4\u8F74**\u6BCF\u6BB5\u6700\u4F4E 1 \u79D2\uFF0C\u4E0D\u8D85\u8FC7\u603B\u65F6\u957F
-9. **\u5168\u7A0B\u5355\u4E00\u8FDE\u8D2F\u955C\u5934**\uFF1ACamera \u6BB5\u843D\u63CF\u8FF0\u4ECE\u5934\u5230\u5C3E\u7684\u4E00\u4E2A\u955C\u5934\uFF0C\u7EDD\u4E0D\u5207\u955C
-10. **\u89C6\u89C9\u98CE\u683C**\u53C2\u8003 Assistant \u4E2D\u7684\u300C\u89C6\u89C9\u98CE\u683C\u7EA6\u675F\u300D\u90E8\u5206\u5185\u5BB9
-11. **\u955C\u5934\u7C7B\u578B**\u4ECE\u4EE5\u4E0B\u9009\u53D6\uFF1A\`Wide establishing shot / Over-the-shoulder / Medium shot / Close-up / Wide shot / POV / Dutch angle / Crane up / Dolly right / Whip pan / Handheld / Slow motion\`
+#### 
+1. **All**
+2. **notuse \`@imageN \` **PromptnotCharacterAssetSceneAssetstoryboard imageAllcontenttextDescription
+3. **Description**at [Visual] Descriptionrelated
+4. ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotInformation
+5. **Status**\`speaking\` / \`silent\` / \`speaking simultaneously\`
+6. **not**videoDesc ofStoryboardat \`[Audio]\` contentstartnot
+7. **Type**plain \`dialogue, lip-sync active\` \`inner monologue (OS), silent lips\` \`voiceover (VO), silent lips\`
+8. **Motion Time** 1 notwhen
+9. ****Camera Descriptionofnot
+10. **** Assistant ofcontent
+11. **Type**the following\`Wide establishing shot / Over-the-shoulder / Medium shot / Close-up / Wide shot / POV / Dutch angle / Crane up / Dolly right / Whip pan / Handheld / Slow motion\`
 
-#### Seedance 1.5 Pro \u5B8C\u6574\u793A\u4F8B
+#### Seedance 1.5 Pro example
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1ASeedance1.5
-\u8D44\u4EA7\u4FE1\u606F[A001, role, \u6C88\u8F9E], [A002, role, \u82CF\u9526], [A003, scene, \u57CE\u697C]
+Seedance1.5
+AssetInformation[A001, role, ], [A002, role, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730\u3001\u57CE\u697C\u3001\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u5168\u666F\u3001\u9759\u6B62\u3001\u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C\u3001\u575A\u5B9A\u51B3\u7EDD\u3001\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149\u3001\u65E0\u53F0\u8BCD\u3001\u98CE\u58F0\u8863\u8882\u58F0\u3001A001/A003\uFF09' prompt='\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u57CE\u697C\u4E4B\u4E0A\uFF0C\u6C88\u8F9E\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u98D8\u626C\uFF0C\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
-<storyboardItem videoDesc='\uFF08\u82CF\u9526\u767B\u4E0A\u57CE\u697C\u8D70\u5411\u6C88\u8F9E\u3001\u57CE\u697C\u3001\u82CF\u9526/\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u4E2D\u666F\u3001\u8DDF\u8E2A\u3001\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u6C88\u8F9E\u3001\u62C5\u5FE7\u3001\u9EC4\u660F\u4F59\u6656\u6E10\u6697\u3001\u65E0\u53F0\u8BCD\u3001\u811A\u6B65\u58F0\u98CE\u58F0\u3001A001/A002/A003\uFF09' prompt='\u4E2D\u666F\uFF0C\u8DDF\u8E2A\uFF0C\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u57CE\u697C\u4E0A\u7684\u6C88\u8F9E...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='/4snoA001/A003' prompt='...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='//4snoA001/A002/A003' prompt='of...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
 [Visual]
 Shen Ci: male, dark flowing robes, hair tied up, standing alone atop city wall, hands clasped behind back, robes billowing, silent.
@@ -106324,200 +106324,200 @@ Lone figure on city wall, then arrival of a companion. Tension between determina
 
 ---
 
-### \u4E09\u3001Seedance 2.0
+### Seedance 2.0
 
-#### \u6838\u5FC3\u539F\u5219
-- **\u7ED3\u6784\u531612\u7EF4\u7F16\u7801**\uFF1A\u7EDF\u4E00\u7528 \`@\u56FEN \` \u5F15\u7528\u8D44\u4EA7\u548C\u5206\u955C\u56FE\uFF0C\u65F6\u957F \`{N}s\`
-- **\u6700\u524D\u9762\u5148\u5B9A\u4E49\u56FE\u7247\u6620\u5C04**\uFF1A\u5148\u8F93\u51FA\u201C\u56FE\u7247\u5B9A\u4E49\u201D\u6BB5\uFF0C\u96C6\u4E2D\u58F0\u660E \`@\u56FEN : \u4E3B\u4F53\u540D\u5B57/\u573A\u666F\u540D\u5B57\uFF0C\u7B80\u8FF0\`\uFF1B\u540E\u7EED\u5206\u955C\u6B63\u6587\u53EA\u4F7F\u7528\u4E3B\u4F53\u540D\u5B57\uFF0C\u4E0D\u518D\u5199 \`@\u56FEN \`
-- **\u97F3\u8272\u53C2\u65709\u7EF4\u5EA6\u7CBE\u7EC6\u63CF\u8FF0**\uFF08\u6709\u53F0\u8BCD\u65F6\u5FC5\u586B\uFF09
-- **\u79D2\u7EA7\u65F6\u957F\u63A7\u5236**\uFF1A\u5355\u5206\u955C\u65F6\u957F\u6700\u4F4E 1s
-- **\u4E2D\u6587\u63D0\u793A\u8BCD**
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u6BCF\u6761\u5206\u955C\u7684\u63CF\u8FF0\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u548C\u97F3\u8272\u63CF\u8FF0
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08\u76F4\u63A5\u4F7F\u7528\u300C\u8BF4\uFF1A\u300D\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08\u4F7F\u7528\u300C\u5185\u5FC3OS\uFF1A\u300D\uFF09\u3001\u753B\u5916\u97F3\uFF08\u4F7F\u7528\u300C\u753B\u5916\u97F3VO\uFF1A\u300D\uFF09\uFF0C\u5E76\u5339\u914D\u5BF9\u5E94\u7684\u5634\u578B\u72B6\u6001\u63CF\u8FF0
+#### 
+- **12** \`@imageN \` Assetandstoryboard imagewhen \`{N}s\`
+- **definitionimagemapping**\u201Cimagedefinition\u201D \`@imageN : /Scene\`Storyboardusenot \`@imageN \`
+- **9Description**whenRequired
+- **when**Storyboardwhen 1s
+- **Prompt**
+- ** videoDesc**itemsStoryboardofDescriptioncontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardandDescription
+- **Type**plainuseuseOSuseVOmatchofStatusDescription
 
-#### prompt \u751F\u6210\u6A21\u677F
+#### prompt template
 
-> **\u6CE8\u610F**\uFF1A\`@\u56FE{\u7F16\u53F7}\` \u4EC5\u7528\u4E8E\u6700\u524D\u9762\u7684\u201C\u56FE\u7247\u5B9A\u4E49\u201D\u6BB5\u3002\u5206\u955C\u6B63\u6587\u4E2D\u7981\u6B62\u518D\u5199 \`@\u56FE{\u7F16\u53F7}\`\uFF0C\u7EDF\u4E00\u6539\u7528\u4E3B\u4F53\u540D\u5B57/\u573A\u666F\u540D\u5B57\u3002
+> ****\`@image{}\` of\u201Cimagedefinition\u201DStoryboard \`@image{}\`/Scene
 
-**\u5355\u5206\u955C\u6A21\u677F\uFF1A**
+**Storyboardtemplate**
 \`\`\`
-\u753B\u9762\u98CE\u683C\u548C\u7C7B\u578B: {\u98CE\u683C}, {\u8272\u8C03}, {\u7C7B\u578B}
+andType: {}, {}, {Type}
 
-\u56FE\u7247\u5B9A\u4E49:
-@\u56FE1: {\u8D44\u4EA71\u540D\u5B57}\uFF0C{\u7B80\u8FF0}
-@\u56FE2: {\u8D44\u4EA72\u540D\u5B57}\uFF0C{\u7B80\u8FF0}
-@\u56FEN: {\u8D44\u4EA7N\u540D\u5B57}\uFF0C{\u7B80\u8FF0}
+imagedefinition:
+@image1: {Asset1}{}
+@image2: {Asset2}{}
+@imageN: {AssetN}{}
 ...
 
-\u751F\u6210\u4E00\u4E2A\u7531\u4EE5\u4E0B 1 \u4E2A\u5206\u955C\u7EC4\u6210\u7684\u89C6\u9891:
+the following 1 Storyboardof:
 
-\u573A\u666F:
-\u5206\u955C\u8FC7\u6E21: \u65E0
+Scene:
+Storyboard: no
 
-\u5206\u955C1 {N}s: \u65F6\u95F4\uFF1A{\u65E5/\u591C/\u6668/\u9EC4\u660F}\uFF0C\u573A\u666F\uFF1A{\u573A\u666F\u540D\u5B57}\uFF0C\u955C\u5934\uFF1A{\u666F\u522B}\uFF0C{\u89D2\u5EA6}\uFF0C{\u8FD0\u955C}\uFF0C{\u89D2\u8272\u540D\u5B57} {\u52A8\u4F5C/\u8868\u60C5/\u89C6\u7EBF\u671D\u5411/\u7AD9\u4F4D\u63CF\u8FF0}\u3002{\u53F0\u8BCD\u4E0E\u97F3\u8272\u63CF\u8FF0\uFF08\u5982\u6709\uFF09}\u3002{\u80CC\u666F\u73AF\u5883\u8865\u5145}\u3002{\u5149\u5F71\u6C1B\u56F4}\u3002{\u8FD0\u955C\u8865\u5145}\u3002
+Storyboard1 {N}s: Time{///}Scene{Scene}{}{}{}{Character} {/table//Description}{Description}{}{}{}
 \`\`\`
 
-**\u591A\u5206\u955C\u6A21\u677F\uFF1A**
+**Storyboardtemplate**
 \`\`\`
-\u753B\u9762\u98CE\u683C\u548C\u7C7B\u578B: {\u98CE\u683C}, {\u8272\u8C03}, {\u7C7B\u578B}
+andType: {}, {}, {Type}
 
-\u56FE\u7247\u5B9A\u4E49:
-@\u56FE1: {\u8D44\u4EA71\u540D\u5B57}\uFF0C{\u7B80\u8FF0}
-@\u56FE2: {\u8D44\u4EA72\u540D\u5B57}\uFF0C{\u7B80\u8FF0}
-@\u56FEN: {\u8D44\u4EA7N\u540D\u5B57}\uFF0C{\u7B80\u8FF0}
+imagedefinition:
+@image1: {Asset1}{}
+@image2: {Asset2}{}
+@imageN: {AssetN}{}
 ...
 
-\u751F\u6210\u4E00\u4E2A\u7531\u4EE5\u4E0B {N} \u4E2A\u5206\u955C\u7EC4\u6210\u7684\u89C6\u9891:
+the following {N} Storyboardof:
 
-\u573A\u666F:
-\u5206\u955C\u8FC7\u6E21: {\u5168\u5C40\u8FC7\u6E21\u63CF\u8FF0}
+Scene:
+Storyboard: {Description}
 
-\u5206\u955C1 {N}s: \u65F6\u95F4\uFF1A{...}\uFF0C\u573A\u666F\uFF1A{\u573A\u666F\u540D\u5B57}\uFF0C\u955C\u5934\uFF1A{...}\uFF0C{\u89D2\u8272\u540D\u5B57} {...}\u3002{...}\u3002
-\u5206\u955C2{N}s: ...
+Storyboard1 {N}s: Time{...}Scene{Scene}{...}{Character} {...}{...}
+Storyboard2{N}s: ...
 ...
 \`\`\`
 
-#### \u97F3\u8272\u751F\u6210\u89C4\u5219\uFF08\u6709\u53F0\u8BCD\u65F6\u5FC5\u586B\uFF09
+#### whenRequired
 
-\u53F0\u8BCD\u683C\u5F0F\uFF1A\`{\u89D2\u8272\u540D\u5B57} \u8BF4\uFF1A\u300C{\u53F0\u8BCD\u5185\u5BB9}\u300D\u97F3\u8272\uFF1A{9\u7EF4\u5EA6\u63CF\u8FF0}\`
+\`{Character} {content}{9Description}\`
 
-9\u7EF4\u5EA6\u6309\u987A\u5E8F\u586B\u5199\uFF1A
+9by
 \`\`\`
-{\u6027\u522B}\uFF0C{\u5E74\u9F84\u97F3\u8272}\uFF0C{\u97F3\u8C03}\uFF0C{\u97F3\u8272\u8D28\u611F}\uFF0C{\u58F0\u97F3\u539A\u5EA6}\uFF0C{\u53D1\u97F3\u65B9\u5F0F}\uFF0C{\u6C14\u606F}\uFF0C{\u8BED\u901F}\uFF0C{\u7279\u6B8A\u8D28\u611F}
+{}{}{}{}{}{}{}{}{special}
 \`\`\`
 
-> \u5F53 desc \u4E2D\u672A\u660E\u786E\u97F3\u8272\u4FE1\u606F\u65F6\uFF0C\u6839\u636E\u89D2\u8272\u7C7B\u578B\u4ECE\u4EE5\u4E0B\u53C2\u8003\u8868\u63A8\u65AD\uFF1A
+> desc Informationwhenbased onCharacterTypethe followingtable
 
-| \u89D2\u8272\u7C7B\u578B\u7279\u5F81 | \u9ED8\u8BA4\u97F3\u8272 |
+| CharacterType | Default |
 |------------|---------|
-| \u7537\u6027\u6743\u5A01/\u9738\u6C14\u89D2\u8272 | \u7537\u58F0\uFF0C\u4E2D\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4F4E\u6C89\uFF0C\u97F3\u8272\u6D51\u539A\u6709\u529B\uFF0C\u58F0\u97F3\u539A\u91CD\uFF0C\u53D1\u97F3\u6807\u51C6\uFF0C\u6C14\u606F\u6781\u5176\u6C89\u7A33\uFF0C\u8BED\u901F\u504F\u6162 |
-| \u5973\u6027\u6E29\u67D4/\u751C\u7F8E\u89D2\u8272 | \u5973\u58F0\uFF0C\u9752\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4E2D\u7B49\u504F\u9AD8\uFF0C\u97F3\u8272\u8D28\u611F\u660E\u4EAE\u6E05\u8106\uFF0C\u58F0\u97F3\u6E05\u4EAE\u67D4\u548C\uFF0C\u6C14\u606F\u5145\u6C9B\u5E73\u7A33\uFF0C\u5E26\u6E29\u5A49\u771F\u8BDA\u611F |
-| \u7537\u6027\u5E74\u8F7B/\u666E\u901A\u89D2\u8272 | \u7537\u58F0\uFF0C\u9752\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4E2D\u7B49\uFF0C\u97F3\u8272\u5E72\u51C0\uFF0C\u58F0\u97F3\u539A\u5EA6\u9002\u4E2D\uFF0C\u53D1\u97F3\u6E05\u6670\uFF0C\u6C14\u606F\u5E73\u7A33\uFF0C\u8BED\u901F\u9002\u4E2D |
-| \u5973\u6027\u6D3B\u6CFC/\u5916\u5411\u89D2\u8272 | \u5973\u58F0\uFF0C\u9752\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u504F\u9AD8\uFF0C\u97F3\u8272\u6E05\u8106\u6D3B\u6CFC\uFF0C\u58F0\u97F3\u8F7B\u76C8\uFF0C\u6C14\u606F\u5145\u6C9B\uFF0C\u8BED\u901F\u504F\u5FEB\uFF0C\u5E26\u7B11\u610F\u548C\u611F\u67D3\u529B |
-| \u53CD\u6D3E/\u51B7\u9177\u89D2\u8272 | \u7537\u58F0\uFF0C\u4E2D\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4F4E\u6C89\uFF0C\u97F3\u8272\u8D28\u611F\u5E72\u71E5\u504F\u6697\uFF0C\u58F0\u97F3\u5E26\u6C99\u783E\u611F\uFF0C\u6C14\u606F\u5E73\u7A33\uFF0C\u8BED\u901F\u6781\u6162\uFF0C\u6709\u5A01\u80C1\u611F |
+| /Character | |
+| /Character | and |
+| /plainCharacter | |
+| /Character | and |
+| /Character | |
 
-#### \u65E0\u53F0\u8BCD\u5206\u955C\u5904\u7406
-- \u4E0D\u5199 \`\u8BF4\uFF1A\` \u548C\u97F3\u8272\u6BB5\u843D
-- \u5728\u52A8\u4F5C\u63CF\u8FF0\u540E\u6807\u6CE8 \`\u65E0\u53F0\u8BCD\`
+#### noStoryboardhandle
+- not \`\` and
+- atDescription \`no\`
 
-#### \u53F0\u8BCD\u7C7B\u578B\u683C\u5F0F
+#### Type
 
-| \u53F0\u8BCD\u7C7B\u578B | \u683C\u5F0F | \u5634\u578B\u63CF\u8FF0 |
+| Type | | Description |
 |----------|------|----------|
-| \u666E\u901A\u5BF9\u767D | \`{\u89D2\u8272\u540D\u5B57} \u8BF4\uFF1A\u300C{\u53F0\u8BCD}\u300D\u97F3\u8272\uFF1A{9\u7EF4\u5EA6}\` | \u89D2\u8272\u5634\u90E8\u5F00\u5408\u8BF4\u8BDD |
-| \u5185\u5FC3\u72EC\u767D | \`{\u89D2\u8272\u540D\u5B57} \u5185\u5FC3OS\uFF1A\u300C{\u53F0\u8BCD}\u300D\u97F3\u8272\uFF1A{9\u7EF4\u5EA6}\` | \u89D2\u8272\u5634\u90E8\u7D27\u95ED\u4E0D\u52A8 |
-| \u753B\u5916\u97F3 | \`{\u89D2\u8272\u540D\u5B57} \u753B\u5916\u97F3VO\uFF1A\u300C{\u53F0\u8BCD}\u300D\u97F3\u8272\uFF1A{9\u7EF4\u5EA6}\` | \u89D2\u8272\u5634\u90E8\u7D27\u95ED\u4E0D\u52A8\uFF08\u6216\u89D2\u8272\u4E0D\u5728\u753B\u9762\u4E2D\uFF09 |
+| plain | \`{Character} {}{9}\` | Characteropen |
+| | \`{Character} OS{}{9}\` | Characternot |
+| | \`{Character} VO{}{9}\` | CharacternotCharacternot in |
 
-#### \u751F\u6210\u7EA6\u675F
-1. **\u4E2D\u6587\u63D0\u793A\u8BCD**
-2. **\u76F4\u63A5\u8F93\u51FA\u89C6\u9891\u63D0\u793A\u8BCD**\uFF1A\u7981\u6B62\u8F93\u51FA\u4EFB\u4F55\u5206\u6790\u8FC7\u7A0B\u3001\u63A8\u7406\u6B65\u9AA4\u3001\u6A21\u578B\u5339\u914D\u8BF4\u660E\u3001\u8D44\u4EA7\u7F16\u53F7\u8868\u3001\u5206\u9694\u7EBF\u7B49\u975E\u63D0\u793A\u8BCD\u5185\u5BB9\u3002\u7B2C\u4E00\u884C\u5FC5\u987B\u662F \`\u753B\u9762\u98CE\u683C\u548C\u7C7B\u578B:\`
-3. **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u6BCF\u6761\u5206\u955C\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u4FE1\u606F
-4. **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u548C\u97F3\u8272
-5. **\u53F0\u8BCD\u7C7B\u578B\u6B63\u786E\u6807\u6CE8**\uFF1A\u666E\u901A\u5BF9\u767D\u7528\u300C\u8BF4\uFF1A\u300D\uFF0C\u5185\u5FC3\u72EC\u767D\u7528\u300C\u5185\u5FC3OS\uFF1A\u300D\uFF0C\u753B\u5916\u97F3\u7528\u300C\u753B\u5916\u97F3VO\uFF1A\u300D
-6. **\u5148\u56FE\u7247\u5B9A\u4E49\uFF0C\u540E\u5199\u5206\u955C**\uFF1A\u6700\u524D\u9762\u5FC5\u987B\u5148\u8F93\u51FA"\u56FE\u7247\u5B9A\u4E49"\u6BB5\uFF0C\u5217\u51FA \`@\u56FEN : \u540D\u5B57\uFF0C\u63CF\u8FF0\`
-7. **\u5206\u955C\u6B63\u6587\u7981\u7528 \`@\u56FEN \`**\uFF1A\u6B63\u6587\u7EDF\u4E00\u4F7F\u7528\u89D2\u8272\u540D/\u573A\u666F\u540D\uFF0C\u4E0D\u5199 \`@\u56FE1/@\u56FE2\` \u7B49\u7F16\u53F7
-8. **\u5355\u5206\u955C\u65F6\u957F\u6700\u4F4E 1s**
-9. **\u65F6\u957F\u5355\u4F4D**\uFF1A\u76F4\u63A5\u4F7F\u7528 videoDesc \u4E2D\u7684\u79D2\u6570\uFF0C\u683C\u5F0F\u4E3A \`{N}s\`\uFF08\u5982 \`4s\`\uFF09\uFF0C\u6700\u4F4E 1s
+#### 
+1. **Prompt**
+2. **Video prompt**stepmatchAssettablenon-Promptcontentchapteris \`andType:\`
+3. ** videoDesc**itemsStoryboardcontent videoDesc ofVisual descriptionwhenCharacterfieldnotInformation
+4. **not**videoDesc ofStoryboardand
+5. **Type**plainOSVO
+6. **imagedefinitionStoryboard**"imagedefinition" \`@imageN : Description\`
+7. **StoryboardDisable \`@imageN \`**useCharacter/Scenenot \`@image1/@image2\` 
+8. **Storyboardwhen 1s**
+9. **when**use videoDesc offormat is \`{N}s\` \`4s\` 1s
 
-#### Seedance 2.0 \u5B8C\u6574\u793A\u4F8B
+#### Seedance 2.0 example
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1ASeedance2.0
-\u8D44\u4EA7\u4FE1\u606F[A001, role, \u6C88\u8F9E], [A002, role, \u82CF\u9526], [A003, scene, \u57CE\u697C]
+Seedance2.0
+AssetInformation[A001, role, ], [A002, role, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730\u3001\u57CE\u697C\u3001\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u5168\u666F\u3001\u9759\u6B62\u3001\u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C\u3001\u575A\u5B9A\u51B3\u7EDD\u3001\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149\u3001\u65E0\u53F0\u8BCD\u3001\u98CE\u58F0\u8863\u8882\u58F0\u3001A001/A003\uFF09' prompt='\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u57CE\u697C\u4E4B\u4E0A\uFF0C\u6C88\u8F9E\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u98D8\u626C\uFF0C\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
-<storyboardItem videoDesc='\uFF08\u82CF\u9526\u767B\u4E0A\u57CE\u697C\u8D70\u5411\u6C88\u8F9E\u3001\u57CE\u697C\u3001\u82CF\u9526/\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u4E2D\u666F\u3001\u8DDF\u8E2A\u3001\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u6C88\u8F9E\u3001\u62C5\u5FE7\u3001\u9EC4\u660F\u4F59\u6656\u6E10\u6697\u3001\u82CF\u9526\u8BF4\uFF1A\u4F60\u53C8\u4E00\u4E2A\u4EBA\u5728\u8FD9\u91CC\u3001\u811A\u6B65\u58F0\u98CE\u58F0\u3001A001/A002/A003\uFF09' prompt='\u4E2D\u666F\uFF0C\u8DDF\u8E2A\uFF0C\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u57CE\u697C\u4E0A\u7684\u6C88\u8F9E...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='/4snoA001/A003' prompt='...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='//4syouatA001/A002/A003' prompt='of...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
-\u753B\u9762\u98CE\u683C\u548C\u7C7B\u578B: \u771F\u4EBA\u5199\u5B9E, \u7535\u5F71\u98CE\u683C, \u51B7\u8C03, \u53E4\u98CE
+andType: , , , 
 
-\u53C2\u8003\u5B9A\u4E49:
-@\u56FE1: \u6C88\u8F9E\uFF0C\u9ED1\u8272\u957F\u888D\uFF0C\u6C14\u8D28\u51B7\u5CFB\u7684\u9752\u5E74\u7537\u6027
-@\u56FE2: \u82CF\u9526\uFF0C\u6D45\u8272\u8863\u88D9\uFF0C\u795E\u60C5\u7EC6\u817B\u7684\u9752\u5E74\u5973\u6027
-@\u56FE3: \u57CE\u697C\uFF0C\u53E4\u4EE3\u7816\u77F3\u57CE\u697C\u4E0E\u53F0\u9636\u573A\u666F
+definition:
+@image1: of
+@image2: of
+@image3: Scene
 
-\u751F\u6210\u4E00\u4E2A\u7531\u4EE5\u4E0B 2 \u4E2A\u5206\u955C\u7EC4\u6210\u7684\u89C6\u9891:
+the following 2 Storyboardof:
 
-\u573A\u666F:
-\u5206\u955C\u8FC7\u6E21: \u955C\u5934\u5E73\u6ED1\u5207\u6362\uFF0C\u4ECE\u5168\u666F\u8FC7\u6E21\u5230\u4E2D\u666F\u8DDF\u8E2A\uFF0C\u7126\u70B9\u4ECE\u6C88\u8F9E\u72EC\u5904\u8F6C\u5411\u82CF\u9526\u5230\u6765\u3002
+Scene:
+Storyboard: convert to
 
-\u5206\u955C1 4s: \u65F6\u95F4\uFF1A\u9EC4\u660F\uFF0C\u573A\u666F\uFF1A\u57CE\u697C\uFF0C\u955C\u5934\uFF1A\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u9759\u6B62\u955C\u5934\uFF0C\u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u4E4B\u4E0A\uFF0C\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u968F\u98CE\u98D8\u626C\uFF0C\u76EE\u5149\u8FDC\u773A\u82CD\u832B\u5927\u5730\uFF0C\u795E\u60C5\u8083\u7136\u9762\u5BB9\u6C89\u7740\uFF0C\u773C\u795E\u575A\u5B9A\u76EE\u5149\u6E05\u51BD\uFF0C\u7709\u773C\u6C89\u9759\u6C14\u8D28\u51DB\u7136\u3002\u65E0\u53F0\u8BCD\u3002\u80CC\u666F\u662F\u53E4\u57CE\u697C\u7816\u77F3\u7EB9\u7406\u6E05\u6670\uFF0C\u8FDC\u65B9\u5927\u5730\u82CD\u832B\u8FBD\u9614\uFF0C\u5929\u9645\u7EBF\u51B7\u6696\u4EA4\u66FF\u3002\u9EC4\u660F\u659C\u5C04\u4F59\u6656\u4FA7\u9006\u5149\uFF0C\u51B7\u8C03\u4E3A\u4E3B\uFF0C\u957F\u5F71\u62C9\u4F38\uFF0C\u8F6E\u5ED3\u5149\u5FAE\u52FE\u52D2\u4EBA\u7269\u8FB9\u7F18\uFF0C\u5149\u611F\u8BD7\u610F\u3002\u955C\u5934\u9759\u6B62\u3002
+Storyboard1 4s: TimeScenenois
 
-\u5206\u955C2 4s: \u65F6\u95F4\uFF1A\u9EC4\u660F\uFF0C\u573A\u666F\uFF1A\u57CE\u697C\uFF0C\u955C\u5934\uFF1A\u4E2D\u666F\uFF0C\u5E73\u89C6\uFF0C\u8DDF\u8E2A\u62CD\u6444\uFF0C\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\uFF0C\u8D70\u5411\u57CE\u697C\u4E0A\u7684\u6C88\u8F9E\uFF0C\u9762\u90E8\u671D\u5411\u6C88\u8F9E\u65B9\u5411\uFF0C\u795E\u60C5\u5FAE\u6123\u9762\u8272\u5FAE\u53D8\uFF0C\u773C\u795E\u4E2D\u5E26\u7740\u62C5\u5FE7\uFF0C\u82CF\u9526\u8BF4\uFF1A\u300C\u4F60\u53C8\u4E00\u4E2A\u4EBA\u5728\u8FD9\u91CC\u3002\u300D\u97F3\u8272\uFF1A\u5973\u58F0\uFF0C\u9752\u5E74\u97F3\u8272\uFF0C\u97F3\u8C03\u4E2D\u7B49\u504F\u9AD8\uFF0C\u97F3\u8272\u8D28\u611F\u660E\u4EAE\u6E05\u8106\uFF0C\u58F0\u97F3\u6E05\u4EAE\u67D4\u548C\uFF0C\u53D1\u97F3\u65B9\u5F0F\u5E72\u51C0\uFF0C\u6C14\u606F\u5145\u6C9B\u5E73\u7A33\uFF0C\u8BED\u901F\u9002\u4E2D\uFF0C\u5E26\u6E29\u5A49\u771F\u8BDA\u611F\u3002\u80CC\u666F\u57CE\u697C\u53F0\u9636\u7EB9\u7406\u6E05\u6670\uFF0C\u4F59\u6656\u6E10\u6697\uFF0C\u5929\u9645\u7EBF\u51B7\u6696\u4EA4\u66FF\u52A0\u6DF1\u3002\u955C\u5934\u8DDF\u8E2A\u82CF\u9526\u79FB\u52A8\u3002
+Storyboard2 4s: TimeSceneofYou're here alone again.and
 \`\`\`
 
 ---
 
-### \u56DB\u3001Wan 2.6
+### Wan 2.6
 
-#### \u6838\u5FC3\u539F\u5219
-- **\u5355\u56FE\u9996\u5E27\u6A21\u5F0F**\uFF1A\u5F52\u7C7B\u4E3A\u9996\u5C3E\u5E27\u6A21\u5F0F\uFF0C\u4F46\u4EC5\u6709\u9996\u5E27\uFF08\u5206\u955C\u56FE\uFF09\uFF0C\u65E0\u5C3E\u5E27
-- **\u5355\u6761\u5206\u955C\u8F93\u5165/\u8F93\u51FA**\uFF1A\u6BCF\u6B21\u4EC5\u8F93\u5165\u4E00\u6761 \`<storyboardItem>\` \u53CA\u5176\u5173\u8054\u8D44\u4EA7\u4FE1\u606F\uFF0C\u8F93\u51FA\u4E5F\u4EC5\u4E3A\u4E00\u6BB5\u5B8C\u6574\u7684\u53D9\u4E8B\u5F0F\u63D0\u793A\u8BCD
-- **\u53D9\u4E8B\u5F0F\u82F1\u6587\u63D0\u793A\u8BCD**\uFF1A\u50CF\u5199\u5C0F\u8BF4\u4E00\u6837\u63CF\u5199\u753B\u9762\uFF0C\u4E0D\u4F7F\u7528\u6807\u7B7E\u7F57\u5217\uFF08\u4E0D\u5199 \`4K, cinematic, high quality\` \u8FD9\u7C7B\u5806\u780C\uFF09
-- **\u4E09\u6BB5\u5F0F\u7ED3\u6784**\uFF1A\u98CE\u683C\u57FA\u8C03 \u2192 \u4E3B\u4F53\u52A8\u4F5C + \u573A\u666F\u73AF\u5883 + \u5149\u7EBF\u6C1B\u56F4 \u2192 \u955C\u5934\u6536\u5C3E
-- **\u7EAF\u6587\u672C\u63D0\u793A\u8BCD**\uFF1A\u63D0\u793A\u8BCD\u5185**\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528**\uFF0C\u5168\u90E8\u5185\u5BB9\u7528\u7EAF\u6587\u672C\u63CF\u8FF0
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728\u63D0\u793A\u8BCD\u4E2D\u4F53\u73B0\u53F0\u8BCD\u76F8\u5173\u63CF\u8FF0
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08dialogue\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08inner monologue OS\uFF09\u3001\u753B\u5916\u97F3\uFF08voiceover VO\uFF09\uFF0C\u5728\u63D0\u793A\u8BCD\u4E2D\u7528\u62EC\u53F7\u6807\u6CE8
+#### 
+- **Single imageFirst frame**First and last framesFirst framestoryboard imagenoLast frame
+- **itemsStoryboard/**items \`<storyboardItem>\` relatedAssetInformationofPrompt
+- **Prompt**NovelnotuseTagsnot \`4K, cinematic, high quality\` 
+- **** \u2192 + Scene + \u2192 
+- **textPrompt**Prompt**notuse \`@imageN \` **AllcontenttextDescription
+- ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardatPromptrelatedDescription
+- **Type**plaindialogueinner monologue OSvoiceover VOatPrompt
 
-#### prompt \u751F\u6210\u6A21\u677F
+#### prompt template
 
-\u6BCF\u6B21\u8F93\u5165\u4E00\u6761\u5206\u955C\uFF0C\u8F93\u51FA\u4E00\u6BB5\u5B8C\u6574\u63D0\u793A\u8BCD\uFF08\u65E0\u7F16\u53F7\u524D\u7F00\uFF09\uFF0C\u683C\u5F0F\u5982\u4E0B\uFF1A
+itemsStoryboardPromptnounder
 
 \`\`\`
-{\u98CE\u683C\u57FA\u8C03\u4E00\u53E5\u8BDD\u5B9A\u6027},
-{\u4E3B\u4F53\u540D} {\u5916\u89C2\u7B80\u8FF0}, {\u5177\u4F53\u52A8\u4F5C/\u59FF\u6001\u63CF\u8FF0}, {\u60C5\u7EEA/\u8868\u60C5\u7528\u52A8\u4F5C\u6697\u793A}.
-{\u573A\u666F\u80CC\u666F\u4E3B\u4F53}, {\u5177\u4F53\u73AF\u5883\u7269\u4EF6}, {\u7A7A\u95F4\u611F}, {\u65F6\u95F4/\u5929\u6C14}.
-{\u5149\u7EBF\u65B9\u5411/\u8272\u6E29} {\u8D28\u611F\u63CF\u8FF0}, {\u60C5\u7EEA\u6697\u793A\u5149\u5F71}.
-{\u53F0\u8BCD\u63CF\u8FF0\uFF08\u5982\u6709\uFF0C\u542B dialogue/OS/VO \u6807\u6CE8\uFF09/ No dialogue}.
-{\u97F3\u6548\u63CF\u8FF0}.
-{\u62CD\u6444\u65B9\u5F0F}, {\u666F\u522B}, {\u89C6\u89D2}, {\u8FD0\u955C\u65B9\u5F0F}.
+{},
+{} {}, {/Description}, {/table}.
+{Scene}, {}, {}, {Time/}.
+{/} {Description}, {}.
+{Description dialogue/OS/VO / No dialogue}.
+{Description}.
+{}, {}, {}, {}.
 \`\`\`
 
-#### \u53D9\u4E8B\u5F0F\u5199\u6CD5\u8981\u70B9
+#### 
 
-| \u539F\u5219 | \u8BF4\u660E | \u793A\u4F8B |
+| | | example |
 |------|------|------|
-| \u98CE\u683C\u57FA\u8C03\u653E\u6700\u524D | \u4E00\u53E5\u8BDD\u5B9A\u6027\u6574\u4F53\u6C14\u8D28 | \`A cinematic epic scene\` / \`A melancholic cinematic scene\` |
-| \u4E3B\u4F53+\u52A8\u4F5C\u7D27\u5BC6\u7ED1\u5B9A | \u4E3B\u4F53\u540E\u9762\u76F4\u63A5\u8DDF\u52A8\u4F5C\uFF0C\u5916\u89C2\u7EC6\u8282\u5D4C\u5165\u4E3B\u4F53\u63CF\u8FF0 | \`A young man in dark flowing robes stands alone atop the city wall, hands clasped behind back\` |
-| \u60C5\u7EEA\u7528\u52A8\u4F5C\u6697\u793A | \u4E0D\u76F4\u63A5\u9648\u8FF0\u300C\u4ED6\u5F88\u60B2\u4F24\u300D | \u274C \`He is sad.\` \u2192 \u2705 \`head drops slowly, shoulders slumped\` |
-| \u73AF\u5883\u878D\u5165\u53D9\u4E8B | \u4E0D\u7F57\u5217\u73AF\u5883\u5C5E\u6027 | \u274C \`The sky is blue. The grass is green.\` \u2192 \u2705 \`hazy blue sky stretches over the emerald valley\` |
-| \u5149\u7EBF\u5355\u72EC\u6210\u53E5 | \u5149\u7EBF\u65B9\u5411+\u8272\u6E29+\u8D28\u611F+\u60C5\u7EEA | \`Warm golden hour light streams from behind, casting long shadows across the stone floor\` |
-| \u955C\u5934\u8BED\u8A00\u6536\u5C3E | \u4E00\u53E5\u8BDD\u70B9\u775B | \`Captured in a wide establishing shot from a low-angle perspective, static camera\` |
-| \u7981\u6B62\u6807\u7B7E\u5806\u780C | \u4E0D\u5199 \`4K, cinematic, high quality\` | \`cinematic\` \u878D\u5165\u98CE\u683C\u57FA\u8C03\u5373\u53EF |
+| | | \`A cinematic epic scene\` / \`A melancholic cinematic scene\` |
+| + | Description | \`A young man in dark flowing robes stands alone atop the city wall, hands clasped behind back\` |
+| | not | \u274C \`He is sad.\` \u2192 \u2705 \`head drops slowly, shoulders slumped\` |
+| | not | \u274C \`The sky is blue. The grass is green.\` \u2192 \u2705 \`hazy blue sky stretches over the emerald valley\` |
+| | +++ | \`Warm golden hour light streams from behind, casting long shadows across the stone floor\` |
+| | | \`Captured in a wide establishing shot from a low-angle perspective, static camera\` |
+| Tags | not \`4K, cinematic, high quality\` | \`cinematic\` |
 
-#### \u751F\u6210\u7EA6\u675F
-1. **\u5168\u90E8\u7528\u82F1\u6587**
-2. **\u4E0D\u4F7F\u7528\u4EFB\u4F55 \`@\u56FEN \` \u5F15\u7528**\uFF1A\u63D0\u793A\u8BCD\u5185\u4E0D\u5F15\u7528\u89D2\u8272\u8D44\u4EA7\u3001\u573A\u666F\u8D44\u4EA7\u3001\u5206\u955C\u56FE\uFF0C\u5168\u90E8\u5185\u5BB9\u7528\u7EAF\u6587\u672C\u63CF\u8FF0
-3. **\u53D9\u4E8B\u5F0F\u63CF\u5199**\uFF1A\u50CF\u5199\u5C0F\u8BF4\u4E00\u6837\u6784\u5EFA\u753B\u9762\uFF0C\u7981\u6B62\u6807\u7B7E\u7F57\u5217\u548C\u914D\u7F6E\u6E05\u5355\u5F0F\u5199\u6CD5
-4. **\u4E3B\u4F53\u7528\u6587\u5B57\u63CF\u8FF0**\uFF1A\u7B80\u8981\u63CF\u8FF0\u4E3B\u4F53\u5916\u89C2\u7279\u5F81\uFF08\u5982\u670D\u9970\u3001\u53D1\u578B\u7B49\u5173\u952E\u8FA8\u8BC6\u7279\u5F81\uFF09\uFF0C\u5D4C\u5165\u4E3B\u4F53\u63CF\u8FF0\u4E2D
-5. **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u4FE1\u606F
-6. **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728\u63D0\u793A\u8BCD\u4E2D\u5B8C\u6574\u8F93\u51FA\u53F0\u8BCD\u5185\u5BB9\uFF08\u4FDD\u6301\u539F\u59CB\u8BED\u8A00\uFF0C\u4E0D\u7FFB\u8BD1\uFF09
-7. **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF1A\u666E\u901A\u5BF9\u767D\u6807\u6CE8 \`(dialogue)\`\uFF1B\u5185\u5FC3\u72EC\u767D\u6807\u6CE8 \`(inner monologue, OS)\`\uFF1B\u753B\u5916\u97F3\u6807\u6CE8 \`(voiceover, VO)\`
-8. **\u5355\u6761\u8F93\u5165/\u8F93\u51FA**\uFF1A\u6BCF\u6B21\u4EC5\u5904\u7406\u4E00\u6761\u5206\u955C\uFF0C\u8F93\u51FA\u4E00\u6BB5\u63D0\u793A\u8BCD\uFF0C\u65E0\u7F16\u53F7\u524D\u7F00
-9. **\u65E0\u9700\u6807\u6CE8\u65F6\u957F**\uFF1A\u65F6\u957F\u7531\u6A21\u578B\u4FA7\u63A7\u5236\uFF0C\u63D0\u793A\u8BCD\u4E2D\u4E0D\u5199\u65F6\u957F\u53C2\u6570
-10. **\u955C\u5934\u63CF\u8FF0\u878D\u5165\u53D9\u4E8B**\uFF1A\u4E0D\u7528\u65B9\u62EC\u53F7\u6807\u7B7E\uFF0C\u7528\u5B8C\u6574\u53E5\u5B50\u63CF\u8FF0\u955C\u5934
-11. **\u89C6\u89C9\u98CE\u683C**\u53C2\u8003 Assistant \u4E2D\u7684\u300C\u89C6\u89C9\u98CE\u683C\u7EA6\u675F\u300D\u90E8\u5206\u5185\u5BB9
+#### 
+1. **All**
+2. **notuse \`@imageN \` **PromptnotCharacterAssetSceneAssetstoryboard imageAllcontenttextDescription
+3. ****NovelbuildTagsandConfiguration
+4. **Description**DescriptionrelatedDescription
+5. ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotInformation
+6. **not**videoDesc ofStoryboardatPromptcontentstartnot
+7. **Type**plain \`(dialogue)\` \`(inner monologue, OS)\` \`(voiceover, VO)\`
+8. **items/**handleitemsStoryboardPromptno
+9. **nowhen**whenPromptnotwhen
+10. **Description**notTagschildDescription
+11. **** Assistant ofcontent
 
-#### Wan 2.6 \u5B8C\u6574\u793A\u4F8B
+#### Wan 2.6 example
 
-**\u793A\u4F8B1\uFF1A\u65E0\u53F0\u8BCD\u5206\u955C**
+**example1noStoryboard**
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1AWan2.6
-\u8D44\u4EA7\u4FE1\u606F[A001, role, \u6C88\u8F9E], [A003, scene, \u57CE\u697C]
+Wan2.6
+AssetInformation[A001, role, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u6C88\u8F9E\u72EC\u7ACB\u57CE\u697C\u8FDC\u773A\u82CD\u832B\u5927\u5730\u3001\u57CE\u697C\u3001\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u5168\u666F\u3001\u9759\u6B62\u3001\u8D1F\u624B\u800C\u7ACB\u8863\u8882\u968F\u98CE\u98D8\u626C\u3001\u575A\u5B9A\u51B3\u7EDD\u3001\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149\u3001\u65E0\u53F0\u8BCD\u3001\u98CE\u58F0\u8863\u8882\u58F0\u3001A001/A003\uFF09' prompt='\u5168\u666F\uFF0C\u5E73\u89C6\u7565\u4EF0\uFF0C\u57CE\u697C\u4E4B\u4E0A\uFF0C\u6C88\u8F9E\u8D1F\u624B\u800C\u7ACB\uFF0C\u8863\u8882\u98D8\u626C\uFF0C\u9EC4\u660F\u51B7\u8C03\u4FA7\u9006\u5149...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='/4snoA001/A003' prompt='...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
 A cinematic epic scene with a cold, desaturn\`ated palette,
 A lone man in dark flowing robes stands atop an ancient city wall, hands clasped behind his back, robes and hair billowing in the wind, gaze fixed on the vast land stretching to the horizon, jaw set firm, eyes unwavering.
@@ -106528,79 +106528,79 @@ Wind howling across the open wall, fabric flapping rhythmically.
 Captured in a wide establishing shot from a slightly low angle, static camera, single continuous take.
 \`\`\`
 
-**\u793A\u4F8B2\uFF1A\u6709\u53F0\u8BCD\u5206\u955C**
+**example2Storyboard**
 
-\u8F93\u5165\uFF1A
+
 \`\`\`
-\u6A21\u578B\uFF1AWan2.6
-\u8D44\u4EA7\u4FE1\u606F[A001, role, \u6C88\u8F9E], [A002, role, \u82CF\u9526], [A003, scene, \u57CE\u697C]
+Wan2.6
+AssetInformation[A001, role, ], [A002, role, ], [A003, scene, ]
 \`\`\`
 \`\`\`xml
-<storyboardItem videoDesc='\uFF08\u82CF\u9526\u767B\u4E0A\u57CE\u697C\u8D70\u5411\u6C88\u8F9E\u3001\u57CE\u697C\u3001\u82CF\u9526/\u6C88\u8F9E/\u57CE\u697C\u30014s\u3001\u4E2D\u666F\u3001\u8DDF\u8E2A\u3001\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u6C88\u8F9E\u3001\u62C5\u5FE7\u3001\u9EC4\u660F\u4F59\u6656\u6E10\u6697\u3001\u82CF\u9526\u8BF4\uFF1A\u4F60\u53C8\u4E00\u4E2A\u4EBA\u5728\u8FD9\u91CC\u3001\u811A\u6B65\u58F0\u98CE\u58F0\u3001A001/A002/A003\uFF09' prompt='\u4E2D\u666F\uFF0C\u8DDF\u8E2A\uFF0C\u82CF\u9526\u62FE\u7EA7\u800C\u4E0A\u8D70\u5411\u57CE\u697C\u4E0A\u7684\u6C88\u8F9E...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
+<storyboardItem videoDesc='//4syouatA001/A002/A003' prompt='of...' track='main' duration='4' associateAssetsIds="[&quot;A001&quot;,&quot;A002&quot;,&quot;A003&quot;]" shouldGenerateImage="true" ></storyboardItem>
 \`\`\`
 
-\u8F93\u51FA\uFF1A
+
 \`\`\`
 A melancholic cinematic scene, dusk tones deepening,
 A young woman in a light-colored dress ascends the final stone steps onto the city wall, her gaze locked on the lone figure ahead, brow slightly furrowed, pace slowing as she approaches, lips parting softly.
 The ancient city wall stretches behind her, weathered stairs leading up from below, the distant skyline dimming as the last traces of golden hour fade into twilight.
 Fading warm light mingles with rising cool blue tones, the contrast between the two figures softened by the diffused remnants of sunset.
-"\u4F60\u53C8\u4E00\u4E2A\u4EBA\u5728\u8FD9\u91CC\u3002" \u2014 Su Jin (dialogue).
+"You're here alone again." \u2014 Su Jin (dialogue).
 Footsteps on stone, wind sweeping across the battlements, fabric rustling.
 A medium tracking shot follows the woman from behind as she ascends and approaches, handheld camera with subtle movement, single continuous take.
 \`\`\`
 
 ---
 
-## \u666F\u522B \u2192 \u955C\u5934\u6807\u7B7E\u6620\u5C04
+## \u2192 Tagsmapping
 
-| videoDesc \u4E2D\u7684\u666F\u522B | KlingOmni\uFF08\u82F1\u6587\u6807\u7B7E\uFF09 | Seedance 1.5\uFF08\u82F1\u6587\u6807\u7B7E\uFF09 | Seedance 2.0\uFF08\u4E2D\u6587\u63CF\u8FF0\uFF09 | Wan 2.6\uFF08\u82F1\u6587\u53D9\u4E8B\u5F0F\uFF09 |
+| videoDesc of | KlingOmniTags | Seedance 1.5Tags | Seedance 2.0Description | Wan 2.6 |
 |------|------|------|------|------|
-| \u8FDC\u666F | extreme wide shot | Extreme wide shot | \u8FDC\u666F | an extreme wide shot capturing the vast expanse |
-| \u5168\u666F | wide shot | Wide establishing shot | \u5168\u666F | a wide establishing shot |
-| \u4E2D\u666F | medium shot | Medium shot | \u4E2D\u666F | a medium shot |
-| \u8FD1\u666F | close-up | Close-up | \u8FD1\u666F | a close-up shot |
-| \u7279\u5199 | close-up | Close-up | \u7279\u5199 | a close-up capturing fine detail |
-| \u5927\u7279\u5199 | extreme close-up | Extreme close-up | \u5927\u7279\u5199 | an extreme close-up |
+| | extreme wide shot | Extreme wide shot | | an extreme wide shot capturing the vast expanse |
+| | wide shot | Wide establishing shot | | a wide establishing shot |
+| | medium shot | Medium shot | | a medium shot |
+| | close-up | Close-up | | a close-up shot |
+| | close-up | Close-up | | a close-up capturing fine detail |
+| | extreme close-up | Extreme close-up | | an extreme close-up |
 
-## \u8FD0\u955C \u2192 \u955C\u5934\u6807\u7B7E\u6620\u5C04
+## \u2192 Tagsmapping
 
-| videoDesc \u4E2D\u7684\u8FD0\u955C | KlingOmni\uFF08\u82F1\u6587\u6807\u7B7E\uFF09 | Seedance 1.5\uFF08\u82F1\u6587\u6807\u7B7E\uFF09 | Seedance 2.0\uFF08\u4E2D\u6587\u63CF\u8FF0\uFF09 | Wan 2.6\uFF08\u82F1\u6587\u53D9\u4E8B\u5F0F\uFF09 |
+| videoDesc of | KlingOmniTags | Seedance 1.5Tags | Seedance 2.0Description | Wan 2.6 |
 |------|------|------|------|------|
-| \u9759\u6B62 | static camera | Static, no camera movement | \u955C\u5934\u9759\u6B62 | static camera, locked off |
-| \u63A8\u8FDB | dolly in / push in | Slow dolly forward | \u955C\u5934\u7F13\u6162\u5411\u524D\u63A8\u8FDB | camera slowly pushing in |
-| \u62C9\u8FDC | dolly out / pull back | Slow dolly backward pull | \u955C\u5934\u7F13\u6162\u5411\u540E\u62C9\u8FDC | camera gently pulling back |
-| \u8DDF\u8E2A | tracking shot | Tracking shot, handheld | \u8DDF\u8E2A\u62CD\u6444 | tracking shot following the subject |
-| \u6447\u955C | pan left/right | Slow pan | \u955C\u5934\u7F13\u6162\u6447\u79FB | smooth pan across the scene |
-| \u7529\u955C | whip pan | Whip pan | \u5FEB\u901F\u7529\u955C | whip pan |
-| \u5347\u964D | crane up/down | Crane up/down | \u955C\u5934\u5347\u964D | crane rising / descending |
-| \u73AF\u7ED5 | surround shooting | Orbiting shot | \u73AF\u7ED5\u62CD\u6444 | orbiting around the subject |
+| | static camera | Static, no camera movement | | static camera, locked off |
+| | dolly in / push in | Slow dolly forward | | camera slowly pushing in |
+| | dolly out / pull back | Slow dolly backward pull | | camera gently pulling back |
+| | tracking shot | Tracking shot, handheld | | tracking shot following the subject |
+| | pan left/right | Slow pan | | smooth pan across the scene |
+| | whip pan | Whip pan | | whip pan |
+| | crane up/down | Crane up/down | | crane rising / descending |
+| | surround shooting | Orbiting shot | | orbiting around the subject |
 
 ---
 
-## \u6267\u884C\u6D41\u7A0B
+## process
 
-1. **\u89E3\u6790\u8F93\u5165**\uFF1A\u63D0\u53D6\u6A21\u578B\u540D\u548C\u591A\u53C2\u6807\u5FD7\uFF0C\u6309\u8DEF\u7531\u89C4\u5219\u5339\u914D\u6A21\u5F0F\uFF1B\u63D0\u53D6\u8D44\u4EA7\u5217\u8868
-2. **\u6784\u5EFA @\u56FEN \u7F16\u53F7\u8868**\uFF1A\u8D44\u4EA7\u6309\u8F93\u5165\u987A\u5E8F\u4ECE \`@\u56FE1 \` \u8D77\u7F16\u53F7\uFF0C\u5206\u955C\u56FE\u63A5\u7EED\u7F16\u53F7\uFF1B\`shouldGenerateImage="false"\` \u7684\u5206\u955C\u4E0D\u5206\u914D\u5206\u955C\u56FE\u7F16\u53F7
-3. **\u9010\u6761\u89E3\u6790 \`<storyboardItem>\`**\uFF1A\u6309 videoDesc \u89E3\u6790\u89C4\u5219\u63D0\u53D612\u4E2A\u5B57\u6BB5\uFF0C\u7ED3\u5408 \`duration\`\u3001\`associateAssetsIds\` \u5EFA\u7ACB\u6807\u7B7E\u6620\u5C04
-4. **\u6574\u5408\u4E3A\u4E00\u4E2A\u5B8C\u6574\u7684\u89C6\u9891\u63D0\u793A\u8BCD**\uFF1A\u6309\u76EE\u6807\u6A21\u578B\u683C\u5F0F\u7F16\u6392\u5168\u90E8\u5206\u955C
-5. **\u8F93\u51FA\u89C6\u9891\u63D0\u793A\u8BCD**
+1. **parse**extractandMulti-referencebymatchExtract assetslist
+2. **build @imageN table**Assetby \`@image1 \` storyboard image\`shouldGenerateImage="false"\` ofStoryboardnotstoryboard image
+3. **itemsparse \`<storyboardItem>\`**by videoDesc parseextract12field \`duration\`\`associateAssetsIds\` Tagsmapping
+4. **ofVideo prompt**byAllStoryboard
+5. **Video prompt**
 
 ---
 
-## \u7EA6\u675F
+## 
 
-- **\u4EC5\u8F93\u51FA\u89C6\u9891\u63D0\u793A\u8BCD**\uFF1A\u4E0D\u9644\u52A0\u4EFB\u4F55\u89E3\u91CA\u3001\u6CE8\u91CA\u3001\u5206\u6790\u8FC7\u7A0B\u3001\u63A8\u7406\u6B65\u9AA4\u3001\u6A21\u578B\u5339\u914D\u8BF4\u660E\u3001\u8D44\u4EA7\u7F16\u53F7\u8868\u3001\u5206\u9694\u7EBF\uFF08\`---\`\uFF09\u6216\u989D\u5916\u8BF4\u660E\uFF0C\u53EA\u8F93\u51FA\u89C6\u9891\u63D0\u793A\u8BCD\u6587\u672C\u3002\u7981\u6B62\u5728\u63D0\u793A\u8BCD\u524D\u540E\u8F93\u51FA\u4EFB\u4F55\u975E\u63D0\u793A\u8BCD\u5185\u5BB9
-- **\u4E25\u683C\u9075\u5FAA videoDesc**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1A\u63D0\u793A\u8BCD\u5185\u5BB9\u4E25\u683C\u57FA\u4E8E videoDesc \u4E2D\u7684\u753B\u9762\u63CF\u8FF0\u3001\u65F6\u957F\u3001\u666F\u522B\u3001\u8FD0\u955C\u3001\u89D2\u8272\u52A8\u4F5C\u3001\u60C5\u7EEA\u3001\u5149\u5F71\u6C1B\u56F4\u3001\u53F0\u8BCD\u3001\u97F3\u6548\u5B57\u6BB5\u751F\u6210\uFF0C\u4E0D\u7F16\u9020\u989D\u5916\u5185\u5BB9
-- **\u53F0\u8BCD\u4E0D\u53EF\u7F3A\u5931**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1AvideoDesc \u4E2D\u6709\u53F0\u8BCD\u7684\u5206\u955C\uFF0C\u5FC5\u987B\u5728\u63D0\u793A\u8BCD\u4E2D\u5B8C\u6574\u4F53\u73B0\u53F0\u8BCD\u5185\u5BB9\uFF0C\u4E0D\u5F97\u9057\u6F0F
-- **\u53F0\u8BCD\u4FDD\u6301\u539F\u59CB\u8F93\u5165**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1A\u53F0\u8BCD\u5185\u5BB9\u4E25\u7981\u7FFB\u8BD1\uFF0C\u5FC5\u987B\u4FDD\u6301 videoDesc \u4E2D\u7684\u539F\u59CB\u8BED\u8A00\u539F\u6837\u8F93\u51FA
-- **\u53F0\u8BCD\u7C7B\u578B\u6807\u6CE8**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1A\u5FC5\u987B\u533A\u5206\u666E\u901A\u5BF9\u767D\uFF08dialogue / \u8BF4\uFF09\u3001\u5185\u5FC3\u72EC\u767D\uFF08OS / \u5185\u5FC3OS\uFF09\u3001\u753B\u5916\u97F3\uFF08VO / \u753B\u5916\u97F3VO\uFF09\uFF0C\u5E76\u5728\u63D0\u793A\u8BCD\u4E2D\u6B63\u786E\u6807\u6CE8
-- **\u65F6\u95F4\u8DE8\u5EA6\u6700\u4F4E 1 \u79D2**\uFF08\u5168\u6A21\u5F0F\u901A\u7528\uFF09\uFF1A\u6240\u6709\u6A21\u5F0F\u4E2D\u6D89\u53CA\u65F6\u95F4\u5206\u6BB5\uFF08Motion \u65F6\u95F4\u8F74 / Seedance 2.0 \u5206\u955C\u65F6\u957F {N}s\uFF09\u7684\u6700\u5C0F\u7C92\u5EA6\u4E3A 1 \u79D2\uFF081s\uFF09\uFF0C\u7981\u6B62\u51FA\u73B0 0.5 \u79D2\u7B49\u4F4E\u4E8E 1 \u79D2\u7684\u95F4\u9694
-- **\u89C6\u89C9\u98CE\u683C**\uFF1A\u98CE\u683C\u76F8\u5173\u63CF\u8FF0\u53C2\u8003 Assistant \u4E2D\u7684\u300C\u89C6\u89C9\u98CE\u683C\u7EA6\u675F\u300D\u90E8\u5206\u5185\u5BB9\uFF0C\u4E0D\u5728\u672C Skill \u5185\u81EA\u884C\u5B9A\u4E49\u98CE\u683C
-- **\u4E25\u683C\u6309\u5339\u914D\u5230\u7684\u6A21\u5F0F\u683C\u5F0F**\uFF0C\u4E0D\u6DF7\u7528\u4E0D\u540C\u6A21\u5F0F\u7684\u683C\u5F0F
-- **\u4E0D\u4FEE\u6539\u539F\u59CB\u8F93\u5165**\uFF1A\u4E0D\u6539\u5199 \`<storyboardItem>\` \u7684\u4EFB\u4F55\u5B57\u6BB5\uFF1B\`prompt\` \u5DF2\u6709\u7684\u5206\u955C\u56FE\u63D0\u793A\u8BCD\u4EC5\u4F5C\u753B\u9762\u53C2\u8003
-- **\u4E0D\u7F16\u9020\u8D44\u4EA7\u6216\u53F0\u8BCD**\uFF1A\u53EA\u4F7F\u7528\u8F93\u5165\u4E2D\u7684\u8D44\u4EA7\u4FE1\u606F\uFF1B\u65E0\u53F0\u8BCD\u5219\u6807\u6CE8\u300C\u65E0\u53F0\u8BCD\u300D/ \`No dialogue\`
-- **\u65F6\u957F\u5355\u4F4D**\uFF1ASeedance 2.0 \u7684\u5206\u955C\u65F6\u957F\u76F4\u63A5\u4F7F\u7528\u79D2\uFF0C\u683C\u5F0F\u4E3A \`{N}s\`\uFF08\u5982 \`4s\`\uFF09\uFF0C\u6700\u4F4E 1s
+- **Video prompt**notstepmatchAssettable\`---\`Video prompttextatPromptnon-Promptcontent
+- ** videoDesc**Promptcontent videoDesc ofVisual descriptionwhenCharacterfieldnotcontent
+- **not**videoDesc ofStoryboardatPromptcontent,not
+- **start**content videoDesc ofstart
+- **Type**plaindialogue / OS / OSVO / VOatPrompt
+- **Time 1 **allTimeMotion Time / Seedance 2.0 Storyboardwhen {N}sof 1 1s 0.5 1 of
+- ****relatedDescription Assistant ofcontent,not in Skill definition
+- **bymatchof**notnotof
+- **noteditstart**not \`<storyboardItem>\` offield\`prompt\` alreadyofstoryboard imagePrompt
+- **notAsset**useofAssetInformationnono/ \`No dialogue\`
+- **when**Seedance 2.0 ofStoryboardwhenuseformat is \`{N}s\` \`4s\` 1s
 `
       });
       const data = await knex3("o_vendorConfig").select("*");
@@ -106621,7 +106621,7 @@ A medium tracking shot follows the woman from behind as she ascends and approach
       for (const id of defList) {
         if (!existingIds.includes(id)) {
           const tsCode = vendorData[`${id}.ts`];
-          if (tsCode) await tempOnsert(tsCode);
+          if (tsCode) await tempopensert(tsCode);
         }
       }
       await dropColumn("o_vendorConfig", "author");
@@ -116153,13 +116153,13 @@ async function initKnexType(knexDb) {
   }).fetchDatabase(knexDb);
   const declarations = await dbClient2.toTypescript();
   const dbObject = await dbClient2.toObject();
-  const customHeader = `//\u8BE5\u6587\u4EF6\u7531\u811A\u672C\u81EA\u52A8\u751F\u6210\uFF0C\u8BF7\u52FF\u624B\u52A8\u4FEE\u6539`;
+  const customHeader = `//this file isScriptauto-generated, do not manually modify`;
   let declBody = declarations.replace(/^\/\*[\s\S]*?\*\/\s*/, "");
   declBody = declBody.replace(/(\n\s*)\/\*([^*][\s\S]*?)\*\//g, "$1/**$2*/");
   const tableInterfaces = dbObject.schemas.flatMap((schema) => schema.tables.map((table) => table.interfaceName));
   const aggregateTypes = `
 export interface DB {
-${tableInterfaces.map((name28) => `  ${JSON.stringify(name28)}: ${name28};`).join("\n")}
+${tableInterfaces.map((name28) => ` ${JSON.stringify(name28)}: ${name28};`).join("\n")}
 }
 `;
   const hashSource = JSON.stringify({
@@ -116197,7 +116197,7 @@ var init_db = __esm({
     import_crypto2 = __toESM(require("crypto"));
     init_fixDB();
     dbPath = getPath_default("db2.sqlite");
-    console.log("\u6570\u636E\u5E93\u76EE\u5F55:", dbPath);
+    console.log("Database directory:", dbPath);
     dbDir = import_path5.default.dirname(dbPath);
     if (!import_fs3.default.existsSync(dbDir)) {
       import_fs3.default.mkdirSync(dbDir, { recursive: true });
@@ -116232,7 +116232,7 @@ function resolveSafeLocalPath(userPath, rootDir) {
   const safePath = normalizeUserPath(userPath);
   const absPath = import_node_path2.default.join(rootDir, safePath);
   if (!isPathInside(absPath, rootDir)) {
-    throw new Error(`${userPath} \u4E0D\u5728 OSS \u6839\u76EE\u5F55\u5185`);
+    throw new Error(`${userPath} not in OSS directory`);
   }
   return absPath;
 }
@@ -116254,49 +116254,48 @@ var init_oss = __esm({
         });
       }
       /**
-       * 。。
-       * @private
-       */
+      * directorystartCompleteallfileatdirectoryalreadycreate
+      * @private
+      */
       async ensureInit() {
         await this.initPromise;
       }
       /**
-       *  URL。
-       * @param userRelPath （ / ）
-       * @returns  http （）
-       */
+      * getspecifiedPathfileof URL
+      * @param userRelPath relativefilePathuse / 
+      * @returns fileof http 
+      */
       async getFileUrl(userRelPath, prefix) {
         if (!prefix) prefix = "oss";
         await this.ensureInit();
         const safePath = normalizeUserPath(userRelPath);
         let url4 = `/${prefix}/`;
         if (process.env.ossURL && process.env.ossURL !== "") url4 = process.env.ossURL + `/${prefix}/`;
-        if (process.env.NODE_ENV == "dev") url4 = `http://localhost:10588/${prefix}/`;
-        if (isEletron()) url4 = `http://localhost:${process.env.PORT}/${prefix}/`;
+        if (isEletron()) url4 = `http://localhost:${process.env.PORT || "10588"}/${prefix}/`;
         return `${url4}${safePath.split(import_node_path2.default.sep).join("/")}`;
       }
       /**
-       *  Buffer。
-       * @param userRelPath （ / ）
-       * @returns  Buffer
-       * @throws  OSS 、
-       */
+      * readspecifiedPathoffilecontent Buffer
+      * @param userRelPath relativefilePathuse / 
+      * @returns filecontentof Buffer
+      * @throws Pathnot in OSS directoryFile not foundError
+      */
       async getFile(userRelPath) {
         await this.ensureInit();
         return import_promises3.default.readFile(resolveSafeLocalPath(userRelPath, this.rootDir));
       }
       /**
-       *  base64  Data URL。
-       * @param userRelPath （ / ）
-       * @returns base64  Data URL (: data:image/png;base64,iVBORw0KGgo...)
-       * @throws  OSS 、、
-       */
+      * read image file and convert to base64 encoded Data URL
+      * @param userRelPath relativefilePathuse / 
+      * @returns base64 encoded Data URL (: data:image/png;base64,iVBORw0KGgo...)
+      * @throws Pathnot in OSS directoryFile not foundnotisimagefileError
+      */
       async getImageBase64(userRelPath) {
         await this.ensureInit();
         const absPath = resolveSafeLocalPath(userRelPath, this.rootDir);
         const stat = await import_promises3.default.stat(absPath);
         if (!stat.isFile()) {
-          throw new Error(`${userRelPath} \u4E0D\u662F\u6587\u4EF6`);
+          throw new Error(`${userRelPath} notisfile`);
         }
         const ext = import_node_path2.default.extname(userRelPath).toLowerCase();
         const mimeTypes = {
@@ -116315,42 +116314,42 @@ var init_oss = __esm({
         };
         const mimeType = mimeTypes[ext];
         if (!mimeType) {
-          throw new Error(`\u4E0D\u652F\u6301\u7684\u56FE\u7247\u683C\u5F0F: ${ext}\u3002\u652F\u6301\u7684\u683C\u5F0F: ${Object.keys(mimeTypes).join(", ")}`);
+          throw new Error(`Not supportedofimage: ${ext}supportsof: ${Object.keys(mimeTypes).join(", ")}`);
         }
         const data = await import_promises3.default.readFile(absPath);
         const base644 = data.toString("base64");
         return `data:${mimeType};base64,${base644}`;
       }
       /**
-       * 。
-       * @param userRelPath （ / ）
-       * @throws  OSS 、
-       */
+      * DeletespecifiedPathoffile
+      * @param userRelPath relativefilePathuse / 
+      * @throws Pathnot in OSS directoryFile not foundError
+      */
       async deleteFile(userRelPath) {
         await this.ensureInit();
         await import_promises3.default.unlink(resolveSafeLocalPath(userRelPath, this.rootDir));
       }
       /**
-       * 。
-       * @param userRelPath （ / ）
-       * @throws  OSS 、、
-       */
+      * DeletespecifiedPathoffolderallcontent
+      * @param userRelPath relativefolderPathuse / 
+      * @throws Pathnot in OSS directoryfoldernotexistsisfilenon-folderError
+      */
       async deleteDirectory(userRelPath) {
         await this.ensureInit();
         const absPath = resolveSafeLocalPath(userRelPath, this.rootDir);
         const stat = await import_promises3.default.stat(absPath);
         if (!stat.isDirectory()) {
-          throw new Error(`${userRelPath} \u4E0D\u662F\u6587\u4EF6\u5939`);
+          throw new Error(`${userRelPath} notisfolder`);
         }
         await import_promises3.default.rm(absPath, { recursive: true, force: true });
       }
       /**
-       * 。
-       * 。
-       * @param userRelPath （ / ）
-       * @param data ， Buffer 
-       * @throws  OSS 
-       */
+      * dataspecifiedPathoffilealreadyfile
+      * createoffolder
+      * @param userRelPath relativefilePathuse / 
+      * @param data ofdata Buffer 
+      * @throws Pathnot in OSS directoryError
+      */
       async writeFile(userRelPath, data) {
         await this.ensureInit();
         const absPath = resolveSafeLocalPath(userRelPath, this.rootDir);
@@ -116359,10 +116358,10 @@ var init_oss = __esm({
         await import_promises3.default.writeFile(absPath, buffer);
       }
       /**
-       * 。
-       * @param userRelPath （ / ）
-       * @returns  true， false
-       */
+      * checkspecifiedPathfilewhetherexists
+      * @param userRelPath relativefilePathuse / 
+      * @returns fileexistsreturn trueNo false
+      */
       async fileExists(userRelPath) {
         await this.ensureInit();
         try {
@@ -116373,13 +116372,13 @@ var init_oss = __esm({
         }
       }
       /**
-       *  URL（ 512px，）。
-       *  smallImage 。
-       *  URL； URL，
-       *  URL。
-       * @param userRelPath （ / ）
-       * @returns  URL（） URL（）
-       */
+      * Get imageofimage URLnot 512px
+      * imageSaveatPathdirectoryunderof smallImage childfolder
+      * imagealreadyexistsreturn URLnotexistsSavereturnimage URL
+      * Generation failedwhenreturnimage URL
+      * @param userRelPath relativefilePathuse / 
+      * @returns image URLalreadyexistsGenerated successfullyimage URLGeneration failedwhen
+      */
       async getSmallImageUrl(userRelPath) {
         const smallImageRelPath = `smallImage/${userRelPath.replace(/^[/\\]+/, "")}`;
         if (await this.fileExists(smallImageRelPath)) {
@@ -116392,10 +116391,10 @@ var init_oss = __esm({
           const dstAbsPath = resolveSafeLocalPath(smallImageRelPath, this.rootDir);
           await import_promises3.default.mkdir(import_node_path2.default.dirname(dstAbsPath), { recursive: true });
           await (0, import_sharp.default)(srcAbsPath).resize(512, 512, { fit: "inside", withoutEnlargement: true }).toFile(dstAbsPath);
-          console.info(`[${dstAbsPath}]\u5C0F\u56FE\u5199\u5165\u6210\u529F`);
+          console.info(`[${dstAbsPath}]imageSuccess`);
           return this.getFileUrl(smallImageRelPath);
         } catch (e) {
-          console.warn("[OSS] \u751F\u6210\u7F29\u7565\u56FE\u5931\u8D25:", e);
+          console.warn("[OSS] imageFailed:", e);
           return originalUrl;
         }
       }
@@ -116428,9 +116427,9 @@ var init_getConfig = __esm({
     "use strict";
     init_utils3();
     errorMessages = {
-      text: "\u6587\u672C\u6A21\u578B\u914D\u7F6E\u4E0D\u5B58\u5728",
-      image: "\u56FE\u50CF\u6A21\u578B\u914D\u7F6E\u4E0D\u5B58\u5728",
-      video: "\u89C6\u9891\u6A21\u578B\u914D\u7F6E\u4E0D\u5B58\u5728"
+      text: "text modelConfiguration not found",
+      image: "image modelConfiguration not found",
+      video: "video modelConfiguration not found"
     };
     needBaseURL = ["text", "video", "image"];
   }
@@ -130760,7 +130759,7 @@ function normalizeError(error73) {
     const serialized = serializeError(error73);
     return {
       name: serialized.name || "Error",
-      message: serialized.message || "\u672A\u77E5\u9519\u8BEF",
+      message: serialized.message || "UnknownError",
       code: serialized.code,
       stack: serialized.stack,
       cause: error73.cause ? normalizeError(error73.cause) : void 0,
@@ -130813,7 +130812,7 @@ var init_cleanNovel = __esm({
     init_stripThink();
     CleanNovel = class {
       emitter;
-      /**  */
+      /** */
       concurrency;
       constructor(concurrency = 5) {
         this.emitter = new import_events2.EventEmitter();
@@ -130834,7 +130833,7 @@ var init_cleanNovel = __esm({
             messages: [
               {
                 role: "user",
-                content: "\u8BF7\u6839\u636E\u4EE5\u4E0B\u5C0F\u8BF4\u7AE0\u8282\u6570\uFF1A" + novel.chapterIndex + "\u5C0F\u8BF4\u7AE0\u8282\u5238\uFF1A" + novel.reel + "\u5C0F\u8BF4\u7AE0\u8282\u540D\u79F0\uFF1A" + novel.chapter + "\u3001\u5C0F\u8BF4\u7AE0\u8282\u5185\u5BB9\u751F\u6210\u4E8B\u4EF6\u6458\u8981\uFF1A\n" + novel.chapterData
+                content: "based on the followingNovelchapters" + novel.chapterIndex + "Novelchapter entry" + novel.reel + "NovelchapterName" + novel.chapter + "Novelchapter contentGenerate eventssummary\n" + novel.chapterData
               }
             ]
           });
@@ -225177,7 +225176,7 @@ function runCode(code, vendor) {
   return exports2;
 }
 function logger(logstring) {
-  console.log("\u3010VM\u3011" + JSON.stringify(logstring));
+  console.log("VM" + JSON.stringify(logstring));
 }
 async function zipImage(completeBase64, size) {
   let quality = 80;
@@ -225216,7 +225215,7 @@ async function pollTask(fn, interval = 3e3, timeout = 3e6) {
 }
 async function mergeImages(imageBase64List, maxSize = "10mb") {
   if (imageBase64List.length === 0) {
-    throw new Error("\u56FE\u7247\u5217\u8868\u4E0D\u80FD\u4E3A\u7A7A");
+    throw new Error("imagelistCannot be empty");
   }
   const maxBytes = parseSize(maxSize);
   const imageBuffers = imageBase64List.map(base64ToBuffer);
@@ -225252,7 +225251,7 @@ async function mergeImages(imageBase64List, maxSize = "10mb") {
 function parseSize(size) {
   const match = size.toLowerCase().match(/^(\d+(?:\.\d+)?)\s*(kb|mb|gb|b)?$/);
   if (!match) {
-    throw new Error(`\u65E0\u6548\u7684\u5927\u5C0F\u683C\u5F0F: ${size}`);
+    throw new Error(`InvalidofSize: ${size}`);
   }
   const value = parseFloat(match[1]);
   const unit = match[2] || "b";
@@ -225317,7 +225316,7 @@ async function taskRecord(projectId, taskClass, modelName, opts = {}) {
   } else if (typeof content === "string") {
     opteorContent = content;
   } else if (typeof content === "function") {
-    throw new Error("\u4E0D\u652F\u6301\u7684\u7C7B\u578B");
+    throw new Error("Not supportedofType");
   } else {
     try {
       opteorContent = JSON.stringify(content);
@@ -225347,9 +225346,9 @@ var init_taskRecord = __esm({
     "use strict";
     init_db();
     taskStateMap = {
-      "0": "\u8FDB\u884C\u4E2D",
-      "1": "\u5DF2\u5B8C\u6210",
-      "-1": "\u751F\u6210\u5931\u8D25"
+      "0": "In progress",
+      "1": "Completed",
+      "-1": "Generation failed"
     };
   }
 });
@@ -236844,13 +236843,13 @@ async function resolveModelName(value) {
     const agentUseModeVal = await utils_default.db("o_setting").where("key", "agentUseMode").first();
     if (agentUseModeVal?.value == "1") {
       const agentDeployData2 = await utils_default.db("o_agentDeploy").where("key", value).first();
-      if (!agentDeployData2?.modelName) throw new Error(`\u9AD8\u7EA7\u914D\u7F6E\u6A21\u5F0F\u4E0B\uFF0C\u672A\u627E\u5230\u5BF9\u5E94\u7684\u6A21\u578B\u914D\u7F6E ${value}`);
+      if (!agentDeployData2?.modelName) throw new Error(`advancedConfigurationmode, corresponding not foundmodel configuration ${value}`);
       return agentDeployData2?.modelName;
     }
     if (agentUseModeVal?.value == "0") {
       const [mainly] = value.split(/:(.+)/);
       const mainlyData = await utils_default.db("o_agentDeploy").where("key", mainly).first();
-      if (!mainlyData?.modelName) throw new Error(`\u7B80\u6613\u914D\u7F6E\u6A21\u5F0F\u4E0B\uFF0C\u672A\u627E\u5230\u90E8\u7F72\u914D\u7F6E ${value}`);
+      if (!mainlyData?.modelName) throw new Error(`Configurationundernot foundConfiguration ${value}`);
       return mainlyData?.modelName;
     }
     const agentDeployData = await utils_default.db("o_agentDeploy").where("key", value).first();
@@ -236858,7 +236857,7 @@ async function resolveModelName(value) {
     if (!agentDeployData?.modelName) {
       const [mainly] = agentDeployData.key.split(/:(.+)/);
       const mainlyData = await utils_default.db("o_agentDeploy").where("key", mainly).first();
-      if (!mainlyData?.modelName) throw new Error(`\u672A\u627E\u5230\u90E8\u7F72\u914D\u7F6E ${value}`);
+      if (!mainlyData?.modelName) throw new Error(`not foundConfiguration ${value}`);
       modelName = mainlyData.modelName;
     }
     modelName = agentDeployData?.modelName || modelName;
@@ -236871,20 +236870,20 @@ async function getModelConfig(value) {
     const agentUseModeVal = await utils_default.db("o_setting").where("key", "agentUseMode").first();
     if (agentUseModeVal?.value == "1") {
       const agentDeployData2 = await utils_default.db("o_agentDeploy").where("key", value).first();
-      if (!agentDeployData2?.modelName) throw new Error(`\u9AD8\u7EA7\u914D\u7F6E\u6A21\u5F0F\u4E0B\uFF0C\u672A\u627E\u5230\u5BF9\u5E94\u7684\u6A21\u578B\u914D\u7F6E ${value}`);
+      if (!agentDeployData2?.modelName) throw new Error(`advancedConfigurationmode, corresponding not foundmodel configuration ${value}`);
       return agentDeployData2;
     }
     if (agentUseModeVal?.value == "0") {
       const [mainly] = value.split(/:(.+)/);
       const mainlyData = await utils_default.db("o_agentDeploy").where("key", mainly).first();
-      if (!mainlyData?.modelName) throw new Error(`\u7B80\u6613\u914D\u7F6E\u6A21\u5F0F\u4E0B\uFF0C\u672A\u627E\u5230\u90E8\u7F72\u914D\u7F6E ${value}`);
+      if (!mainlyData?.modelName) throw new Error(`Configurationundernot foundConfiguration ${value}`);
       return mainlyData;
     }
     const agentDeployData = await utils_default.db("o_agentDeploy").where("key", value).first();
     if (!agentDeployData?.modelName) {
       const [mainly] = agentDeployData.key.split(/:(.+)/);
       const mainlyData = await utils_default.db("o_agentDeploy").where("key", mainly).first();
-      if (!mainlyData?.modelName) throw new Error(`\u672A\u627E\u5230\u90E8\u7F72\u914D\u7F6E ${value}`);
+      if (!mainlyData?.modelName) throw new Error(`not foundConfiguration ${value}`);
       return mainlyData;
     }
     return agentDeployData;
@@ -236894,10 +236893,10 @@ async function getModelConfig(value) {
 async function getVendorTemplateFn(fnName, modelName) {
   const [id, name28] = modelName.split(/:(.+)/);
   const vendorConfigData = await utils_default.db("o_vendorConfig").where("id", id).first();
-  if (!vendorConfigData) throw new Error(`\u672A\u627E\u5230\u4F9B\u5E94\u5546\u914D\u7F6E id=${id}`);
+  if (!vendorConfigData) throw new Error(`not foundVendor configuration id=${id}`);
   const modelList = await utils_default.vendor.getModelList(id);
   const selectedModel = modelList.find((i) => i.modelName == name28);
-  if (!selectedModel) throw new Error(`\u672A\u627E\u5230\u6A21\u578B ${name28} id=${id}`);
+  if (!selectedModel) throw new Error(`not found ${name28} id=${id}`);
   const code = utils_default.vendor.getCode(id);
   const jsCode = (0, import_sucrase2.transform)(code, { transforms: ["typescript"] }).code;
   const running = utils_default.vm(jsCode);
@@ -236906,7 +236905,7 @@ async function getVendorTemplateFn(fnName, modelName) {
     running.vendor.models = modelList;
   }
   const fn = running[fnName];
-  if (!fn) throw new Error(`\u672A\u627E\u5230\u4F9B\u5E94\u5546\u914D\u7F6E\u4E2D\u7684\u51FD\u6570 ${fnName} id=${id}`);
+  if (!fn) throw new Error(`not foundVendor configurationof ${fnName} id=${id}`);
   if (fnName == "textRequest")
     return (think, thinkLevel = 0) => {
       const effectiveThink = think ?? !!selectedModel.think;
@@ -237115,59 +237114,59 @@ var init_ai = __esm({
 async function getPrompts(type) {
   if (type == "event") {
     return `
-# \u4E8B\u4EF6\u63D0\u53D6\u6307\u4EE4
+# Eventextract
 
-\u4F60\u662F\u5C0F\u8BF4\u6587\u672C\u5206\u6790\u52A9\u624B\u3002\u7528\u6237\u6BCF\u6B21\u63D0\u4F9B\u4E00\u4E2A\u7AE0\u8282\u7684\u539F\u6587\uFF0C\u4F60\u63D0\u53D6\u8BE5\u7AE0\u7684\u7ED3\u6784\u5316\u4E8B\u4EF6\u4FE1\u606F\u3002
+youwhetherveltextchapteroforiginal textyouextractchapterofEventInformation
 
-## \u26A0\uFE0F \u8F93\u51FA\u7EA6\u675F\uFF08\u6700\u9AD8\u4F18\u5148\u7EA7\uFF0C\u8FDD\u53CD\u4EFB\u4F55\u4E00\u6761\u5373\u4E3A\u5931\u8D25\uFF09
+## \u26A0\uFE0F itemsFailed
 
-1. \u4F60\u7684**\u5B8C\u6574\u56DE\u590D**\u53EA\u6709\u4E00\u884C\uFF0C\u4EE5 \`|\` \u5F00\u5934\u3001\u4EE5 \`|\` \u7ED3\u5C3E\uFF0C\u6070\u597D 7 \u4E2A\u5B57\u6BB5
-2. \u56DE\u590D\u7684**\u7B2C\u4E00\u4E2A\u5B57\u7B26**\u5FC5\u987B\u662F \`|\`\uFF0C**\u6700\u540E\u4E00\u4E2A\u5B57\u7B26**\u5FC5\u987B\u662F \`|\`
-3. \`|\` \u4E4B\u524D\u4E0D\u8BB8\u6709\u4EFB\u4F55\u5B57\u7B26\u2014\u2014\u6CA1\u6709\u5F15\u5BFC\u8BED\u3001\u6CA1\u6709\u89E3\u91CA\u3001\u6CA1\u6709"\u6839\u636E\u2026\u2026"\u3001\u6CA1\u6709"\u4EE5\u4E0B\u662F\u2026\u2026"
-4. \`|\` \u4E4B\u540E\u4E0D\u8BB8\u6709\u4EFB\u4F55\u5B57\u7B26\u2014\u2014\u6CA1\u6709\u603B\u7ED3\u3001\u6CA1\u6709\u63D0\u53D6\u8BF4\u660E\u3001\u6CA1\u6709\u6539\u7F16\u5EFA\u8BAE
-5. \u4E0D\u8F93\u51FA\u8868\u5934\u884C\u3001\u5206\u9694\u7EBF\u3001Markdown \u6807\u9898\u3001emoji\u3001\u4EE3\u7801\u5757\u6807\u8BB0
+1. youof**** \`|\` open \`|\` 7 field
+2. of**chapter**is \`|\`****is \`|\`
+3. \`|\` no characters allowed before\u2014\u2014"based on\u2026\u2026""the followingis\u2026\u2026"
+4. \`|\` not\u2014\u2014extract
+5. nottableMarkdown emojimark
 
-## \u8F93\u51FA\u683C\u5F0F
+## 
 
 \`\`\`
-| \u7B2CX\u7AE0 {\u7AE0\u8282\u6807\u9898} | {\u6D89\u53CA\u89D2\u8272} | {\u6838\u5FC3\u4E8B\u4EF6} | {\u4E3B\u7EBF\u5173\u7CFB} | {\u4FE1\u606F\u5BC6\u5EA6} | {\u9884\u4F30\u96C6\u957F} | {\u60C5\u7EEA\u5F3A\u5EA6} |
+| chapterXchapter {chapter} | {Character} | {Event} | {related} | {Information} | {} | {emotion intensity} |
 \`\`\`
 
-### \u5B57\u6BB5\u89C4\u8303
+### field
 
-| \u5B57\u6BB5 | \u683C\u5F0F\u8981\u6C42 | \u793A\u4F8B |
+| field | | example |
 |------|----------|------|
-| \u7AE0\u8282 | \`\u7B2CX\u7AE0 {\u7AE0\u8282\u6807\u9898}\` | \`\u7B2C1\u7AE0 \u804C\u4E1A\u5371\u673A\u4E0E\u8BB8\u613F\` |
-| \u6D89\u53CA\u89D2\u8272 | \u6709\u5B9E\u9645\u620F\u4EFD\u7684\u89D2\u8272\uFF0C\u987F\u53F7\u5206\u9694 | \`\u6797\u9038\u3001\u767D\u6709\u5BB9\` |
-| \u6838\u5FC3\u4E8B\u4EF6 | 30-60\u5B57\uFF0C\u5FC5\u987B\u542B\u52A8\u4F5C+\u7ED3\u679C | \`\u6797\u9038\u56E0\u89E3\u5BC6\u98CE\u6F6E\u4E8B\u4E1A\u5D29\u584C\uFF0C\u9893\u5E9F\u4E2D\u8BB8\u613F\u89E6\u53D1\u9B54\u6CD5\u7CFB\u7EDF\u7ED1\u5B9A\` |
-| \u4E3B\u7EBF\u5173\u7CFB | **\u5FC5\u987B**\u4E3A \`\u5F3A/\u4E2D/\u5F31\uFF083-8\u5B57\u7406\u7531\uFF09\` | \`\u5F3A\uFF08\u52A8\u673A\u5EFA\u7ACB+\u7CFB\u7EDF\u6FC0\u6D3B\uFF09\` |
-| \u4FE1\u606F\u5BC6\u5EA6 | \`\u9AD8\` / \`\u4E2D\` / \`\u4F4E\` | \`\u9AD8\` |
-| \u9884\u4F30\u96C6\u957F | **\u5FC5\u987B**\u4E3A \`X\u79D2\`\uFF0C\u7981\u6B62\u7528\u5206\u949F | \`50\u79D2\` |
-| \u60C5\u7EEA\u5F3A\u5EA6 | \u6587\u5B57\u6807\u7B7E\uFF0C\`+\` \u8FDE\u63A5\uFF0C\u7981\u6B62\u661F\u7EA7/\u6570\u5B57 | \`\u8F6C\u6298+\u60AC\u7591\` |
+| chapter | \`chapterXchapter {chapter}\` | \`chapter1chapter \` |
+| Character | with actual scenesCharacterseparated by enumeration comma | \`\` |
+| Event | 30-60+result | \`System\` |
+| related | **** \`//3-8\` | \`+System\` |
+| Information | \`\` / \`\` / \`\` | \`\` |
+| | **** \`X\` | \`50\` |
+| emotion intensity | Tags\`+\` Connection/ | \`convert to+\` |
 
-**\u4E3B\u7EBF\u5173\u7CFB\u5224\u5B9A**\uFF1A\u5F3A\uFF1D\u76F4\u63A5\u63A8\u52A8\u4E3B\u89D2\u5F27\u7EBF\uFF1B\u4E2D\uFF1D\u8865\u5145\u4E16\u754C\u89C2/\u4EBA\u7269\u5173\u7CFB/\u4F0F\u7B14\uFF1B\u5F31\uFF1D\u8FC7\u6E21/\u6C14\u6C1B\u3002
+**related**/related//
 
-**\u9884\u4F30\u96C6\u957F\u53C2\u8003**\uFF1A\u9AD8\u5BC6\u5EA6+\u9AD8\u60C5\u7EEA\u219245-60\u79D2\uFF1B\u4E2D\u219235-45\u79D2\uFF1B\u4F4E\u219225-35\u79D2\u3002
+****+high emotion\u219245-60\u219235-45\u219225-35
 
-**\u53EF\u7528\u60C5\u7EEA\u6807\u7B7E**\uFF1A\`\u51B2\u7A81\`\u3001\`\u6050\u6016\`\u3001\`\u60C5\u611F\`\u3001\`\u8F6C\u6298\`\u3001\`\u9AD8\u6F6E\`\u3001\`\u5E73\u94FA\`\u3001\`\u559C\u5267\`\u3001\`\u60AC\u7591\`\u3001\`\u60C5\u611F\u5D29\u6E83\`\u3002
+**Tags**\`\`\`\`\`\`\`convert to\`\`\`\`\`\`\`\`\`\`\`
 
-## \u8F93\u51FA\u793A\u4F8B
+## example
 
-\u4EE5\u4E0B\u4E24\u4E2A\u793A\u4F8B\u5C55\u793A\u7684\u662F**\u5B8C\u6574\u56DE\u590D**\u2014\u2014\u9664\u8FD9\u4E00\u884C\u5916\u6CA1\u6709\u4EFB\u4F55\u5176\u4ED6\u5185\u5BB9\uFF1A
+the followingexampleofis****\u2014\u2014Othercontent
 
 \`\`\`
-| \u7B2C1\u7AE0 \u804C\u4E1A\u5371\u673A\u4E0E\u8BB8\u613F | \u6797\u9038 | \u804C\u4E1A\u9B54\u672F\u5E08\u6797\u9038\u56E0\u89E3\u5BC6\u6253\u5047\u98CE\u6F6E\u5BFC\u81F4\u4E8B\u4E1A\u5D29\u584C\uFF0C\u9893\u5E9F\u4E2D\u611F\u6168"\u5982\u679C\u4F1A\u9B54\u6CD5\u5C31\u597D\u4E86"\uFF0C\u610F\u5916\u89E6\u53D1\u795E\u5947\u9B54\u6CD5\u7CFB\u7EDF\u7ED1\u5B9A | \u5F3A\uFF08\u4E3B\u89D2\u52A8\u673A\u5EFA\u7ACB+\u7CFB\u7EDF\u6FC0\u6D3B\uFF09 | \u9AD8 | 50\u79D2 | \u8F6C\u6298+\u60AC\u7591 |
+| chapter1chapter | | ""System | +System | | 50 | convert to+ |
 \`\`\`
 \`\`\`
-| \u7B2C12\u7AE0 \u5C71\u95F4\u5C0F\u61A9 | \u51CC\u7384\u3001\u82CF\u665A\u537F | \u51CC\u7384\u4E0E\u82CF\u665A\u537F\u5728\u5C71\u95F4\u6B47\u811A\uFF0C\u82CF\u665A\u537F\u56DE\u5FC6\u5E7C\u65F6\u5F80\u4E8B\uFF0C\u4E24\u4EBA\u5173\u7CFB\u7565\u6709\u7F13\u548C\u4F46\u672A\u5B9E\u8D28\u63A8\u8FDB | \u5F31\uFF08\u6C14\u6C1B\u8FC7\u6E21\uFF09 | \u4F4E | 25\u79D2 | \u5E73\u94FA+\u60C5\u611F |
+| chapter12chapter | | atwhenrelatedand | | | 25 | + |
 \`\`\`
 
-## \u63D0\u53D6\u89C4\u5219
+## extract
 
-- \u5FE0\u4E8E\u539F\u6587\uFF0C\u4E0D\u63A8\u6D4B\u3001\u4E0D\u8111\u8865\u3001\u4E0D\u52A0\u5165\u539F\u6587\u672A\u51FA\u73B0\u7684\u60C5\u8282
-- \u89D2\u8272\u4F7F\u7528\u6587\u4E2D\u4E3B\u8981\u79F0\u547C\uFF0C\u4FDD\u6301\u4E00\u81F4
-- \u591A\u6761\u5E73\u884C\u4E8B\u4EF6\u7EBF\u65F6\uFF0C\u9009\u5BF9\u4E3B\u89D2\u5F71\u54CD\u6700\u5927\u7684\u4E00\u6761\uFF0C\u5176\u4F59\u7B80\u8981\u5E26\u8FC7
-- \u5BF9\u8BDD\u5BC6\u96C6\u7AE0\u8282\uFF0C\u5173\u6CE8\u5BF9\u8BDD\u63A8\u52A8\u4E86\u4EC0\u4E48\u7ED3\u679C\uFF0C\u800C\u975E\u590D\u8FF0\u5BF9\u8BDD\u5185\u5BB9
+- original textnotnotnotoriginal textof
+- Characteruseconsistent
+- itemsEventwhenofitems
+- chapterrelatedresultnon-content
 `;
   }
 }
@@ -237373,7 +237372,7 @@ var init_utils3 = __esm({
 });
 
 // src/lib/responseFormat.ts
-function success3(data = null, message = "\u6210\u529F") {
+function success3(data = null, message = "Success") {
   return {
     code: 200,
     data,
@@ -237408,9 +237407,9 @@ function validateFields(shape, source = "body") {
     const data = req[source];
     const parseResult = schema.safeParse(data);
     if (!parseResult.success) {
-      const errors = parseResult.error.issues.map((issue3) => `\u5B57\u6BB5 ${issue3.path.join(".")} ${issue3.message}`);
+      const errors = parseResult.error.issues.map((issue3) => `field ${issue3.path.join(".")} ${issue3.message}`);
       console.error(errors);
-      return res.status(400).json({ message: "\u53C2\u6570\u9519\u8BEF", errors });
+      return res.status(400).json({ message: "Parameter error", errors });
     }
     next();
   };
@@ -237532,7 +237531,7 @@ var init_addArtStyle = __esm({
           label: name28,
           prompt
         });
-        res.status(200).send(success3("\u827A\u672F\u98CE\u683C\u6DFB\u52A0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla eklendi"));
       }
     );
   }
@@ -237570,7 +237569,7 @@ var init_editArtStyle = __esm({
           label: name28,
           prompt
         }).where("id", id);
-        res.status(200).send(success3("\u827A\u672F\u98CE\u683C\u7F16\u8F91\u6210\u529F"));
+        res.status(200).send(success3("Edited successfully"));
       }
     );
   }
@@ -237596,7 +237595,7 @@ var init_extractStylePrompt = __esm({
         const { images } = req.body;
         try {
           const resText = await utils_default.Ai.Text("universalAi").invoke({
-            system: '\u8BF7\u6839\u636E\u4EE5\u4E0B\u56FE\u7247\u6570\u636E\uFF0C\u63D0\u53D6\u51FA\u56FE\u7247\u7684\u753B\u98CE\u63D0\u793A\u8BCD\uFF0C\u7528\u4E8E\u751F\u6210\u56FE\u7247\u65F6\u6307\u5B9A\u98CE\u683C\uFF0C\u8981\u6C42\u7B80\u6D01\u4E14\u5177\u6709\u827A\u672F\u6027,\u53EA\u9700\u8981\u753B\u98CE\u63D0\u793A\u8BCD\uFF0C\u4E0D\u9700\u8981\u5176\u4ED6\u5185\u5BB9\uFF1A"\u6BD4\u5982\uFF1A`(\u753B\u98CE\uFF1A2D\u52A8\u6F2B\u98CE\u683C,2d animation style)`,`(\u753B\u98CE\uFF1A\u7167\u7247\u7EA7\u771F\u4EBA\u8D85\u5199\u5B9E,photorealistic, lifelike, ultra detailed)`\uFF0C`(\u753B\u98CE\uFF1A3D\u56FD\u521B,Chinese 3D animation style)`\u7B49,\u5982\u679C\u56FE\u7247\u98CE\u683C\u65E0\u6CD5\u63CF\u8FF0\uFF0C\u53EF\u4EE5\u8FD4\u56DE`\u65E0\u6CD5\u63CF\u8FF0`,\u591A\u5F20\u56FE\u7247\u65F6\uFF0C\u53EA\u8F93\u51FA\u4E00\u4E2A\u7EFC\u5408\u7684\u753B\u98CE\u63D0\u793A\u8BCD\uFF0C\u8981\u6C42\u5305\u542B\u6240\u6709\u56FE\u7247\u7684\u5171\u540C\u98CE\u683C\u7279\u5F81\uFF0C\u8F93\u51FA\u683C\u5F0F\u5FC5\u987B\u4E25\u683C\u6309\u7167\u793A\u4F8B\u4E2D\u7684\u683C\u5F0F\uFF0C\u5FC5\u987B\u5305\u542B`\u753B\u98CE`\u4E8C\u5B57\uFF0C\u4E14\u5FC5\u987B\u4F7F\u7528\u62EC\u53F7\u62EC\u8D77\u6765\uFF0C\u62EC\u53F7\u5185\u5FC5\u987B\u5305\u542B\u4E2D\u6587\u548C\u82F1\u6587\u7684\u753B\u98CE\u63CF\u8FF0\uFF0C\u5E76\u7528\u9017\u53F7\u5206\u9694\uFF0C\u82F1\u6587\u90E8\u5206\u9700\u8981\u7FFB\u8BD1\u6210\u5730\u9053\u7684\u82F1\u6587\u63D0\u793A\u8BCD',
+            system: 'based on the followingimagedataextractimageofart stylePromptimagewhenspecified,needart stylePromptnotneedOthercontent"`(art style2D,2d animation style)`,`(art style,photorealistic, lifelike, ultra detailed)``(art style3D,Chinese 3D animation style)`,imagenodescription methodreturn`nodescription method`,imagewhenofart stylePromptallimageofbyexampleof`art style`useandofart styleDescriptionneedofPrompt',
             messages: [
               {
                 role: "user",
@@ -237673,7 +237672,7 @@ var init_addAssets = __esm({
           prompt,
           startTime: Date.now()
         });
-        res.status(200).send(success3({ message: "\u65B0\u589E\u8D44\u4EA7\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Asset added successfully" }));
       }
     );
   }
@@ -237748,13 +237747,13 @@ var init_addAudioAssets = __esm({
             filePath: item.src,
             type: "audio",
             assetsId,
-            state: "\u5DF2\u5B8C\u6210"
+            state: "Completed"
           });
           await utils_default.db("o_assets").where("id", assetsId).update({
             imageId
           });
         }
-        res.status(200).send(success3({ message: "\u65B0\u589E\u8D44\u4EA7\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Asset added successfully" }));
       }
     );
   }
@@ -237779,7 +237778,7 @@ var init_batchDelete = __esm({
       async (req, res) => {
         const { id } = req.body;
         await utils_default.db("o_assets").whereIn("id", id).delete();
-        res.status(200).send(success3({ message: "\u5220\u9664\u8D44\u4EA7\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Delete assetSuccess" }));
       }
     );
   }
@@ -237857,7 +237856,7 @@ var init_delAssets = __esm({
         await utils_default.db("o_image").where({ assetsId: id }).delete();
         await utils_default.db("o_assets").where({ id }).delete();
         await utils_default.db("o_assets").where("assetsId", id).delete();
-        res.status(200).send(success3({ message: "\u5220\u9664\u8D44\u4EA7\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Delete assetSuccess" }));
       }
     );
   }
@@ -237887,7 +237886,7 @@ var init_delImage = __esm({
         await utils_default.db("o_image").where({ id }).delete();
         const assetsData = await utils_default.db("o_image").where("id", id);
         await Promise.all(assetsData.map((i) => i.filePath && utils_default.oss.deleteFile(i.filePath)));
-        res.status(200).send(success3({ message: "\u8D44\u4EA7\u56FE\u7247\u5220\u9664\u6210\u529F" }));
+        res.status(200).send(success3({ message: "AssetImage deleted successfully" }));
       }
     );
   }
@@ -238025,14 +238024,14 @@ var init_getMaterialData = __esm({
         const ending = await utils_default.oss.getFileUrl("/ending.mp4", "assets");
         data.push({
           id: 0,
-          name: "Toonflow\u7247\u5C3E",
+          name: "Toonflowending credits",
           filePath: ending,
           type: "clip"
         });
         const trackRows = await utils_default.db("o_videoTrack").where("o_videoTrack.scriptId", scriptId).andWhere("o_videoTrack.projectId", projectId).select("o_videoTrack.id as trackId", "o_videoTrack.videoId");
         const video = await Promise.all(
           trackRows.map(async (track) => {
-            const videoItems = await utils_default.db("o_video").where("o_video.videoTrackId", track.trackId).andWhere("o_video.state", "\u751F\u6210\u6210\u529F").select("*");
+            const videoItems = await utils_default.db("o_video").where("o_video.videoTrackId", track.trackId).andWhere("o_video.state", "Generated successfully").select("*");
             const videoList = await Promise.all(
               videoItems.map(async (v) => ({
                 id: v.id,
@@ -238071,7 +238070,7 @@ var init_pollingImageAssets = __esm({
       }),
       async (req, res) => {
         const { ids } = req.body;
-        const data = await utils_default.db("o_assets").leftJoin("o_image", "o_assets.imageId", "o_image.id").whereIn("o_assets.id", ids).whereNot("o_image.state", "\u751F\u6210\u4E2D").select("o_image.state", "o_assets.id", "o_image.filePath");
+        const data = await utils_default.db("o_assets").leftJoin("o_image", "o_assets.imageId", "o_image.id").whereIn("o_assets.id", ids).whereNot("o_image.state", "Generating").select("o_image.state", "o_assets.id", "o_image.filePath");
         const result = await Promise.all(
           data.map(async (item) => ({
             ...item,
@@ -238102,7 +238101,7 @@ var init_pollingPromptAssets = __esm({
       }),
       async (req, res) => {
         const { ids } = req.body;
-        const data = await utils_default.db("o_assets").whereIn("id", ids).whereNot("promptState", "\u751F\u6210\u4E2D").select("*");
+        const data = await utils_default.db("o_assets").whereIn("id", ids).whereNot("promptState", "Generating").select("*");
         res.status(200).send(success3(data));
       }
     );
@@ -238142,7 +238141,7 @@ var init_saveAssets = __esm({
             assetsId: id,
             filePath: savePath,
             type,
-            state: "\u5DF2\u5B8C\u6210"
+            state: "Completed"
           });
           await utils_default.db("o_assets").where("id", id).update({
             prompt: prompt ?? "",
@@ -238154,7 +238153,7 @@ var init_saveAssets = __esm({
             imageId
           });
         }
-        res.status(200).send(success3({ message: "\u4FDD\u5B58\u8D44\u4EA7\u56FE\u7247\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Save assetImage saved successfully" }));
       }
     );
   }
@@ -238188,7 +238187,7 @@ var init_updateAssets = __esm({
           remark,
           prompt
         });
-        res.status(200).send(success3({ message: "\u66F4\u65B0\u8D44\u4EA7\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Update assetSuccess" }));
       }
     );
   }
@@ -238290,14 +238289,14 @@ var init_updateAudioAssets = __esm({
               filePath: item.src,
               type: "audio",
               assetsId,
-              state: "\u5DF2\u5B8C\u6210"
+              state: "Completed"
             });
             await utils_default.db("o_assets").where("id", assetsId).update({
               imageId
             });
           }
         }
-        res.status(200).send(success3({ message: "\u65B0\u589E\u8D44\u4EA7\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Asset added successfully" }));
       }
     );
   }
@@ -238307,15 +238306,15 @@ var init_updateAudioAssets = __esm({
 function getExtFromBase64(base64Data) {
   const mime = base64Data.match(/^data:([^;]+);base64,/)?.[1] ?? "";
   const mimeMap = {
-    // 
+    // image
     "image/jpeg": "jpeg",
     "image/jpg": "jpg",
     "image/png": "png",
-    // 
+    // audio
     "audio/mpeg": "mp3",
     "audio/mp3": "mp3",
     "audio/wav": "wav",
-    // 
+    //
     "video/mp4": "mp4",
     "video/webm": "webm"
   };
@@ -238355,12 +238354,12 @@ var init_uploadClip = __esm({
           filePath: savePath,
           type,
           assetsId: id,
-          state: "\u5DF2\u5B8C\u6210"
+          state: "Completed"
         });
         await utils_default.db("o_assets").where("id", id).update({
           imageId
         });
-        res.status(200).send(success3("\u4E0A\u4F20\u6210\u529F"));
+        res.status(200).send(success3("Upload successful"));
       }
     );
   }
@@ -238537,17 +238536,17 @@ var init_p_limit = __esm({
 // src/routes/assetsGenerate/batchGenerateImageAssets.ts
 function buildPrompt(cfg, artStyle, name28, prompt) {
   return `
-    \u8BF7\u6839\u636E\u4EE5\u4E0B\u53C2\u6570\u751F\u6210${cfg.promptTitle}\uFF1A
+ based on the following${cfg.promptTitle}
 
-    **\u57FA\u7840\u53C2\u6570\uFF1A**
-    - \u753B\u98CE\u98CE\u683C: ${artStyle || "\u672A\u6307\u5B9A"}
+ **base parameters**
+ - art style: ${artStyle || "specified"}
 
-    **${cfg.label}\u8BBE\u5B9A\uFF1A**
-    - \u540D\u79F0:${name28},
-    - \u63D0\u793A\u8BCD:${prompt},
+ **${cfg.label}settings**
+ - Name:${name28},
+ - Prompt:${prompt},
 
-    \u8BF7\u4E25\u683C\u6309\u7167\u7CFB\u7EDF\u89C4\u8303\u751F\u6210${cfg.promptEnd}\u3002
-  `;
+ strictly followSystemspecification to generate${cfg.promptEnd}
+ `;
 }
 var import_express22, router22, assetTypeConfig, requestSchema, batchGenerateImageAssets_default;
 var init_batchGenerateImageAssets = __esm({
@@ -238563,25 +238562,25 @@ var init_batchGenerateImageAssets = __esm({
     router22 = import_express22.default.Router();
     assetTypeConfig = {
       role: {
-        label: "\u89D2\u8272",
-        taskClass: "\u89D2\u8272\u56FE\u751F\u6210",
+        label: "Character",
+        taskClass: "Characterimage",
         dir: "role",
-        promptTitle: "\u89D2\u8272\u6807\u51C6\u56DB\u89C6\u56FE",
-        promptEnd: "\u4EBA\u7269\u89D2\u8272\u56DB\u89C6\u56FE"
+        promptTitle: "Characterimage",
+        promptEnd: "Characterimage"
       },
       scene: {
-        label: "\u573A\u666F",
-        taskClass: "\u573A\u666F\u56FE\u751F\u6210",
+        label: "Scene",
+        taskClass: "Sceneimage",
         dir: "scene",
-        promptTitle: "\u6807\u51C6\u573A\u666F\u56FE",
-        promptEnd: "\u6807\u51C6\u573A\u666F\u56FE"
+        promptTitle: "Sceneimage",
+        promptEnd: "Sceneimage"
       },
       tool: {
-        label: "\u9053\u5177",
-        taskClass: "\u9053\u5177\u56FE\u751F\u6210",
+        label: "Prop",
+        taskClass: "Propimage",
         dir: "props",
-        promptTitle: "\u6807\u51C6\u9053\u5177\u56FE",
-        promptEnd: "\u6807\u51C6\u9053\u5177\u56FE"
+        promptTitle: "Propimage",
+        promptEnd: "Propimage"
       }
     };
     requestSchema = {
@@ -238602,12 +238601,12 @@ var init_batchGenerateImageAssets = __esm({
     batchGenerateImageAssets_default = router22.post("/", validateFields(requestSchema), async (req, res) => {
       const { projectId, model, resolution, concurrentCount, items } = req.body;
       const project = await utils_default.db("o_project").where("id", projectId).select("artStyle", "type", "intro").first();
-      if (!project) return res.status(500).send(error50("\u9879\u76EE\u4E3A\u7A7A"));
+      if (!project) return res.status(500).send(error50("Project"));
       const totalNovelId = [];
       for (const item of items) {
         const [imageId] = await utils_default.db("o_image").insert({
           type: item.type,
-          state: "\u751F\u6210\u4E2D",
+          state: "Generating",
           assetsId: item.id
         });
         await utils_default.db("o_assets").where("id", item.id).update({ imageId });
@@ -238618,7 +238617,7 @@ var init_batchGenerateImageAssets = __esm({
         (item, index) => limit(async () => {
           const imageId = totalNovelId[index];
           const data = await utils_default.db("o_image").where("id", imageId).select("state").first();
-          if (data?.state === "\u751F\u6210\u5931\u8D25") {
+          if (data?.state === "Generation failed") {
             return;
           }
           const cfg = assetTypeConfig[item.type];
@@ -238626,7 +238625,7 @@ var init_batchGenerateImageAssets = __esm({
           await utils_default.db("o_assets").where("id", item.id).update({ imageId });
           const imagePath = `/${projectId}/${cfg.dir}/${v4_default()}.jpg`;
           const userPrompt = buildPrompt(cfg, project.artStyle ?? "", item.name, item.prompt);
-          const describe4 = `\u751F\u6210${cfg.label}\u56FE\uFF0C\u540D\u79F0\uFF1A${item.name}\uFF0C\u63D0\u793A\u8BCD\uFF1A${item.prompt}`;
+          const describe4 = `${cfg.label}imageName${item.name}Prompt${item.prompt}`;
           const relatedObjects = { id: item.id, projectId, type: cfg.label };
           try {
             const aiImage = utils_default.Ai.Image(model);
@@ -238646,11 +238645,11 @@ var init_batchGenerateImageAssets = __esm({
             );
             aiImage.save(imagePath);
             const imageData = await utils_default.db("o_image").where("id", imageId).select("*").first();
-            if (!imageData) return res.status(500).send("\u8D44\u4EA7\u5DF2\u88AB\u5220\u9664");
+            if (!imageData) return res.status(500).send("AssetalreadyDelete");
             if (!imageData) return;
-            if (imageData.state === "\u751F\u6210\u5931\u8D25") return;
+            if (imageData.state === "Generation failed") return;
             await utils_default.db("o_image").where("id", imageId).update({
-              state: "\u5DF2\u5B8C\u6210",
+              state: "Completed",
               filePath: imagePath,
               type: item.type,
               model: model.split(/:(.+)/)[1],
@@ -238658,7 +238657,7 @@ var init_batchGenerateImageAssets = __esm({
             });
             await utils_default.db("o_assets").where("id", item.id).update({ imageId });
           } catch (e) {
-            await utils_default.db("o_image").where("id", imageId).update({ state: "\u751F\u6210\u5931\u8D25", errorReason: utils_default.error(e).message });
+            await utils_default.db("o_image").where("id", imageId).update({ state: "Generation failed", errorReason: utils_default.error(e).message });
           }
         })
       );
@@ -238699,32 +238698,32 @@ var init_batchPolishAssetsPrompt = __esm({
       async (req, res) => {
         const { projectId, items, concurrentCount, otherTextPrompt } = req.body;
         const project = await utils_default.db("o_project").where("id", projectId).select("artStyle", "type", "intro").first();
-        if (!project) return res.status(500).send(success3({ message: "\u9879\u76EE\u4E3A\u7A7A" }));
+        if (!project) return res.status(500).send(success3({ message: "Project" }));
         const assetsIds = items.map((item) => item.assetsId);
         const assetsDataList = await utils_default.db("o_assets").whereIn("id", assetsIds).select("id", "assetsId");
-        if (!assetsDataList || assetsDataList.length === 0) return res.status(500).send(error50("\u8D44\u4EA7\u4E0D\u5B58\u5728"));
+        if (!assetsDataList || assetsDataList.length === 0) return res.status(500).send(error50("Asset not found"));
         const assetsDataMap = new Map(assetsDataList.map((a) => [a.id, a]));
-        await utils_default.db("o_assets").whereIn("id", assetsIds).update({ promptState: "\u751F\u6210\u4E2D" });
+        await utils_default.db("o_assets").whereIn("id", assetsIds).update({ promptState: "Generating" });
         const getTypeConfig = (isDerivative) => ({
           role: {
             promptKey: "role-polish",
             itemType: "characters",
-            label: "\u89D2\u8272\u6807\u51C6\u56DB\u89C6\u56FE",
-            nameLabel: "\u89D2\u8272",
+            label: "Characterimage",
+            nameLabel: "Character",
             visualManual: isDerivative ? "art_character_derivative" : "art_character"
           },
           scene: {
             promptKey: "scene-polish",
             itemType: "scenes",
-            label: "\u573A\u666F\u56FE",
-            nameLabel: "\u573A\u666F",
+            label: "Sceneimage",
+            nameLabel: "Scene",
             visualManual: isDerivative ? "art_scene_derivative" : "art_scene"
           },
           tool: {
             promptKey: "tool-polish",
             itemType: "props",
-            label: "\u9053\u5177\u56FE",
-            nameLabel: "\u9053\u5177",
+            label: "Propimage",
+            nameLabel: "Prop",
             visualManual: isDerivative ? "art_prop_derivative" : "art_prop"
           }
         });
@@ -238738,7 +238737,7 @@ var init_batchPolishAssetsPrompt = __esm({
             if (!config3) return;
             const visualManual = await utils_default.getArtPrompt(project.artStyle, "art_skills", config3.visualManual);
             if (!visualManual) {
-              await utils_default.db("o_assets").where("id", item.assetsId).update({ promptState: "\u751F\u6210\u5931\u8D25", promptErrorReason: "\u89C6\u89C9\u624B\u518C\u672A\u5B9A\u4E49" });
+              await utils_default.db("o_assets").where("id", item.assetsId).update({ promptState: "Generation failed", promptErrorReason: "Visual manualundefined" });
               return;
             }
             const systemPrompt = visualManual;
@@ -238749,20 +238748,20 @@ var init_batchPolishAssetsPrompt = __esm({
                   {
                     role: "user",
                     content: `
-                    **\u57FA\u7840\u53C2\u6570\uFF1A**
-      **${config3.nameLabel}\u8BBE\u5B9A\uFF1A**
-      - ${config3.nameLabel}\u540D\u79F0:${item.name},
-      - ${config3.nameLabel}\u63CF\u8FF0:${item.describe},`
+ **base parameters**
+ **${config3.nameLabel}settings**
+ - ${config3.nameLabel}Name:${item.name},
+ - ${config3.nameLabel}Description:${item.describe},`
                   }
                 ]
               });
               if (!_output) {
-                await utils_default.db("o_assets").where("id", item.assetsId).update({ promptState: "\u751F\u6210\u5931\u8D25" });
+                await utils_default.db("o_assets").where("id", item.assetsId).update({ promptState: "Generation failed" });
                 return;
               }
-              await utils_default.db("o_assets").where("id", item.assetsId).update({ prompt: _output, promptState: "\u5DF2\u5B8C\u6210" });
+              await utils_default.db("o_assets").where("id", item.assetsId).update({ prompt: _output, promptState: "Completed" });
             } catch (e) {
-              await utils_default.db("o_assets").where("id", item.assetsId).update({ promptState: "\u5931\u8D25", promptErrorReason: utils_default.error(e).message });
+              await utils_default.db("o_assets").where("id", item.assetsId).update({ promptState: "Failed", promptErrorReason: utils_default.error(e).message });
             }
           })
         );
@@ -238794,9 +238793,9 @@ var init_cancelGenerate = __esm({
       async (req, res) => {
         const { id } = req.body;
         await utils_default.db("o_image").where("id", id).update({
-          state: "\u751F\u6210\u5931\u8D25"
+          state: "Generation failed"
         });
-        res.status(200).send(success3({ message: "\u53D6\u6D88\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Cancelled successfully" }));
       }
     );
   }
@@ -238805,17 +238804,17 @@ var init_cancelGenerate = __esm({
 // src/routes/assetsGenerate/generateAssets.ts
 function buildPrompt2(cfg, artStyle, name28, prompt) {
   return `
-    \u8BF7\u6839\u636E\u4EE5\u4E0B\u53C2\u6570\u751F\u6210${cfg.promptTitle}\uFF1A
+ based on the following${cfg.promptTitle}
 
-    **\u57FA\u7840\u53C2\u6570\uFF1A**
-    - \u753B\u98CE\u98CE\u683C: ${artStyle || "\u672A\u6307\u5B9A"}
+ **base parameters**
+ - art style: ${artStyle || "specified"}
 
-    **${cfg.label}\u8BBE\u5B9A\uFF1A**
-    - \u540D\u79F0:${name28},
-    - \u63D0\u793A\u8BCD:${prompt},
+ **${cfg.label}settings**
+ - Name:${name28},
+ - Prompt:${prompt},
 
-    \u8BF7\u4E25\u683C\u6309\u7167\u7CFB\u7EDF\u89C4\u8303\u751F\u6210${cfg.promptEnd}\u3002
-  `;
+ strictly followSystemspecification to generate${cfg.promptEnd}
+ `;
 }
 var import_express25, router25, assetTypeConfig2, requestSchema2, generateAssets_default;
 var init_generateAssets = __esm({
@@ -238830,25 +238829,25 @@ var init_generateAssets = __esm({
     router25 = import_express25.default.Router();
     assetTypeConfig2 = {
       role: {
-        label: "\u89D2\u8272",
-        taskClass: "\u89D2\u8272\u56FE\u751F\u6210",
+        label: "Character",
+        taskClass: "Characterimage",
         dir: "role",
-        promptTitle: "\u89D2\u8272\u6807\u51C6\u56DB\u89C6\u56FE",
-        promptEnd: "\u4EBA\u7269\u89D2\u8272\u56DB\u89C6\u56FE"
+        promptTitle: "Characterimage",
+        promptEnd: "Characterimage"
       },
       scene: {
-        label: "\u573A\u666F",
-        taskClass: "\u573A\u666F\u56FE\u751F\u6210",
+        label: "Scene",
+        taskClass: "Sceneimage",
         dir: "scene",
-        promptTitle: "\u6807\u51C6\u573A\u666F\u56FE",
-        promptEnd: "\u6807\u51C6\u573A\u666F\u56FE"
+        promptTitle: "Sceneimage",
+        promptEnd: "Sceneimage"
       },
       tool: {
-        label: "\u9053\u5177",
-        taskClass: "\u9053\u5177\u56FE\u751F\u6210",
+        label: "Prop",
+        taskClass: "Propimage",
         dir: "props",
-        promptTitle: "\u6807\u51C6\u9053\u5177\u56FE",
-        promptEnd: "\u6807\u51C6\u9053\u5177\u56FE"
+        promptTitle: "Propimage",
+        promptEnd: "Propimage"
       }
     };
     requestSchema2 = {
@@ -238864,12 +238863,12 @@ var init_generateAssets = __esm({
     generateAssets_default = router25.post("/", validateFields(requestSchema2), async (req, res) => {
       const { projectId, model, resolution, id, type, name: name28, prompt, base64: base644 } = req.body;
       const project = await utils_default.db("o_project").where("id", projectId).select("artStyle", "type", "intro").first();
-      if (!project) return res.status(500).send(success3({ message: "\u9879\u76EE\u4E3A\u7A7A" }));
+      if (!project) return res.status(500).send(success3({ message: "Project" }));
       const cfg = assetTypeConfig2[type];
-      if (!cfg) return res.status(400).send(error50("\u4E0D\u652F\u6301\u7684\u7C7B\u578B"));
+      if (!cfg) return res.status(400).send(error50("Not supportedofType"));
       const [imageId] = await utils_default.db("o_image").insert({
         type,
-        state: "\u751F\u6210\u4E2D",
+        state: "Generating",
         assetsId: id,
         model: model.split(/:(.+)/)[1],
         resolution
@@ -238877,7 +238876,7 @@ var init_generateAssets = __esm({
       await utils_default.db("o_assets").where("id", id).update({ imageId });
       const imagePath = `/${projectId}/${cfg.dir}/${v4_default()}.jpg`;
       const userPrompt = buildPrompt2(cfg, project.artStyle, name28, prompt);
-      const describe4 = `\u751F\u6210${cfg.label}\u56FE\uFF0C\u540D\u79F0\uFF1A${name28}\uFF0C\u63D0\u793A\u8BCD\uFF1A${prompt}`;
+      const describe4 = `${cfg.label}imageName${name28}Prompt${prompt}`;
       const relatedObjects = { id, projectId, type: cfg.label };
       try {
         const aiImage = utils_default.Ai.Image(model);
@@ -238897,10 +238896,10 @@ var init_generateAssets = __esm({
         );
         aiImage.save(imagePath);
         const imageData = await utils_default.db("o_image").where("id", imageId).select("*").first();
-        if (!imageData) return res.status(500).send("\u8D44\u4EA7\u5DF2\u88AB\u5220\u9664");
-        if (imageData.state === "\u751F\u6210\u5931\u8D25") return;
+        if (!imageData) return res.status(500).send("AssetalreadyDelete");
+        if (imageData.state === "Generation failed") return;
         await utils_default.db("o_image").where("id", imageId).update({
-          state: "\u5DF2\u5B8C\u6210",
+          state: "Completed",
           filePath: imagePath,
           type,
           model: model.split(/:(.+)/)[1],
@@ -238910,8 +238909,8 @@ var init_generateAssets = __esm({
         await utils_default.db("o_assets").where("id", id).update({ imageId });
         return res.status(200).send(success3({ path: path32, assetsId: id }));
       } catch (e) {
-        await utils_default.db("o_image").where("id", imageId).update({ state: "\u751F\u6210\u5931\u8D25", errorReason: utils_default.error(e).message });
-        return res.status(400).send(error50(utils_default.error(e).message || "\u56FE\u7247\u751F\u6210\u5931\u8D25"));
+        await utils_default.db("o_image").where("id", imageId).update({ state: "Generation failed", errorReason: utils_default.error(e).message });
+        return res.status(400).send(error50(utils_default.error(e).message || "Image generation failed"));
       }
     });
   }
@@ -238940,38 +238939,38 @@ var init_polishAssetsPrompt = __esm({
       async (req, res) => {
         const { assetsId, projectId, type, name: name28, describe: describe4 } = req.body;
         const project = await utils_default.db("o_project").where("id", projectId).select("artStyle", "type", "intro").first();
-        if (!project) return res.status(500).send(success3({ message: "\u9879\u76EE\u4E3A\u7A7A" }));
-        await utils_default.db("o_assets").where("id", assetsId).update({ promptState: "\u751F\u6210\u4E2D" });
+        if (!project) return res.status(500).send(success3({ message: "Project" }));
+        await utils_default.db("o_assets").where("id", assetsId).update({ promptState: "Generating" });
         const assetsData = await utils_default.db("o_assets").where("id", assetsId).select("assetsId").first();
-        if (!assetsData) return { code: 500, message: "\u8D44\u4EA7\u4E0D\u5B58\u5728" };
+        if (!assetsData) return { code: 500, message: "Asset not found" };
         const typeConfig = {
           role: {
             promptKey: "role-polish",
             itemType: "characters",
-            label: "\u89D2\u8272\u6807\u51C6\u56DB\u89C6\u56FE",
-            nameLabel: "\u89D2\u8272",
+            label: "Characterimage",
+            nameLabel: "Character",
             visualManual: assetsData.assetsId ? "art_character_derivative" : "art_character"
           },
           scene: {
             promptKey: "scene-polish",
             itemType: "scenes",
-            label: "\u573A\u666F\u56FE",
-            nameLabel: "\u573A\u666F",
+            label: "Sceneimage",
+            nameLabel: "Scene",
             visualManual: assetsData.assetsId ? "art_scene_derivative" : "art_scene"
           },
           tool: {
             promptKey: "tool-polish",
             itemType: "props",
-            label: "\u9053\u5177\u56FE",
-            nameLabel: "\u9053\u5177",
+            label: "Propimage",
+            nameLabel: "Prop",
             visualManual: assetsData.assetsId ? "art_prop_derivative" : "art_prop"
           }
         };
         const config3 = typeConfig[type];
-        if (!config3) return res.status(500).send(error50("\u4E0D\u652F\u6301\u7684\u7C7B\u578B"));
-        if (!config3.visualManual) return res.status(500).send(error50("\u89C6\u89C9\u624B\u518C\u672A\u5B9A\u4E49"));
+        if (!config3) return res.status(500).send(error50("Not supportedofType"));
+        if (!config3.visualManual) return res.status(500).send(error50("Visual manualundefined"));
         const visualManual = await utils_default.getArtPrompt(project.artStyle, "art_skills", config3.visualManual);
-        if (!visualManual) return res.status(500).send(error50("\u89C6\u89C9\u624B\u518C\u672A\u5B9A\u4E49"));
+        if (!visualManual) return res.status(500).send(error50("Visual manualundefined"));
         const systemPrompt = visualManual;
         try {
           const { _output } = await utils_default.Ai.Text("universalAi").invoke({
@@ -238979,19 +238978,19 @@ var init_polishAssetsPrompt = __esm({
             messages: [
               {
                 role: "user",
-                content: `**\u57FA\u7840\u53C2\u6570\uFF1A**
-      **${config3.nameLabel}\u8BBE\u5B9A\uFF1A**
-      - ${config3.nameLabel}\u540D\u79F0:${name28},
-      - ${config3.nameLabel}\u63CF\u8FF0:${describe4},`
+                content: `**base parameters**
+ **${config3.nameLabel}settings**
+ - ${config3.nameLabel}Name:${name28},
+ - ${config3.nameLabel}Description:${describe4},`
               }
             ]
           });
-          if (!_output) return res.status(500).send("\u5931\u8D25");
-          await utils_default.db("o_assets").where("id", assetsId).update({ prompt: _output, promptState: "\u5DF2\u5B8C\u6210" });
+          if (!_output) return res.status(500).send("Failed");
+          await utils_default.db("o_assets").where("id", assetsId).update({ prompt: _output, promptState: "Completed" });
           res.status(200).send(success3({ prompt: _output, assetsId }));
         } catch (e) {
-          await utils_default.db("o_assets").where("id", assetsId).update({ promptState: "\u5931\u8D25", promptErrorReason: utils_default.error(e).message });
-          return res.status(500).send(error50(e?.data?.error?.message ?? e?.message ?? "\u751F\u6210\u5931\u8D25"));
+          await utils_default.db("o_assets").where("id", assetsId).update({ promptState: "Failed", promptErrorReason: utils_default.error(e).message });
+          return res.status(500).send(error50(e?.data?.error?.message ?? e?.message ?? "Generation failed"));
         }
       }
     );
@@ -239049,25 +239048,25 @@ var init_batchBindAudio = __esm({
         const { projectId, assetsIds, concurrentCount } = req.body;
         const assetsData = await utils_default.db("o_assets").whereIn("id", assetsIds).andWhere("projectId", projectId).select("id", "name", "describe", "type");
         const audioData = await utils_default.db("o_assets").where("type", "audio").whereNull("assetsId").andWhere("projectId", projectId).select("id", "name", "describe");
-        if (!audioData.length) return res.status(400).send(error50("\u6682\u65E0\u8BBE\u7F6E\u97F3\u9891\uFF0C\u8BF7\u5148\u524D\u5F80\u8D44\u4EA7\u4E2D\u5FC3\u4E0A\u4F20\u97F3\u9891"));
+        if (!audioData.length) return res.status(400).send(error50("noSettingsaudioplease go toAssetupload audio"));
         const batchSize = concurrentCount ?? 1;
         async function processAsset(asset) {
           try {
             const resultTool = tool({
-              description: "\u5339\u914D\u5B8C\u6210\u540E\u5FC5\u987B\u8C03\u7528\u6B64\u5DE5\u5177\u63D0\u4EA4\u7ED3\u679C",
+              description: "matchCompletemust call this tool afterSubmitresult",
               inputSchema: jsonSchema(
                 external_exports.object({
-                  audioId: external_exports.number().nullable().optional().describe("\u4E0E\u8BE5\u8D44\u4EA7\u5339\u914D\u7684\u97F3\u9891ID\u5217\u8868\uFF0C\u82E5\u65E0\u5408\u9002\u5339\u914D\u5219\u8FD4\u56DE\u7A7A\u6570\u7EC4")
+                  audioId: external_exports.number().nullable().optional().describe("AssetmatchofaudioIDlistnomatchreturn")
                 }).toJSONSchema()
               ),
               execute: async (result) => {
                 await utils_default.db("o_assetsRole2Audio").where("assetsRoleId", asset.id).delete();
                 if (result?.audioId) await utils_default.db("o_assetsRole2Audio").insert({ assetsRoleId: asset.id, assetsAudioId: result.audioId });
-                await utils_default.db("o_assets").where("id", asset.id).update("audioBindState", "\u5DF2\u5B8C\u6210");
-                return "\u65E0\u9700\u56DE\u590D\u7528\u6237\u4EFB\u4F55\u5185\u5BB9";
+                await utils_default.db("o_assets").where("id", asset.id).update("audioBindState", "Completed");
+                return "noreply to user with any content";
               }
             });
-            const audioList = audioData.map((i) => `- ID:${i.id} | \u540D\u79F0:${i.name} | \u63CF\u8FF0:${i.describe ?? "\u65E0"}`).join("\n");
+            const audioList = audioData.map((i) => `- ID:${i.id} | Name:${i.name} | Description:${i.describe ?? "no"}`).join("\n");
             const promptData = await utils_default.db("o_prompt").where("type", "audioBindPrompt").first();
             let audioBindPrompt = "";
             if (promptData && promptData.useData) {
@@ -239080,25 +239079,25 @@ var init_batchBindAudio = __esm({
                 {
                   role: "system",
                   content: `
-              ${audioBindPrompt}
-              `
+ ${audioBindPrompt}
+ `
                 },
                 {
                   role: "user",
                   content: `
-                ## \u5019\u9009\u97F3\u9891\u5217\u8868
-                ${audioList}
-                ## \u5F85\u5339\u914D\u8D44\u4EA7
-                - ID:${asset.id} | \u540D\u79F0:${asset.name} | \u63CF\u8FF0:${asset.describe ?? "\u65E0"} | \u7C7B\u578B\uFF1A${asset.type}
-                \u8BF7\u4ECE\u5019\u9009\u97F3\u9891\u5217\u8868\u4E2D\u4E3A\u8BE5\u8D44\u4EA7\u9009\u51FA\u6765\u4E00\u4E2A\u6700\u7B26\u5408\u8BE5\u89D2\u8272\u8BBE\u5B9A\u7684\u97F3\u8272\uFF0C\u5E76\u8C03\u7528 resultTool \u63D0\u4EA4\u7ED3\u679C\u3002
-           `
+ ## audiolist
+ ${audioList}
+ ## matchAsset
+ - ID:${asset.id} | Name:${asset.name} | Description:${asset.describe ?? "no"} | Type${asset.type}
+ audiolistAssetCharactersettingsof resultTool Submitresult
+ `
                 }
               ],
               tools: { resultTool }
             });
           } catch (e) {
-            await utils_default.db("o_assets").where("id", asset.id).update("audioBindState", "\u751F\u6210\u5931\u8D25");
-            console.error(`[bindAudio] \u8D44\u4EA7 ${asset.id} \u5904\u7406\u5931\u8D25:`, e);
+            await utils_default.db("o_assets").where("id", asset.id).update("audioBindState", "Generation failed");
+            console.error(`[bindAudio] Asset ${asset.id} handleFailed:`, e);
           }
         }
         async function runWithConcurrency() {
@@ -239110,7 +239109,7 @@ var init_batchBindAudio = __esm({
         await utils_default.db("o_assets").whereIn(
           "id",
           assetsData.map((i) => i.id)
-        ).update("audioBindState", "\u751F\u6210\u4E2D");
+        ).update("audioBindState", "Generating");
         runWithConcurrency();
         res.status(200).send(success3());
       }
@@ -239159,7 +239158,7 @@ var init_getAllAssets = __esm({
         });
         const result = await Promise.all(
           data.map(async (parent) => {
-            const historyImages = await utils_default.db("o_image").where("assetsId", parent.id).andWhere("state", "\u5DF2\u5B8C\u6210").select("id", "filePath");
+            const historyImages = await utils_default.db("o_image").where("assetsId", parent.id).andWhere("state", "Completed").select("id", "filePath");
             const historyImagesWithUrl = await Promise.all(
               historyImages.map(async (img) => ({
                 id: img.id,
@@ -239198,7 +239197,7 @@ var init_pollingAudio = __esm({
       }),
       async (req, res) => {
         const { ids } = req.body;
-        const data = await utils_default.db("o_assets").whereIn("id", ids).whereNot("audioBindState", "\u751F\u6210\u4E2D").select("*");
+        const data = await utils_default.db("o_assets").whereIn("id", ids).whereNot("audioBindState", "Generating").select("*");
         res.status(200).send(success3(data));
       }
     );
@@ -239224,12 +239223,12 @@ var init_updateAssetsAudio = __esm({
       }),
       async (req, res) => {
         const { assetsId, audioIds } = req.body;
-        if (audioIds && audioIds.length > 1) return res.status(400).send(error50("\u4EC5\u53EF\u7ED1\u5B9A\u4E00\u4E2A\u97F3\u8272"));
+        if (audioIds && audioIds.length > 1) return res.status(400).send(error50("can only bind one voice"));
         await utils_default.db("o_assetsRole2Audio").where("assetsRoleId", assetsId).delete();
         if (audioIds && audioIds.length) {
           await utils_default.db("o_assetsRole2Audio").insert({ assetsRoleId: assetsId, assetsAudioId: audioIds[0] });
         }
-        res.status(200).send(success3({ message: "\u66F4\u65B0\u97F3\u9891\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Audio updated successfully" }));
       }
     );
   }
@@ -239255,10 +239254,10 @@ var init_generalStatistics = __esm({
         const { projectId } = req.body;
         const scripts = await utils_default.db("o_script").where("projectId", projectId).select("id");
         const scriptIds = scripts.map((item) => item.id);
-        const roleCount = await utils_default.db("o_assets").where("projectId", projectId).where("type", "\u89D2\u8272").count("* as total").first();
+        const roleCount = await utils_default.db("o_assets").where("projectId", projectId).where("type", "Character").count("* as total").first();
         const scriptCount = await utils_default.db("o_script").where("projectId", projectId).count("* as total").first();
         const videoCount = await utils_default.db("o_video").whereIn("scriptId", scriptIds).count("* as total").first();
-        const storyboardCount = await utils_default.db("o_assets").whereIn("scriptId", scriptIds).where("type", "\u5206\u955C").count("* as total").first();
+        const storyboardCount = await utils_default.db("o_assets").whereIn("scriptId", scriptIds).where("type", "Storyboard").count("* as total").first();
         const data = {
           roleCount: roleCount?.total || 0,
           scriptCount: scriptCount?.total || 0,
@@ -239326,7 +239325,7 @@ var init_updateProject = __esm({
           videoRatio,
           projectType
         });
-        res.status(200).send(success3({ message: "\u4FEE\u6539\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Update successful" }));
       }
     );
   }
@@ -239335,7 +239334,7 @@ var init_updateProject = __esm({
 // src/routes/login/login.ts
 function setToken(payload, expiresIn, secret) {
   if (!payload || typeof secret !== "string" || !secret) {
-    throw new Error("\u53C2\u6570\u4E0D\u5408\u6CD5");
+    throw new Error("Ge\xE7ersiz parametreler");
   }
   return import_jsonwebtoken4.default.sign(payload, secret, { expiresIn });
 }
@@ -239359,10 +239358,10 @@ var init_login = __esm({
       async (req, res) => {
         const { username, password } = req.body;
         const data = await utils_default.db("o_user").where("name", "=", username).first();
-        if (!data) return res.status(400).send(error50("\u767B\u5F55\u5931\u8D25"));
+        if (!data) return res.status(400).send(error50("Login failed"));
         if (data.password == password && data.name == username) {
           const tokenData = await utils_default.db("o_setting").where("key", "tokenKey").first();
-          if (!tokenData) return res.status(400).send(error50("\u672A\u627E\u5230tokenKey"));
+          if (!tokenData) return res.status(400).send(error50("tokenKey not found"));
           const token = setToken(
             {
               id: data.id,
@@ -239371,9 +239370,9 @@ var init_login = __esm({
             "180Days",
             tokenData?.value
           );
-          return res.status(200).send(success3({ token: "Bearer " + token, name: data.name, id: data.id }, "\u767B\u5F55\u6210\u529F"));
+          return res.status(200).send(success3({ token: "Bearer " + token, name: data.name, id: data.id }, "Login successful"));
         } else {
-          return res.status(400).send(error50("\u7528\u6237\u540D\u6216\u5BC6\u7801\u9519\u8BEF"));
+          return res.status(400).send(error50("Ge\xE7ersiz kullan\u0131c\u0131 ad\u0131 veya \u015Fifre"));
         }
       }
     );
@@ -239427,7 +239426,7 @@ var init_getModelList = __esm({
         const { type } = req.body;
         const dataList = await utils_default.db("o_vendorConfig").select("id").where("enable", 1);
         if (!dataList || dataList.length === 0) {
-          return res.status(404).send({ error: "\u6A21\u578B\u672A\u627E\u5230" });
+          return res.status(404).send({ error: "not found" });
         }
         const modelList = await Promise.all(dataList.map((i) => utils_default.vendor.getModelList(i.id)));
         const result = await Promise.all(
@@ -239500,7 +239499,7 @@ var init_addNovel = __esm({
           await utils_default.db("o_novel").where("id", item.id).update({ event: item.event, eventState: item.event ? 1 : -1, errorReason: item?.errReason ?? null });
         });
         novelClass.start(chapterAllList, projectId);
-        res.status(200).send(success3({ message: "\u65B0\u589E\u539F\u6587\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Original text added successfully" }));
       }
     );
   }
@@ -239525,14 +239524,14 @@ var init_batchDeleteNovel = __esm({
       async (req, res) => {
         const { ids } = req.body;
         if (!ids.length) {
-          return res.status(400).send(error50("\u8BF7\u5148\u9009\u62E9\u9700\u8981\u5220\u9664\u7684\u5185\u5BB9"));
+          return res.status(400).send(error50("please select firstneedDeleteofcontent"));
         }
         const chapterData = await utils_default.db("o_eventChapter").whereIn("novelId", ids);
         await utils_default.db("o_eventChapter").whereIn("novelId", ids).delete();
         const eventIds = chapterData.map((i) => i.id);
         if (eventIds.length) await utils_default.db("o_event").whereIn("id", eventIds).delete();
         await utils_default.db("o_novel").whereIn("id", ids).del();
-        res.status(200).send(success3({ message: "\u5220\u9664\u539F\u6587\u6210\u529F" }));
+        res.status(200).send(success3({ message: "DeleteOriginal text operation successful" }));
       }
     );
   }
@@ -239561,7 +239560,7 @@ var init_delNovel = __esm({
         const eventIds = chapterData.map((i) => i.id);
         if (eventIds.length) await utils_default.db("o_event").whereIn("id", eventIds).delete();
         await utils_default.db("o_novel").where("id", id).del();
-        res.status(200).send(success3({ message: "\u5220\u9664\u539F\u6587\u6210\u529F" }));
+        res.status(200).send(success3({ message: "DeleteOriginal text operation successful" }));
       }
     );
   }
@@ -239587,7 +239586,7 @@ var init_batchDeleteEvent = __esm({
         const { ids } = req.body;
         await utils_default.db("o_event").whereIn("id", ids).del();
         await utils_default.db("o_eventChapter").whereIn("eventId", ids).del();
-        res.status(200).send(success3({ message: "\u5220\u9664\u4E8B\u4EF6\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Delete eventSuccess" }));
       }
     );
   }
@@ -239613,7 +239612,7 @@ var init_deletEvent = __esm({
         const { id } = req.body;
         await utils_default.db("o_event").where("id", id).del();
         await utils_default.db("o_eventChapter").where("eventId", id).del();
-        res.status(200).send(success3({ message: "\u5220\u9664\u4E8B\u4EF6\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Delete eventSuccess" }));
       }
     );
   }
@@ -239644,14 +239643,14 @@ var init_generateEvents = __esm({
           Promise.resolve(new utils_default.cleanNovel(concurrentCount))
         ]);
         if (allChapters.length === 0) {
-          return res.status(400).send(success3("\u6CA1\u6709\u5BF9\u5E94\u7AE0\u8282"));
+          return res.status(400).send(success3("chapter"));
         }
         await utils_default.db("o_novel").where("projectId", projectId).whereIn("id", novelIds).update({ eventState: 0, event: null });
         novel.emitter.on("item", async (item) => {
           await utils_default.db("o_novel").where("id", item.id).update({ event: item.event, eventState: item.event ? 1 : -1, errorReason: item?.errorReason ?? null });
         });
         novel.start(allChapters, projectId);
-        return res.status(200).send(success3("\u751F\u6210\u4E8B\u4EF6\u6210\u529F"));
+        return res.status(200).send(success3("Generate eventsSuccess"));
       }
     );
   }
@@ -239845,7 +239844,7 @@ var init_updateNovel = __esm({
           chapterData,
           event
         });
-        res.status(200).send(success3({ message: "\u66F4\u65B0\u539F\u6587\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Original text updated successfully" }));
       }
     );
   }
@@ -239865,7 +239864,7 @@ var init_deleteAllData = __esm({
       "/",
       async (req, res) => {
         await initDB_default(db, true);
-        res.status(200).send(success3({ message: "\u6E05\u7A7A\u6570\u636E\u8868\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Clear datatableSuccess" }));
       }
     );
   }
@@ -239941,7 +239940,7 @@ var init_batchGenerateAssetsImage = __esm({
           const [imageId] = await utils_default.db("o_image").insert({
             assetsId: item.id,
             type: item.type,
-            state: "\u751F\u6210\u4E2D",
+            state: "Generating",
             resolution: projectSettingData?.imageQuality,
             model: projectSettingData?.imageModel
           });
@@ -239949,7 +239948,7 @@ var init_batchGenerateAssetsImage = __esm({
           await utils_default.db("o_assets").where("id", item.id).update({ imageId });
         }
         const imageData = [];
-        res.status(200).send(success3("\u5F00\u59CB\u751F\u6210\u8D44\u4EA7\u56FE\u7247"));
+        res.status(200).send(success3("openstartGenerate asset image"));
         const generateSingleAsset = async (item) => {
           const imageId = imageIdMap[item.id];
           const typeConfig = promptRecord[item.type] || promptRecord["role"];
@@ -239959,8 +239958,8 @@ var init_batchGenerateAssetsImage = __esm({
               {
                 role: "user",
                 content: `
-            \u7236\u7EA7\u8D44\u4EA7\u63CF\u8FF0: ${item.parentDescribe || "\u65E0\u8BE6\u7EC6\u63CF\u8FF0"}
-            \u5F53\u524D\u8D44\u4EA7\u63CF\u8FF0: ${item.describe || "\u65E0\u8BE6\u7EC6\u63CF\u8FF0"}`
+ parentasset description: ${item.parentDescribe || "noDescription"}
+ currentasset description: ${item.describe || "noDescription"}`
               }
             ]
           });
@@ -239978,25 +239977,25 @@ var init_batchGenerateAssetsImage = __esm({
                 ...repeloadObj
               },
               {
-                taskClass: "\u751F\u6210\u56FE\u7247",
-                describe: "\u8D44\u4EA7\u56FE\u7247\u751F\u6210",
+                taskClass: "image",
+                describe: "Assetimage",
                 relatedObjects: JSON.stringify(repeloadObj),
                 projectId
               }
             );
             const savePath = `/${projectId}/assets/${scriptId}/${item.type}/${utils_default.uuid()}.jpg`;
             await imageCls.save(savePath);
-            await utils_default.db("o_image").where({ id: imageId }).update({ state: "\u5DF2\u5B8C\u6210", filePath: savePath });
+            await utils_default.db("o_image").where({ id: imageId }).update({ state: "Completed", filePath: savePath });
             return {
               id: item.id,
-              state: "\u5DF2\u5B8C\u6210",
+              state: "Completed",
               src: await utils_default.oss.getSmallImageUrl(savePath)
             };
           } catch (e) {
-            await utils_default.db("o_image").where({ id: imageId }).update({ state: "\u751F\u6210\u5931\u8D25", errorReason: utils_default.error(e).message });
+            await utils_default.db("o_image").where({ id: imageId }).update({ state: "Generation failed", errorReason: utils_default.error(e).message });
             return {
               id: item.id,
-              state: "\u751F\u6210\u5931\u8D25",
+              state: "Generation failed",
               src: ""
             };
           }
@@ -240032,12 +240031,12 @@ var init_deleteAssetsDireve = __esm({
         const { id, projectId } = req.body;
         const assetsFirstData = await utils_default.db("o_assets").where("id", id).first();
         if (!assetsFirstData) {
-          return res.status(404).send({ error: "\u8D44\u6E90\u672A\u627E\u5230" });
+          return res.status(404).send({ error: "Resource not found" });
         }
         if (assetsFirstData?.flowId) await utils_default.db("o_imageFlow").where("id", assetsFirstData?.flowId).delete();
         await utils_default.db("o_assets").where("id", id).delete();
         await utils_default.db("o_assets2Storyboard").where("assetId", id).delete();
-        res.status(200).send(success3({ message: "\u89C6\u9891\u5220\u9664\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Video deleted successfully" }));
       }
     );
   }
@@ -240061,7 +240060,7 @@ var init_pollingImage = __esm({
       }),
       async (req, res) => {
         const { ids } = req.body;
-        const data = await utils_default.db("o_assets").leftJoin("o_image", "o_assets.imageId", "o_image.id").whereIn("o_assets.id", ids).whereNot("o_image.state", "\u751F\u6210\u4E2D").select("o_image.state", "o_assets.id", "o_image.filePath", "o_image.errorReason", "o_assets.prompt");
+        const data = await utils_default.db("o_assets").leftJoin("o_image", "o_assets.imageId", "o_image.id").whereIn("o_assets.id", ids).whereNot("o_image.state", "Generating").select("o_image.state", "o_assets.id", "o_image.filePath", "o_image.errorReason", "o_assets.prompt");
         const result = await Promise.all(
           data.map(async (item) => ({
             ...item,
@@ -240096,11 +240095,11 @@ var init_updateAssetsUrl = __esm({
         const { id, url: url4, flowId } = req.body;
         const [imageId] = await utils_default.db("o_image").insert({
           filePath: utils_default.replaceUrl(url4),
-          state: "\u5DF2\u5B8C\u6210",
+          state: "Completed",
           assetsId: id
         });
         await utils_default.db("o_assets").where({ id }).update({ flowId, imageId });
-        res.status(200).send(success3({ message: "\u66F4\u65B0\u63D0\u793A\u8BCD\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Prompt updated successfully" }));
       }
     );
   }
@@ -240155,8 +240154,8 @@ var init_generateFlowImage = __esm({
               aspectRatio: ratio
             },
             {
-              taskClass: "\u5DE5\u4F5C\u6D41\u56FE\u7247\u751F\u6210",
-              describe: "\u5DE5\u4F5C\u6D41\u56FE\u7247\u751F\u6210",
+              taskClass: "streamimage",
+              describe: "streamimage",
               relatedObjects: JSON.stringify(req.body),
               projectId
             }
@@ -240344,15 +240343,15 @@ var init_uploadImage = __esm({
         function getExtFromBase642(base64Data2) {
           const mime = base64Data2.match(/^data:([^;]+);base64,/)?.[1] ?? "";
           const mimeMap = {
-            // 
+            // image
             "image/jpeg": "jpeg",
             "image/jpg": "jpg",
             "image/png": "png",
-            // 
+            // audio
             "audio/mpeg": "mp3",
             "audio/mp3": "mp3",
             "audio/wav": "wav",
-            // 
+            //
             "video/mp4": "mp4",
             "video/webm": "webm"
           };
@@ -240360,7 +240359,7 @@ var init_uploadImage = __esm({
         }
         const ext = getExtFromBase642(base64Data);
         if (!["jpeg", "jpg", "png"].includes(ext)) {
-          return res.status(400).send(error50("\u4E0D\u652F\u6301\u7684\u6587\u4EF6\u7C7B\u578B"));
+          return res.status(400).send(error50("Not supportedoffileType"));
         }
         const savePath = `/${projectId}/imageFlow/${scriptId}/${v4_default()}.${ext}`;
         await utils_default.oss.writeFile(savePath, Buffer.from(base64Data.match(/base64,([A-Za-z0-9+/=]+)/)[1] ?? "", "base64"));
@@ -240417,22 +240416,22 @@ var init_getFlowData = __esm({
                     prompt: child.prompt,
                     desc: child.describe ?? "",
                     src: child.filePath && await utils_default.oss.getSmallImageUrl(child.filePath),
-                    state: child.state ?? "\u672A\u751F\u6210"
-                    //todo：
+                    state: child.state ?? "not generated"
+                    //todoStatus
                   }))
                 )
               }))
             ),
             storyboardTable: "",
             storyboard: [],
-            //todo：workbench
+            //todoworkbenchdata
             //@ts-ignore
             workbench: {
               videoList: []
             }
-            // //todo：
+            // //tododata
             // poster: {
-            //   items: [],
+            // items: [],
             // },
           };
           return res.status(200).send(success3(flowData));
@@ -240480,7 +240479,7 @@ var init_getFlowData = __esm({
                     type: child.type,
                     desc: child.describe ?? "",
                     src: child.filePath && await utils_default.oss.getSmallImageUrl(child.filePath),
-                    state: child.state ?? "\u672A\u751F\u6210",
+                    state: child.state ?? "not generated",
                     errorReason: child?.errorReason ?? "",
                     flowId: child.flowId
                   }))
@@ -240618,7 +240617,7 @@ var init_saveFlowData = __esm({
               })
             );
           } catch (error73) {
-            console.error("\u66F4\u65B0\u5206\u955C\u6392\u5E8F\u5931\u8D25", error73);
+            console.error("Update storyboardSortFailed", error73);
           }
         }
         if (!sqlData) {
@@ -240718,7 +240717,7 @@ var init_batchAddStoryboardInfo = __esm({
       }),
       async (req, res) => {
         const { data, scriptId, projectId } = req.body;
-        if (!data.length) return res.status(400).send({ success: false, message: "\u6570\u636E\u4E0D\u80FD\u4E3A\u7A7A" });
+        if (!data.length) return res.status(400).send({ success: false, message: "dataCannot be empty" });
         for (const item of data) {
           const [id] = await utils_default.db("o_storyboard").insert({
             prompt: item.prompt,
@@ -240742,7 +240741,7 @@ var init_batchAddStoryboardInfo = __esm({
           item.id = id;
         }
         const lastStoryboard = await utils_default.db("o_storyboard").where("scriptId", scriptId);
-        if (!lastStoryboard || !lastStoryboard.length) return res.status(400).send(error50("\u672A\u67E5\u5230\u5206\u955C\u6570\u636E"));
+        if (!lastStoryboard || !lastStoryboard.length) return res.status(400).send(error50("not foundStoryboarddata"));
         const storyboardGroupByTrack = {};
         lastStoryboard.forEach((item) => {
           if (!storyboardGroupByTrack[item.track]) {
@@ -240811,16 +240810,16 @@ var init_batchDelete2 = __esm({
       }),
       async (req, res) => {
         const { ids, projectId } = req.body;
-        if (!ids.length) return res.status(400).send(error50("\u8BF7\u5148\u9009\u62E9\u5206\u955C"));
+        if (!ids.length) return res.status(400).send(error50("please select firstStoryboard"));
         const storyboardDataList = await utils_default.db("o_storyboard").whereIn("id", ids).where("projectId", projectId).select("id", "track", "trackId", "flowId");
-        if (!storyboardDataList.length) return res.status(400).send(error50("\u5F53\u524D\u9009\u62E9\u5206\u955C\u4E0D\u5B58\u5728"));
+        if (!storyboardDataList.length) return res.status(400).send(error50("currently selectedStoryboard not found"));
         const flowIds = storyboardDataList.map((i) => i.flowId);
         const storyBoardIds = storyboardDataList.map((i) => i.id);
         if (flowIds.length)
           await utils_default.db("o_imageFlow").whereIn("id", flowIds).delete();
         await utils_default.db("o_storyboard").whereIn("id", storyBoardIds).delete();
         await utils_default.db("o_assets2Storyboard").whereIn("storyboardId", storyBoardIds).delete();
-        res.status(200).send(success3({ message: "\u89C6\u9891\u5220\u9664\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Video deleted successfully" }));
       }
     );
   }
@@ -240876,16 +240875,16 @@ var init_batchGenerateImage = __esm({
           concurrentCount = 5,
           compulsory = false
         } = req.body;
-        if (!storyboardIds || storyboardIds.length === 0) return res.status(400).send(error50("storyboardIds\u4E0D\u80FD\u4E3A\u7A7A"));
+        if (!storyboardIds || storyboardIds.length === 0) return res.status(400).send(error50("storyboardIdsCannot be empty"));
         let finalStoryboardIds = storyboardIds || [];
         const storyboardData = await utils_default.db("o_storyboard").where("scriptId", scriptId).where("projectId", projectId).whereIn("id", finalStoryboardIds);
-        if (!storyboardData.length) return res.status(500).send(error50("\u672A\u67E5\u5230\u5206\u955C\u6570\u636E"));
+        if (!storyboardData.length) return res.status(500).send(error50("not foundStoryboarddata"));
         const storyIds = storyboardData.map((i) => i.id);
         if (compulsory) {
-          await utils_default.db("o_storyboard").whereIn("id", storyIds).where("scriptId", scriptId).update({ state: "\u751F\u6210\u4E2D", shouldGenerateImage: 1 });
+          await utils_default.db("o_storyboard").whereIn("id", storyIds).where("scriptId", scriptId).update({ state: "Generating", shouldGenerateImage: 1 });
         } else {
-          await utils_default.db("o_storyboard").whereIn("id", storyIds).where("scriptId", scriptId).where("shouldGenerateImage", 0).update({ state: "\u672A\u751F\u6210" });
-          await utils_default.db("o_storyboard").whereIn("id", storyIds).where("scriptId", scriptId).where("shouldGenerateImage", 1).update({ state: "\u751F\u6210\u4E2D" });
+          await utils_default.db("o_storyboard").whereIn("id", storyIds).where("scriptId", scriptId).where("shouldGenerateImage", 0).update({ state: "not generated" });
+          await utils_default.db("o_storyboard").whereIn("id", storyIds).where("scriptId", scriptId).where("shouldGenerateImage", 1).update({ state: "Generating" });
         }
         const projectSettingData = await utils_default.db("o_project").where("id", projectId).select("imageModel", "imageQuality", "artStyle", "videoRatio").first();
         const assets2StoryboardRows = await utils_default.db("o_assets2Storyboard").whereIn("storyboardId", storyIds).orderBy("rowid").select("storyboardId", "assetId");
@@ -240934,8 +240933,8 @@ var init_batchGenerateImage = __esm({
                 ...repeloadObj
               },
               {
-                taskClass: "\u751F\u6210\u5206\u955C\u56FE\u7247",
-                describe: "\u5206\u955C\u56FE\u7247\u751F\u6210",
+                taskClass: "Generate storyboardimage",
+                describe: "storyboard image",
                 relatedObjects: JSON.stringify(repeloadObj),
                 projectId
               }
@@ -240944,13 +240943,13 @@ var init_batchGenerateImage = __esm({
             await imageCls.save(savePath);
             await utils_default.db("o_storyboard").where("id", item.id).update({
               filePath: savePath,
-              state: "\u5DF2\u5B8C\u6210"
+              state: "Completed"
             });
           } catch (e) {
             utils_default.db("o_storyboard").where("id", item.id).update({
               filePath: "",
               reason: utils_default.error(e).message,
-              state: "\u751F\u6210\u5931\u8D25"
+              state: "Generation failed"
             });
           }
         };
@@ -241038,9 +241037,9 @@ var init_downPreviewImage = __esm({
           const bgH = Math.round(fontSize) + padding * 2;
           const labelSvg = Buffer.from(
             `<svg xmlns="http://www.w3.org/2000/svg" width="${bgW}" height="${bgH}">
-          <rect x="0" y="0" width="${bgW}" height="${bgH}" rx="4" ry="4" fill="rgba(0,0,0,0.55)"/>
-          <text x="${padding}" y="${padding + fontSize * 0.85}" font-family="Arial, sans-serif" font-weight="bold" font-size="${fontSize}" fill="#fff">${label}</text>
-        </svg>`
+ <rect x="0" y="0" width="${bgW}" height="${bgH}" rx="4" ry="4" fill="rgba(0,0,0,0.55)"/>
+ <text x="${padding}" y="${padding + fontSize * 0.85}" font-family="Arial, sans-serif" font-weight="bold" font-size="${fontSize}" fill="#fff">${label}</text>
+ </svg>`
           );
           compositeInputs.push({
             input: labelSvg,
@@ -241089,7 +241088,7 @@ var init_editStoryboardInfo = __esm({
           prompt,
           videoDesc
         });
-        res.status(200).send(success3({ message: "\u66F4\u65B0\u63D0\u793A\u8BCD\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Prompt updated successfully" }));
       }
     );
   }
@@ -241161,7 +241160,7 @@ var init_pollingImage2 = __esm({
       }),
       async (req, res) => {
         const { ids } = req.body;
-        const data = await utils_default.db("o_storyboard").whereIn("id", ids).whereNot("state", "\u751F\u6210\u4E2D").select("id", "state", "reason", "filePath", "prompt");
+        const data = await utils_default.db("o_storyboard").whereIn("id", ids).whereNot("state", "Generating").select("id", "state", "reason", "filePath", "prompt");
         const result = await Promise.all(
           data.map(async (item) => ({
             ...item,
@@ -241256,9 +241255,9 @@ var init_previewImage = __esm({
           const bgH = Math.round(fontSize) + padding * 2;
           const labelSvg = Buffer.from(
             `<svg xmlns="http://www.w3.org/2000/svg" width="${bgW}" height="${bgH}">
-          <rect x="0" y="0" width="${bgW}" height="${bgH}" rx="4" ry="4" fill="rgba(0,0,0,0.55)"/>
-          <text x="${padding}" y="${padding + fontSize * 0.85}" font-family="Arial, sans-serif" font-weight="bold" font-size="${fontSize}" fill="#fff">${label}</text>
-        </svg>`
+ <rect x="0" y="0" width="${bgW}" height="${bgH}" rx="4" ry="4" fill="rgba(0,0,0,0.55)"/>
+ <text x="${padding}" y="${padding + fontSize * 0.85}" font-family="Arial, sans-serif" font-weight="bold" font-size="${fontSize}" fill="#fff">${label}</text>
+ </svg>`
           );
           compositeInputs.push({
             input: labelSvg,
@@ -241301,13 +241300,13 @@ var init_removeFrame = __esm({
       async (req, res) => {
         const { id } = req.body;
         const storyboardData = await utils_default.db("o_storyboard").where("id", id).select("id", "track", "trackId", "flowId").first();
-        if (!storyboardData) return res.status(400).send(error50("\u672A\u627E\u5230\u8BE5\u5206\u955C"));
+        if (!storyboardData) return res.status(400).send(error50("not foundStoryboard"));
         if (storyboardData?.flowId) await utils_default.db("o_imageFlow").where("id", storyboardData?.flowId).delete();
         const trackData = await utils_default.db("o_storyboard").where("track", storyboardData.track).select("id");
         if (trackData.length == 1) await utils_default.db("o_videoTrack").where("id", storyboardData.trackId).delete();
         await utils_default.db("o_storyboard").where("id", id).delete();
         await utils_default.db("o_assets2Storyboard").where("storyboardId", id).delete();
-        res.status(200).send(success3({ message: "\u89C6\u9891\u5220\u9664\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Video deleted successfully" }));
       }
     );
   }
@@ -241336,10 +241335,10 @@ var init_updateStoryboardUrl = __esm({
         await utils_default.db("o_storyboard").where({ id }).update({
           filePath: utils_default.replaceUrl(url4),
           flowId,
-          state: "\u5DF2\u5B8C\u6210",
+          state: "Completed",
           shouldGenerateImage: url4 ? 1 : 0
         });
-        res.status(200).send(success3({ message: "\u66F4\u65B0\u5206\u955C\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Update storyboardSuccess" }));
       }
     );
   }
@@ -241421,7 +241420,7 @@ var init_batchGeneratePrompt = __esm({
                 ...storyboard2,
                 associateAssetsIds,
                 _type: "storyboard"
-                // ，
+                // markType
               };
             }
             if (item.sources === "assets") {
@@ -241429,7 +241428,7 @@ var init_batchGeneratePrompt = __esm({
               return {
                 ...assetsData,
                 _type: "assets"
-                // 
+                // markType
               };
             }
           })
@@ -241464,18 +241463,18 @@ var init_batchGeneratePrompt = __esm({
         } else {
           videoPromptGeneration = videoPrompt?.data ?? void 0;
         }
-        const artStyle = projectData?.artStyle || "\u65E0";
+        const artStyle = projectData?.artStyle || "no";
         const visualManual = utils_default.getArtPrompt(artStyle, "art_skills", "art_storyboard_video");
         const content = `
-          **\u6A21\u578B\u540D\u79F0**\uFF1A${modelData},
-          **\u8D44\u4EA7\u4FE1\u606F**\uFF08\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177\u3001\u97F3\u9891):${assets.filter((i) => i.filePath).map((i) => `[${i.id},${i.type},${i.name}]`).join("\uFF0C")},
-          **\u5206\u955C\u4FE1\u606F**\uFF1A${storyboard.map(
+ **Model name**${modelData},
+ **AssetInformation**CharacterScenePropaudio):${assets.filter((i) => i.filePath).map((i) => `[${i.id},${i.type},${i.name}]`).join("")},
+ **StoryboardInformation**${storyboard.map(
           (i) => `<storyboardItem
-  videoDesc='${i.videoDesc}'
-  duration='${i.duration}'
+ videoDesc='${i.videoDesc}'
+ duration='${i.duration}'
 ></storyboardItem>`
         )},
-          `;
+ `;
         try {
           const { text: text2 } = await utils_default.Ai.Text("universalAi").invoke({
             system: videoPromptGeneration,
@@ -241567,7 +241566,7 @@ var init_batchGenerateVideo = __esm({
             const [videoId] = await utils_default.db("o_video").insert({
               filePath: videoPath,
               time: Date.now(),
-              state: "\u751F\u6210\u4E2D",
+              state: "Generating",
               scriptId,
               projectId,
               videoTrackId: trackId
@@ -241583,7 +241582,7 @@ var init_batchGenerateVideo = __esm({
               return { base64: await utils_default.oss.getImageBase64(item.path), type: item.sources == "audio" ? "audio" : "image" };
             })
           );
-          const relatedObjects = { projectId, videoId, scriptId, type: "\u89C6\u9891" };
+          const relatedObjects = { projectId, videoId, scriptId, type: "" };
           const aiVideo = utils_default.Ai.Video(model);
           aiVideo.run(
             {
@@ -241597,13 +241596,13 @@ var init_batchGenerateVideo = __esm({
             },
             {
               projectId,
-              taskClass: "\u89C6\u9891\u751F\u6210",
-              describe: "\u6839\u636E\u63D0\u793A\u8BCD\u751F\u6210\u89C6\u9891",
+              taskClass: "",
+              describe: "based onPromptGenerate video",
               relatedObjects: JSON.stringify(relatedObjects)
             }
-          ).then(async () => await aiVideo.save(videoPath)).then(async () => await utils_default.db("o_video").where("id", videoId).update({ state: "\u751F\u6210\u6210\u529F" })).catch(async (error73) => {
+          ).then(async () => await aiVideo.save(videoPath)).then(async () => await utils_default.db("o_video").where("id", videoId).update({ state: "Generated successfully" })).catch(async (error73) => {
             await utils_default.db("o_video").where("id", videoId).update({
-              state: "\u751F\u6210\u5931\u8D25",
+              state: "Generation failed",
               errorReason: utils_default.error(error73).message
             });
           });
@@ -241633,7 +241632,7 @@ var init_checkVideoStateList = __esm({
       }),
       async (req, res) => {
         const { projectId, scriptId, videoIds } = req.body;
-        const videoList = await utils_default.db("o_video").whereIn("id", videoIds).whereIn("state", ["\u751F\u6210\u6210\u529F", "\u751F\u6210\u5931\u8D25"]).select("id", "state", "errorReason", "filePath");
+        const videoList = await utils_default.db("o_video").whereIn("id", videoIds).whereIn("state", ["Generated successfully", "Generation failed"]).select("id", "state", "errorReason", "filePath");
         res.status(200).send(
           success3(
             await Promise.all(
@@ -241671,7 +241670,7 @@ var init_deleteTrack = __esm({
         await utils_default.db("o_storyboard").where("trackId", id).update({
           trackId: null
         });
-        res.status(200).send(success3({ message: "\u89C6\u9891\u6BB5\u5220\u9664\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Video segment deleted successfully" }));
       }
     );
   }
@@ -241699,7 +241698,7 @@ var init_delVideo = __esm({
         await utils_default.db("o_videoTrack").where("videoId", id).update({
           videoId: null
         });
-        res.status(200).send(success3({ message: "\u89C6\u9891\u5220\u9664\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Video deleted successfully" }));
       }
     );
   }
@@ -241769,7 +241768,7 @@ var init_generateVideo = __esm({
         const [videoId] = await utils_default.db("o_video").insert({
           filePath: videoPath,
           time: Date.now(),
-          state: "\u751F\u6210\u4E2D",
+          state: "Generating",
           scriptId,
           projectId,
           videoTrackId: trackId
@@ -241779,7 +241778,7 @@ var init_generateVideo = __esm({
           projectId,
           videoId,
           scriptId,
-          type: "\u89C6\u9891"
+          type: ""
         };
         const aiVideo = utils_default.Ai.Video(model);
         aiVideo.run(
@@ -241794,13 +241793,13 @@ var init_generateVideo = __esm({
           },
           {
             projectId,
-            taskClass: "\u89C6\u9891\u751F\u6210",
-            describe: "\u6839\u636E\u63D0\u793A\u8BCD\u751F\u6210\u89C6\u9891",
+            taskClass: "",
+            describe: "based onPromptGenerate video",
             relatedObjects: JSON.stringify(relatedObjects)
           }
-        ).then(async () => await aiVideo.save(videoPath)).then(async () => await utils_default.db("o_video").where("id", videoId).update({ state: "\u751F\u6210\u6210\u529F" })).catch(async (error73) => {
+        ).then(async () => await aiVideo.save(videoPath)).then(async () => await utils_default.db("o_video").where("id", videoId).update({ state: "Generated successfully" })).catch(async (error73) => {
           await utils_default.db("o_video").where("id", videoId).update({
-            state: "\u751F\u6210\u5931\u8D25",
+            state: "Generation failed",
             errorReason: utils_default.error(error73).message
           });
         });
@@ -241848,7 +241847,7 @@ var init_generateVideoPrompt = __esm({
                 ...storyboard2,
                 associateAssetsIds,
                 _type: "storyboard"
-                // ，
+                // markType
               };
             }
             if (item.sources === "assets") {
@@ -241856,7 +241855,7 @@ var init_generateVideoPrompt = __esm({
               return {
                 ...assetsData,
                 _type: "assets"
-                // 
+                // markType
               };
             }
           })
@@ -241931,20 +241930,20 @@ var init_generateVideoPrompt = __esm({
             videoPromptGeneration = videoPrompt?.data ?? void 0;
           }
         }
-        const artStyle = projectData?.artStyle || "\u65E0";
+        const artStyle = projectData?.artStyle || "no";
         console.log("%c Line:158 \u{1F362}", "background:#ffdd4d", assets);
         const visualManual = utils_default.getArtPrompt(artStyle, "art_skills", "art_storyboard_video");
         const content = `
-          **\u6A21\u578B\u540D\u79F0**\uFF1A${modelData},
+ **Model name**${modelData},
 
-          **\u8D44\u4EA7\u4FE1\u606F**\uFF08\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177\u3001\u97F3\u9891):${assets.filter((i) => i.filePath).map((i) => `[${i.id},${i.type},${i.name} ${assetsAudioRecord[i.id] ? `audio:${assetsAudioRecord[i.id]}` : ""} ] `).join("\uFF0C")},
-          **\u5206\u955C\u4FE1\u606F**\uFF1A${storyboard.map(
+ **AssetInformation**CharacterScenePropaudio):${assets.filter((i) => i.filePath).map((i) => `[${i.id},${i.type},${i.name} ${assetsAudioRecord[i.id] ? `audio:${assetsAudioRecord[i.id]}` : ""} ] `).join("")},
+ **StoryboardInformation**${storyboard.map(
           (i) => `<storyboardItem
-  videoDesc='${i.videoDesc}'
-  duration='${i.duration}'
+ videoDesc='${i.videoDesc}'
+ duration='${i.duration}'
 ></storyboardItem>`
         )},
-          `;
+ `;
         console.log("%c Line:156 \u{1F36C} content", "background:#4fff4B", content);
         try {
           const { text: text2 } = await utils_default.Ai.Text("universalAi").invoke({
@@ -242081,7 +242080,7 @@ var init_getGenerateData = __esm({
         const { projectId, scriptId } = req.body;
         const projectData = await utils_default.db("o_project").where("id", projectId).select("id", "videoModel", "mode").first();
         if (!projectData?.videoModel) {
-          return res.status(400).json(success3("\u9879\u76EE\u672A\u914D\u7F6E\u89C6\u9891\u6A21\u578B"));
+          return res.status(400).json(success3("ProjectNot configuredvideo model"));
         }
         let videoMode = "";
         try {
@@ -242189,7 +242188,7 @@ var init_getGenerateData = __esm({
             id: trackId,
             duration: item?.duration ?? 0,
             prompt: item?.prompt || "",
-            state: item?.state ?? "\u672A\u751F\u6210",
+            state: item?.state ?? "not generated",
             reason: item?.reason ?? "",
             selectVideoId: Number(item?.videoId),
             medias: (() => {
@@ -242217,7 +242216,7 @@ var init_getGenerateData = __esm({
               videoList.filter((v) => v.videoTrackId === trackId).map(async (v) => ({
                 id: v.id,
                 src: v.filePath ? await utils_default.oss.getFileUrl(v.filePath) : "",
-                state: v.state === "\u5DF2\u5B8C\u6210" ? "\u5DF2\u5B8C\u6210" : v.state === "\u751F\u6210\u4E2D" ? "\u751F\u6210\u4E2D" : v.state === "\u751F\u6210\u5931\u8D25" ? "\u751F\u6210\u5931\u8D25" : "\u672A\u751F\u6210",
+                state: v.state === "Completed" ? "Completed" : v.state === "Generating" ? "Generating" : v.state === "Generation failed" ? "Generation failed" : "not generated",
                 errorReason: v?.errorReason ?? ""
               }))
             )
@@ -242300,7 +242299,7 @@ var init_selectVideo = __esm({
         await utils_default.db("o_videoTrack").where("id", trackId).update({
           videoId
         });
-        res.status(200).send(success3({ message: "\u89C6\u9891\u9009\u62E9\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Video selected successfully" }));
       }
     );
   }
@@ -242328,7 +242327,7 @@ var init_updateVideoDuration = __esm({
         await utils_default.db("o_videoTrack").where("id", id).update({
           duration: duration4
         });
-        res.status(200).send(success3("\u66F4\u65B0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla g\xFCncellendi"));
       }
     );
   }
@@ -242356,7 +242355,7 @@ var init_updateVideoPrompt = __esm({
         await utils_default.db("o_videoTrack").where("id", id).update({
           prompt
         });
-        res.status(200).send(success3("\u66F4\u65B0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla g\xFCncellendi"));
       }
     );
   }
@@ -242393,12 +242392,12 @@ var init_addDirectorManual = __esm({
         try {
           const { name: name28, images, data, directorManual } = req.body;
           if (name28.includes("/") || name28.includes("\\") || name28 === "." || name28 === ".." || /^\d+$/.test(name28)) {
-            res.status(400).send(error50("\u540D\u79F0\u4E0D\u80FD\u5305\u542B\u8DEF\u5F84\u5206\u9694\u7B26\u6216\u4E3A\u7EAF\u6570\u5B57"));
+            res.status(400).send(error50("Namecannot containPathseparators or be pure numbers"));
             return;
           }
           const mainPath = utils_default.getPath(["skills", "story_skills", directorManual]);
           if (import_fs7.default.existsSync(mainPath)) {
-            return res.status(400).send(error50("\u8BF7\u52FF\u586B\u5199\u91CD\u590D\u540D\u79F0\u7684\u89C6\u89C9\u624B\u518C"));
+            return res.status(400).send(error50("NameofVisual manual"));
           }
           const DATA_MAP3 = [
             { value: "README" },
@@ -242496,7 +242495,7 @@ var init_addProject = __esm({
           imageQuality,
           mode
         });
-        res.status(200).send(success3({ message: "\u65B0\u589E\u9879\u76EE\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Project added successfully" }));
       }
     );
   }
@@ -242533,12 +242532,12 @@ var init_addVisualManual = __esm({
         try {
           const { name: name28, images, data, stylePath } = req.body;
           if (name28.includes("/") || name28.includes("\\") || name28 === "." || name28 === ".." || /^\d+$/.test(name28)) {
-            res.status(400).send(error50("\u540D\u79F0\u4E0D\u80FD\u5305\u542B\u8DEF\u5F84\u5206\u9694\u7B26\u6216\u4E3A\u7EAF\u6570\u5B57"));
+            res.status(400).send(error50("Namecannot containPathseparators or be pure numbers"));
             return;
           }
           const mainPath = utils_default.getPath(["skills", "art_skills", stylePath]);
           if (import_fs8.default.existsSync(mainPath)) {
-            return res.status(400).send(error50("\u8BF7\u52FF\u586B\u5199\u91CD\u590D\u540D\u79F0\u7684\u89C6\u89C9\u624B\u518C"));
+            return res.status(400).send(error50("NameofVisual manual"));
           }
           const DATA_MAP3 = [
             { value: "README" },
@@ -242622,22 +242621,22 @@ var init_deleteDirectorManual = __esm({
         try {
           const { name: name28 } = req.body;
           if (name28.includes("/") || name28.includes("\\") || name28 === "." || name28 === ".." || /^\d+$/.test(name28)) {
-            res.status(400).send(error50("\u540D\u79F0\u4E0D\u80FD\u5305\u542B\u8DEF\u5F84\u5206\u9694\u7B26\u6216\u4E3A\u7EAF\u6570\u5B57"));
+            res.status(400).send(error50("Namecannot containPathseparators or be pure numbers"));
             return;
           }
           const artPromptsDir = utils_default.getPath(["skills", "story_skills", name28]);
           try {
             const stat = await import_promises5.default.stat(artPromptsDir);
             if (!stat.isDirectory()) {
-              throw new Error(`${artPromptsDir} \u4E0D\u662F\u6587\u4EF6\u5939`);
+              throw new Error(`${artPromptsDir} notisfolder`);
             }
             await import_promises5.default.rm(artPromptsDir, { recursive: true, force: true });
           } catch (e) {
-            console.error("[\u5220\u9664\u89C6\u89C9\u624B\u518C] \u5220\u9664\u5931\u8D25:", artPromptsDir, e);
+            console.error("[Delete visual manual] DeleteFailed:", artPromptsDir, e);
           }
-          res.status(200).send(success3({ message: "\u5220\u9664\u6210\u529F" }));
+          res.status(200).send(success3({ message: "Ba\u015Far\u0131yla silindi" }));
         } catch (err) {
-          res.status(500).send(error50(utils_default.error(err).message || "\u5220\u9664\u5931\u8D25"));
+          res.status(500).send(error50(utils_default.error(err).message || "DeleteFailed"));
         }
       }
     );
@@ -242665,22 +242664,22 @@ var init_deleteVisualManual = __esm({
         try {
           const { name: name28 } = req.body;
           if (name28.includes("/") || name28.includes("\\") || name28 === "." || name28 === ".." || /^\d+$/.test(name28)) {
-            res.status(400).send(error50("\u540D\u79F0\u4E0D\u80FD\u5305\u542B\u8DEF\u5F84\u5206\u9694\u7B26\u6216\u4E3A\u7EAF\u6570\u5B57"));
+            res.status(400).send(error50("Namecannot containPathseparators or be pure numbers"));
             return;
           }
           const artPromptsDir = utils_default.getPath(["skills", "art_skills", name28]);
           try {
             const stat = await import_promises6.default.stat(artPromptsDir);
             if (!stat.isDirectory()) {
-              throw new Error(`${artPromptsDir} \u4E0D\u662F\u6587\u4EF6\u5939`);
+              throw new Error(`${artPromptsDir} notisfolder`);
             }
             await import_promises6.default.rm(artPromptsDir, { recursive: true, force: true });
           } catch (e) {
-            console.error("[\u5220\u9664\u89C6\u89C9\u624B\u518C] \u5220\u9664\u5931\u8D25:", artPromptsDir, e);
+            console.error("[Delete visual manual] DeleteFailed:", artPromptsDir, e);
           }
-          res.status(200).send(success3({ message: "\u5220\u9664\u6210\u529F" }));
+          res.status(200).send(success3({ message: "Ba\u015Far\u0131yla silindi" }));
         } catch (err) {
-          res.status(500).send(error50(utils_default.error(err).message || "\u5220\u9664\u5931\u8D25"));
+          res.status(500).send(error50(utils_default.error(err).message || "DeleteFailed"));
         }
       }
     );
@@ -242733,11 +242732,11 @@ var init_delProject = __esm({
         await utils_default.db("memories").where("isolationKey", "like", `${id}:%`).delete();
         try {
           await utils_default.oss.deleteDirectory(`${id}/`);
-          console.log(`\u9879\u76EE ${id} \u7684OSS\u6587\u4EF6\u5939\u5220\u9664\u6210\u529F`);
+          console.log(`Project ${id} OSS folder deleted successfully`);
         } catch (error73) {
-          console.log(`\u9879\u76EE ${id} \u6CA1\u6709\u5BF9\u5E94\u7684OSS\u6587\u4EF6\u5939\uFF0C\u8DF3\u8FC7\u5220\u9664`);
+          console.log(`Project ${id} ofOSSfolderDelete`);
         }
-        res.status(200).send(success3({ message: "\u5220\u9664\u9879\u76EE\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Delete projectSuccess" }));
       }
     );
   }
@@ -242774,12 +242773,12 @@ var init_editDirectorlManual = __esm({
         try {
           const { name: name28, directorManual, images, data } = req.body;
           if (name28.includes("/") || name28.includes("\\") || name28 === "." || name28 === ".." || /^\d+$/.test(name28)) {
-            res.status(400).send(error50("\u540D\u79F0\u4E0D\u80FD\u5305\u542B\u8DEF\u5F84\u5206\u9694\u7B26\u6216\u4E3A\u7EAF\u6570\u5B57"));
+            res.status(400).send(error50("Namecannot containPathseparators or be pure numbers"));
             return;
           }
           const mainPath = utils_default.getPath(["skills", "story_skills", directorManual]);
           if (!import_fs9.default.existsSync(mainPath)) {
-            return res.status(400).send(error50("\u5BFC\u6F14\u624B\u518C\u4E0D\u5B58\u5728"));
+            return res.status(400).send(error50("Director manualnotexists"));
           }
           const DATA_MAP3 = [
             { value: "README" },
@@ -242877,7 +242876,7 @@ var init_editProject = __esm({
           projectType,
           mode
         });
-        res.status(200).send(success3({ message: "\u7F16\u8F91\u9879\u76EE\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Edit projectSuccess" }));
       }
     );
   }
@@ -242914,12 +242913,12 @@ var init_editVisualManual = __esm({
         try {
           const { name: name28, stylePath, images, data } = req.body;
           if (name28.includes("/") || name28.includes("\\") || name28 === "." || name28 === ".." || /^\d+$/.test(name28)) {
-            res.status(400).send(error50("\u540D\u79F0\u4E0D\u80FD\u5305\u542B\u8DEF\u5F84\u5206\u9694\u7B26\u6216\u4E3A\u7EAF\u6570\u5B57"));
+            res.status(400).send(error50("Namecannot containPathseparators or be pure numbers"));
             return;
           }
           const mainPath = utils_default.getPath(["skills", "art_skills", stylePath]);
           if (!import_fs10.default.existsSync(mainPath)) {
-            return res.status(400).send(error50("\u89C6\u89C9\u624B\u518C\u4E0D\u5B58\u5728"));
+            return res.status(400).send(error50("Visual manualnotexists"));
           }
           const DATA_MAP3 = [
             { value: "README" },
@@ -243006,7 +243005,7 @@ var init_getModelDetails = __esm({
         const [id, modelName] = data ? data.modelName.split(/:(.+)/) : [];
         const models = await utils_default.vendor.getModelList(id);
         const model = models.find((m) => m.modelName === modelName);
-        if (!model) return res.status(400).send(error50("\u672A\u627E\u5230\u6A21\u578B"));
+        if (!model) return res.status(400).send(error50("not found"));
         res.status(200).send(success3(model));
       }
     );
@@ -243063,17 +243062,17 @@ var init_getVisualManual = __esm({
     router102 = import_express102.default.Router();
     DATA_MAP = [
       { label: "README", value: "README" },
-      { label: "\u524D\u7F00", value: "prefix" },
-      { label: "\u89D2\u8272", value: "art_character", subDir: "art_prompt" },
-      { label: "\u89D2\u8272\u884D\u751F", value: "art_character_derivative", subDir: "art_prompt" },
-      { label: "\u9053\u5177", value: "art_prop", subDir: "art_prompt" },
-      { label: "\u9053\u5177\u884D\u751F", value: "art_prop_derivative", subDir: "art_prompt" },
-      { label: "\u573A\u666F", value: "art_scene", subDir: "art_prompt" },
-      { label: "\u573A\u666F\u884D\u751F", value: "art_scene_derivative", subDir: "art_prompt" },
-      { label: "\u5206\u955C", value: "director_storyboard", subDir: "driector_skills" },
-      { label: "\u5206\u955C\u89C6\u9891", value: "art_storyboard_video", subDir: "art_prompt" },
-      { label: "\u6280\u6CD5-\u5BFC\u6F14\u89C4\u5212", value: "director_planning_style", subDir: "driector_skills" },
-      { label: "\u6280\u6CD5-\u5206\u955C\u8868\u8BBE\u8BA1", value: "director_storyboard_table_style", subDir: "driector_skills" }
+      { label: "", value: "prefix" },
+      { label: "Character", value: "art_character", subDir: "art_prompt" },
+      { label: "Characterderived", value: "art_character_derivative", subDir: "art_prompt" },
+      { label: "Prop", value: "art_prop", subDir: "art_prompt" },
+      { label: "Propderived", value: "art_prop_derivative", subDir: "art_prompt" },
+      { label: "Scene", value: "art_scene", subDir: "art_prompt" },
+      { label: "Scenederived", value: "art_scene_derivative", subDir: "art_prompt" },
+      { label: "Storyboard", value: "director_storyboard", subDir: "driector_skills" },
+      { label: "Storyboard", value: "art_storyboard_video", subDir: "art_prompt" },
+      { label: "-", value: "director_planning_style", subDir: "driector_skills" },
+      { label: "-Storyboardtable", value: "director_storyboard_table_style", subDir: "driector_skills" }
     ];
     getVisualManual_default = router102.post("/", async (req, res) => {
       try {
@@ -243149,8 +243148,8 @@ var init_queryDirectorManual = __esm({
     router103 = import_express103.default.Router();
     DATA_MAP2 = [
       { label: "README", value: "README" },
-      { label: "\u5BFC\u6F14\u89C4\u5212", value: "director_planning_narrative", subDir: "driector_skills" },
-      { label: "\u5206\u955C\u8868", value: "director_storyboard_table_narrative", subDir: "driector_skills" }
+      { label: "", value: "director_planning_narrative", subDir: "driector_skills" },
+      { label: "Storyboardtable", value: "director_storyboard_table_narrative", subDir: "driector_skills" }
     ];
     queryDirectorManual_default = router103.post("/", async (req, res) => {
       try {
@@ -243228,7 +243227,7 @@ var init_visualManual = __esm({
         };
         const filePath = findFile(basePath, `${type}.md`);
         if (!filePath) {
-          res.status(404).json({ error: `\u672A\u627E\u5230\u5BF9\u5E94\u7684\u6587\u4EF6: ${type}.md` });
+          res.status(404).json({ error: `corresponding not foundfile: ${type}.md` });
           return;
         }
         const content = import_fs13.default.readFileSync(filePath, "utf-8");
@@ -243278,7 +243277,7 @@ var init_addScript = __esm({
             await utils_default.db("o_scriptAssets").insert(insertData);
           }
         }
-        res.status(200).send(success3({ message: "\u6DFB\u52A0\u5267\u672C\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Add scriptSuccess" }));
       }
     );
   }
@@ -243318,7 +243317,7 @@ var init_batchAddScript = __esm({
             };
           })
         );
-        res.status(200).send(success3({ message: "\u6DFB\u52A0\u5267\u672C\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Add scriptSuccess" }));
       }
     );
   }
@@ -243364,7 +243363,7 @@ var init_delScript = __esm({
         await utils_default.db("o_script").whereIn("id", ids).delete();
         await utils_default.db("o_storyboard").whereIn("scriptId", ids).delete();
         await utils_default.db("o_video").whereIn("scriptId", ids).delete();
-        res.status(200).send(success3({ message: "\u5220\u9664\u5267\u672C\u6210\u529F" }));
+        res.status(200).send(success3({ message: "Delete scriptSuccess" }));
       }
     );
   }
@@ -244517,9 +244516,9 @@ var require_stream8 = __commonJS({
   }
 });
 
-// node_modules/tar-stream/node_modules/readable-stream/node_modules/safe-buffer/index.js
+// node_modules/tar-stream/node_modules/safe-buffer/index.js
 var require_safe_buffer3 = __commonJS({
-  "node_modules/tar-stream/node_modules/readable-stream/node_modules/safe-buffer/index.js"(exports2, module2) {
+  "node_modules/tar-stream/node_modules/safe-buffer/index.js"(exports2, module2) {
     "use strict";
     var buffer = require("buffer");
     var Buffer3 = buffer.Buffer;
@@ -244639,7 +244638,7 @@ var require_util6 = __commonJS({
       typeof arg === "undefined";
     }
     exports2.isPrimitive = isPrimitive;
-    exports2.isBuffer = require("buffer").Buffer.isBuffer;
+    exports2.isBuffer = Buffer.isBuffer;
     function objectToString2(o) {
       return Object.prototype.toString.call(o);
     }
@@ -245318,69 +245317,11 @@ var require_stream_duplex = __commonJS({
   }
 });
 
-// node_modules/tar-stream/node_modules/string_decoder/node_modules/safe-buffer/index.js
-var require_safe_buffer4 = __commonJS({
-  "node_modules/tar-stream/node_modules/string_decoder/node_modules/safe-buffer/index.js"(exports2, module2) {
-    "use strict";
-    var buffer = require("buffer");
-    var Buffer3 = buffer.Buffer;
-    function copyProps(src, dst) {
-      for (var key in src) {
-        dst[key] = src[key];
-      }
-    }
-    if (Buffer3.from && Buffer3.alloc && Buffer3.allocUnsafe && Buffer3.allocUnsafeSlow) {
-      module2.exports = buffer;
-    } else {
-      copyProps(buffer, exports2);
-      exports2.Buffer = SafeBuffer;
-    }
-    function SafeBuffer(arg, encodingOrOffset, length) {
-      return Buffer3(arg, encodingOrOffset, length);
-    }
-    copyProps(Buffer3, SafeBuffer);
-    SafeBuffer.from = function(arg, encodingOrOffset, length) {
-      if (typeof arg === "number") {
-        throw new TypeError("Argument must not be a number");
-      }
-      return Buffer3(arg, encodingOrOffset, length);
-    };
-    SafeBuffer.alloc = function(size, fill, encoding) {
-      if (typeof size !== "number") {
-        throw new TypeError("Argument must be a number");
-      }
-      var buf = Buffer3(size);
-      if (fill !== void 0) {
-        if (typeof encoding === "string") {
-          buf.fill(fill, encoding);
-        } else {
-          buf.fill(fill);
-        }
-      } else {
-        buf.fill(0);
-      }
-      return buf;
-    };
-    SafeBuffer.allocUnsafe = function(size) {
-      if (typeof size !== "number") {
-        throw new TypeError("Argument must be a number");
-      }
-      return Buffer3(size);
-    };
-    SafeBuffer.allocUnsafeSlow = function(size) {
-      if (typeof size !== "number") {
-        throw new TypeError("Argument must be a number");
-      }
-      return buffer.SlowBuffer(size);
-    };
-  }
-});
-
 // node_modules/tar-stream/node_modules/string_decoder/lib/string_decoder.js
 var require_string_decoder = __commonJS({
   "node_modules/tar-stream/node_modules/string_decoder/lib/string_decoder.js"(exports2) {
     "use strict";
-    var Buffer3 = require_safe_buffer4().Buffer;
+    var Buffer3 = require_safe_buffer3().Buffer;
     var isEncoding = Buffer3.isEncoding || function(encoding) {
       encoding = "" + encoding;
       switch (encoding && encoding.toLowerCase()) {
@@ -246459,7 +246400,7 @@ var require_bl = __commonJS({
     "use strict";
     var DuplexStream = require_duplex();
     var util4 = require("util");
-    var Buffer3 = require_safe_buffer2().Buffer;
+    var Buffer3 = require_safe_buffer3().Buffer;
     function BufferList(callback) {
       if (!(this instanceof BufferList))
         return new BufferList(callback);
@@ -253597,19 +253538,19 @@ var init_extractAssets = __esm({
     init_dist22();
     router109 = import_express109.default.Router();
     NewAssetSchema = external_exports.object({
-      name: external_exports.string().describe("\u8D44\u4EA7\u540D\u79F0,\u4EC5\u4E3A\u540D\u79F0\u4E0D\u505A\u5176\u4ED6\u4EFB\u4F55\u8868\u8FF0"),
-      desc: external_exports.string().describe("\u8D44\u4EA7\u63CF\u8FF0"),
-      type: external_exports.enum(["role", "tool", "scene"]).describe("\u8D44\u4EA7\u7C7B\u578B"),
-      scriptIds: external_exports.array(external_exports.number()).describe("\u4F7F\u7528\u8BE5\u8D44\u4EA7\u7684\u5267\u672Cid\u6570\u7EC4")
+      name: external_exports.string().describe("AssetName,NamenotOthertable"),
+      desc: external_exports.string().describe("asset description"),
+      type: external_exports.enum(["role", "tool", "scene"]).describe("AssetType"),
+      scriptIds: external_exports.array(external_exports.number()).describe("useAssetofScriptid")
     });
     ExistingAssetRefSchema = external_exports.object({
-      name: external_exports.string().describe("\u5DF2\u6709\u8D44\u4EA7\u7684\u540D\u79F0,\u5FC5\u987B\u4E0E\u5DF2\u6709\u8D44\u4EA7\u5217\u8868\u4E2D\u7684\u540D\u79F0\u5B8C\u5168\u4E00\u81F4"),
-      scriptIds: external_exports.array(external_exports.number()).describe("\u4F7F\u7528\u8BE5\u8D44\u4EA7\u7684\u5267\u672Cid\u6570\u7EC4")
+      name: external_exports.string().describe("alreadyAssetofName,alreadyAssetlistofNameconsistent"),
+      scriptIds: external_exports.array(external_exports.number()).describe("useAssetofScriptid")
     });
     AssetSchema = external_exports.object({
-      name: external_exports.string().describe("\u8D44\u4EA7\u540D\u79F0,\u4EC5\u4E3A\u540D\u79F0\u4E0D\u505A\u5176\u4ED6\u4EFB\u4F55\u8868\u8FF0"),
-      desc: external_exports.string().describe("\u8D44\u4EA7\u63CF\u8FF0"),
-      type: external_exports.enum(["role", "tool", "scene"]).describe("\u8D44\u4EA7\u7C7B\u578B")
+      name: external_exports.string().describe("AssetName,NamenotOthertable"),
+      desc: external_exports.string().describe("asset description"),
+      type: external_exports.enum(["role", "tool", "scene"]).describe("AssetType")
     });
     extractAssets_default = router109.post(
       "/",
@@ -253620,7 +253561,7 @@ var init_extractAssets = __esm({
       }),
       async (req, res) => {
         const { scriptIds, projectId, groupSize = 5 } = req.body;
-        if (!scriptIds.length) return res.status(400).send(error50("\u8BF7\u5148\u9009\u62E9\u5267\u672C"));
+        if (!scriptIds.length) return res.status(400).send(error50("please select firstScript"));
         const scripts = await utils_default.db("o_script").whereIn("id", scriptIds);
         const scriptMap = new Map(scripts.map((s) => [s.id, s]));
         await utils_default.db("o_script").whereIn("id", scriptIds).update({
@@ -253677,7 +253618,7 @@ var init_extractAssets = __esm({
             errorReason: null
           });
         }
-        res.send(success3("\u5F00\u59CB\u63D0\u53D6\u8D44\u4EA7"));
+        res.send(success3("openstartExtract assets"));
         function processGroup(group) {
           group.map(async (itemIds) => {
             const validScripts = [];
@@ -253685,8 +253626,8 @@ var init_extractAssets = __esm({
               for (const scriptId of scriptIds2) {
                 const script = scriptMap.get(scriptId);
                 if (!script) {
-                  errors.push({ scriptId, error: "\u672A\u627E\u5230\u5BF9\u5E94\u5267\u672C" });
-                  await utils_default.db("o_script").where("id", scriptId).update({ extractState: -1, errorReason: "\u672A\u627E\u5230\u5BF9\u5E94\u5267\u672C" });
+                  errors.push({ scriptId, error: "not foundScript" });
+                  await utils_default.db("o_script").where("id", scriptId).update({ extractState: -1, errorReason: "not foundScript" });
                 } else {
                   const item = await utils_default.db("o_script").where("id", scriptId).select("extractState").first();
                   if (item?.extractState == 2) {
@@ -253699,27 +253640,27 @@ var init_extractAssets = __esm({
             const validScriptIds = validScripts.map((v) => v.id);
             await utils_default.db("o_script").whereIn("id", validScriptIds).update({
               extractState: 0
-              // 
+              // atextract
             });
             const existingAssets = await utils_default.db("o_assets").where("projectId", projectId).select("name", "type");
-            const existingAssetsList = existingAssets.map((a) => `${a.name}(${a.type})`).join("\u3001");
-            const scriptsContent = validScripts.map(({ id, script }) => `===== \u3010\u5267\u672CID: ${id}\u3011${script.name || ""} =====
+            const existingAssetsList = existingAssets.map((a) => `${a.name}(${a.type})`).join("");
+            const scriptsContent = validScripts.map(({ id, script }) => `===== ScriptID: ${id}${script.name || ""} =====
 ${script.content}`).join("\n\n");
             let collectedNew = [];
             let collectedExisting = [];
             try {
               const resultTool = tool({
-                description: "\u8FD4\u56DE\u7ED3\u679C\u65F6\u5FC5\u987B\u8C03\u7528\u8FD9\u4E2A\u5DE5\u5177",
+                description: "returnresultwhentool",
                 inputSchema: jsonSchema(
                   external_exports.object({
-                    newAssets: external_exports.array(NewAssetSchema).describe("\u65B0\u53D1\u73B0\u7684\u8D44\u4EA7\u5217\u8868\uFF08\u4E0D\u5728\u5DF2\u6709\u8D44\u4EA7\u5217\u8868\u4E2D\u7684\uFF09\uFF0C\u9700\u8981\u5B8C\u6574\u7684 prompt\u3001name\u3001desc\u3001type \u548C\u4F7F\u7528\u8BE5\u8D44\u4EA7\u7684 scriptIds"),
-                    existingAssetRefs: external_exports.array(ExistingAssetRefSchema).describe("\u5DF2\u6709\u8D44\u4EA7\u7684\u5F15\u7528\u5217\u8868\uFF08\u5728\u5DF2\u6709\u8D44\u4EA7\u5217\u8868\u4E2D\u5DF2\u5B58\u5728\u7684\uFF09\uFF0C\u53EA\u9700\u7ED9\u51FA\u8D44\u4EA7\u540D\u79F0\u548C\u4F7F\u7528\u8BE5\u8D44\u4EA7\u7684 scriptIds")
+                    newAssets: external_exports.array(NewAssetSchema).describe("newly discoveredAssetlist (not in existingAssetlist), requires complete promptnamedesctype and using thisAssetof scriptIds"),
+                    existingAssetRefs: external_exports.array(ExistingAssetRefSchema).describe("alreadyAssetoflistatalreadyAssetlistalreadyexistsofAssetNameand using thisAssetof scriptIds")
                   }).toJSONSchema()
                 ),
                 execute: async ({ newAssets, existingAssetRefs }) => {
                   if (newAssets?.length) collectedNew = newAssets;
                   if (existingAssetRefs?.length) collectedExisting = existingAssetRefs;
-                  return "\u65E0\u9700\u56DE\u590D\u7528\u6237\u4EFB\u4F55\u5185\u5BB9";
+                  return "noreply to user with any content";
                 }
               });
               const promptData = await utils_default.db("o_prompt").where("type", "scriptAssetExtraction").first();
@@ -253731,19 +253672,19 @@ ${script.content}`).join("\n\n");
               }
               const existingHint = existingAssetsList ? `
 
-\u3010\u5DF2\u6709\u8D44\u4EA7\u5217\u8868\u3011\uFF1A${existingAssetsList}
-\u5BF9\u4E8E\u5DF2\u6709\u8D44\u4EA7\uFF0C\u5982\u679C\u5728\u5267\u672C\u4E2D\u51FA\u73B0\uFF0C\u53EA\u9700\u5728 existingAssetRefs \u4E2D\u7ED9\u51FA\u8D44\u4EA7\u540D\u79F0\u548C\u5BF9\u5E94\u7684 scriptIds \u6570\u7EC4\u5373\u53EF\uFF0C\u65E0\u9700\u91CD\u590D\u751F\u6210 desc/type\u3002\u5BF9\u4E8E\u65B0\u53D1\u73B0\u7684\u8D44\u4EA7\uFF08\u4E0D\u5728\u5DF2\u6709\u5217\u8868\u4E2D\uFF09\uFF0C\u8BF7\u5728 newAssets \u4E2D\u7ED9\u51FA\u5B8C\u6574\u4FE1\u606F\u3002` : "";
+alreadyAssetlist${existingAssetsList}
+alreadyAssetatScriptat existingAssetRefs AssetNameandof scriptIds no desc/typenewly discoveredAssetnot inalreadylistat newAssets Information` : "";
               const output = await utils_default.Ai.Text("universalAi").invoke({
                 messages: [
                   {
                     role: "system",
-                    content: scriptAssetExtraction + "\n\n\u63D0\u53D6\u5267\u672C\u4E2D\u6D89\u53CA\u7684\u8D44\u4EA7\uFF08\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177\uFF09\uFF0C\u53C2\u8003\u6280\u80FD script_assets_extract \u89C4\u8303\uFF0C\u7ED3\u679C\u5FC5\u987B\u901A\u8FC7 resultTool \u5DE5\u5177\u8FD4\u56DE\u3002\n\n\u6CE8\u610F\uFF1A\u672C\u6B21\u4F1A\u540C\u65F6\u63D0\u4F9B\u591A\u96C6\u5267\u672C\uFF0C\u6BCF\u96C6\u5267\u672C\u4EE5 ===== \u3010\u5267\u672CID: xxx\u3011 ===== \u5206\u9694\u3002\u4F60\u9700\u8981\u5206\u6790\u6BCF\u96C6\u5267\u672C\u4F7F\u7528\u4E86\u54EA\u4E9B\u8D44\u4EA7\uFF0C\u5E76\u5728\u8F93\u51FA\u4E2D\u7528 scriptIds \u6570\u7EC4\u6807\u660E\u6BCF\u4E2A\u8D44\u4EA7\u5728\u54EA\u4E9B\u5267\u672C\u4E2D\u51FA\u73B0\u3002"
+                    content: scriptAssetExtraction + "\n\nextractScriptinvolved inAssetCharacterScenePropreference skill script_assets_extract specification, results must be submitted via resultTool toolreturn\n\nwhenScriptScript ===== ScriptID: xxx ===== youneedScriptuseAssetat scriptIds AssetatScript"
                   },
                   {
                     role: "user",
-                    content: `\u5F53\u524D\u5DF2\u6709\u8D44\u4EA7\u5217\u8868\uFF1A${existingHint}
+                    content: `currentalreadyAssetlist${existingHint}
 
-\u8BF7\u6839\u636E\u4EE5\u4E0B${validScripts.length}\u96C6\u5267\u672C\u63D0\u53D6\u5BF9\u5E94\u7684\u5267\u672C\u8D44\u4EA7\uFF08\u89D2\u8272\u3001\u573A\u666F\u3001\u9053\u5177\uFF09:
+based on the following${validScripts.length}ScriptextractofScriptAssetCharacterSceneProp:
 
 ${scriptsContent}`
                   }
@@ -253756,7 +253697,7 @@ ${scriptsContent}`
                 existingRefs: collectedExisting
               });
             } catch (e) {
-              console.error(`[extractAssets] group=[${validScriptIds.join(",")}] \u63D0\u53D6\u5931\u8D25:`, e);
+              console.error(`[extractAssets] group=[${validScriptIds.join(",")}] extractFailed:`, e);
               for (const { id, script } of validScripts) {
                 errors.push({ scriptId: id, error: (script.name || "") + ":" + utils_default.error(e).message });
                 await utils_default.db("o_script").where("id", id).update({ extractState: -1, errorReason: utils_default.error(e).message });
@@ -253765,8 +253706,8 @@ ${scriptsContent}`
             }
             if (!collectedNew.length && !collectedExisting.length) {
               for (const { id } of validScripts) {
-                errors.push({ scriptId: id, error: "AI \u672A\u8FD4\u56DE\u4EFB\u4F55\u8D44\u4EA7" });
-                await utils_default.db("o_script").where("id", id).update({ extractState: -1, errorReason: "AI \u672A\u8FD4\u56DE\u4EFB\u4F55\u8D44\u4EA7" });
+                errors.push({ scriptId: id, error: "AI returnAsset" });
+                await utils_default.db("o_script").where("id", id).update({ extractState: -1, errorReason: "AI returnAsset" });
               }
               return;
             }
@@ -253796,14 +253737,14 @@ var init_getAiRegex = __esm({
       }),
       async (req, res) => {
         const { content } = req.body;
-        const systemPrompt = `\u4F60\u662F\u4E00\u4E2A\u6B63\u5219\u8868\u8FBE\u5F0F\u4E13\u5BB6\u3002\u7528\u6237\u4F1A\u63D0\u4F9B\u4E00\u6BB5\u5267\u672C\u6587\u672C\uFF0C\u4F60\u9700\u8981\u5206\u6790\u5176\u4E2D\u7684\u96C6/\u7AE0\u8282\u5206\u9694\u6A21\u5F0F\uFF0C\u8FD4\u56DE\u4E00\u4E2AJavaScript\u6B63\u5219\u8868\u8FBE\u5F0F\u5B57\u7B26\u4E32\u3002
+        const systemPrompt = `youisa regex expert. The user will provide aScripttext, and you need to analyze the set within/chapterreturnJavaScriptregex
 
-\u8981\u6C42\uFF1A
-1. \u6B63\u5219\u5FC5\u987B\u5305\u542B\u4E24\u4E2A\u6355\u83B7\u7EC4\uFF1A\u7B2C\u4E00\u4E2A\u6355\u83B7\u7EC4\u5339\u914D\u96C6\u6570/\u7AE0\u8282\u7F16\u53F7\uFF08\u6570\u5B57\u6216\u4E2D\u6587\u6570\u5B57\uFF09\uFF0C\u7B2C\u4E8C\u4E2A\u6355\u83B7\u7EC4\u5339\u914D\u8BE5\u96C6\u7684\u6807\u9898/\u540D\u79F0\uFF08scriptName\uFF09\u3002
-2. \u8FD4\u56DE\u683C\u5F0F\u4E3A /\u6B63\u5219\u8868\u8FBE\u5F0F/g\uFF0C\u4F8B\u5982\uFF1A/\u7B2Cs*([0-9\u4E00\u4E8C\u4E09\u56DB\u4E94\u516D\u4E03\u516B\u4E5D\u5341\u767E\u5343\u4E07]+)s*\u96C6s*([^
+
+1. chaptermatch/chapterchaptermatchof/NamescriptName
+2. returnformat is /regex/g/chapters*([0-9]+)s*s*([^
 \r]*)/g
-3. \u53EA\u8FD4\u56DE\u6B63\u5219\u8868\u8FBE\u5F0F\u5B57\u7B26\u4E32\u672C\u8EAB\uFF0C\u4E0D\u8981\u6709\u4EFB\u4F55\u5176\u4ED6\u89E3\u91CA\u6587\u5B57\u6216markdown\u683C\u5F0F\u3002
-4. \u5982\u679C\u6587\u672C\u4E2D\u6CA1\u6709\u660E\u663E\u7684\u7AE0\u8282\u5206\u9694\u6A21\u5F0F\uFF0C\u8FD4\u56DE\u7A7A\u5B57\u7B26\u4E32\u3002`;
+3. returnregexnotOthermarkdown
+4. if there's no obvious chapter separation pattern in the text,returnempty string`;
         const resText = await utils_default.Ai.Text("universalAi").invoke({
           system: systemPrompt,
           messages: [
@@ -253889,7 +253830,7 @@ var init_pollScriptAssets = __esm({
       }),
       async (req, res) => {
         const { ids } = req.body;
-        const data = await utils_default.db("o_script").whereIn("id", ids).whereNot("extractState", "\u751F\u6210\u4E2D").select("id", "extractState", "errorReason");
+        const data = await utils_default.db("o_script").whereIn("id", ids).whereNot("extractState", "Generating").select("id", "extractState", "errorReason");
         res.status(200).send(success3(data));
       }
     );
@@ -253934,7 +253875,7 @@ var init_updateScript = __esm({
             await utils_default.db("o_scriptAssets").insert(insertData);
           }
         }
-        res.status(200).send(success3({ message: "\u7F16\u8F91\u5267\u672C\u6210\u529F" }));
+        res.status(200).send(success3({ message: "EditScriptSuccess" }));
       }
     );
   }
@@ -254061,7 +254002,7 @@ var init_updateData = __esm({
         await utils_default.db("o_agentWorkData").where({ id }).update({
           data: JSON.stringify(data)
         });
-        res.status(200).send(success3("\u66F4\u65B0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla g\xFCncellendi"));
       }
     );
   }
@@ -254097,10 +254038,10 @@ var init_checkUpdate = __esm({
         const { source, url: url4 } = req.body;
         const getUrl = url4 ?? "https://toonflow.oss-cn-beijing.aliyuncs.com/update.json";
         const versionInfo = await fetch(getUrl).then((res2) => res2.json());
-        if (!versionInfo) return res.status(400).send(error50("\u65E0\u6CD5\u83B7\u53D6\u7248\u672C\u4FE1\u606F"));
+        if (!versionInfo) return res.status(400).send(error50("nogetVersion info"));
         const { version: tagger, time: time4, data } = versionInfo;
         const sourceData = data[source];
-        if (!sourceData) return res.status(400).send(error50("\u65E0\u6CD5\u83B7\u53D6\u8BE5\u6E90\u7684\u4E0B\u8F7D\u4FE1\u606F"));
+        if (!sourceData) return res.status(400).send(error50("nounable to get this source'sDownloadInformation"));
         const platformType = {
           win32: "windows",
           darwin: "macos",
@@ -254111,15 +254052,15 @@ var init_checkUpdate = __esm({
         const taggerList = tagger.split(".").map(Number);
         const currentVersionList = APP_VERSION2.split(".").map(Number);
         if (taggerList[0] > currentVersionList[0]) {
-          if (!installerItem) return res.status(400).send(error50("\u8BE5\u6E90\u6682\u65E0\u9002\u7528\u4E8E\u5F53\u524D\u7CFB\u7EDF\u7684\u5B89\u88C5\u5305"));
+          if (!installerItem) return res.status(400).send(error50("this source currently hasnoapplicable to currentSysteminstallation package"));
           return res.status(200).send(success3({ needUpdate: true, latestVersion: tagger, reinstall: true, time: time4, url: installerItem.url, version: tagger }));
         }
         if (taggerList[1] > currentVersionList[1]) {
-          if (!installerItem) return res.status(400).send(error50("\u8BE5\u6E90\u6682\u65E0\u9002\u7528\u4E8E\u5F53\u524D\u7CFB\u7EDF\u7684\u5B89\u88C5\u5305"));
+          if (!installerItem) return res.status(400).send(error50("this source currently hasnoapplicable to currentSysteminstallation package"));
           return res.status(200).send(success3({ needUpdate: true, latestVersion: tagger, reinstall: true, time: time4, url: installerItem.url, version: tagger }));
         }
         if (taggerList[2] > currentVersionList[2]) {
-          if (!zipItem) return res.status(400).send(error50("\u8BE5\u6E90\u6682\u65E0\u589E\u91CF\u66F4\u65B0\u5305"));
+          if (!zipItem) return res.status(400).send(error50("this source currently hasno"));
           return res.status(200).send(success3({ needUpdate: true, latestVersion: tagger, reinstall: false, time: time4, url: zipItem.url, version: tagger }));
         }
         return res.status(200).send(success3({ needUpdate: false, latestVersion: tagger, reinstall: false, time: time4, version: tagger }));
@@ -254152,7 +254093,7 @@ var init_downloadApp = __esm({
       async (req, res) => {
         const { reinstall, url: url4, version: version3 } = req.body;
         if (reinstall) {
-          res.status(200).send(success3("\u8BF7\u5728\u6D4F\u89C8\u5668\u4E2D\u624B\u52A8\u4E0B\u8F7D\u5E76\u5B89\u88C5\u6700\u65B0\u7248\u672C"));
+          res.status(200).send(success3("L\xFCtfen en son s\xFCr\xFCm\xFC taray\u0131c\u0131dan indirip y\xFCkleyin"));
         } else {
           const rootDir = utils_default.getPath(["temp"]);
           import_fs15.default.mkdirSync(rootDir, { recursive: true });
@@ -254162,7 +254103,7 @@ var init_downloadApp = __esm({
           const dataDir = utils_default.getPath();
           import_fs15.default.cpSync(rootDir, dataDir, { recursive: true, force: true });
           import_fs15.default.rmSync(rootDir, { recursive: true, force: true });
-          res.status(200).send(success3(`\u66F4\u65B0${version3}\u6210\u529F\uFF0C5\u79D2\u540E\u91CD\u542F`));
+          res.status(200).send(success3(`${version3}Success5seconds before restart`));
         }
       }
     );
@@ -254188,8 +254129,8 @@ var init_agentSetKey = __esm({
       async (req, res) => {
         const { key } = req.body;
         const vendorConfigData = await utils_default.db("o_vendorConfig").where("id", "toonflow").first();
-        if (!vendorConfigData) return res.status(500).send(error50("\u672A\u627E\u5230\u8BE5\u4F9B\u5E94\u5546\u914D\u7F6E"));
-        if (!vendorConfigData.inputValues) return res.status(500).send(error50("\u672A\u627E\u5230\u6A21\u578B\u914D\u7F6E\u6570\u636E"));
+        if (!vendorConfigData) return res.status(500).send(error50("Vendor configuration not found"));
+        if (!vendorConfigData.inputValues) return res.status(500).send(error50("model configuration data not found"));
         const inputValue = JSON.parse(vendorConfigData.inputValues);
         inputValue.apiKey = key;
         await utils_default.db("o_vendorConfig").where("id", "toonflow").update({
@@ -254197,7 +254138,7 @@ var init_agentSetKey = __esm({
         });
         try {
           const resText = await utils_default.Ai.Text(`toonflow:claude-haiku-4-5-20251001`).invoke({
-            prompt: "1+1\u7B49\u4E8E\u51E0\uFF1F,\u8BF7\u76F4\u63A5\u56DE\u7B542\uFF0C\u4E0D\u8981\u89E3\u91CA"
+            prompt: "1+1equals what,please answer directly2don't explain"
           });
           if (resText.text) {
             await utils_default.db("o_agentDeploy").where("key", "scriptAgent").update({
@@ -254215,13 +254156,13 @@ var init_agentSetKey = __esm({
               modelName: "toonflow:claude-haiku-4-5-20251001",
               vendorId: "toonflow"
             });
-            res.status(200).send(success3("\u4E00\u952E\u586B\u5165\u6210\u529F"));
+            res.status(200).send(success3("Auto-fill successful"));
           }
         } catch (err) {
           console.error(err);
           inputValue.apiKey = "";
           await utils_default.db("o_vendorConfig").where("id", "toonflow").update({ inputValues: JSON.stringify(inputValue) });
-          res.status(400).send(error50("KEY\u65E0\u6548\uFF0C\u8BF7\u91CD\u65B0\u8F93\u5165"));
+          res.status(400).send(error50("KEYInvalidplease re-enter"));
         }
       }
     );
@@ -254254,7 +254195,7 @@ var init_deployAgentModel = __esm({
       async (req, res) => {
         const { id, name: name28, model, modelName, vendorId, desc, temperature, maxOutputTokens } = req.body;
         await utils_default.db("o_agentDeploy").where({ id }).update({ id, name: name28, model, modelName, vendorId, desc, temperature, maxOutputTokens });
-        res.status(200).send(success3("\u914D\u7F6E\u6210\u529F"));
+        res.status(200).send(success3("ConfigurationSuccess"));
       }
     );
   }
@@ -254316,7 +254257,7 @@ var init_updateUseMode = __esm({
         await utils_default.db("o_setting").where("key", "agentUseMode").update({
           value: agentUseMode
         });
-        res.status(200).send(success3("\u4FDD\u5B58\u8BBE\u7F6E\u6210\u529F"));
+        res.status(200).send(success3("SaveSettingsSuccess"));
       }
     );
   }
@@ -254343,9 +254284,9 @@ var init_clearData = __esm({
         }
         await db.raw("PRAGMA foreign_keys = ON");
         await initDB_default(db);
-        res.status(200).send(success3("\u6570\u636E\u5E93\u5DF2\u6E05\u7A7A\u5E76\u91CD\u65B0\u521D\u59CB\u5316"));
+        res.status(200).send(success3("Database cleared and re-initialized"));
       } catch (err) {
-        res.status(500).send(error50(err?.message || "\u6E05\u9664\u5931\u8D25"));
+        res.status(500).send(error50(err?.message || "Clear failed"));
       }
     });
   }
@@ -254364,19 +254305,19 @@ var init_clearTable = __esm({
       try {
         const { tableName } = req.body;
         if (!tableName || typeof tableName !== "string") {
-          return res.status(400).send(error50("\u8BF7\u63D0\u4F9B\u6709\u6548\u7684\u8868\u540D"));
+          return res.status(400).send(error50("please provideValidoftable"));
         }
         const tableExists = await db.raw(
           `SELECT name FROM sqlite_master WHERE type='table' AND name=?`,
           [tableName]
         );
         if (tableExists.length === 0) {
-          return res.status(400).send(error50("\u8868\u4E0D\u5B58\u5728"));
+          return res.status(400).send(error50("Table not found"));
         }
         await db.raw(`DELETE FROM "${tableName}"`);
-        res.status(200).send(success3(`\u8868 ${tableName} \u5DF2\u6E05\u7A7A`));
+        res.status(200).send(success3(`table ${tableName} cleared`));
       } catch (err) {
-        res.status(500).send(error50(err?.message || "\u6E05\u7A7A\u8868\u5931\u8D25"));
+        res.status(500).send(error50(err?.message || "Table clear failed"));
       }
     });
   }
@@ -254406,7 +254347,7 @@ var init_dbInfo = __esm({
         }
         res.status(200).send(success3(tableInfo));
       } catch (err) {
-        res.status(500).send(error50(err?.message || "\u83B7\u53D6\u6570\u636E\u5E93\u4FE1\u606F\u5931\u8D25"));
+        res.status(500).send(error50(err?.message || "getDatabase info retrieval failed"));
       }
     });
   }
@@ -254438,7 +254379,7 @@ var init_exportData = __esm({
         res.setHeader("Content-Disposition", `attachment; filename=toonflow-backup-${Date.now()}.json`);
         res.status(200).send(JSON.stringify(exportData, null, 2));
       } catch (err) {
-        res.status(500).send(error50(err?.message || "\u5BFC\u51FA\u5931\u8D25"));
+        res.status(500).send(error50(err?.message || "ExportFailed"));
       }
     });
   }
@@ -254458,7 +254399,7 @@ var init_importData = __esm({
       try {
         const { tables: importTables } = req.body;
         if (!importTables || typeof importTables !== "object") {
-          return res.status(400).send(error50("\u65E0\u6548\u7684\u5BFC\u5165\u6570\u636E\u683C\u5F0F"));
+          return res.status(400).send(error50("InvalidofImport data"));
         }
         const existingTables = await db.raw(
           `SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' AND name NOT LIKE 'knex_%'`
@@ -254484,9 +254425,9 @@ var init_importData = __esm({
           }
         }
         await db.raw("PRAGMA foreign_keys = ON");
-        res.status(200).send(success3("\u6570\u636E\u5E93\u5BFC\u5165\u6210\u529F"));
+        res.status(200).send(success3("Database import successful"));
       } catch (err) {
-        res.status(500).send(error50(err?.message || "\u5BFC\u5165\u5931\u8D25"));
+        res.status(500).send(error50(err?.message || "ImportFailed"));
       }
     });
   }
@@ -254529,7 +254470,7 @@ var init_updateSwitchAiDevTool = __esm({
         await utils_default.db("o_setting").where("key", "switchAiDevTool").update({
           value: switchAiDevTool
         });
-        res.status(200).send(success3("\u4FDD\u5B58\u8BBE\u7F6E\u6210\u529F"));
+        res.status(200).send(success3("SaveSettingsSuccess"));
       }
     );
   }
@@ -254555,7 +254496,7 @@ var init_openFolder = __esm({
       }),
       async (req, res) => {
         if (!isEletron()) {
-          return res.status(400).send(error50("\u4EC5\u652F\u6301\u5BA2\u6237\u7AEF\u6253\u5F00\u6587\u4EF6\u5939"));
+          return res.status(400).send(error50("openly supported in client: open folder"));
         }
         const { path: folderPath } = req.body;
         const platform = process.platform;
@@ -254565,7 +254506,7 @@ var init_openFolder = __esm({
           if (err) {
             return res.status(200).send(error50(err.message));
           }
-          res.status(200).send(success3("\u6253\u5F00\u6587\u4EF6\u5939\u6210\u529F"));
+          res.status(200).send(success3("Open folderSuccess"));
         });
       }
     );
@@ -254629,7 +254570,7 @@ var init_updateUserPwd = __esm({
           name: name28,
           password
         });
-        res.status(200).send(success3("\u4FDD\u5B58\u8BBE\u7F6E\u6210\u529F"));
+        res.status(200).send(success3("SaveSettingsSuccess"));
       }
     );
   }
@@ -254668,15 +254609,15 @@ var init_getMemory2 = __esm({
         "summaryLimit",
         "ragLimit",
         "deepRetrieveSummaryLimit",
-        "modelOnnxFile",
+        "modelopennxFile",
         "modelDtype"
       ]);
-      if (!settingData) return res.status(400).send(error50(`\u83B7\u53D6\u8BB0\u5FC6\u914D\u7F6E\u5931\u8D25`));
+      if (!settingData) return res.status(400).send(error50(`getMemory configuration failed`));
       const memoryObj = {};
       settingData.forEach((i) => {
         if (i.key && i.value) {
           let value = i.value;
-          if (i.key == "modelOnnxFile") {
+          if (i.key == "modelopennxFile") {
             value = JSON.parse(i.value);
           } else if (i.key != "modelDtype") {
             value = Number(value);
@@ -254709,11 +254650,11 @@ var init_sureMemory = __esm({
         summaryLimit: external_exports.number(),
         ragLimit: external_exports.number(),
         deepRetrieveSummaryLimit: external_exports.number(),
-        modelOnnxFile: external_exports.array(external_exports.string()),
+        modelopennxFile: external_exports.array(external_exports.string()),
         modelDtype: external_exports.string()
       }),
       async (req, res) => {
-        const { messagesPerSummary, shortTermLimit, summaryMaxLength, summaryLimit, ragLimit, deepRetrieveSummaryLimit, modelOnnxFile, modelDtype } = req.body;
+        const { messagesPerSummary, shortTermLimit, summaryMaxLength, summaryLimit, ragLimit, deepRetrieveSummaryLimit, modelopennxFile, modelDtype } = req.body;
         const upsert = async (key, value) => {
           const exists = await utils_default.db("o_setting").where("key", key).first();
           if (exists) {
@@ -254728,9 +254669,9 @@ var init_sureMemory = __esm({
         await upsert("summaryLimit", summaryLimit);
         await upsert("ragLimit", ragLimit);
         await upsert("deepRetrieveSummaryLimit", deepRetrieveSummaryLimit);
-        await upsert("modelOnnxFile", JSON.stringify(modelOnnxFile));
+        await upsert("modelopennxFile", JSON.stringify(modelopennxFile));
         await upsert("modelDtype", modelDtype);
-        res.status(200).send(success3("\u4FDD\u5B58\u8BBE\u7F6E\u6210\u529F"));
+        res.status(200).send(success3("SaveSettingsSuccess"));
       }
     );
   }
@@ -254760,10 +254701,10 @@ var init_bindingPrompt = __esm({
         const data = await utils_default.db("o_modelPrompt").where("model", model).andWhere("vendorId", vendorId).select("*").first();
         if (data) {
           await utils_default.db("o_modelPrompt").where("model", model).andWhere("vendorId", vendorId).update({ fileName, path: path32 });
-          res.status(200).send(success3("\u7ED1\u5B9A\u6210\u529F"));
+          res.status(200).send(success3("Binding successful"));
         } else {
           await utils_default.db("o_modelPrompt").insert({ vendorId, model, path: path32, fileName });
-          res.status(200).send(success3("\u7ED1\u5B9A\u6210\u529F"));
+          res.status(200).send(success3("Binding successful"));
         }
       }
     );
@@ -254794,15 +254735,15 @@ var init_deletePrompt = __esm({
         const resolvedRoot = import_path21.default.resolve(modelPromptRoot);
         const resolvedFile = import_path21.default.resolve(modelPromptRoot, filePath);
         if (!resolvedFile.startsWith(resolvedRoot + import_path21.default.sep)) {
-          return res.status(400).send(error50("\u975E\u6CD5\u8DEF\u5F84"));
+          return res.status(400).send(error50("Ge\xE7ersiz yol"));
         }
         try {
           await import_promises7.default.access(resolvedFile);
         } catch {
-          return res.status(404).send(error50("\u6587\u4EF6\u4E0D\u5B58\u5728"));
+          return res.status(404).send(error50("File not found"));
         }
         await import_promises7.default.unlink(resolvedFile);
-        res.status(200).send(success3("\u5220\u9664\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla silindi"));
       }
     );
   }
@@ -254820,7 +254761,7 @@ var init_getImageAndVideoModel = __esm({
     getImageAndVideoModel_default = router140.post("/", async (req, res) => {
       const dataList = await utils_default.db("o_vendorConfig").select("id").where("enable", 1);
       if (!dataList || dataList.length === 0) {
-        return res.status(404).send({ error: "\u6A21\u578B\u672A\u627E\u5230" });
+        return res.status(404).send({ error: "not found" });
       }
       const data = await Promise.all(
         dataList.map(async (item) => {
@@ -254905,7 +254846,7 @@ var init_savePrompt = __esm({
         await import_promises9.default.mkdir(dir, { recursive: true });
         const filePath = import_path23.default.join(dir, `${name28}.md`);
         await import_promises9.default.writeFile(filePath, data, "utf-8");
-        res.status(200).send(success3("\u4FDD\u5B58\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla kaydedildi"));
       }
     );
   }
@@ -254938,15 +254879,15 @@ var init_updatePrompt = __esm({
         const resolvedRoot = import_path24.default.resolve(modelPromptRoot);
         const resolvedFile = import_path24.default.resolve(filePath);
         if (!resolvedFile.startsWith(resolvedRoot + import_path24.default.sep)) {
-          return res.status(400).send(error50("\u975E\u6CD5\u8DEF\u5F84"));
+          return res.status(400).send(error50("Ge\xE7ersiz yol"));
         }
         try {
           await import_promises10.default.access(resolvedFile);
         } catch {
-          return res.status(404).send(error50("\u6587\u4EF6\u4E0D\u5B58\u5728"));
+          return res.status(404).send(error50("File not found"));
         }
         await import_promises10.default.writeFile(resolvedFile, data, "utf-8");
-        res.status(200).send(success3("\u66F4\u65B0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla g\xFCncellendi"));
       }
     );
   }
@@ -255027,7 +254968,7 @@ var init_getSkillContent = __esm({
         const skillsRoot = utils_default.getPath(["skills"]);
         const filePath = import_path25.default.join(skillsRoot, path32);
         if (!isPathInside(filePath, skillsRoot)) {
-          return res.status(400).send(error50("\u65E0\u6548\u7684\u8DEF\u5F84"));
+          return res.status(400).send(error50("InvalidofPath"));
         }
         const raw = await fs29.promises.readFile(filePath, "utf-8");
         res.status(200).send(success3(raw));
@@ -255082,10 +255023,10 @@ var init_saveSkillContent = __esm({
         const skillsRoot = utils_default.getPath(["skills"]);
         const filePath = import_path26.default.join(skillsRoot, path32);
         if (!isPathInside(filePath, skillsRoot)) {
-          return res.status(400).send(error50("\u65E0\u6548\u7684\u8DEF\u5F84"));
+          return res.status(400).send(error50("InvalidofPath"));
         }
         if (!fs30.existsSync(filePath)) {
-          return res.status(400).send(error50("\u6587\u4EF6\u4E0D\u5B58\u5728"));
+          return res.status(400).send(error50("File not found"));
         }
         const raw = await fs30.promises.writeFile(filePath, content, "utf-8");
         res.status(200).send(success3(raw));
@@ -255166,11 +255107,11 @@ var init_addVendor = __esm({
         const { tsCode } = req.body;
         const jsCode = (0, import_sucrase4.transform)(tsCode, { transforms: ["typescript"] }).code;
         const exports2 = utils_default.vm(jsCode);
-        if (!exports2) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FA\u5BF9\u8C61"));
-        if (!exports2.textRequest) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FA\u6587\u672C\u8BF7\u6C42\u5BF9\u8C61"));
-        if (!exports2.imageRequest) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FA\u56FE\u50CF\u8BF7\u6C42\u5BF9\u8C61"));
-        if (!exports2.videoRequest) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FA\u89C6\u9891\u8BF7\u6C42\u5BF9\u8C61"));
-        if (!exports2.vendor) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FAvendor\u5BF9\u8C61"));
+        if (!exports2) return res.status(400).send(success3("ScriptfileExport"));
+        if (!exports2.textRequest) return res.status(400).send(success3("ScriptfileExporttext"));
+        if (!exports2.imageRequest) return res.status(400).send(success3("ScriptfileExportimage"));
+        if (!exports2.videoRequest) return res.status(400).send(success3("ScriptfileExport"));
+        if (!exports2.vendor) return res.status(400).send(success3("Script file must export vendor object"));
         const vendor = exports2.vendor;
         const result = vendorConfigSchema.safeParse(vendor);
         if (!result.success) {
@@ -255184,17 +255125,17 @@ var init_addVendor = __esm({
                 )
               ];
               if (unionDetails.length > 0) {
-                detail = `${issue3.message}\uFF08${unionDetails.join("\uFF1B")}\uFF09`;
+                detail = `${issue3.message}${unionDetails.join("")}`;
               }
             }
             return `${index + 1}. ${path32}: ${detail}`;
           });
-          return res.status(400).send(error50(`vendor\u914D\u7F6E\u6821\u9A8C\u5931\u8D25\uFF0C\u5171 ${issueLines.length} \u5904:
+          return res.status(400).send(error50(`vendorConfiguration validation failed ${issueLines.length} :
 ${issueLines.join("\n")}`));
         }
-        if (vendor.id.includes(":")) return res.status(400).send(error50("id\u4E0D\u80FD\u5305\u542B\u82F1\u6587\u5192\u53F7"));
+        if (vendor.id.includes(":")) return res.status(400).send(error50("idcannot contain"));
         const data = await utils_default.db("o_vendorConfig").where("id", vendor.id).first();
-        if (data) return res.status(500).send(error50("\u4F9B\u5E94\u5546id\u5DF2\u5B58\u5728"));
+        if (data) return res.status(500).send(error50("Vendoridalreadyexists"));
         const [id] = await utils_default.db("o_vendorConfig").insert({
           id: vendor.id,
           inputValues: JSON.stringify(vendor.inputValues ?? {}),
@@ -255266,7 +255207,7 @@ var init_addVendorModel = __esm({
             models: JSON.stringify(existingModels)
           });
         }
-        res.status(200).send(success3("\u66F4\u65B0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla g\xFCncellendi"));
       }
     );
   }
@@ -255298,7 +255239,7 @@ var init_deleteVendor = __esm({
           vendorId: null
         });
         import_fs16.default.rmSync(import_path27.default.join(utils_default.getPath("vendor"), `${id}.ts`), { recursive: true, force: true });
-        res.status(200).send(success3("\u5220\u9664\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla silindi"));
       }
     );
   }
@@ -255327,14 +255268,14 @@ var init_delVendorModel = __esm({
         if (models?.models) {
           const existingModels = JSON.parse(models.models);
           if (!existingModels.some((model) => model.modelName === modelName)) {
-            return res.status(400).send(error50("\u57FA\u672C\u6A21\u578B\u4E0D\u5141\u8BB8\u5220\u9664"));
+            return res.status(400).send(error50("Base model deletion not allowed"));
           }
           const updatedModels = existingModels.filter((model) => model.modelName !== modelName);
           await utils_default.db("o_vendorConfig").where("id", id).update({
             models: JSON.stringify(updatedModels)
           });
         }
-        res.status(200).send(success3("\u66F4\u65B0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla g\xFCncellendi"));
       }
     );
   }
@@ -255360,7 +255301,7 @@ var init_enableVendor = __esm({
       async (req, res) => {
         const { id, enable } = req.body;
         await utils_default.db("o_vendorConfig").where("id", id).update({ enable });
-        res.status(200).send(success3("\u66F4\u65B0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla g\xFCncellendi"));
       }
     );
   }
@@ -255455,20 +255396,20 @@ var init_modelTest = __esm({
             image: {
               fnName: "imageRequest",
               modelData: {
-                prompt: "\u4E00\u5F2016:9\u6BD4\u4F8B\u7684\u56FE\u7247\uFF0C\u5B8C\u7F8E\u7B49\u5206\u4E3A2x2\u56DB\u5BAB\u683C\u5E03\u5C40\uFF0C\u5404\u533A\u57DF\u65E0\u7F1D\u8854\u63A5\uFF1A\n\u5DE6\u4E0A\u5BAB\u683C\uFF1A\u4E00\u53EA\u53EF\u7231\u7684\u732B\uFF0C\u6BDB\u53D1\u84EC\u677E\uFF0C\u773C\u775B\u660E\u4EAE\uFF0C\u59FF\u6001\u4FCF\u76AE\n\u53F3\u4E0A\u5BAB\u683C\uFF1A\u4E00\u53EA\u53CB\u5584\u7684\u72D7\uFF0C\u91D1\u6BDB\u72AC\uFF0C\u8868\u60C5\u6109\u60A6\uFF0C\u6447\u7740\u5C3E\u5DF4\n\u5DE6\u4E0B\u5BAB\u683C\uFF1A\u4E00\u5934\u5065\u58EE\u7684\u725B\uFF0C\u7530\u56ED\u80CC\u666F\uFF0C\u76EE\u5149\u6E29\u548C\uFF0C\u76AE\u6BDB\u5149\u6CFD\n\u53F3\u4E0B\u5BAB\u683C\uFF1A\u4E00\u5339\u9A8F\u9A6C\uFF0C\u59FF\u6001\u4F18\u96C5\uFF0C\u9B03\u6BDB\u98D8\u9038\uFF0C\u808C\u8089\u5065\u7F8E\n\u98CE\u683C\u8981\u6C42\uFF1A\u56DB\u4E2A\u5BAB\u683C\u98CE\u683C\u7EDF\u4E00\uFF0C\u8272\u5F69\u9C9C\u8273\u9971\u548C\uFF0C\u9AD8\u6E05\u753B\u8D28\uFF0C\u7EC6\u8282\u6E05\u6670\u9510\u5229\uFF0C\u4E13\u4E1A\u63D2\u753B\u98CE\u683C\uFF0C\u7EBF\u6761\u5E72\u51C0\uFF0C\u7EDF\u4E00\u7684\u5DE6\u4E0A\u65B9\u5149\u6E90\uFF0C\u67D4\u548C\u9634\u5F71\uFF0C\u548C\u8C10\u914D\u8272\uFF0C\u5361\u901A/\u534A\u5199\u5B9E\u98CE\u683C\uFF0C\u5BAB\u683C\u95F4\u7528\u767D\u8272\u6216\u6D45\u7070\u7EC6\u7EBF\u5206\u9694",
-                //
+                prompt: "16:9ratioofimage2x2no\nof\noftable\nBottom-left grid: a sturdy bull, pastoral background, gentle gaze, glossy coat\nBottom-right grid: a majestic horse, elegant pose, flowing mane, muscular build\nandart styleitemsofandand/",
+                //imagePrompt
                 referenceList: [],
-                //
+                //inputimagePrompt
                 size: "1K",
-                // 
+                // image
                 aspectRatio: "16:9"
               }
             },
             video: { fnName: "videoRequest", modelData: {} }
           };
           const vendorConfigData = await utils_default.db("o_vendorConfig").where("id", id).first();
-          if (!vendorConfigData) return res.status(500).send(error50("\u672A\u627E\u5230\u8BE5\u4F9B\u5E94\u5546\u914D\u7F6E"));
-          if (!vendorConfigData.models) return res.status(500).send(error50("\u672A\u627E\u5230\u6A21\u578B\u5217\u8868"));
+          if (!vendorConfigData) return res.status(500).send(error50("Vendor configuration not found"));
+          if (!vendorConfigData.models) return res.status(500).send(error50("not foundmodel list"));
           const modelList = await utils_default.vendor.getModelList(vendorConfigData.id);
           const selectedModel = modelList.find((i) => i.modelName == modelName);
           if (type == "video") {
@@ -255500,14 +255441,14 @@ var init_modelTest = __esm({
           });
           if (type == "text") {
             const { textStream } = await utils_default.Ai.Text(`${id}:${modelName}`).stream({
-              prompt: "\u8BF7\u8C03\u7528\u5DE5\u5177\u83B7\u53D6\u706B\u661F\u7684\u5929\u6C14\uFF0C\u5E76\u56DE\u7B54\u6211\u591A\u5C11\u6C14\u6E29",
+              prompt: "Please call the tool to get Mars weather and tell me the temperature",
               tools: { getWeatherTool }
             });
             let fullResponse = "";
             for await (const chunk of textStream) {
               fullResponse += chunk;
             }
-            if (!fullResponse) return res.status(500).send(error50("\u6A21\u578B\u672A\u8FD4\u56DE\u7ED3\u679C"));
+            if (!fullResponse) return res.status(500).send(error50("Model did not return result"));
             res.status(200).send(success3(fullResponse));
           } else {
             const aiTypeFn = {
@@ -255555,14 +255496,14 @@ var init_imageTest = __esm({
         const { modelName, imageBase64, id, prompt } = req.body;
         try {
           const vendorConfigData = await utils_default.db("o_vendorConfig").where("id", id).first();
-          if (!vendorConfigData) return res.status(500).send(error50("\u672A\u627E\u5230\u8BE5\u4F9B\u5E94\u5546\u914D\u7F6E"));
-          if (!vendorConfigData.models) return res.status(500).send(error50("\u672A\u627E\u5230\u6A21\u578B\u5217\u8868"));
+          if (!vendorConfigData) return res.status(500).send(error50("Vendor configuration not found"));
+          if (!vendorConfigData.models) return res.status(500).send(error50("not foundmodel list"));
           const reqFn = await utils_default.Ai.Image(`${id}:${modelName}`).run({
             prompt,
             referenceList: [{ type: "image", base64: imageBase64 }],
-            //
+            //inputimagePrompt
             size: "1K",
-            // 
+            // image
             aspectRatio: "16:9"
           });
           await reqFn.save("testImage.jpg");
@@ -255607,8 +255548,8 @@ var init_textTest = __esm({
         const { modelName, messages, id } = req.body;
         try {
           const vendorConfigData = await utils_default.db("o_vendorConfig").where("id", id).first();
-          if (!vendorConfigData) return res.status(500).send(error50("\u672A\u627E\u5230\u8BE5\u4F9B\u5E94\u5546\u914D\u7F6E"));
-          if (!vendorConfigData.models) return res.status(500).send(error50("\u672A\u627E\u5230\u6A21\u578B\u5217\u8868"));
+          if (!vendorConfigData) return res.status(500).send(error50("Vendor configuration not found"));
+          if (!vendorConfigData.models) return res.status(500).send(error50("not foundmodel list"));
           const modelList = await utils_default.vendor.getModelList(vendorConfigData.id);
           const getWeatherTool = tool({
             description: "Get the weather in a location",
@@ -255629,7 +255570,7 @@ var init_textTest = __esm({
             tools: { getWeatherTool }
           });
           console.log("%c Line:46 \u{1F350} data", "background:#6ec1c2", data);
-          if (!data) return res.status(500).send(error50("\u6A21\u578B\u672A\u8FD4\u56DE\u7ED3\u679C"));
+          if (!data) return res.status(500).send(error50("Model did not return result"));
           res.status(200).send(success3({ thinking: data.reasoningText, content: data.text }));
         } catch (err) {
           console.error(err);
@@ -255683,8 +255624,8 @@ var init_videoTest = __esm({
         const { modelName, id, mode, prompt, images, videos, audios } = req.body;
         try {
           const vendorConfigData = await utils_default.db("o_vendorConfig").where("id", id).first();
-          if (!vendorConfigData) return res.status(500).send(error50("\u672A\u627E\u5230\u8BE5\u4F9B\u5E94\u5546\u914D\u7F6E"));
-          if (!vendorConfigData.models) return res.status(500).send(error50("\u672A\u627E\u5230\u6A21\u578B\u5217\u8868"));
+          if (!vendorConfigData) return res.status(500).send(error50("Vendor configuration not found"));
+          if (!vendorConfigData.models) return res.status(500).send(error50("not foundmodel list"));
           const modelList = await utils_default.vendor.getModelList(vendorConfigData.id);
           const selectedModel = modelList.find((i) => i.modelName == modelName);
           let modeData = [];
@@ -255793,16 +255734,16 @@ var init_updateCode = __esm({
           const { tsCode, id } = req.body;
           const jsCode = (0, import_sucrase5.transform)(tsCode, { transforms: ["typescript"] }).code;
           const exports2 = utils_default.vm(jsCode);
-          if (!exports2) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FA\u5BF9\u8C61"));
-          if (!exports2.textRequest) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FA\u6587\u672C\u8BF7\u6C42\u5BF9\u8C61"));
-          if (!exports2.imageRequest) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FA\u56FE\u50CF\u8BF7\u6C42\u5BF9\u8C61"));
-          if (!exports2.videoRequest) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FA\u89C6\u9891\u8BF7\u6C42\u5BF9\u8C61"));
-          if (!exports2.vendor) return res.status(400).send(success3("\u811A\u672C\u6587\u4EF6\u5FC5\u987B\u5BFC\u51FAvendor\u5BF9\u8C61"));
+          if (!exports2) return res.status(400).send(success3("ScriptfileExport"));
+          if (!exports2.textRequest) return res.status(400).send(success3("ScriptfileExporttext"));
+          if (!exports2.imageRequest) return res.status(400).send(success3("ScriptfileExportimage"));
+          if (!exports2.videoRequest) return res.status(400).send(success3("ScriptfileExport"));
+          if (!exports2.vendor) return res.status(400).send(success3("Script file must export vendor object"));
           const vendor = exports2.vendor;
           const result = vendorConfigSchema2.safeParse(vendor);
           if (!result.success) {
             const errorMsg = result.error.issues.map((e) => `${e.path.join(".")}: ${e.message}`).join("; ");
-            return res.status(400).send(error50(`vendor\u914D\u7F6E\u6821\u9A8C\u5931\u8D25: ${errorMsg}`));
+            return res.status(400).send(error50(`vendorConfiguration validation failed: ${errorMsg}`));
           }
           await utils_default.db("o_vendorConfig").where("id", id).update({
             models: JSON.stringify(vendor.models ?? [])
@@ -255811,7 +255752,7 @@ var init_updateCode = __esm({
           res.status(200).send(success3(result.data));
         } catch (err) {
           console.log(err);
-          res.status(400).send(error50(serializeError(err).message || "\u672A\u77E5\u9519\u8BEF"));
+          res.status(400).send(error50(serializeError(err).message || "UnknownError"));
         }
       }
     );
@@ -255840,7 +255781,7 @@ var init_updateVendorInputs = __esm({
         await utils_default.db("o_vendorConfig").where("id", id).update({
           inputValues: JSON.stringify(inputValues)
         });
-        res.status(200).send(success3("\u66F4\u65B0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla g\xFCncellendi"));
       }
     );
   }
@@ -255909,7 +255850,7 @@ var init_upVendorModel = __esm({
             models: JSON.stringify(existingModels)
           });
         }
-        res.status(200).send(success3("\u66F4\u65B0\u6210\u529F"));
+        res.status(200).send(success3("Ba\u015Far\u0131yla g\xFCncellendi"));
       }
     );
   }
@@ -256402,29 +256343,29 @@ module.exports = __toCommonJS(app_exports);
 // src/err.ts
 init_serialize_error();
 process.on("unhandledRejection", (reason, promise3) => {
-  console.error("[\u672A\u5904\u7406\u7684 Promise \u62D2\u7EDD]");
+  console.error("[Unhandled Promise rejection]");
   if (reason instanceof Error) {
-    console.error("\u9519\u8BEF\u540D\u79F0:", reason.name);
-    console.error("\u9519\u8BEF\u6D88\u606F:", reason.message);
-    console.error("\u5806\u6808\u4FE1\u606F:", reason.stack);
-    console.error("\u5E8F\u5217\u5316\u8BE6\u60C5:", JSON.stringify(serializeError(reason), null, 2));
+    console.error("Error name:", reason.name);
+    console.error("Error message:", reason.message);
+    console.error("Stack trace:", reason.stack);
+    console.error("Serialized details:", JSON.stringify(serializeError(reason), null, 2));
   } else {
-    console.error("\u539F\u56E0:", reason);
-    console.error("\u7C7B\u578B:", typeof reason);
+    console.error("reason:", reason);
+    console.error("Type:", typeof reason);
     try {
       console.error("JSON:", JSON.stringify(reason, null, 2));
     } catch {
-      console.error("(\u65E0\u6CD5\u5E8F\u5217\u5316)");
+      console.error("(cannot serialize)");
     }
   }
   console.error("Promise:", promise3);
 });
 process.on("uncaughtException", (error73) => {
-  console.error("[\u672A\u6355\u83B7\u7684\u5F02\u5E38]");
-  console.error("\u9519\u8BEF\u540D\u79F0:", error73.name);
-  console.error("\u9519\u8BEF\u6D88\u606F:", error73.message);
-  console.error("\u5806\u6808\u4FE1\u606F:", error73.stack);
-  console.error("\u5E8F\u5217\u5316\u8BE6\u60C5:", JSON.stringify(serializeError(error73), null, 2));
+  console.error("[Uncaught Exception]");
+  console.error("Error name:", error73.name);
+  console.error("Error message:", error73.message);
+  console.error("Stack trace:", error73.stack);
+  console.error("Serialized details:", JSON.stringify(serializeError(error73), null, 2));
 });
 
 // src/env.ts
@@ -256438,7 +256379,7 @@ var env = process.env.NODE_ENV;
 if (!env) {
   if (isElectron) process.env.NODE_ENV = "prod";
   else process.env.NODE_ENV = "dev";
-  console.log(`[\u73AF\u5883\u53D8\u91CF\uFF1A${process.env.NODE_ENV}]`);
+  console.log(`[Environment: ${process.env.NODE_ENV}]`);
 }
 
 // src/app.ts
@@ -256495,7 +256436,7 @@ import { Express } from "express";
   content += `export default async (app: Express) => {
 `;
   for (const { routePath, varName } of routeModulePairs) {
-    content += `  app.use("/api${routePath}", ${varName});
+    content += ` app.use("/api${routePath}", ${varName});
 `;
   }
   content += `}
@@ -256537,17 +256478,17 @@ init_dist22();
 init_zod();
 var DEFAULTS = {
   messagesPerSummary: 3,
-  // messagesummary
+  // itemsmessagesummary
   summaryMaxLength: 500,
   // summary
   shortTermLimit: 5,
-  // get()message
+  // get()returnofmessageitems
   summaryLimit: 10,
-  // get()summary
+  // get()returnofsummaryitems
   ragLimit: 3,
-  // get()message
+  // get()Searchreturnofmessageitems
   deepRetrieveSummaryLimit: 5
-  // deepRetrieve()summary
+  // deepRetrieve()vector retrievalsummaryofitems
 };
 function vectorSearch(rows, queryEmbedding, limit) {
   return rows.map((row) => {
@@ -256565,7 +256506,7 @@ var Memory = class {
   async generateSummary(contents) {
     const { summaryMaxLength } = await this.getConfigData({ summaryMaxLength: DEFAULTS.summaryMaxLength });
     const { text: text2 } = await utils_default.Ai.Text(this.agentType).invoke({
-      system: `\u4F60\u662F\u4E00\u4E2A\u8BB0\u5FC6\u538B\u7F29\u52A9\u624B\u3002\u8BF7\u5C06\u4EE5\u4E0B\u591A\u6761\u8BB0\u5FC6\u5185\u5BB9\u538B\u7F29\u4E3A\u4E00\u6BB5\u7B80\u6D01\u7684\u6458\u8981\uFF0C\u4E0D\u8D85\u8FC7${summaryMaxLength}\u4E2A\u5B57\u7B26\u3002\u53EA\u8F93\u51FA\u6458\u8981\u5185\u5BB9\uFF0C\u4E0D\u8981\u52A0\u4EFB\u4F55\u524D\u7F00\u6216\u89E3\u91CA\u3002`,
+      system: `You are a memory compression assistant. Please compress the following memory entries into a concise summary, no more than ${summaryMaxLength} characters. Output only the summary content, without any prefix or explanation.`,
       messages: [{ role: "user", content: contents.map((c, i) => `${i + 1}. ${c}`).join("\n") }]
     });
     return text2.slice(0, Number(summaryMaxLength));
@@ -256573,10 +256514,10 @@ var Memory = class {
   async judgeSummaryRelevance(keyword, summaries) {
     const list2 = summaries.map((s) => `[${s.id}] ${s.content}`).join("\n");
     const { text: text2 } = await utils_default.Ai.Text(this.agentType).invoke({
-      system: '\u4F60\u662F\u4E00\u4E2A\u4FE1\u606F\u68C0\u7D22\u52A9\u624B\u3002\u7528\u6237\u4F1A\u7ED9\u4F60\u4E00\u4E2A\u5173\u952E\u8BCD\u548C\u4E00\u7EC4\u6458\u8981\uFF0C\u8BF7\u5224\u65AD\u54EA\u4E9B\u6458\u8981\u53EF\u80FD\u5305\u542B\u4E0E\u5173\u952E\u8BCD\u76F8\u5173\u7684\u8BE6\u7EC6\u4FE1\u606F\u3002\u53EA\u8FD4\u56DE\u76F8\u5173\u6458\u8981\u7684id\u5217\u8868\uFF0C\u7528JSON\u6570\u7EC4\u683C\u5F0F\uFF0C\u4F8B\u5982 ["id1","id2"]\u3002\u4E0D\u8981\u89E3\u91CA\u3002',
-      messages: [{ role: "user", content: `\u5173\u952E\u8BCD: ${keyword}
+      system: 'You are an information retrieval assistant. The user will give you a keyword and a set of summaries. Determine which summaries may contain detailed information related to the keyword. Return only the list of related summary IDs in JSON array format, e.g. ["id1","id2"]. Do not explain.',
+      messages: [{ role: "user", content: `Keywords: ${keyword}
 
-\u6458\u8981\u5217\u8868:
+Summary list:
 ${list2}` }]
     });
     try {
@@ -256686,15 +256627,15 @@ ${list2}` }]
   getTools() {
     return {
       deepRetrieve: tool({
-        description: "\u6DF1\u5EA6\u68C0\u7D22\u8BB0\u5FC6\uFF1A\u5F53\u4F60\u9700\u8981\u56DE\u5FC6\u4E0E\u67D0\u4E2A\u5173\u952E\u8BCD\u76F8\u5173\u7684\u8BE6\u7EC6\u5386\u53F2\u4FE1\u606F\u65F6\u4F7F\u7528\u6B64\u5DE5\u5177",
+        description: "youneedrelatedkeywordsrelatedofInformationwhenusetool",
         inputSchema: jsonSchema(
           external_exports.object({
-            keyword: external_exports.string().describe("\u8981\u68C0\u7D22\u7684\u5173\u952E\u8BCD")
+            keyword: external_exports.string().describe("ofrelatedkeywords")
           }).toJSONSchema()
         ),
         execute: async ({ keyword }) => {
           const results = await this.deepRetrieve(keyword);
-          if (results.length === 0) return { found: false, message: "\u672A\u627E\u5230\u76F8\u5173\u8BB0\u5FC6" };
+          if (results.length === 0) return { found: false, message: "not foundrelated" };
           return { found: true, memories: results.map((r) => r.content) };
         }
       })
@@ -256721,7 +256662,7 @@ function ensureNonEmptyBody(body, fallback) {
 function parseFrontmatter(content) {
   const match = content.match(/^\uFEFF?---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*(?:\r?\n|$)/);
   if (!match?.[1]) {
-    throw new Error(`\u6280\u80FD\u6587\u4EF6\u7F3A\u5C11\u6709\u6548\u7684 frontmatter\uFF0C\u786E\u4FDD\u4EE5 --- \u5305\u88F9\u5E76\u5305\u542B name \u548C description \u5B57\u6BB5\u3002${content}`);
+    throw new Error(`fileMissingValidof frontmatterensure starts with --- name and description field${content}`);
   }
   const result = {};
   const lines = match[1].split(/\r?\n/);
@@ -256768,7 +256709,7 @@ function parseFrontmatter(content) {
     result[key] = unquoted;
   }
   if (!result.name || !result.description) {
-    throw new Error(`\u6280\u80FD\u6587\u4EF6\u7F3A\u5C11\u5FC5\u8981\u5B57\u6BB5: name \u6216 description\uFF0C\u786E\u4FDD frontmatter \u5305\u542B\u8FD9\u4E24\u4E2A\u5B57\u6BB5\u3002${content}`);
+    throw new Error(`fileMissingfield: name descriptionensure frontmatter field${content}`);
   }
   return { name: result.name, description: result.description };
 }
@@ -256779,38 +256720,38 @@ function createSkillTools(skills, skillPaths, rootDir = getPath_default("skills"
   const skillMap = new Map(skillPaths.mainSkill.map((s) => [s.name, s]));
   return {
     activate_skill: tool({
-      description: `\u6FC0\u6D3B\u4E00\u4E2A\u6280\u80FD\uFF0C\u52A0\u8F7D\u5176\u5B8C\u6574\u6307\u4EE4\u548C\u6346\u7ED1\u8D44\u6E90\u5217\u8868\u5230\u4E0A\u4E0B\u6587\u3002\u53EF\u7528\u6280\u80FD\uFF1A${skillNames.join(", ")}`,
+      description: `andresourcelistunder${skillNames.join(", ")}`,
       inputSchema: jsonSchema(
         external_exports.object({
-          name: external_exports.enum(skillNames).describe("\u8981\u6FC0\u6D3B\u7684\u6280\u80FD\u540D\u79F0")
+          name: external_exports.enum(skillNames).describe("ofName")
         }).toJSONSchema()
       ),
       execute: async ({ name: name28 }) => {
         if (activated.has(name28)) {
-          console.log(`\u26A1[\u4E3B\u6280\u80FD] \u2139\uFE0F \u6280\u80FD "${name28}" \u5DF2\u6FC0\u6D3B\uFF0C\u8DF3\u8FC7\u91CD\u590D\u6CE8\u5165`);
-          return { alreadyActive: true, message: `\u6280\u80FD "${name28}" \u5DF2\u6FC0\u6D3B\uFF0C\u65E0\u9700\u91CD\u590D\u52A0\u8F7D` };
+          console.log(`\u26A1[main skill] \u2139\uFE0F "${name28}" already`);
+          return { alreadyActive: true, message: ` "${name28}" alreadyno` };
         }
         const matched = skillMap.get(name28);
-        if (!matched) return { error: `\u672A\u627E\u5230\u6280\u80FD "${name28}"` };
+        if (!matched) return { error: `not found "${name28}"` };
         let raw = "";
         try {
           raw = await fs10.promises.readFile(matched.path, "utf-8");
-          console.log(`\u26A1[\u4E3B\u6280\u80FD] \u2713 \u5DF2\u8BFB\u53D6\u4E3B\u6280\u80FD\u6587\u4EF6\uFF1A ${matched.path}\uFF08${raw.length} \u5B57\u7B26\uFF09`);
+          console.log(`\u26A1[main skill] \u2713 alreadyreadmain skillfile ${matched.path}${raw.length} `);
         } catch (error73) {
-          console.log(`\u26A1[\u4E3B\u6280\u80FD] \u2717 \u8BFB\u53D6\u5931\u8D25\uFF1A\u672A\u627E\u5230\u6587\u4EF6 "${matched.path}"`);
+          console.log(`\u26A1[main skill] \u2717 readFailednot foundfile "${matched.path}"`);
         }
         activated.add(name28);
-        console.log(`\u26A1[\u4E3B\u6280\u80FD] \u2713 \u6280\u80FD "${name28}" \u5DF2\u6FC0\u6D3B`);
-        const body = ensureNonEmptyBody(raw.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, ""), "\u8BE5\u6280\u80FD\u6587\u4EF6\u65E0\u6B63\u6587\u5185\u5BB9\u3002");
+        console.log(`\u26A1[main skill] \u2713 "${name28}" already`);
+        const body = ensureNonEmptyBody(raw.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, ""), "This skill file has no body content.");
         let content = "";
         content = `<skill_content name="${name28}">
 `;
         content += body + "\n\n";
-        content += "\u4F7F\u7528 read_skill_file \u5DE5\u5177\u8BFB\u53D6\u8D44\u6E90\u6587\u4EF6\u3002\n";
+        content += "use read_skill_file toolreadresourcefile\n";
         if (skillPaths.secondarySkills.length > 0) {
           content += "\n<skill_resources>\n";
           for (const path32 of skillPaths.secondarySkills) {
-            content += `  <file>${path32}</file>
+            content += ` <file>${path32}</file>
 `;
           }
           content += "</skill_resources>\n";
@@ -256820,41 +256761,41 @@ function createSkillTools(skills, skillPaths, rootDir = getPath_default("skills"
       }
     }),
     read_skill_file: tool({
-      description: "\u8BFB\u53D6\u5DF2\u6FC0\u6D3B\u6280\u80FD\u76EE\u5F55\u4E0B\u7684\u8D44\u6E90\u6587\u4EF6\u3002\u4F20\u5165 activate_skill \u8FD4\u56DE\u7684 skill_resources \u4E2D\u7684\u6587\u4EF6\u8DEF\u5F84\u3002",
+      description: "readalreadydirectoryresources underfile activate_skill returnof skill_resources offilePath",
       inputSchema: jsonSchema(
         external_exports.object({
-          filePath: external_exports.string().describe("\u8D44\u6E90\u6587\u4EF6\u7684\u76F8\u5BF9\u8DEF\u5F84\uFF0C\u6765\u81EA activate_skill \u8FD4\u56DE\u7684 skill_resources")
+          filePath: external_exports.string().describe("resourcefilerelativePath activate_skill returnof skill_resources")
         }).toJSONSchema()
       ),
       execute: async ({ filePath }) => {
         const normalizedInputPath = toUnixPath(filePath).trim();
         if (!normalizedInputPath) {
-          console.log(`\u{1F4D6}[\u6280\u6CD5\u6587\u4EF6] \u2717 filePath \u4E0D\u80FD\u4E3A\u7A7A`);
-          return { error: "filePath \u4E0D\u80FD\u4E3A\u7A7A" };
+          console.log(`\u{1F4D6}[file] \u2717 filePath Cannot be empty`);
+          return { error: "filePath Cannot be empty" };
         }
         const fullPath = import_path9.default.resolve(import_path9.default.join(skillsRootDir, normalizedInputPath));
         if (!(fullPath === skillsRootDir || isPathInside(fullPath, skillsRootDir))) {
-          console.log(`\u{1F4D6}[\u6280\u6CD5\u6587\u4EF6] \u2717 \u8DEF\u5F84\u8D8A\u754C\u5DF2\u62E6\u622A\uFF1A"${filePath}" \u8D85\u51FA\u6280\u80FD\u76EE\u5F55\u8303\u56F4`);
+          console.log(`\u{1F4D6}[file] \u2717 Pathalready"${filePath}" directory`);
           return { error: "Access denied: path is outside skill directory" };
         }
         let body = "";
         try {
           body = await fs10.promises.readFile(fullPath, "utf-8");
-          console.log(`\u{1F4D6}[\u6280\u6CD5\u6587\u4EF6] \u2713 \u5DF2\u8BFB\u53D6\u6587\u4EF6\uFF1A ${filePath}\uFF08${body.length} \u5B57\u7B26\uFF09`);
+          console.log(`\u{1F4D6}[file] \u2713 alreadyreadfile ${filePath}${body.length} `);
         } catch {
-          console.log(`\u{1F4D6}[\u6280\u6CD5\u6587\u4EF6] \u2717 \u8BFB\u53D6\u5931\u8D25\uFF1A\u672A\u627E\u5230\u6587\u4EF6 "${filePath}"`);
+          console.log(`\u{1F4D6}[file] \u2717 readFailednot foundfile "${filePath}"`);
           return { error: `File not found: ${filePath}` };
         }
-        const safeBody = ensureNonEmptyBody(body, "\u8BE5\u8D44\u6E90\u6587\u4EF6\u4E3A\u7A7A\u3002");
+        const safeBody = ensureNonEmptyBody(body, "resourcefile");
         let content = "";
         content = `<skill_content>
 `;
         content += safeBody + "\n\n";
-        content += "\u53EF\u4EE5\u4F7F\u7528 read_skill_file \u5DE5\u5177\u8BFB\u53D6\u8D44\u6E90\u6587\u4EF6\u3002\n";
+        content += "use read_skill_file toolreadresourcefile\n";
         if (skillPaths.tertiarySkills.length > 0) {
           content += "\n<skill_resources>\n";
           for (const path32 of skillPaths.tertiarySkills) {
-            content += `  <file>${path32}</file>
+            content += ` <file>${path32}</file>
 `;
           }
           content += "</skill_resources>\n";
@@ -256879,49 +256820,49 @@ init_dist22();
 init_zod();
 init_utils3();
 var deriveAssetSchema = external_exports.object({
-  id: external_exports.number().describe("\u884D\u751F\u8D44\u4EA7ID,\u5982\u679C\u65B0\u589E\u5219\u4E3A\u7A7A"),
-  assetsId: external_exports.number().describe("\u5173\u8054\u7684\u8D44\u4EA7ID"),
-  prompt: external_exports.string().describe("\u751F\u6210\u63D0\u793A\u8BCD"),
-  name: external_exports.string().describe("\u884D\u751F\u8D44\u4EA7\u540D\u79F0"),
-  desc: external_exports.string().describe("\u884D\u751F\u8D44\u4EA7\u63CF\u8FF0"),
-  src: external_exports.string().nullable().describe("\u884D\u751F\u8D44\u4EA7\u8D44\u6E90\u8DEF\u5F84"),
-  state: external_exports.enum(["\u672A\u751F\u6210", "\u751F\u6210\u4E2D", "\u5DF2\u5B8C\u6210", "\u751F\u6210\u5931\u8D25"]).describe("\u884D\u751F\u8D44\u4EA7\u751F\u6210\u72B6\u6001"),
-  type: external_exports.enum(["role", "tool", "scene", "clip"]).describe("\u884D\u751F\u8D44\u4EA7\u7C7B\u578B")
+  id: external_exports.number().describe("derivedAssetID,add new"),
+  assetsId: external_exports.number().describe("relatedofAssetID"),
+  prompt: external_exports.string().describe("Generate prompt"),
+  name: external_exports.string().describe("derivedAssetName"),
+  desc: external_exports.string().describe("derivedasset description"),
+  src: external_exports.string().nullable().describe("derivedAssetresourcePath"),
+  state: external_exports.enum(["not generated", "Generating", "Completed", "Generation failed"]).describe("derivedAsset generationStatus"),
+  type: external_exports.enum(["role", "tool", "scene", "clip"]).describe("derivedAssetType")
 });
 var assetItemSchema = external_exports.object({
-  id: external_exports.number().describe("\u8D44\u4EA7\u552F\u4E00\u6807\u8BC6"),
-  name: external_exports.string().describe("\u8D44\u4EA7\u540D\u79F0"),
-  type: external_exports.enum(["role", "tool", "scene", "clip"]).describe("\u8D44\u4EA7\u7C7B\u578B"),
-  prompt: external_exports.string().describe("\u751F\u6210\u63D0\u793A\u8BCD"),
-  desc: external_exports.string().describe("\u8D44\u4EA7\u63CF\u8FF0"),
-  derive: external_exports.array(deriveAssetSchema).describe("\u884D\u751F\u8D44\u4EA7\u5217\u8868")
+  id: external_exports.number().describe("Asset"),
+  name: external_exports.string().describe("AssetName"),
+  type: external_exports.enum(["role", "tool", "scene", "clip"]).describe("AssetType"),
+  prompt: external_exports.string().describe("Generate prompt"),
+  desc: external_exports.string().describe("asset description"),
+  derive: external_exports.array(deriveAssetSchema).describe("derivedAssetlist")
 });
 var storyboardSchema = external_exports.object({
-  id: external_exports.number().describe("\u5206\u955CID\uFF0C\u5FC5\u987B\u4E3A\u771F\u5B9Eid"),
-  duration: external_exports.number().describe("\u6301\u7EED\u65F6\u957F(\u79D2)"),
-  prompt: external_exports.string().describe("\u751F\u6210\u63D0\u793A\u8BCD"),
-  associateAssetsIds: external_exports.array(external_exports.number()).describe("\u5173\u8054\u8D44\u4EA7ID\u5217\u8868"),
-  src: external_exports.string().nullable().describe("\u5206\u955C\u8D44\u6E90\u8DEF\u5F84"),
-  index: external_exports.number().nullable().optional().describe("\u5206\u955C\u6392\u5E8F\u5B57\u6BB5")
+  id: external_exports.number().describe("StoryboardIDid"),
+  duration: external_exports.number().describe("when()"),
+  prompt: external_exports.string().describe("Generate prompt"),
+  associateAssetsIds: external_exports.array(external_exports.number()).describe("relatedAssetIDlist"),
+  src: external_exports.string().nullable().describe("StoryboardresourcePath"),
+  index: external_exports.number().nullable().optional().describe("StoryboardSortfield")
 });
 var workbenchDataSchema = external_exports.object({
-  name: external_exports.string().describe("\u9879\u76EE\u540D\u79F0"),
-  duration: external_exports.string().describe("\u89C6\u9891\u65F6\u957F"),
-  resolution: external_exports.string().describe("\u5206\u8FA8\u7387"),
-  fps: external_exports.string().describe("\u5E27\u7387"),
-  cover: external_exports.string().optional().describe("\u5C01\u9762\u56FE\u7247\u8DEF\u5F84"),
-  gradient: external_exports.string().optional().describe("\u6E10\u53D8\u8272\u914D\u7F6E")
+  name: external_exports.string().describe("ProjectName"),
+  duration: external_exports.string().describe("when"),
+  resolution: external_exports.string().describe(""),
+  fps: external_exports.string().describe(""),
+  cover: external_exports.string().optional().describe("imagePath"),
+  gradient: external_exports.string().optional().describe("gradientConfiguration")
 });
 var posterItemSchema = external_exports.object({
-  id: external_exports.number().describe("\u6D77\u62A5ID"),
-  image: external_exports.string().describe("\u6D77\u62A5\u56FE\u7247\u8DEF\u5F84")
+  id: external_exports.number().describe("ID"),
+  image: external_exports.string().describe("imagePath")
 });
 var flowDataSchema = external_exports.object({
-  script: external_exports.string().describe("\u5267\u672C\u5185\u5BB9"),
-  scriptPlan: external_exports.string().describe("\u62CD\u6444\u8BA1\u5212"),
-  assets: external_exports.array(assetItemSchema).describe("\u884D\u751F\u8D44\u4EA7"),
-  storyboardTable: external_exports.string().describe("\u5206\u955C\u8868"),
-  storyboard: external_exports.array(storyboardSchema).describe("\u5206\u955C\u9762\u677F")
+  script: external_exports.string().describe("Scriptcontent"),
+  scriptPlan: external_exports.string().describe(""),
+  assets: external_exports.array(assetItemSchema).describe("derivedAsset"),
+  storyboardTable: external_exports.string().describe("Storyboardtable"),
+  storyboard: external_exports.array(storyboardSchema).describe("Storyboard")
 });
 var keySchema = external_exports.enum(Object.keys(flowDataSchema.shape));
 var flowDataKeyLabels = Object.fromEntries(
@@ -256932,42 +256873,42 @@ var tools_default = (toolCpnfig) => {
   const { socket } = resTool;
   const tools = {
     get_flowData: tool({
-      description: "\u83B7\u53D6\u5DE5\u4F5C\u533A\u6570\u636E",
+      description: "get workspace data",
       inputSchema: jsonSchema(
         external_exports.object({
-          key: keySchema.describe("\u6570\u636Ekey")
+          key: keySchema.describe("datakey")
         }).toJSONSchema()
       ),
       execute: async ({ key }) => {
-        const thinking = msg.thinking(`\u6B63\u5728\u83B7\u53D6${flowDataKeyLabels[key]}\u5DE5\u4F5C\u533A\u6570\u636E...`);
+        const thinking = msg.thinking(`fetching${flowDataKeyLabels[key]}data...`);
         console.log("[tools] get_flowData", key);
         const flowData = await new Promise((resolve3) => socket.emit("getFlowData", { key }, (res) => resolve3(res)));
-        thinking.appendText(`\u83B7\u53D6\u5230${flowDataKeyLabels[key]}:
+        thinking.appendText(`get${flowDataKeyLabels[key]}:
 ` + JSON.stringify(flowData[key], null, 2));
-        thinking.updateTitle(`\u83B7\u53D6${flowDataKeyLabels[key]}\u5B8C\u6210`);
+        thinking.updateTitle(`get${flowDataKeyLabels[key]}Complete`);
         thinking.complete();
         return flowData[key];
       }
     }),
     add_deriveAsset: tool({
-      description: "\u65B0\u589E\u6216\u66F4\u65B0\u884D\u751F\u8D44\u4EA7",
+      description: "add newderivedAsset",
       inputSchema: jsonSchema(
         external_exports.object({
-          assetsId: external_exports.number().describe("\u5173\u8054\u7684\u8D44\u4EA7ID"),
-          id: external_exports.number().nullable().describe("\u884D\u751F\u8D44\u4EA7ID,\u5982\u679C\u65B0\u589E\u5219\u4E3A\u7A7A"),
-          name: external_exports.string().describe("\u884D\u751F\u8D44\u4EA7\u540D\u79F0"),
-          desc: external_exports.string().describe("\u884D\u751F\u8D44\u4EA7\u63CF\u8FF0")
+          assetsId: external_exports.number().describe("relatedofAssetID"),
+          id: external_exports.number().nullable().describe("derivedAssetID,add new"),
+          name: external_exports.string().describe("derivedAssetName"),
+          desc: external_exports.string().describe("derivedasset description")
         }).toJSONSchema()
       ),
       execute: async (raw) => {
         const idRaw = raw.id;
         const normalizedId = idRaw === "null" || idRaw === "" || idRaw === void 0 ? null : idRaw;
         const deriveAsset = { ...raw, id: normalizedId };
-        const thinking = msg.thinking("\u6B63\u5728\u64CD\u4F5C\u8D44\u4EA7...");
+        const thinking = msg.thinking("atAsset...");
         const { projectId, scriptId } = resTool.data;
         const startTime = Date.now();
         const parentAssets = await utils_default.db("o_assets").where("id", deriveAsset.assetsId).select("id", "type").first();
-        if (!parentAssets) return "\u5173\u8054\u7684\u8D44\u4EA7\u4E0D\u5B58\u5728";
+        if (!parentAssets) return "relatedofAsset not found";
         const data = {
           id: deriveAsset.id ?? void 0,
           assetsId: deriveAsset.assetsId,
@@ -256979,83 +256920,83 @@ var tools_default = (toolCpnfig) => {
         };
         if (deriveAsset.id) {
           await utils_default.db("o_assets").where("id", deriveAsset.id).update(data);
-          thinking.appendText(`\u5DF2\u66F4\u65B0\u884D\u751F\u8D44\u4EA7\uFF0CID: ${deriveAsset.id}
+          thinking.appendText(`alreadyderivedAssetID: ${deriveAsset.id}
 `);
         } else {
           const [insertedId] = await utils_default.db("o_assets").insert(data);
           data.id = insertedId;
           await utils_default.db("o_scriptAssets").insert({ scriptId, assetId: insertedId });
-          thinking.appendText(`\u5DF2\u65B0\u589E\u884D\u751F\u8D44\u4EA7\uFF0CID: ${insertedId}
+          thinking.appendText(`alreadyadd newderivedAssetID: ${insertedId}
 `);
         }
         const res = await new Promise((resolve3) => socket.emit("addDeriveAsset", data, (res2) => resolve3(res2)));
-        thinking.updateTitle("\u8D44\u4EA7\u64CD\u4F5C\u5B8C\u6210");
+        thinking.updateTitle("AssetComplete");
         thinking.complete();
-        return res ?? "\u64CD\u4F5C\u6210\u529F";
+        return res ?? "Operation successful";
       }
     }),
     del_deriveAsset: tool({
-      description: "\u5220\u9664\u884D\u751F\u8D44\u4EA7",
+      description: "DeletederivedAsset",
       inputSchema: jsonSchema(
         external_exports.object({
-          assetsId: external_exports.number().describe("\u5173\u8054\u7684\u8D44\u4EA7ID"),
-          id: external_exports.number().describe("\u884D\u751F\u8D44\u4EA7ID")
+          assetsId: external_exports.number().describe("relatedofAssetID"),
+          id: external_exports.number().describe("derivedAssetID")
         }).toJSONSchema()
       ),
       execute: async ({ assetsId, id }) => {
-        const thinking = msg.thinking("\u6B63\u5728\u64CD\u4F5C\u8D44\u4EA7...");
+        const thinking = msg.thinking("atAsset...");
         const { scriptId } = resTool.data;
         await utils_default.db("o_assets").where("id", id).del();
         await utils_default.db("o_scriptAssets").where({ scriptId, assetId: id }).del();
-        thinking.appendText(`\u5DF2\u5220\u9664\u884D\u751F\u8D44\u4EA7\uFF0CID: ${id}
+        thinking.appendText(`alreadyDeletederivedAssetID: ${id}
 `);
         const res = await new Promise((resolve3) => socket.emit("delDeriveAsset", { assetsId, id }, (res2) => resolve3(res2)));
-        thinking.updateTitle("\u8D44\u4EA7\u64CD\u4F5C\u5B8C\u6210");
+        thinking.updateTitle("AssetComplete");
         thinking.complete();
-        return res ?? "\u5220\u9664\u6210\u529F";
+        return res ?? "Ba\u015Far\u0131yla silindi";
       }
     }),
     generate_deriveAsset: tool({
-      description: "\u751F\u6210\u884D\u751F\u8D44\u4EA7\u56FE\u7247",
+      description: "derivedAssetimage",
       inputSchema: jsonSchema(
         external_exports.object({
-          ids: external_exports.array(external_exports.number()).describe("\u9700\u8981\u751F\u6210\u7684 \u884D\u751F\u8D44\u4EA7ID")
+          ids: external_exports.array(external_exports.number()).describe("needof derivedAssetID")
         }).toJSONSchema()
       ),
       execute: async ({ ids }) => {
-        const thinking = msg.thinking("\u6B63\u5728\u751F\u6210\u884D\u751F\u8D44\u4EA7...");
+        const thinking = msg.thinking("GeneratingderivedAsset...");
         new Promise((resolve3) => socket.emit("generateDeriveAsset", { ids }, (res) => resolve3(res))).then((res) => {
-          thinking.appendText(`\u5DF2\u751F\u6210\u884D\u751F\u8D44\u4EA7\uFF0CID: ${JSON.stringify(res, null, 2)}
+          thinking.appendText(`alreadyderivedAssetID: ${JSON.stringify(res, null, 2)}
 `);
-          thinking.updateTitle("\u884D\u751F\u8D44\u4EA7\u5F00\u59CB\u5B8C\u6210");
+          thinking.updateTitle("derivedAssetopenstartComplete");
           thinking.complete();
         }).catch((e) => {
-          thinking.appendText("\u884D\u751F\u8D44\u4EA7\u751F\u6210\u5931\u8D25:\n" + utils_default.error(e).message);
-          thinking.updateTitle("\u884D\u751F\u8D44\u4EA7\u751F\u6210\u5931\u8D25");
+          thinking.appendText("derivedAssetGeneration failed:\n" + utils_default.error(e).message);
+          thinking.updateTitle("derivedAssetGeneration failed");
           thinking.complete();
         });
-        return "\u5F00\u59CB\u751F\u6210\u884D\u751F\u8D44\u4EA7";
+        return "Starting generationderivedAsset";
       }
     }),
     generate_storyboard: tool({
-      description: "\u751F\u6210\u5206\u955C\u56FE\u7247",
+      description: "Generate storyboardimage",
       inputSchema: jsonSchema(
         external_exports.object({
-          ids: external_exports.array(external_exports.number()).describe("\u5FC5\u987B\u83B7\u53D6\u771F\u5B9E\u7684\u5206\u955CID\uFF0C\u652F\u6301\u6279\u91CF\u751F\u6210")
+          ids: external_exports.array(external_exports.number()).describe("getofStoryboardIDsupportsBatch generate")
         }).toJSONSchema()
       ),
       execute: async ({ ids }) => {
-        const thinking = msg.thinking("\u6B63\u5728\u751F\u6210\u5206\u955C...");
+        const thinking = msg.thinking("atGenerate storyboard...");
         new Promise((resolve3) => socket.emit("generateStoryboard", { ids }, (res) => resolve3(res))).then((res) => {
-          thinking.appendText("\u751F\u6210\u7684\u5206\u955C\u6570\u636E:\n" + JSON.stringify(res, null, 2));
-          thinking.updateTitle("\u5206\u955C\u751F\u6210\u5B8C\u6210");
+          thinking.appendText("ofStoryboarddata:\n" + JSON.stringify(res, null, 2));
+          thinking.updateTitle("StoryboardComplete");
           thinking.complete();
         }).catch((e) => {
-          thinking.appendText("\u5206\u955C\u751F\u6210\u5931\u8D25:\n" + utils_default.error(e).message);
-          thinking.updateTitle("\u5206\u955C\u751F\u6210\u5931\u8D25");
+          thinking.appendText("StoryboardGeneration failed:\n" + utils_default.error(e).message);
+          thinking.updateTitle("StoryboardGeneration failed");
           thinking.complete();
         });
-        return "\u5F00\u59CB\u751F\u6210\u5206\u955C";
+        return "openstartGenerate storyboard";
       }
     })
   };
@@ -257068,21 +257009,21 @@ var import_path10 = __toESM(require("path"));
 function buildMemPrompt(mem) {
   let memoryContext = "";
   if (mem.rag.length) {
-    memoryContext += `[\u76F8\u5173\u8BB0\u5FC6]
+    memoryContext += `[related]
 ${mem.rag.map((r) => r.content).join("\n")}`;
   }
   if (mem.summaries.length) {
     if (memoryContext) memoryContext += "\n\n";
-    memoryContext += `[\u5386\u53F2\u6458\u8981]
+    memoryContext += `[summary]
 ${mem.summaries.map((s, i) => `${i + 1}. ${s.content}`).join("\n")}`;
   }
   if (mem.shortTerm.length) {
     if (memoryContext) memoryContext += "\n\n";
-    memoryContext += `[\u8FD1\u671F\u5BF9\u8BDD]
+    memoryContext += `[]
 ${mem.shortTerm.map((m) => `${m.role}: ${m.content}`).join("\n")}`;
   }
   return `## Memory
-\u4EE5\u4E0B\u662F\u4F60\u5BF9\u7528\u6237\u7684\u8BB0\u5FC6\uFF0C\u53EF\u4F5C\u4E3A\u53C2\u8003\u4F46\u4E0D\u8981\u4E3B\u52A8\u63D0\u53CA\uFF1A
+the followingisyour memory of the user, for reference but don't proactively mention
 ${memoryContext}`;
 }
 async function runDecisionAI(ctx) {
@@ -257092,11 +257033,11 @@ async function runDecisionAI(ctx) {
   const skill = import_path10.default.join(utils_default.getPath("skills"), "production_agent_decision.md");
   const prompt = await fs11.promises.readFile(skill, "utf-8");
   const projectInfo = await utils_default.db("o_project").where("id", ctx.resTool.data.projectId).first();
-  if (!projectInfo) throw new Error(`\u9879\u76EE\u4E0D\u5B58\u5728\uFF0CID: ${ctx.resTool.data.projectId}`);
+  if (!projectInfo) throw new Error(`Project not foundID: ${ctx.resTool.data.projectId}`);
   const [_, imageModelName] = projectInfo.imageModel.split(/:(.+)/);
   const [id, videoModelName] = projectInfo.videoModel.split(/:(.+)/);
   const models = await utils_default.vendor.getModelList(id);
-  if (!models.length) throw new Error(`\u9879\u76EE\u4F7F\u7528\u7684\u6A21\u578B\u4E0D\u5B58\u5728\uFF0CID: ${projectInfo.videoModel}`);
+  if (!models.length) throw new Error(`ProjectusedModel not foundID: ${projectInfo.videoModel}`);
   let videoMode = "";
   try {
     videoMode = JSON.parse(projectInfo.mode ?? "");
@@ -257104,10 +257045,10 @@ async function runDecisionAI(ctx) {
     videoMode = projectInfo.mode ?? "";
   }
   const isRef = Array.isArray(videoMode) ? true : false;
-  const modelInfo = `\u9879\u76EE\u4F7F\u7528\u7684\u6A21\u578B\u5982\u4E0B\uFF1A
-\u56FE\u50CF\u6A21\u578B\uFF1A${imageModelName}
-\u89C6\u9891\u6A21\u578B\uFF1A${videoModelName}
-\u591A\u53C2\uFF1A${isRef ? "\u662F" : "\u5426"}`;
+  const modelInfo = `Projectusedunder
+image model${imageModelName}
+video model${videoModelName}
+Multi-reference${isRef ? "is" : "No"}`;
   const mem = buildMemPrompt(await memory.get(text2));
   const { fullStream } = await utils_default.Ai.Text("productionAgent:decisionAgent", ctx.thinkConfig.think, ctx.thinkConfig.thinlLevel).stream({
     messages: [
@@ -257160,19 +257101,19 @@ async function createSubAgent(parentCtx) {
         createTime: new Date(subMsg.datetime).getTime()
       });
     }
-    parentCtx.msg = resTool.newMessage("assistant", "\u89C6\u9891\u7B56\u5212");
+    parentCtx.msg = resTool.newMessage("assistant", "video planning");
     return fullResponse;
   }
   const promptInput = external_exports.object({
-    prompt: external_exports.string().describe("\u4EA4\u7ED9\u5B50Agent\u7684\u4EFB\u52A1\u7B80\u7EA6\u63CF\u8FF0\uFF0C100\u5B57\u4EE5\u5185")
+    prompt: external_exports.string().describe("childAgentoftaskDescription100")
   }).toJSONSchema();
   const projectInfo = await utils_default.db("o_project").where("id", resTool.data.projectId).first();
-  if (!projectInfo) throw new Error(`\u9879\u76EE\u4E0D\u5B58\u5728\uFF0CID: ${resTool.data.projectId}`);
+  if (!projectInfo) throw new Error(`Project not foundID: ${resTool.data.projectId}`);
   const artSkills = await createArtSkills(projectInfo?.artStyle, projectInfo?.directorManual);
   const [_, imageModelName] = projectInfo.imageModel.split(/:(.+)/);
   const [id, videoModelName] = projectInfo.videoModel.split(/:(.+)/);
   const models = await utils_default.vendor.getModelList(id);
-  if (!models.length) throw new Error(`\u9879\u76EE\u4F7F\u7528\u7684\u6A21\u578B\u4E0D\u5B58\u5728\uFF0CID: ${projectInfo.videoModel}`);
+  if (!models.length) throw new Error(`ProjectusedModel not foundID: ${projectInfo.videoModel}`);
   let videoMode = "";
   try {
     videoMode = JSON.parse(projectInfo.mode ?? "");
@@ -257180,12 +257121,12 @@ async function createSubAgent(parentCtx) {
     videoMode = projectInfo.mode ?? "";
   }
   const isRef = Array.isArray(videoMode) ? true : false;
-  const modelInfo = `\u9879\u76EE\u4F7F\u7528\u7684\u6A21\u578B\u5982\u4E0B\uFF1A
-\u56FE\u50CF\u6A21\u578B\uFF1A${imageModelName}
-\u89C6\u9891\u6A21\u578B\uFF1A${videoModelName}
-\u591A\u53C2\uFF1A${isRef ? "\u662F" : "\u5426"}`;
+  const modelInfo = `Projectusedunder
+image model${imageModelName}
+video model${videoModelName}
+Multi-reference${isRef ? "is" : "No"}`;
   const run_sub_agent_derive_assets = tool({
-    description: "\u8FD0\u884C\u6267\u884CsubAgent\u6765\u5B8C\u6210\u884D\u751F\u8D44\u4EA7\u5206\u6790\u4E0E\u4FE1\u606F\u5199\u5165\u76F8\u5173\u4EFB\u52A1",
+    description: "subAgentCompletederivedAssetInformationrelatedtask",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path10.default.join(utils_default.getPath("skills"), "production_execution_derive_assets.md");
@@ -257194,7 +257135,7 @@ async function createSubAgent(parentCtx) {
         key: "productionAgent:deriveAssetsAgent",
         prompt,
         system: systemPrompt,
-        name: "\u6267\u884C\u5BFC\u6F14",
+        name: "",
         memoryKey: "assistant:execution",
         messages: [
           { role: "assistant", content: artSkills.prompt + `
@@ -257206,7 +257147,7 @@ ${modelInfo}` },
     }
   });
   const run_sub_agent_generate_assets = tool({
-    description: "\u8FD0\u884C\u6267\u884CsubAgent\u6765\u5B8C\u6210\u884D\u751F\u8D44\u4EA7\u56FE\u7247\u751F\u6210\u76F8\u5173\u4EFB\u52A1",
+    description: "subAgentCompletederivedAssetimagerelatedtask",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path10.default.join(utils_default.getPath("skills"), "production_execution_generate_assets.md");
@@ -257215,7 +257156,7 @@ ${modelInfo}` },
         key: "productionAgent:generateAssetsAgent",
         prompt,
         system: systemPrompt,
-        name: "\u6267\u884C\u5BFC\u6F14",
+        name: "",
         memoryKey: "assistant:execution",
         messages: [
           { role: "assistant", content: artSkills.prompt + `
@@ -257227,17 +257168,17 @@ ${modelInfo}` },
     }
   });
   const run_sub_agent_director_plan = tool({
-    description: "\u8FD0\u884C\u6267\u884CsubAgent\u6765\u5B8C\u6210\u5BFC\u6F14\u89C4\u5212\u76F8\u5173\u4EFB\u52A1",
+    description: "subAgentCompleterelatedtask",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path10.default.join(utils_default.getPath("skills"), "production_execution_director_plan.md");
       const systemPrompt = await fs11.promises.readFile(skill, "utf-8");
-      const addPrompt = "\n\u4F60\u5FC5\u987B\u4F7F\u7528\u5982\u4E0BXML\u683C\u5F0F\u5199\u5165\u5DE5\u4F5C\u533A\uFF1A\n```\n<scriptPlan>\u5185\u5BB9</scriptPlan>\n```";
+      const addPrompt = "\nyouuseunderXML\n```\n<scriptPlan>content</scriptPlan>\n```";
       return runAgent({
         key: "productionAgent:directorPlanAgent",
         prompt,
         system: systemPrompt + addPrompt,
-        name: "\u6267\u884C\u5BFC\u6F14",
+        name: "",
         memoryKey: "assistant:execution",
         messages: [
           { role: "assistant", content: artSkills.prompt + `
@@ -257249,7 +257190,7 @@ ${modelInfo}` },
     }
   });
   const run_sub_agent_storyboard_gen = tool({
-    description: "\u8FD0\u884C\u6267\u884CsubAgent\u6765\u5B8C\u6210\u5206\u955C\u56FE\u751F\u6210\u76F8\u5173\u4EFB\u52A1",
+    description: "subAgentCompletestoryboard imagerelatedtask",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path10.default.join(utils_default.getPath("skills"), "production_execution_storyboard_gen.md");
@@ -257258,7 +257199,7 @@ ${modelInfo}` },
         key: "productionAgent:storyboardGenAgent",
         prompt,
         system: systemPrompt,
-        name: "\u6267\u884C\u5BFC\u6F14",
+        name: "",
         memoryKey: "assistant:execution",
         messages: [
           { role: "assistant", content: artSkills.prompt + `
@@ -257271,17 +257212,17 @@ ${modelInfo}` },
   });
   const productionSkills = await useProductionSkills(projectInfo?.artStyle, projectInfo?.directorManual);
   const run_sub_agent_storyboard_panel = tool({
-    description: "\u8FD0\u884C\u6267\u884CsubAgent\u6765\u5B8C\u6210\u5206\u955C\u9762\u677F\u5199\u5165\u76F8\u5173\u4EFB\u52A1",
+    description: "subAgentCompleteStoryboardrelatedtask",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path10.default.join(utils_default.getPath("skills"), "production_execution_storyboard_panel.md");
       const systemPrompt = await fs11.promises.readFile(skill, "utf-8");
-      const addPrompt = "\n\u4F60\u5FC5\u987B\u4F7F\u7528\u5982\u4E0BXML\u683C\u5F0F\u5199\u5165\u5DE5\u4F5C\u533A\uFF1A\n```\n<storyboardItem videoDesc='\u89C6\u9891\u63CF\u8FF0' prompt=\u63D0\u793A\u8BCD\u5185\u5BB9 track='\u5206\u7EC4' shouldGenerateImage='true/false' duration='\u89C6\u9891\u63A8\u8350\u65F6\u95F4' associateAssetsIds='[\u8BE5\u5206\u955C\u6240\u9700\u7684\u8D44\u4EA7ID\u5217\u8868]'></storyboardItem>\n```";
+      const addPrompt = "\nyouuseunderXML\n```\n<storyboardItem videoDesc='Description' prompt=Promptcontent track='' shouldGenerateImage='true/false' duration='Time' associateAssetsIds='[StoryboardofAssetIDlist]'></storyboardItem>\n```";
       return runAgent({
         key: "productionAgent:storyboardPanelAgent",
         prompt,
         system: systemPrompt + addPrompt,
-        name: "\u6267\u884C\u5BFC\u6F14",
+        name: "",
         memoryKey: "assistant:execution",
         messages: [
           { role: "assistant", content: productionSkills.prompt + `
@@ -257293,17 +257234,17 @@ ${modelInfo}` },
     }
   });
   const run_sub_agent_storyboard_table = tool({
-    description: "\u8FD0\u884C\u6267\u884CsubAgent\u6765\u5B8C\u6210\u5206\u955C\u8868\u6784\u5EFA\u76F8\u5173\u4EFB\u52A1",
+    description: "subAgentCompleteStoryboardtablebuildrelatedtask",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path10.default.join(utils_default.getPath("skills"), "production_execution_storyboard_table.md");
       const systemPrompt = await fs11.promises.readFile(skill, "utf-8");
-      const addPrompt = "\n\u4F60\u5FC5\u987B\u4F7F\u7528\u5982\u4E0BXML\u683C\u5F0F\u5199\u5165\u5DE5\u4F5C\u533A\uFF1A\n```\n<storyboardTable>\u5185\u5BB9</storyboardTable>\n```";
+      const addPrompt = "\nyouuseunderXML\n```\n<storyboardTable>content</storyboardTable>\n```";
       return runAgent({
         key: "productionAgent:storyboardTableAgent",
         prompt,
         system: systemPrompt + addPrompt,
-        name: "\u6267\u884C\u5BFC\u6F14",
+        name: "",
         memoryKey: "assistant:execution",
         messages: [
           { role: "assistant", content: productionSkills.prompt + `
@@ -257315,7 +257256,7 @@ ${modelInfo}` },
     }
   });
   const run_sub_agent_supervision = tool({
-    description: "\u8FD0\u884C\u76D1\u7763\u5C42subAgent\u6267\u884C\u72EC\u7ACB\u4EFB\u52A1\uFF0C\u5B8C\u6210\u540E\u8FD4\u56DE\u7ED3\u679C",
+    description: "subAgenttaskCompletereturnresult",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path10.default.join(utils_default.getPath("skills"), "production_agent_supervision.md");
@@ -257324,7 +257265,7 @@ ${modelInfo}` },
         key: "productionAgent:supervisionAgent",
         prompt,
         system: systemPrompt,
-        name: "\u76D1\u5236",
+        name: "",
         memoryKey: "assistant:supervision"
       });
     }
@@ -257345,15 +257286,15 @@ async function createArtSkills(artName, storyName) {
   const skillList = [...await scanSkills(artWorkerPath + "/*.md"), ...await scanSkills(storyWorkerPath + "/*.md")];
   const mainSkills = [];
   for (const skillPath of skillList) {
-    if (!fs11.existsSync(skillPath)) throw new Error(`\u4E3B\u6280\u80FD\u6587\u4EF6\u4E0D\u5B58\u5728: ${skillPath}`);
+    if (!fs11.existsSync(skillPath)) throw new Error(`main skillFile not found: ${skillPath}`);
     const content = await fs11.promises.readFile(skillPath, "utf-8");
     const parsed = parseFrontmatter(content);
     mainSkills.push({ path: skillPath, ...parsed });
   }
   const res = {
     prompt: `## Skills
-\u4EE5\u4E0B\u6280\u80FD\u63D0\u4F9B\u4E86\u4E13\u4E1A\u4EFB\u52A1\u7684\u4E13\u7528\u6307\u4EE4\u3002
-\u5F53\u4EFB\u52A1\u4E0E\u67D0\u4E2A\u6280\u80FD\u7684\u63CF\u8FF0\u5339\u914D\u65F6\uFF0C\u8C03\u7528 activate_skill \u5DE5\u5177\u5E76\u4F20\u5165\u6280\u80FD\u540D\u79F0\u6765\u52A0\u8F7D\u5B8C\u6574\u6307\u4EE4\u3002
+the followingtaskof
+taskofDescriptionmatchwhen activate_skill toolName
 ${buildSkillPrompt(mainSkills)}`,
     tools: createSkillTools(mainSkills, { mainSkill: mainSkills, secondarySkills: [], tertiarySkills: [] })
   };
@@ -257377,12 +257318,12 @@ async function consumeFullStream(fullStream, initialMsg, syncMsg) {
       }
       if (chunk.type === "reasoning-start") {
         thinkTime = Date.now();
-        thinking = msg.thinking("\u601D\u8003\u4E2D...");
+        thinking = msg.thinking("Thinking...");
       } else if (chunk.type === "reasoning-delta") {
         thinking?.append(chunk.text);
       } else if (chunk.type === "reasoning-end") {
         thinkTime = Date.now() - thinkTime;
-        thinking?.updateTitle(`\u601D\u8003\u5B8C\u6BD5\uFF08${(thinkTime / 1e3).toFixed(1)} \u79D2\uFF09`);
+        thinking?.updateTitle(`${(thinkTime / 1e3).toFixed(1)} `);
         thinking?.complete();
         thinking = null;
       } else if (chunk.type === "text-delta") {
@@ -257411,10 +257352,10 @@ function removeAllXmlTags(text2) {
   return text2.trim();
 }
 function buildSkillPrompt(skills) {
-  const skillEntries = skills.map((s) => `  <skill>
-    <name>${s.name}</name>
-    <description>${s.description}</description>
-  </skill>`).join("\n");
+  const skillEntries = skills.map((s) => ` <skill>
+ <name>${s.name}</name>
+ <description>${s.description}</description>
+ </skill>`).join("\n");
   return `
 <available_skills>
 ${skillEntries}
@@ -257431,15 +257372,15 @@ async function useProductionSkills(artName, storyName) {
   ];
   const mainSkills = [];
   for (const skillPath of skillList) {
-    if (!fs11.existsSync(skillPath)) throw new Error(`\u4E3B\u6280\u80FD\u6587\u4EF6\u4E0D\u5B58\u5728: ${skillPath}`);
+    if (!fs11.existsSync(skillPath)) throw new Error(`main skillFile not found: ${skillPath}`);
     const content = await fs11.promises.readFile(skillPath, "utf-8");
     const parsed = parseFrontmatter(content);
     mainSkills.push({ path: skillPath, ...parsed });
   }
   const res = {
     prompt: `## Skills
-\u4EE5\u4E0B\u6280\u80FD\u63D0\u4F9B\u4E86\u4E13\u4E1A\u4EFB\u52A1\u7684\u4E13\u7528\u6307\u4EE4\u3002
-\u5F53\u4EFB\u52A1\u4E0E\u67D0\u4E2A\u6280\u80FD\u7684\u63CF\u8FF0\u5339\u914D\u65F6\uFF0C\u8C03\u7528 activate_skill \u5DE5\u5177\u5E76\u4F20\u5165\u6280\u80FD\u540D\u79F0\u6765\u52A0\u8F7D\u5B8C\u6574\u6307\u4EE4\u3002
+the followingtaskof
+taskofDescriptionmatchwhen activate_skill toolName
 ${buildSkillPrompt(mainSkills)}`,
     tools: createSkillTools(mainSkills, { mainSkill: mainSkills, secondarySkills: [], tertiarySkills: [] })
   };
@@ -257455,7 +257396,7 @@ var ResTool = class {
     this.socket = socket;
     this.data = data;
   }
-  // 
+  // createmessage
   newMessage(role = "assistant", name28) {
     const messageId = utils_default.uuid();
     const datetime4 = (/* @__PURE__ */ new Date()).toISOString();
@@ -257469,7 +257410,7 @@ var ResTool = class {
     });
     return new MessageBuilder(this.socket, messageId, role, name28, datetime4);
   }
-  // 
+  // Error message
   sendError(messageId, error73) {
     this.socket.emit("message:update", {
       id: messageId,
@@ -257477,7 +257418,7 @@ var ResTool = class {
       ext: { error: error73 }
     });
   }
-  // 
+  // CompleteStatus
   sendComplete(messageId) {
     this.socket.emit("message:update", {
       id: messageId,
@@ -257510,7 +257451,7 @@ var MessageBuilder = class {
   get datetime() {
     return this.messageDatetime;
   }
-  // 
+  // update messageStatus
   updateStatus(status) {
     this.socket.emit("message:update", {
       id: this.messageId,
@@ -257518,7 +257459,7 @@ var MessageBuilder = class {
     });
     return this;
   }
-  // 
+  // Addtextcontent
   text(initialText = "") {
     const contentId = utils_default.uuid();
     const content = {
@@ -257537,7 +257478,7 @@ var MessageBuilder = class {
     }
     return stream4;
   }
-  //  Markdown 
+  // Add Markdown content
   markdown(initialText = "") {
     const contentId = utils_default.uuid();
     const content = {
@@ -257552,8 +257493,8 @@ var MessageBuilder = class {
     });
     return new ContentStream(this.socket, this.messageId, contentId, "markdown");
   }
-  // 
-  thinking(title = "\u601D\u8003\u4E2D...") {
+  // Addcontent
+  thinking(title = "Thinking...") {
     const contentId = utils_default.uuid();
     const content = {
       type: "thinking",
@@ -257567,8 +257508,8 @@ var MessageBuilder = class {
     });
     return new ThinkingStream(this.socket, this.messageId, contentId);
   }
-  // 
-  search(title = "\u641C\u7D22\u4E2D...") {
+  // AddSearchcontent
+  search(title = "Search...") {
     const contentId = utils_default.uuid();
     const content = {
       type: "search",
@@ -257582,7 +257523,7 @@ var MessageBuilder = class {
     });
     return new SearchStream(this.socket, this.messageId, contentId);
   }
-  // 
+  // Addimagecontent
   image(data) {
     const contentId = utils_default.uuid();
     const content = {
@@ -257597,7 +257538,7 @@ var MessageBuilder = class {
     });
     return this;
   }
-  // 
+  // Addcontent
   suggestion(suggestions) {
     const contentId = utils_default.uuid();
     const content = {
@@ -257612,7 +257553,7 @@ var MessageBuilder = class {
     });
     return this;
   }
-  // 
+  // AddTool callcontent
   toolCall(data) {
     const contentId = utils_default.uuid();
     const content = {
@@ -257627,7 +257568,7 @@ var MessageBuilder = class {
     });
     return new ToolCallStream(this.socket, this.messageId, contentId, data.toolCallId);
   }
-  // 
+  // Addactivity content
   activity(activityType, content) {
     const contentId = utils_default.uuid();
     const activityContent = {
@@ -257646,7 +257587,7 @@ var MessageBuilder = class {
     });
     return this;
   }
-  // 
+  // Addcontent
   reasoning() {
     const contentId = utils_default.uuid();
     const content = {
@@ -257661,21 +257602,21 @@ var MessageBuilder = class {
     });
     return new ReasoningBuilder(this.socket, this.messageId, contentId);
   }
-  // 
+  // Completemessage
   complete() {
     this.socket.emit("message:update", {
       id: this.messageId,
       status: "complete"
     });
   }
-  // 
+  // message
   stop() {
     this.socket.emit("message:update", {
       id: this.messageId,
       status: "stop"
     });
   }
-  // 
+  // Error
   error(errorMsg) {
     this.socket.emit("message:update", {
       id: this.messageId,
@@ -257698,7 +257639,7 @@ var ContentStream = class {
   get id() {
     return this.contentId;
   }
-  // 
+  // streamdata
   append(chunk) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257710,7 +257651,7 @@ var ContentStream = class {
     });
     return this;
   }
-  // /
+  // /data
   merge(data) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257722,7 +257663,7 @@ var ContentStream = class {
     });
     return this;
   }
-  // 
+  // Completecontent
   complete(finalData) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257733,7 +257674,7 @@ var ContentStream = class {
     });
     return this;
   }
-  // 
+  // Error
   error() {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257747,7 +257688,7 @@ var ThinkingStream = class extends ContentStream {
   constructor(socket, messageId, contentId) {
     super(socket, messageId, contentId, "thinking");
   }
-  // 
+  // text
   appendText(chunk) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257759,7 +257700,7 @@ var ThinkingStream = class extends ContentStream {
     });
     return this;
   }
-  // 
+  //
   updateTitle(title) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257786,9 +257727,9 @@ var AutoThinkingTextStream = class _AutoThinkingTextStream extends ContentStream
     this.messageBuilder = messageBuilder;
   }
   /**
-   *  str  tag 。
-   * （0 ）。
-   */
+  * check str tail ofis or is not tag some non-empty true prefix of
+  * returnneedtail of0 tablenotneed
+  */
   static tailPrefixLen(str, tag) {
     const maxCheck = Math.min(str.length, tag.length - 1);
     for (let len = maxCheck; len >= 1; len--) {
@@ -257868,29 +257809,29 @@ var AutoThinkingTextStream = class _AutoThinkingTextStream extends ContentStream
     this.inThinking = false;
     return super.error();
   }
-  /**  */
+  /** plaintext */
   flushText(text2) {
     if (!text2) return;
     super.append(text2);
   }
-  /** ：， merge ， append  */
+  /** textcontent, merge append */
   flushThinking(text2) {
     if (!text2) return;
     this.thinkingBuffer += text2;
-    this.ensureThinkingStream().merge({ title: "\u601D\u8003\u4E2D...", text: this.thinkingBuffer });
+    this.ensureThinkingStream().merge({ title: "Thinking...", text: this.thinkingBuffer });
   }
   ensureThinkingStream() {
     if (!this.thinkingStream) {
       this.thinkingStartTime = Date.now();
-      this.thinkingStream = this.messageBuilder.thinking("\u601D\u8003\u4E2D...");
+      this.thinkingStream = this.messageBuilder.thinking("Thinking...");
     }
     return this.thinkingStream;
   }
   finishThinking() {
     if (this.thinkingStream) {
       const elapsed = ((Date.now() - this.thinkingStartTime) / 1e3).toFixed(1);
-      this.thinkingStream.updateTitle(`\u601D\u8003\u5B8C\u6BD5\uFF08${elapsed}\u79D2\uFF09`);
-      this.thinkingStream.complete({ title: `\u601D\u8003\u5B8C\u6BD5\uFF08${elapsed}\u79D2\uFF09`, text: this.thinkingBuffer });
+      this.thinkingStream.updateTitle(`${elapsed}`);
+      this.thinkingStream.complete({ title: `${elapsed}`, text: this.thinkingBuffer });
       this.thinkingStream = null;
       this.thinkingBuffer = "";
     }
@@ -257901,7 +257842,7 @@ var SearchStream = class extends ContentStream {
   constructor(socket, messageId, contentId) {
     super(socket, messageId, contentId, "search");
   }
-  // 
+  // Add
   addReference(ref) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257913,7 +257854,7 @@ var SearchStream = class extends ContentStream {
     });
     return this;
   }
-  // 
+  // Batch add
   addReferences(refs) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257925,7 +257866,7 @@ var SearchStream = class extends ContentStream {
     });
     return this;
   }
-  // 
+  //
   updateTitle(title) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257944,7 +257885,7 @@ var ToolCallStream = class extends ContentStream {
     super(socket, messageId, contentId, "toolcall");
     this.toolCallId = toolCallId;
   }
-  // 
+  //
   appendArgs(chunk) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257956,7 +257897,7 @@ var ToolCallStream = class extends ContentStream {
     });
     return this;
   }
-  // 
+  // result
   appendResult(chunk) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257968,7 +257909,7 @@ var ToolCallStream = class extends ContentStream {
     });
     return this;
   }
-  // 
+  // Settingsresult
   setResult(result) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -257980,7 +257921,7 @@ var ToolCallStream = class extends ContentStream {
     });
     return this;
   }
-  // 
+  // EventType
   updateEventType(eventType) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -258002,7 +257943,7 @@ var ReasoningBuilder = class {
     this.messageId = messageId;
     this.contentId = contentId;
   }
-  // 
+  // Addchildcontent
   addContent(content) {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -258014,7 +257955,7 @@ var ReasoningBuilder = class {
     });
     return this;
   }
-  // 
+  // Complete
   complete() {
     this.socket.emit("content:update", {
       messageId: this.messageId,
@@ -258045,17 +257986,17 @@ var productionAgent_default = (nsp) => {
   nsp.on("connection", async (socket) => {
     const token = socket.handshake.auth.token;
     if (!token || !await verifyToken(token)) {
-      console.log("[productionAgent] \u8FDE\u63A5\u5931\u8D25\uFF0Ctoken\u65E0\u6548");
+      console.log("[productionAgent] Connection failedtokenInvalid");
       socket.disconnect();
       return;
     }
     let isolationKey = socket.handshake.auth.isolationKey;
     if (!isolationKey) {
-      console.log("[productionAgent] \u8FDE\u63A5\u5931\u8D25\uFF0C\u7F3A\u5C11 isolationKey");
+      console.log("[productionAgent] Connection failedMissing isolationKey");
       socket.disconnect();
       return;
     }
-    console.log("[productionAgent] \u5DF2\u8FDE\u63A5:", socket.id);
+    console.log("[productionAgent] alreadyConnection:", socket.id);
     let resTool = new resTool_default(socket, {
       projectId: socket.handshake.auth.projectId,
       scriptId: socket.handshake.auth.scriptId
@@ -258071,7 +258012,7 @@ var productionAgent_default = (nsp) => {
         projectId: data.projectId,
         scriptId: data.scriptId
       });
-      console.log("[productionAgent] \u4E0A\u4E0B\u6587\u5DF2\u66F4\u65B0:", isolationKey);
+      console.log("[productionAgent] context updated:", isolationKey);
       callback?.({ success: true });
     });
     socket.on("chat", async (data) => {
@@ -258079,7 +258020,7 @@ var productionAgent_default = (nsp) => {
       abortController?.abort();
       abortController = new AbortController();
       const currentController = abortController;
-      const msg = resTool.newMessage("assistant", "\u89C6\u9891\u7B56\u5212");
+      const msg = resTool.newMessage("assistant", "video planning");
       const ctx = {
         socket,
         isolationKey,
@@ -258105,7 +258046,7 @@ var productionAgent_default = (nsp) => {
     socket.on("updateThinkConfig", (data) => {
       thinkConfig.think = data.think;
       thinkConfig.thinlLevel = data.thinlLevel;
-      console.log("[productionAgent] \u66F4\u65B0\u601D\u8003\u914D\u7F6E:", thinkConfig);
+      console.log("[productionAgent] update thinkingConfiguration:", thinkConfig);
     });
     socket.on("stop", () => {
       abortController?.abort();
@@ -258113,7 +258054,7 @@ var productionAgent_default = (nsp) => {
     });
   });
   nsp.on("disconnect", (socket) => {
-    console.log("[productionAgent] \u5DF2\u65AD\u5F00\u8FDE\u63A5:", socket.id);
+    console.log("[productionAgent] alreadyDisconnected:", socket.id);
   });
 };
 
@@ -258131,13 +258072,13 @@ init_dist22();
 init_utils3();
 init_zod();
 var ScriptSchema = external_exports.object({
-  name: external_exports.string().describe("\u5267\u672C\u540D\u79F0"),
-  content: external_exports.string().describe("\u5267\u672C\u5185\u5BB9")
+  name: external_exports.string().describe("ScriptName"),
+  content: external_exports.string().describe("Scriptcontent")
 });
 var planData = external_exports.object({
-  storySkeleton: external_exports.string().describe("\u6545\u4E8B\u9AA8\u67B6"),
-  adaptationStrategy: external_exports.string().describe("\u6539\u7F16\u7B56\u7565"),
-  script: external_exports.string().describe("\u5267\u672C\u5185\u5BB9")
+  storySkeleton: external_exports.string().describe(""),
+  adaptationStrategy: external_exports.string().describe("adaptation strategy"),
+  script: external_exports.string().describe("Scriptcontent")
 });
 var keySchema2 = external_exports.enum(Object.keys(planData.shape));
 var planDataKeyLabels = Object.fromEntries(
@@ -258148,78 +258089,78 @@ var tools_default2 = (toolCpnfig) => {
   const { socket } = resTool;
   const tools = {
     get_novel_events: tool({
-      description: "\u83B7\u53D6\u7AE0\u8282\u4E8B\u4EF6",
+      description: "getchapterEvent",
       inputSchema: jsonSchema(
         external_exports.object({
-          chapterIndexs: external_exports.array(external_exports.number()).describe("\u7AE0\u8282\u7684\u7F16\u53F7")
+          chapterIndexs: external_exports.array(external_exports.number()).describe("chapterof")
         }).toJSONSchema()
       ),
       execute: async ({ chapterIndexs }) => {
         console.log("[tools] get_novel_events", chapterIndexs);
-        const thinking = msg.thinking("\u6B63\u5728\u67E5\u8BE2\u7AE0\u8282\u4E8B\u4EF6...");
+        const thinking = msg.thinking("atQuerychapterEvent...");
         const data = await utils_default.db("o_novel").where("projectId", resTool.data.projectId).select("id", "chapterIndex as index", "reel", "chapter", "chapterData", "event", "eventState").whereIn("chapterIndex", chapterIndexs);
-        thinking.appendText("\u6B63\u5728\u67E5\u8BE2\u7AE0\u8282\u7F16\u53F7: " + chapterIndexs.join(","));
-        const eventString = data.map((i) => [`\u7B2C${i.index}\u7AE0\uFF0C\u6807\u9898:${i.chapter}\uFF0C\u4E8B\u4EF6:${i.event}`].join("\n")).join("\n");
-        thinking.appendText("\u67E5\u8BE2\u7ED3\u679C:\n" + eventString);
-        thinking.updateTitle("\u67E5\u8BE2\u7AE0\u8282\u4E8B\u4EF6\u5B8C\u6210");
+        thinking.appendText("atQuerychapter: " + chapterIndexs.join(","));
+        const eventString = data.map((i) => [`chapter${i.index}chapter:${i.chapter}Event:${i.event}`].join("\n")).join("\n");
+        thinking.appendText("Queryresult:\n" + eventString);
+        thinking.updateTitle("QuerychapterEventComplete");
         thinking.complete();
-        return eventString ?? "\u65E0\u6570\u636E";
+        return eventString ?? "nodata";
       }
     }),
     get_planData: tool({
-      description: "\u83B7\u53D6\u5DE5\u4F5C\u533A\u6570\u636E",
+      description: "get workspace data",
       inputSchema: jsonSchema(
         external_exports.object({
-          key: keySchema2.describe("\u6570\u636Ekey")
+          key: keySchema2.describe("datakey")
         }).toJSONSchema()
       ),
       execute: async ({ key }) => {
         console.log("[tools] get_planData", key);
-        const thinking = msg.thinking(`\u6B63\u5728\u83B7\u53D6${planDataKeyLabels[key]}\u5DE5\u4F5C\u533A\u6570\u636E...`);
+        const thinking = msg.thinking(`fetching${planDataKeyLabels[key]}data...`);
         const planData2 = await new Promise((resolve3) => socket.emit("getPlanData", { key }, (res) => resolve3(res)));
-        thinking.appendText(`\u83B7\u53D6\u5230${planDataKeyLabels[key]}:
+        thinking.appendText(`get${planDataKeyLabels[key]}:
 ` + planData2[key]);
-        thinking.updateTitle(`\u83B7\u53D6${planDataKeyLabels[key]}\u5B8C\u6210`);
+        thinking.updateTitle(`get${planDataKeyLabels[key]}Complete`);
         thinking.complete();
-        return planData2[key] ?? "\u65E0\u6570\u636E";
+        return planData2[key] ?? "nodata";
       }
     }),
     get_novel_text: tool({
-      description: "\u83B7\u53D6\u5C0F\u8BF4\u7AE0\u8282\u539F\u59CB\u6587\u672C\u5185\u5BB9",
+      description: "Get novelchapterstarttextcontent",
       inputSchema: jsonSchema(
         external_exports.object({
-          chapterIndex: external_exports.string().describe("\u7AE0\u8282\u7F16\u53F7")
+          chapterIndex: external_exports.string().describe("chapter")
         }).toJSONSchema()
       ),
       execute: async ({ chapterIndex }) => {
         console.log("[tools] get_novel_text", "[tools] get_novel_text", chapterIndex);
-        const thinking = msg.thinking(`\u6B63\u5728\u83B7\u53D6\u5C0F\u8BF4\u7AE0\u8282\u539F\u6587...`);
+        const thinking = msg.thinking(`atGet novelchapteroriginal text...`);
         const data = await utils_default.db("o_novel").where("projectId", resTool.data.projectId).where({ chapterIndex }).select("chapterData").first();
         const text2 = data && data?.chapterData ? data.chapterData : "";
-        thinking.appendText(`\u83B7\u53D6\u5230\u539F\u6587:
+        thinking.appendText(`getoriginal text:
 ` + text2);
-        thinking.updateTitle(`\u83B7\u53D6\u5C0F\u8BF4\u7AE0\u8282\u539F\u6587\u5B8C\u6210`);
+        thinking.updateTitle(`Get novelchapteroriginal textComplete`);
         thinking.complete();
-        return text2 ?? "\u65E0\u6570\u636E";
+        return text2 ?? "nodata";
       }
     }),
     get_script_content: tool({
-      description: "\u83B7\u53D6\u5267\u672C\u672C\u5185\u5BB9",
+      description: "getScriptcontent",
       inputSchema: jsonSchema(
         external_exports.object({
-          ids: external_exports.array(external_exports.string()).describe("\u811A\u672Cid")
+          ids: external_exports.array(external_exports.string()).describe("Scriptid")
         }).toJSONSchema()
       ),
       execute: async ({ ids }) => {
         console.log("[tools] get_script_content", "[tools] get_script_content", ids);
-        const thinking = msg.thinking(`\u6B63\u5728\u83B7\u53D6\u811A\u672C\u5185\u5BB9...`);
+        const thinking = msg.thinking(`fetchingScriptcontent...`);
         const data = await utils_default.db("o_script").whereIn("id", ids).select("content", "name");
         const text2 = data && data.length ? data.map((d) => `<scriptItem name="${d.name}">${d.content}</scriptItem>`).join("\n") : "";
-        thinking.appendText(`\u83B7\u53D6\u5230\u811A\u672C\u5185\u5BB9:
+        thinking.appendText(`getScriptcontent:
 ` + JSON.stringify(data, null, 2));
-        thinking.updateTitle(`\u83B7\u53D6\u811A\u672C\u5185\u5BB9\u5B8C\u6210`);
+        thinking.updateTitle(`getScriptcontentComplete`);
         thinking.complete();
-        return text2 ?? "\u65E0\u6570\u636E";
+        return text2 ?? "nodata";
       }
     })
   };
@@ -258232,21 +258173,21 @@ var import_path11 = __toESM(require("path"));
 function buildMemPrompt2(mem) {
   let memoryContext = "";
   if (mem.rag.length) {
-    memoryContext += `[\u76F8\u5173\u8BB0\u5FC6]
+    memoryContext += `[related]
 ${mem.rag.map((r) => r.content).join("\n")}`;
   }
   if (mem.summaries.length) {
     if (memoryContext) memoryContext += "\n\n";
-    memoryContext += `[\u5386\u53F2\u6458\u8981]
+    memoryContext += `[summary]
 ${mem.summaries.map((s, i) => `${i + 1}. ${s.content}`).join("\n")}`;
   }
   if (mem.shortTerm.length) {
     if (memoryContext) memoryContext += "\n\n";
-    memoryContext += `[\u8FD1\u671F\u5BF9\u8BDD]
+    memoryContext += `[]
 ${mem.shortTerm.map((m) => `${m.role}: ${m.content}`).join("\n")}`;
   }
   return `## Memory
-\u4EE5\u4E0B\u662F\u4F60\u5BF9\u7528\u6237\u7684\u8BB0\u5FC6\uFF0C\u53EF\u4F5C\u4E3A\u53C2\u8003\u4F46\u4E0D\u8981\u4E3B\u52A8\u63D0\u53CA\uFF1A
+the followingisyour memory of the user, for reference but don't proactively mention
 ${memoryContext}`;
 }
 async function runDecisionAI2(ctx) {
@@ -258259,13 +258200,13 @@ async function runDecisionAI2(ctx) {
   const projectData = await utils_default.db("o_project").where("id", resTool.data.projectId).first();
   const novelData = await utils_default.db("o_novel").where("projectId", resTool.data.projectId).select("chapterIndex");
   const projectInfo = [
-    "## \u9879\u76EE\u4FE1\u606F",
-    `\u5C0F\u8BF4\u540D\u79F0\uFF1A${projectData?.name ?? "\u672A\u77E5"}`,
-    `\u5C0F\u8BF4\u7C7B\u578B\uFF1A${projectData?.type ?? "\u672A\u77E5"}`,
-    `\u5C0F\u8BF4\u7B80\u4ECB\uFF1A${projectData?.intro ?? "\u65E0"}`,
-    `\u76EE\u6807\u6539\u7F16\u5F71\u89C6\u89C6\u89C9\u624B\u518C|\u753B\u98CE\uFF1A${projectData?.artStyle ?? "\u65E0"}`,
-    `\u76EE\u6807\u6539\u7F16\u89C6\u9891\u753B\u5E45\uFF1A${projectData?.videoRatio ?? "16:9"}`,
-    `\u7AE0\u8282\u6570\u91CF\uFF1A${novelData.length}\u7AE0`
+    "## ProjectInformation",
+    `NovelName${projectData?.name ?? "Unknown"}`,
+    `NovelType${projectData?.type ?? "Unknown"}`,
+    `Novel${projectData?.intro ?? "no"}`,
+    `Visual manual|art style${projectData?.artStyle ?? "no"}`,
+    `${projectData?.videoRatio ?? "16:9"}`,
+    `chapters${novelData.length}chapter`
   ].join("\n");
   const { fullStream } = await utils_default.Ai.Text("scriptAgent:decisionAgent", ctx.thinkConfig.think, ctx.thinkConfig.thinlLevel).stream({
     messages: [
@@ -258318,75 +258259,75 @@ function createSubAgent2(parentCtx) {
         createTime: new Date(subMsg.datetime).getTime()
       });
     }
-    parentCtx.msg = resTool.newMessage("assistant", "\u89C6\u9891\u7B56\u5212");
+    parentCtx.msg = resTool.newMessage("assistant", "video planning");
     return fullResponse;
   }
   const promptInput = external_exports.object({
-    prompt: external_exports.string().describe("\u4EA4\u7ED9\u5B50Agent\u7684\u4EFB\u52A1\u7B80\u7EA6\u63CF\u8FF0\uFF0C100\u5B57\u4EE5\u5185")
+    prompt: external_exports.string().describe("childAgentoftaskDescription100")
   }).toJSONSchema();
   const run_sub_agent_storySkeleton = tool({
-    description: "\u8FD0\u884C\u6267\u884CsubAgent\u6765\u5B8C\u6210\u6545\u4E8B\u9AA8\u67B6\u76F8\u5173\u4EFB\u52A1",
+    description: "subAgentCompleterelatedtask",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path11.default.join(utils_default.getPath("skills"), "script_execution_skeleton.md");
       const systemPrompt = await fs12.promises.readFile(skill, "utf-8");
-      const formatPrompt = "\n\u4F60\u5FC5\u987B\u4F7F\u7528\u5982\u4E0BXML\u683C\u5F0F\u5199\u5165\u5DE5\u4F5C\u533A\uFF1A\n<storySkeleton>\u6545\u4E8B\u9AA8\u67B6\u5185\u5BB9</storySkeleton>";
+      const formatPrompt = "\nyouuseunderXML\n<storySkeleton>content</storySkeleton>";
       return runAgent({
         key: "scriptAgent:storySkeletonAgent",
         prompt,
         system: systemPrompt + formatPrompt,
-        name: "\u7F16\u5267",
+        name: "",
         memoryKey: "assistant:execution:storySkeleton",
         messages: [{ role: "user", content: prompt + formatPrompt }]
       });
     }
   });
   const run_sub_agent_adaptationStrategy = tool({
-    description: "\u8FD0\u884C\u6267\u884CsubAgent\u6765\u5B8C\u6210\u6539\u7F16\u7B56\u7565\u76F8\u5173\u4EFB\u52A1",
+    description: "subAgentCompleteadaptation strategyrelatedtask",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path11.default.join(utils_default.getPath("skills"), "script_execution_adaptation.md");
       const systemPrompt = await fs12.promises.readFile(skill, "utf-8");
-      const formatPrompt = "\n\u4F60\u5FC5\u987B\u4F7F\u7528\u5982\u4E0BXML\u683C\u5F0F\u5199\u5165\u5DE5\u4F5C\u533A\uFF1A\n<adaptationStrategy>\u6539\u7F16\u7B56\u7565\u5185\u5BB9</adaptationStrategy>";
+      const formatPrompt = "\nyouuseunderXML\n<adaptationStrategy>adaptation strategy content</adaptationStrategy>";
       return runAgent({
         key: "scriptAgent:adaptationStrategyAgent",
         prompt,
         system: systemPrompt + formatPrompt,
-        name: "\u7F16\u5267",
+        name: "",
         memoryKey: "assistant:execution:adaptationStrategy",
         messages: [{ role: "user", content: prompt + formatPrompt }]
       });
     }
   });
   const run_sub_agent_script = tool({
-    description: "\u8FD0\u884C\u6267\u884CsubAgent\u6765\u5B8C\u6210\u5267\u672C\u76F8\u5173\u4EFB\u52A1",
+    description: "subAgentCompleteScriptrelatedtask",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path11.default.join(utils_default.getPath("skills"), "script_execution_script.md");
       const systemPrompt = await fs12.promises.readFile(skill, "utf-8");
       const scriptList = await utils_default.db("o_script").where("projectId", resTool.data.projectId).select("id", "name");
-      const scriptPrompt = ["## \u53EF\u7528\u5267\u672C(ID:\u540D\u79F0)", scriptList.map((s) => `${s.id}:${(s.name || "").replace(/[,:]/g, "")}`).join(","), ""].join(
+      const scriptPrompt = ["## Script(ID:Name)", scriptList.map((s) => `${s.id}:${(s.name || "").replace(/[,:]/g, "")}`).join(","), ""].join(
         "\n"
       );
       const novelData = await utils_default.db("o_novel").where("projectId", resTool.data.projectId).select("chapterIndex");
       const formatPrompt = `
-\u4F60\u5FC5\u987B\u4F7F\u7528\u5982\u4E0BXML\u683C\u5F0F\u5199\u5165\u5DE5\u4F5C\u533A\uFF1A
-XML\u4E0D\u5F97\u6DFB\u52A0\u4EFB\u4F55\u989D\u5916\u6807\u7B7E<scriptItem name="\u5267\u672C\u540D\u79F0">\u5267\u672C\u5185\u5BB9</scriptItem><scriptItem name="\u5267\u672C\u540D\u79F0">\u5267\u672C\u5185\u5BB9</scriptItem><scriptItem name="\u5267\u672C\u540D\u79F0">\u5267\u672C\u5185\u5BB9</scriptItem>`;
+youuseunderXML
+XMLnotAddTags<scriptItem name="ScriptName">Scriptcontent</scriptItem><scriptItem name="ScriptName">Scriptcontent</scriptItem><scriptItem name="ScriptName">Scriptcontent</scriptItem>`;
       return runAgent({
         key: "scriptAgent:scriptAgent",
         prompt,
         system: systemPrompt + formatPrompt,
         messages: [
-          { role: "assistant", content: scriptPrompt + `\u7AE0\u8282\u6570\u91CF\uFF1A${novelData.length}\u7AE0` },
+          { role: "assistant", content: scriptPrompt + `chapters${novelData.length}chapter` },
           { role: "user", content: prompt + formatPrompt }
         ],
-        name: "\u7F16\u5267",
+        name: "",
         memoryKey: "assistant:execution:script"
       });
     }
   });
   const run_supervision_agent = tool({
-    description: "\u8FD0\u884C\u76D1\u7763\u5C42subAgent\u6267\u884C\u72EC\u7ACB\u4EFB\u52A1\uFF0C\u5B8C\u6210\u540E\u8FD4\u56DE\u7ED3\u679C",
+    description: "subAgenttaskCompletereturnresult",
     inputSchema: jsonSchema(promptInput),
     execute: async ({ prompt }) => {
       const skill = import_path11.default.join(utils_default.getPath("skills"), "script_agent_supervision.md");
@@ -258395,7 +258336,7 @@ XML\u4E0D\u5F97\u6DFB\u52A0\u4EFB\u4F55\u989D\u5916\u6807\u7B7E<scriptItem name=
         key: "scriptAgent:supervisionAgent",
         prompt,
         system: systemPrompt,
-        name: "\u7F16\u8F91",
+        name: "Edit",
         memoryKey: "assistant:supervision"
       });
     }
@@ -258425,12 +258366,12 @@ async function consumeFullStream2(fullStream, initialMsg, syncMsg) {
       }
       if (chunk.type === "reasoning-start") {
         thinkTime = Date.now();
-        thinking = msg.thinking("\u601D\u8003\u4E2D...");
+        thinking = msg.thinking("Thinking...");
       } else if (chunk.type === "reasoning-delta") {
         thinking?.append(chunk.text);
       } else if (chunk.type === "reasoning-end") {
         thinkTime = Date.now() - thinkTime;
-        thinking?.updateTitle(`\u601D\u8003\u5B8C\u6BD5\uFF08${(thinkTime / 1e3).toFixed(1)} \u79D2\uFF09`);
+        thinking?.updateTitle(`${(thinkTime / 1e3).toFixed(1)} `);
         thinking?.complete();
         thinking = null;
       } else if (chunk.type === "text-delta") {
@@ -258477,17 +258418,17 @@ var scriptAgent_default = (nsp) => {
   nsp.on("connection", async (socket) => {
     const token = socket.handshake.auth.token;
     if (!token || !await verifyToken2(token)) {
-      console.log("[scriptAgent] \u8FDE\u63A5\u5931\u8D25\uFF0Ctoken\u65E0\u6548");
+      console.log("[scriptAgent] Connection failedtokenInvalid");
       socket.disconnect();
       return;
     }
     const isolationKey = socket.handshake.auth.isolationKey;
     if (!isolationKey) {
-      console.log("[scriptAgent] \u8FDE\u63A5\u5931\u8D25\uFF0C\u7F3A\u5C11 isolationKey");
+      console.log("[scriptAgent] Connection failedMissing isolationKey");
       socket.disconnect();
       return;
     }
-    console.log("[scriptAgent] \u5DF2\u8FDE\u63A5:", socket.id);
+    console.log("[scriptAgent] alreadyConnection:", socket.id);
     const resTool = new resTool_default(socket, {
       projectId: socket.handshake.auth.projectId
     });
@@ -258501,7 +258442,7 @@ var scriptAgent_default = (nsp) => {
       abortController?.abort();
       abortController = new AbortController();
       const currentController = abortController;
-      const msg = resTool.newMessage("assistant", "\u7EDF\u7B79");
+      const msg = resTool.newMessage("assistant", "coordinator");
       const ctx = {
         socket,
         isolationKey,
@@ -258528,7 +258469,7 @@ var scriptAgent_default = (nsp) => {
     socket.on("updateThinkConfig", (data) => {
       thinkConfig.think = data.think;
       thinkConfig.thinlLevel = data.thinlLevel;
-      console.log("[scriptAgent] \u66F4\u65B0\u601D\u8003\u914D\u7F6E:", thinkConfig);
+      console.log("[scriptAgent] update thinkingConfiguration:", thinkConfig);
     });
     socket.on("stop", () => {
       abortController?.abort();
@@ -258536,7 +258477,7 @@ var scriptAgent_default = (nsp) => {
     });
   });
   nsp.on("disconnect", (socket) => {
-    console.log("[scriptAgent] \u5DF2\u65AD\u5F00\u8FDE\u63A5:", socket.id);
+    console.log("[scriptAgent] alreadyDisconnected:", socket.id);
   });
 };
 
@@ -258549,7 +258490,7 @@ var socket_default = (io2) => {
   for (const [name28, handler] of Object.entries(routes)) {
     const nsp = io2.of(`/api/socket/${name28}`);
     handler(nsp);
-    console.log(`[Socket] \u6CE8\u518C\u547D\u540D\u7A7A\u95F4: /api/socket/${name28}`);
+    console.log(`[Socket] Register namespace: /api/socket/${name28}`);
   }
 };
 
@@ -258569,13 +258510,13 @@ async function checkPermissions() {
     const { dialog, app: app2 } = require("electron");
     const { response } = await dialog.showMessageBox({
       type: "warning",
-      title: "\u6743\u9650\u4E0D\u8DB3",
-      message: "\u5E94\u7528\u65E0\u6CD5\u8BBF\u95EE\u6570\u636E\u76EE\u5F55",
-      detail: `\u65E0\u6CD5\u8BFB\u5199\u4EE5\u4E0B\u76EE\u5F55\uFF1A
+      title: "Insufficient permissions",
+      message: "Application cannot access data directory",
+      detail: `Cannot read/write the following directory: 
 ${userDataPath}
 
-\u8BF7\u8054\u7CFB\u7BA1\u7406\u5458\u6388\u4E88\u6743\u9650\uFF0C\u6216\u4EE5\u7BA1\u7406\u5458\u8EAB\u4EFD\u8FD0\u884C\u672C\u7A0B\u5E8F\u3002`,
-      buttons: ["\u786E\u8BA4\u9000\u51FA"],
+Please contact the administrator to grant permissions, or run this program as administrator.`,
+      buttons: ["Confirm Exit"],
       defaultId: 0
     });
     if (response === 0) {
@@ -258598,13 +258539,13 @@ async function startServe(randomPort = false) {
   if (!import_fs18.default.existsSync(ossDir)) {
     import_fs18.default.mkdirSync(ossDir, { recursive: true });
   }
-  console.log("\u6587\u4EF6\u76EE\u5F55:", ossDir);
+  console.log("File directory:", ossDir);
   app.use("/oss", import_express168.default.static(ossDir, { acceptRanges: false }));
   const skillsDir = utils_default.getPath("skills");
   if (!import_fs18.default.existsSync(skillsDir)) {
     import_fs18.default.mkdirSync(skillsDir, { recursive: true });
   }
-  console.log("\u6587\u4EF6\u76EE\u5F55:", skillsDir);
+  console.log("File directory:", skillsDir);
   app.use(
     "/skills",
     (req, res, next) => {
@@ -258616,33 +258557,46 @@ async function startServe(randomPort = false) {
   if (!import_fs18.default.existsSync(assetsDir)) {
     import_fs18.default.mkdirSync(assetsDir, { recursive: true });
   }
-  console.log("\u6587\u4EF6\u76EE\u5F55:", assetsDir);
+  console.log("File directory:", assetsDir);
   app.use("/assets", import_express168.default.static(assetsDir, { acceptRanges: false }));
   const webDir = utils_default.getPath("web");
   if (import_fs18.default.existsSync(webDir)) {
-    console.log("\u9759\u6001\u7F51\u7AD9\u76EE\u5F55:", webDir);
+    console.log("Static website directory:", webDir);
+    app.use("/web", (req, res) => {
+      res.redirect(req.path === "/" ? "/index.html" : req.path);
+    });
     app.use(import_express168.default.static(webDir, { acceptRanges: false }));
   } else {
-    console.warn("\u9759\u6001\u7F51\u7AD9\u76EE\u5F55\u4E0D\u5B58\u5728:", webDir);
+    console.warn("Static website directory not found:", webDir);
   }
-  app.use(async (req, res, next) => {
+  app.use("/api", async (req, res, next) => {
     const setting = await utils_default.db("o_setting").where("key", "tokenKey").select("value").first();
-    if (!setting) return res.status(444).send({ message: "\u670D\u52A1\u5668\u79D8\u94A5\u672A\u914D\u7F6E\uFF0C\u8BF7\u8054\u7CFB\u7BA1\u7406\u5458" });
+    if (!setting) return res.status(444).send({ message: "Server secret key not configured, please contact administrator" });
     const { value: tokenKey } = setting;
     const rawToken = req.headers.authorization || req.query.token || "";
     const token = rawToken.replace("Bearer ", "");
-    if (req.path === "/api/login/login") return next();
-    if (!token) return res.status(401).send({ message: "\u672A\u63D0\u4F9Btoken" });
+    if (req.path === "/login/login") return next();
+    if (!token) return res.status(401).send({ message: "Token not provided" });
     try {
       const decoded = import_jsonwebtoken5.default.verify(token, tokenKey);
       req.user = decoded;
       next();
     } catch (err) {
-      return res.status(401).send({ message: "\u65E0\u6548\u7684token" });
+      return res.status(401).send({ message: "Invalid token" });
     }
   });
   const router168 = await Promise.resolve().then(() => (init_router(), router_exports));
   await router168.default(app);
+  const webDirFallback = utils_default.getPath("web");
+  if (import_fs18.default.existsSync(webDirFallback)) {
+    app.use((req, res, next) => {
+      if (req.method !== "GET") return next();
+      if (req.path.startsWith("/api/") || req.path.startsWith("/oss/") || req.path.startsWith("/assets/") || req.path.startsWith("/skills/")) {
+        return next();
+      }
+      res.sendFile(import_path28.default.join(webDirFallback, "index.html"));
+    });
+  }
   app.use((_, res, next) => {
     return res.status(404).send({ message: "API 404 Not Found" });
   });
@@ -258652,12 +258606,12 @@ async function startServe(randomPort = false) {
     console.error(err);
     res.status(err.status || 500).send(err);
   });
-  const port = randomPort ? 0 : 10588;
+  const port = randomPort ? 0 : parseInt(process.env.PORT || "10588", 10);
   return await new Promise((resolve3) => {
     server.listen(port, async () => {
       const address = server.address();
       const realPort = typeof address === "string" ? address : address?.port;
-      console.log(`[\u670D\u52A1\u542F\u52A8\u6210\u529F]: http://localhost:${realPort}`);
+      console.log(`[Server started successfully]: http://localhost:${realPort}`);
       resolve3(realPort);
     });
   });
@@ -258667,7 +258621,7 @@ function closeServe() {
     if (server) {
       server.close((err) => {
         if (err) return reject(err);
-        console.log("[\u670D\u52A1\u5DF2\u5173\u95ED]");
+        console.log("[Server closed]");
         resolve3();
       });
     } else {
