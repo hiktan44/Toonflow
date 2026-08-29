@@ -23,3 +23,6 @@ EXPOSE 10588
 
 # Use tsx directly instead of nodemon for production stability
 CMD ["npx", "tsx", "src/app.ts"]
+# --- Agentic Security Firewall: Katman 2 (non-root hardening) ---
+RUN [ -d /app ] && chown -R node:node /app || true
+USER node
