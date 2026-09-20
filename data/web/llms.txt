@@ -1,0 +1,9 @@
+# Toonflow
+
+> Yapay zekâ destekli kısa drama ve animasyon üretim aracı.
+
+- Resmî site: https://e2z8qqbf9varx40d02mcc87y.seymata.com/
+- Gizlilik ve KVKK: https://e2z8qqbf9varx40d02mcc87y.seymata.com/gizlilik/
+- Kullanım koşulları: https://e2z8qqbf9varx40d02mcc87y.seymata.com/kullanim-kosullari/
+- Çerez politikası: https://e2z8qqbf9varx40d02mcc87y.seymata.com/cerez-politikasi/
+- İletişim: https://e2z8qqbf9varx40d02mcc87y.seymata.com/iletisim/

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Sitemap: https://e2z8qqbf9varx40d02mcc87y.seymata.com/sitemap.xml
