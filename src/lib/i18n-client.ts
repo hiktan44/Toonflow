@@ -117,6 +117,7 @@ export function generateI18nScript(): string {
     if (!['tr', 'en'].includes(lang)) return;
 
     currentLang = lang;
+    document.documentElement.lang = lang;
 
     try {
       localStorage.setItem(STORAGE_KEY, lang);
@@ -213,15 +214,9 @@ export function generateI18nScript(): string {
   }
 
   async function initializeI18n() {
-    if (!localStorage.getItem(STORAGE_KEY)) {
-      const detected = await detectCountryFromIP();
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        setLang(detected);
-      }
-    } else {
-      currentLang = getStoredLang();
-      updatePageContent();
-    }
+    currentLang = getStoredLang();
+    document.documentElement.lang = currentLang;
+    updatePageContent();
 
     window.addEventListener(LANG_CHANGE_EVENT, updatePageContent);
 
@@ -333,7 +328,7 @@ export function generateLangSwitchHTML(): string {
 
   function renderLangSwitch(lang) {
     return \`
-      \${styles}
+      <style>\${styles}</style>
       <div class="lang-switch">
         <span class="lang-switch-label">\${t('lang.switch', lang)}</span>
         <div class="lang-options">

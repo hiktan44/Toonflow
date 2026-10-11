@@ -16,7 +16,7 @@
   "main": "build/main.js",
   "packageManager": "yarn@1.0.0",
   "engines": {
-    "node": ">=1.0.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "nodemon --inspect --exec tsx src/app.ts",
@@ -34,7 +34,10 @@
     "dist:linux": "yarn build && electron-builder --linux",
     "debug:ai": "npx @ai-sdk/devtools",
     "license": "node scripts/license.ts",
-    "vendor2json": "node scripts/vendor2json.ts"
+    "vendor2json": "node scripts/vendor2json.ts",
+    "predev": "node --experimental-strip-types scripts/prepare-web.mjs",
+    "prestart": "node --experimental-strip-types scripts/prepare-web.mjs",
+    "test:web": "node --experimental-strip-types --test tests/web-html.test.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.35",

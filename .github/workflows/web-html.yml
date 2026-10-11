@@ -1,0 +1,54 @@
+name: Web HTML ve dil kontrolleri
+
+on:
+  push:
+    branches: [master, 'codex/**']
+    paths:
+      - 'data/web/index.html'
+      - 'src/lib/i18n-client.ts'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'Dockerfile'
+      - '.github/workflows/web-html.yml'
+  pull_request:
+    paths:
+      - 'data/web/index.html'
+      - 'src/lib/i18n-client.ts'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'Dockerfile'
+      - '.github/workflows/web-html.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  web-html:
+    name: HTML5 ve JavaScript / Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: tests/html-parser/package-lock.json
+      - name: Yalnız HTML5 test ayrıştırıcısını kur
+        run: npm ci --ignore-scripts --no-audit --no-fund --prefix tests/html-parser
+      - name: Gerçek uygulama çıktısı ve dil regresyonları
+        run: npm run test:web
+      - name: Dağıtımda kullanılacak web dosyasını hazırla
+        run: node --experimental-strip-types scripts/prepare-web.mjs
+      - name: Hazırlama araçlarının sözdizimini kontrol et
+        run: |
+          node --check scripts/web-html.mjs
+          node --check scripts/prepare-web.mjs
+          node --experimental-strip-types --check scripts/inject-i18n.ts
