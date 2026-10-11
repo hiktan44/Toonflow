@@ -8,7 +8,7 @@ Her hazırlamada gerçek JavaScript modülü ve klasik betikler Node sözdizimi 
 
 ## Çalıştırma
 
-Node 22.12 veya üzeri gerekir. Docker imajı hazırlanırken kontrol çalışır. `npm run dev`, `npm start`, mevcut `build` ve `inject-i18n` komutları da web dosyasını hazırlar. Doğrudan çalıştırmak için:
+Node 22.12 veya üzeri gerekir. Docker imajı hazırlanırken ve konteyner her açıldığında kontrol çalışır; böylece bağlı veri diskindeki eski web çıktısı da hazırlanır. `npm run dev`, `npm start`, mevcut `build` ve `inject-i18n` komutları da web dosyasını hazırlar. Doğrudan çalıştırmak için:
 
 ```sh
 node --experimental-strip-types scripts/prepare-web.mjs
