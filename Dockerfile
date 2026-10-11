@@ -19,6 +19,9 @@ RUN node -e "const fs=require('fs');const pkg=JSON.parse(fs.readFileSync('packag
 ENV NODE_ENV=dev
 ENV PORT=10588
 
+# HTML hazırlama ve gerçek betik sözdizimi kontrolü imaj kapısıdır.
+RUN node --experimental-strip-types scripts/prepare-web.mjs
+
 EXPOSE 10588
 
 # Use tsx directly instead of nodemon for production stability

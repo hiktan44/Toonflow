@@ -1,0 +1,8 @@
+{
+  "name": "toonflow-html-test-parser",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "parse5": "7.3.0"
+  }
+}
