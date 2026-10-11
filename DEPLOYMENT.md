@@ -1,160 +1,101 @@
-# Toonflow Deployment Guide
+# Toonflow dağıtım rehberi
 
-## 🚀 Quick Overview
+| Bilgi | Kaynakta kayıtlı değer |
+| --- | --- |
+| GitHub deposu | https://github.com/hiktan44/Toonflow |
+| Coolify paneli | https://seymata.com |
+| Uygulama adresi | https://e2z8qqbf9varx40d02mcc87y.seymata.com |
+| Uygulama kimliği | `e2z8qqbf9varx40d02mcc87y` |
+| Dağıtım dalı | `master` |
+| Derleme yöntemi | `Dockerfile` |
+| İç port | `10588` |
 
-| Item | Value |
-|------|-------|
-| **GitHub Repo** | https://github.com/hiktan44/Toonflow |
-| **Coolify App URL** | https://e2z8qqbf9varx40d02mcc87y.seymata.com |
-| **Coolify Dashboard** | https://seymata.com |
-| **Default Port** | 10588 |
-| **Default Login** | admin / admin123 |
-| **Web UI Path** | `/web/index.html` |
+Bu bilgiler depo belgesinden gelir. Canlı sürümü, durumu ve alan adını dağıtımdan önce Coolify panelinde doğrulayın.
 
----
+## Ortam değişkenleri
 
-## 📋 Environment Variables
+| Değişken | Açıklama |
+| --- | --- |
+| `NODE_ENV` | Mevcut Dockerfile backend için `dev` kullanır. |
+| `PORT` | Sunucu iç portu; mevcut değer `10588`. |
+| `FAL_KEY` | FAL entegrasyonları için sağlayıcı anahtarı. Gerçek değeri ortam/sır deposunda saklayın. |
+| `OSSURL` | İsteğe bağlı statik kaynak adresi. |
+| `COOLIFY_TOKEN` | Aşağıdaki yönetim API örneklerinin anahtarı; uygulama istemcisine gönderilmez. |
 
-| Variable | Description | Value |
-|----------|-------------|-------|
-| `NODE_ENV` | Runtime environment | `dev` |
-| `PORT` | Server port | `10588` |
-| `FAL_KEY` | FAL AI API key | Configured ✅ |
-| `OSSURL` | Static resource URL (optional) | Empty for local |
+Gerçek anahtarları Git dosyalarına, bu belgeye veya komut çıktısına yazmayın. Üretim ortam dosyalarını Git deposu dışında veya Coolify ortam değişkenlerinde yönetin. Bu belge hiçbir gerçek anahtar içermez.
 
----
+## Yerel Docker kurulumu
 
-## 🐳 Local Docker Setup (macOS)
+Docker ve Git gerekir. Mevcut imaj Node 24 kullanır.
 
-### Prerequisites
-- Docker Desktop installed on macOS
-- Git
-
-### Steps
-
-```bash
-# 1. Clone the repository
+```sh
 git clone https://github.com/hiktan44/Toonflow.git
 cd Toonflow
-
-# 2. Create .env file (copy from example)
-cp .env.example .env
-# Edit .env and add your FAL_KEY
-
-# 3. Build and run with Docker Compose
-docker compose up -d
-
-# 4. Access the application
-open http://localhost:10588/web/index.html
-```
-
-### Manual Docker Build
-
-```bash
+# Yerel .env dosyanızı gerçek değerleri Git'e kaydetmeden hazırlayın.
 docker build -t toonflow .
-docker run -d -p 10588:10588 \
+docker run -d --name toonflow -p 10588:10588 \
+  --env-file .env \
   -v toonflow-data:/app/data \
-  -e FAL_KEY=your_fal_key_here \
-  -e NODE_ENV=dev \
-  -e PORT=10588 \
   toonflow
 ```
 
----
+Tarayıcıda `http://localhost:10588/` adresini açın. SQLite veritabanı, yüklemeler ve web çıktısı `/app/data` altındadır; kalıcı diski silmeyin. Bağlı disk imajdaki web dosyalarını geçersiz kılabilir. F04 düzeltmesi imaj derlemesinde ve her açılışta web dosyasını hazırlar: https://github.com/hiktan44/Toonflow/pull/1
 
-## ☁️ Coolify Deployment (Already Deployed!)
+İlk kurulum hesabını güvenli bir parolayla değiştirin. Bu belge hazır yönetici parolasıyla giriş veya mevcut üretim hesabını değiştirmez.
 
-The application is **already deployed** on Coolify at seymata.com.
+## Coolify üzerinden dağıtım
 
-### Deployment Details
-- **Application UUID**: `e2z8qqbf9varx40d02mcc87y`
-- **Project**: Toonflow (UUID: `ssoizan4lkfojqryyf9cylth`)
-- **Build Pack**: Dockerfile
-- **Domain**: `https://e2z8qqbf9varx40d02mcc87y.seymata.com`
+1. Coolify paneline giriş yapın.
+2. Toonflow projesi ve uygulamasını açın.
+3. Git kaynağını, `master` dalını, Dockerfile yöntemini ve `10588` portunu doğrulayın.
+4. Ortam değişkenlerini panelin güvenli alanında tanımlayın.
+5. İncelenmiş değişiklikleri birleştirdikten sonra dağıtımı başlatın.
+6. Dağıtım günlükleri, web açılışı, konsol, giriş ve ana özellikleri kontrol edin.
 
-### Access the App
-1. Go to: **https://e2z8qqbf9varx40d02mcc87y.seymata.com/web/index.html**
-2. Login with: **admin** / **admin123**
+Alan adı için uygulamanın ayarlarındaki Domains (Alan adları) bölümünü kullanın ve DNS kaydını sunucuya yönlendirin.
 
-### Custom Domain (Optional)
-To set a custom domain in Coolify:
+## Coolify API örnekleri
 
-```bash
-# Via Coolify API
-curl -X PATCH -H "Authorization: Bearer YOUR_COOLIFY_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"fqdn": "https://toonflow.yourdomain.com"}' \
-  https://seymata.com/api/v1/applications/e2z8qqbf9varx40d02mcc87y
-```
+Anahtarı yerel kabuğun güvenli isteminde veya CI sır deposunda `COOLIFY_TOKEN` olarak tanımlayın. Gerçek değeri komutun içine yazmayın; `set -x`, ayrıntılı curl izleme ve anahtarı ekrana basma işlemlerini kullanmayın. Çift tırnaklı başlık ortam değişkenini genişletir.
 
-Or via the Coolify web dashboard:
-1. Log in to https://seymata.com
-2. Navigate to Toonflow project → Toonflow application
-3. In Settings → Domains, add your custom domain
-4. Ensure DNS points to your Coolify server IP
+```sh
+# Anahtar tanımlı değilse istek gönderilmez.
+: "${COOLIFY_TOKEN:?Coolify erişim anahtarı güvenli ortamda tanımlanmalı}"
 
-### Redeploy (After Code Changes)
-
-```bash
-# Push changes to GitHub
-cd Toonflow
-git add .
-git commit -m "Your changes"
-git push origin master
-
-# Trigger redeploy via Coolify API
-curl -X POST -H "Authorization: Bearer 9|snKZNq3f9J4Hs93sLtJJ1v5lliELcZuBlj5yVHyT6df7c6f3" \
+# İncelenmiş kodun yeni dağıtımını başlatır; üretimi değiştirir.
+curl --fail-with-body -X POST \
+  -H "Authorization: Bearer ${COOLIFY_TOKEN}" \
   "https://seymata.com/api/v1/deploy?uuid=e2z8qqbf9varx40d02mcc87y&force=true"
 ```
 
----
+İsteğe bağlı alan adı değişikliği de üretim ayarını değiştirir:
 
-## 🔧 FAL AI Configuration
-
-FAL AI API key is configured as an environment variable (`FAL_KEY`). However, Toonflow uses a **vendor plugin system** for AI model providers. To configure AI models within the app:
-
-1. Login to Toonflow web UI
-2. Go to **Settings** → **Vendor Configuration** (供应商配置)
-3. You can:
-   - Enable/configure the built-in **Toonflow official platform** vendor
-   - Add custom vendor plugins (OpenAI, DeepSeek, KlingAI, etc.)
-   - Configure API keys per vendor through the UI
-
-### Available Built-in Vendors
-- Toonflow Official Platform
-- OpenAI
-- DeepSeek
-- KlingAI
-- MiniMax
-- Vidu
-- VolcEngine
-- AtlasCloud
-- GRSAI
-
----
-
-## 📁 Project Structure
-
-```
-Toonflow/
-├── Dockerfile              # Docker build file
-├── docker-compose.yml      # Docker Compose for local/Coolify
-├── .env.example            # Environment variable template
-├── .env.production         # Production environment config
-├── src/                    # Source code (TypeScript)
-├── data/
-│   ├── vendor/             # AI vendor plugins
-│   ├── web/                # Frontend build (pre-built)
-│   ├── skills/             # Agent skill prompts
-│   └── models/             # Local AI models
-└── package.json
+```sh
+: "${COOLIFY_TOKEN:?Coolify erişim anahtarı güvenli ortamda tanımlanmalı}"
+curl --fail-with-body -X PATCH \
+  -H "Authorization: Bearer ${COOLIFY_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"fqdn":"https://toonflow.example.com"}' \
+  "https://seymata.com/api/v1/applications/e2z8qqbf9varx40d02mcc87y"
 ```
 
----
+Bu örnekler belge kontrolünde çalıştırılmaz.
 
-## ⚠️ Important Notes
+## Açığa çıkan anahtarı yenileme — F50
 
-1. **First login**: Use `admin` / `admin123`, then change the password
-2. **Data persistence**: The SQLite database and uploads are stored in `/app/data` - use Docker volumes to persist data
-3. **FAL AI**: The FAL_KEY env var is available for custom integrations. The main AI model configuration happens through the Toonflow web UI vendor system
-4. **Node.js**: The app requires Node.js 24.x (included in Docker image)
+Önceki belgedeki somut Coolify anahtarı kaldırıldı. Geçerliliği ve yetki kapsamı bu düzeltmede denenmedi. Eski değer, Git geçmişinde ve daha önce alınmış kopyalarda bulunabilir; belgeden kaldırmak anahtarı iptal etmez.
+
+Coolify panelindeki API Tokens (API anahtarları) bölümünden ilgili eski anahtarı iptal edin. Gerekli entegrasyonlar için en dar yetkiyle yeni anahtar oluşturun; yeni değeri güvenli ortam/sır deposunda güncelleyin. Coolify işlem kayıtları ve Git geçmişindeki sızıntı ayrıca değerlendirilmelidir. Kaynak PR'ı üretimde iptal, yenileme veya dağıtım yapmaz; F50 canlı iptal doğrulanana kadar açık kalır.
+
+## Model sağlayıcı ayarları
+
+Toonflow model sağlayıcılarını eklenti sistemiyle yönetir. Arayüzde Settings (Ayarlar) → Vendor Configuration (Sağlayıcı yapılandırması) bölümünden gereken sağlayıcıyı ve modelini tanımlayın. OpenAI, DeepSeek, KlingAI, MiniMax, Vidu ve diğer sağlayıcıların gerçek anahtarlarını yalnız güvenli ayar alanında girin. `FAL_KEY` tanımlanması bütün modellerin çalıştığını kanıtlamaz; her kullanılan model ayrıca denenmelidir.
+
+## Belge güvenlik kontrolü
+
+```sh
+node --test tests/deployment-secrets.test.mjs
+node scripts/check-deployment-secrets.mjs
+```
+
+Kontrol belgeye yeniden somut Bearer/Basic anahtarı veya Coolify anahtar ataması eklenmesini reddeder. Hata çıktısı yalnız tür ve satır numarası içerir; anahtar değeri gösterilmez. Bu dar kontrol kapsamlı sır taraması ve geçmiş incelemesinin yerine geçmez.
