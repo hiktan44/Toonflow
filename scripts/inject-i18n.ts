@@ -52,11 +52,19 @@ async function injectI18n(): Promise<void> {
 
   // Inject the i18n script
   console.log('📝 Injecting i18n client script...');
-  htmlContent = htmlContent.replace('</head>', clientScriptJS + '</head>');
+  // The 26 MB bundle embeds HTML templates inside JS strings, so the FIRST '</head>' / '</body>'
+  // is inside a string literal. Insert at the LAST occurrence (the real document end) and use
+  // slicing instead of String.replace (which also interprets '$' patterns in the replacement).
+  const insertBeforeLast = (html: string, tag: string, snippet: string): string => {
+    const at = html.lastIndexOf(tag);
+    if (at === -1) throw new Error(`${tag} not found in index.html`);
+    return html.slice(0, at) + snippet + html.slice(at);
+  };
+  htmlContent = insertBeforeLast(htmlContent, '</head>', clientScriptJS);
 
   // Inject the language switcher
   console.log('📝 Injecting language switcher...');
-  htmlContent = htmlContent.replace('</body>', langSwitchHTML + '</body>');
+  htmlContent = insertBeforeLast(htmlContent, '</body>', langSwitchHTML);
 
   // Write the modified content
   fs.writeFileSync(INDEX_HTML, htmlContent, 'utf8');
