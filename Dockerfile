@@ -10,6 +10,11 @@ WORKDIR /app
 # Copy the repository contents into the image and install all dependencies
 COPY . .
 
+# onnxruntime-node's install script tries to download CUDA binaries from GitHub releases;
+# that asset now answers 404 and fails the whole build. The container has no GPU, so skip it
+# (ONNX Runtime still works on CPU).
+ENV ONNXRUNTIME_NODE_INSTALL_CUDA=skip
+
 # The container only runs the backend dev server, so strip Electron-only
 # packages before installing to avoid downloading desktop binaries.
 RUN node -e "const fs=require('fs');const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));for(const section of ['dependencies','devDependencies']){if(!pkg[section]) continue;for(const name of ['custom-electron-titlebar','electron','electron-builder','electron-rebuild','electronmon']) delete pkg[section][name];}fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2)+'\n');" && \
