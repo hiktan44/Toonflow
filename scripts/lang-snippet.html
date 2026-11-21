@@ -1,0 +1,49 @@
+<!-- toonflow-lang:start -->
+<script>
+(function () {
+  // Interface language. The app (vue-i18n) already ships English and Turkish and reads the
+  // `locale` key from localStorage when it boots, so we only have to pick the right value
+  // before the app starts. Order: choice made with the switch (ui_lang_user) > choice made in
+  // Settings (locale differs from the value we set last) > browser language (not Turkish -> en).
+  var KEY = 'locale', AUTO = 'ui_lang_auto', USER = 'ui_lang_user';
+  var ok = function (v) { return v === 'en' || v === 'tr' ? v : null; };
+  var lang = 'tr';
+  try {
+    var ls = window.localStorage;
+    var cur = ok(ls.getItem(KEY));
+    var auto = ok(ls.getItem(AUTO));
+    var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language];
+    var primary = String(list.find(Boolean) || '').toLowerCase();
+    var detected = primary ? (primary.indexOf('tr') === 0 ? 'tr' : 'en') : 'tr';
+    if (ls.getItem(USER) === '1' && cur) {
+      lang = cur;
+    } else if (cur && auto && cur !== auto) {
+      ls.setItem(USER, '1'); // changed in Settings: that is an explicit choice
+      lang = cur;
+    } else {
+      lang = detected;
+      ls.setItem(KEY, lang);
+      ls.setItem(AUTO, lang);
+    }
+  } catch (e) { lang = 'tr'; }
+  window.__toonflowLang = lang;
+  try { document.documentElement.lang = lang; } catch (e) {}
+  if (lang === 'en') {
+    document.addEventListener('DOMContentLoaded', function () {
+      var d = 'AI-powered short drama and animation production tool.';
+      var set = function (sel, v) { var el = document.querySelector(sel); if (el) el.setAttribute('content', v); };
+      set('meta[name="description"]', d);
+      set('meta[property="og:description"]', d);
+    });
+  }
+  window.__toonflowSetLang = function (next) {
+    try {
+      localStorage.setItem(KEY, next);
+      localStorage.setItem(AUTO, next);
+      localStorage.setItem(USER, '1');
+    } catch (e) {}
+    location.reload();
+  };
+})();
+</script>
+<!-- toonflow-lang:end -->
