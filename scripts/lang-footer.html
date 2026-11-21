@@ -1,0 +1,27 @@
+<!-- toonflow-lang-footer:start -->
+<footer id="legal-footer" style="padding:18px;text-align:center;font:14px system-ui;background:#0b1020;color:#dbeafe">
+<a data-tr="/gizlilik/" data-en="/en/privacy/" style="color:#93c5fd;margin:0 8px" href="/gizlilik/">Gizlilik ve KVKK</a><a data-tr="/kullanim-kosullari/" data-en="/en/terms/" style="color:#93c5fd;margin:0 8px" href="/kullanim-kosullari/">Kullanım Koşulları</a><a data-tr="/cerez-politikasi/" data-en="/en/cookies/" style="color:#93c5fd;margin:0 8px" href="/cerez-politikasi/">Çerez Politikası</a><a data-tr="/iletisim/" data-en="/en/contact/" style="color:#93c5fd;margin:0 8px" href="/iletisim/">İletişim</a>
+</footer>
+<div id="lang-switch" style="position:fixed;left:16px;bottom:16px;z-index:9999;display:flex;border:1px solid rgba(255,255,255,.25);border-radius:8px;overflow:hidden;font:600 12px system-ui;background:rgba(11,16,32,.85)"><button type="button" data-l="tr" style="border:0;padding:6px 10px;cursor:pointer;color:#fff;background:transparent">TR</button><button type="button" data-l="en" style="border:0;padding:6px 10px;cursor:pointer;color:#fff;background:transparent">EN</button></div>
+<script>
+(function () {
+  var lang = window.__toonflowLang === 'en' ? 'en' : 'tr';
+  var names = { 'en': ['Privacy and KVKK', 'Terms of Use', 'Cookie Policy', 'Contact'] };
+  var links = document.querySelectorAll('#legal-footer a');
+  for (var i = 0; i < links.length; i++) {
+    links[i].setAttribute('href', links[i].getAttribute('data-' + lang));
+    if (lang === 'en') links[i].textContent = names.en[i];
+  }
+  var btns = document.querySelectorAll('#lang-switch button');
+  for (var j = 0; j < btns.length; j++) {
+    var b = btns[j], on = b.getAttribute('data-l') === lang;
+    b.style.background = on ? '#db2777' : 'transparent';
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    b.addEventListener('click', function (e) {
+      var next = e.currentTarget.getAttribute('data-l');
+      if (next !== lang && window.__toonflowSetLang) window.__toonflowSetLang(next);
+    });
+  }
+})();
+</script>
+<!-- toonflow-lang-footer:end -->
