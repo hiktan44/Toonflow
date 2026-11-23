@@ -39,7 +39,7 @@ docker run -d --name toonflow -p 10588:10588 \
   toonflow
 ```
 
-Tarayıcıda `http://localhost:10588/` adresini açın. SQLite veritabanı, yüklemeler ve web çıktısı `/app/data` altındadır; kalıcı diski silmeyin. Bağlı disk imajdaki web dosyalarını geçersiz kılabilir. F04 düzeltmesi imaj derlemesinde ve her açılışta web dosyasını hazırlar: https://github.com/hiktan44/Toonflow/pull/1
+Tarayıcıda `http://localhost:10588/` adresini açın. SQLite veritabanı, yüklemeler ve web çıktısı `/app/data` altındadır; kalıcı diski silmeyin. Bağlı disk imajdaki web dosyalarını geçersiz kılabilir. F04 web HTML enjeksiyonu düzeltmesi ve TR/EN dil desteği `master` dalında PR #3, PR #4 ve PR #5 ile uygulanmıştır (`scripts/inject-lang.js`).
 
 İlk kurulum hesabını güvenli bir parolayla değiştirin. Bu belge hazır yönetici parolasıyla giriş veya mevcut üretim hesabını değiştirmez.
 
@@ -81,11 +81,11 @@ curl --fail-with-body -X PATCH \
 
 Bu örnekler belge kontrolünde çalıştırılmaz.
 
-## Açığa çıkan anahtarı yenileme — F50
+## Açığa çıkan anahtarları yenileme — F50
 
-Önceki belgedeki somut Coolify anahtarı kaldırıldı. Geçerliliği ve yetki kapsamı bu düzeltmede denenmedi. Eski değer, Git geçmişinde ve daha önce alınmış kopyalarda bulunabilir; belgeden kaldırmak anahtarı iptal etmez.
+Önceki `DEPLOYMENT.md`, `DEPLOYMENT.docx` ve `DEPLOYMENT.pdf` belgelerindeki somut Coolify anahtarı ile `.env.production` ve `docker-compose.yml` dosyalarındaki somut `FAL_KEY` değeri kaldırıldı. Geçerlilikleri ve yetki kapsamları bu düzeltmede denenmedi. Eski değerler Git geçmişinde ve daha önce alınmış kopyalarda bulunabilir; dosyalardan kaldırmak anahtarları iptal etmez.
 
-Coolify panelindeki API Tokens (API anahtarları) bölümünden ilgili eski anahtarı iptal edin. Gerekli entegrasyonlar için en dar yetkiyle yeni anahtar oluşturun; yeni değeri güvenli ortam/sır deposunda güncelleyin. Coolify işlem kayıtları ve Git geçmişindeki sızıntı ayrıca değerlendirilmelidir. Kaynak PR'ı üretimde iptal, yenileme veya dağıtım yapmaz; F50 canlı iptal doğrulanana kadar açık kalır.
+Coolify panelindeki API Tokens (API anahtarları) bölümünden ilgili eski anahtarı iptal edin ve FAL AI panelinden açığa çıkan `FAL_KEY` anahtarını yenileyin. Gerekli entegrasyonlar için en dar yetkiyle yeni anahtarlar oluşturun; yeni değerleri Coolify ortam değişkenlerinde ve güvenli sır deposunda güncelleyin. Coolify işlem kayıtları ve Git geçmişindeki sızıntı ayrıca değerlendirilmelidir. Bu düzeltme üretimde iptal, yenileme veya dağıtım yapmaz; F50 canlı iptal ve anahtar yenilemesi doğrulanana kadar açık kalır.
 
 ## Model sağlayıcı ayarları
 
@@ -98,4 +98,4 @@ node --test tests/deployment-secrets.test.mjs
 node scripts/check-deployment-secrets.mjs
 ```
 
-Kontrol belgeye yeniden somut Bearer/Basic anahtarı veya Coolify anahtar ataması eklenmesini reddeder. Hata çıktısı yalnız tür ve satır numarası içerir; anahtar değeri gösterilmez. Bu dar kontrol kapsamlı sır taraması ve geçmiş incelemesinin yerine geçmez.
+Kontrol dağıtım belgelerine ve yapılandırma dosyalarına yeniden somut Bearer/Basic anahtarı, Coolify anahtar ataması, `FAL_KEY` değeri veya yasaklı ikili belge/ortam dosyası (`DEPLOYMENT.docx`, `DEPLOYMENT.pdf`, `.env.production`) eklenmesini reddeder. Hata çıktısı yalnız dosya, tür ve satır numarası içerir; anahtar değeri gösterilmez. Bu dar kontrol kapsamlı sır taraması ve geçmiş incelemesinin yerine geçmez.
